@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilvae@gmail.com"
 __date__        = "09/22/2018"
-__description__ = "This script plot mensal and seasonal simulation and obs data"
+__description__ = "This script plot time series simulation and obs databases"
 
 
 import os
@@ -22,41 +22,34 @@ from matplotlib.font_manager import FontProperties
 
 def import_exp_model(exp):
 	
-	sim = []
-	for mon in range(0,12):
+	mod_path = '/home/nice'
+	arq1     = '{0}/pre_amz_neb_regcm_{1}_2005_monmean.nc'.format(mod_path, exp)
+	data1    = netCDF4.Dataset(arq1)
+	var1     = data1.variables['pr'][:]
+	lat      = data1.variables['lat'][:]
+	lon      = data1.variables['lon'][:]
+	mod      = var1[:][:,:,:]
+	mod_ini1 = np.nanmean(mod, axis=1)
+	mod_end1 = np.nanmean(mod_ini1, axis=1)
 
-		mod_path = '/home/nice'
-		arq1     = '{0}/pre_amz_neb_regcm_{1}_2005_monmean.nc'.format(mod_path, exp)
-		data1    = netCDF4.Dataset(arq1)
-		var1     = data1.variables['pr'][:]
-		lat      = data1.variables['lat'][:]
-		lon      = data1.variables['lon'][:]
-		mod      = var1[mon::12][:,:,:]
-		mod_ini1 = np.nanmean(mod, axis=1)
-		mod_end1 = np.nanmean(mod_ini1, axis=1)
-		sim.append(mod_end1)
-	return np.squeeze(sim)
+	return np.squeeze(mod_end1)
 	
 
 def import_obs_data(obs):
 
 	vars_dic = {u'cmap': u'precip', u'trmm': u'r'}
-	
-	data = []
-	for mon in range(0,12):
 
-		pre_path = '/home/nice'
-		arq2     = '{0}/pre_amz_neb_{1}_obs_2005_monmean.nc'.format(pre_path, obs)
-		data2    = netCDF4.Dataset(arq2)
-		var2     = data2.variables[vars_dic[obs]][:]
-		lat      = data2.variables['lat'][:]
-		lon      = data2.variables['lon'][:]
-		pre      = var2[mon::12][:,:,:]
-		pre_ini1 = np.nanmean(pre, axis=1)
-		pre_end1 = np.nanmean(pre_ini1, axis=1)
-		data.append(pre_end1)
+	pre_path = '/home/nice'
+	arq2     = '{0}/pre_amz_neb_{1}_obs_2005_monmean.nc'.format(pre_path, obs)
+	data2    = netCDF4.Dataset(arq2)
+	var2     = data2.variables[vars_dic[obs]][:]
+	lat      = data2.variables['lat'][:]
+	lon      = data2.variables['lon'][:]
+	pre      = var2[:][:,:,:]
+	pre_ini1 = np.nanmean(pre, axis=1)
+	pre_end1 = np.nanmean(pre_ini1, axis=1)
 
-	return np.squeeze(data)
+	return np.squeeze(pre_end1)
 	
 
 # Import simulations experiments and observed databases
@@ -80,36 +73,56 @@ print "cmap", cmap
 print
 print "trmm", trmm
 
-# Plot figure of time series per region
+	      
+# Plot precipitation time series per region
 fig = plt.figure(figsize=(12,6))
-time = np.arange(0, 12)
+time = np.arange(0, 11+1)
 
 a1 = plt.plot(time, exp1, time, exp2, time, cmap, time, trmm)
 
 l1, l2, l3, l4 = a1
-plt.setp(l1,  linewidth=2, markeredgewidth=1, marker='o', color='blue')
-plt.setp(l2,  linewidth=2, markeredgewidth=1, marker='o', color='green')
-plt.setp(l3,  linewidth=2, markeredgewidth=1, marker='o', color='red')
-plt.setp(l4,  linewidth=2, markeredgewidth=1, marker='o', color='black')
+plt.setp(l1,  linewidth=2, markeredgewidth=4, marker='+', color='blue')
+plt.setp(l2,  linewidth=2, markeredgewidth=4, marker='+', color='green')
+plt.setp(l3,  linewidth=2, markeredgewidth=4, marker='+', color='red')
+plt.setp(l4,  linewidth=2, markeredgewidth=4, marker='+', color='black')
 				     
 plt.title(u'Precipitação Média - AMZ_NEB (A1) - 2005', fontsize=16, fontweight='bold')
 
 plt.xlabel(u'Meses', fontsize=16, fontweight='bold')
-plt.ylabel(u'Precipitação', fontsize=16, fontweight='bold')
-
+plt.ylabel(u'Precipitação (mm/m)', fontsize=16, fontweight='bold')
 plt.ylim([0,40])
 
-objects = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
+objects = [u'JAN', u'FEV', u'MAR', u'ABR', u'MAI', u'JUN', u'JUL', u'AGO', u'SET', u'OUT', u'NOV', u'DEZ']
 plt.xticks(time, objects, fontsize=12)
 plt.grid(True, which='major', linestyle='--', linewidth='0.5', zorder=0.5)
 
 font = FontProperties(size=10)
-plt.legend([u'RegCM_EXP1', U'RegCM_EXP2', u'CMAP', u'TRMM'], loc='best', ncol=2, prop=font)
+plt.legend([u'RegCM4.6_EXP1', U'RegCM4.6_EXP2', u'CMAP', u'TRMM'], loc='best', ncol=2, prop=font)
 
 path_out = '/home/nice/'
 
-graph_ts = 'pre_serie_temp_neb_A1_2005.png'
-plt.savefig(os.path.join(path_out, graph_ts), bbox_inches='tight')
+plt.savefig(os.path.join(path_out, 'precip_serie_temp_amz_neb_a1_2005.png'), bbox_inches='tight')
+plt.show()
+
+
+# Precipitation boxplot per region
+fig = plt.figure(figsize=(12,6))
+time = np.arange(1, 5)
+
+data = [exp1, exp2, cmap, trmm]
+
+a2 = plt.boxplot(data, notch=0, sym='+', vert=1, whis=1.5)
+
+plt.title(u'Boxplot de Precipitação - AMZ_NEB (A1) - 2005', fontsize=16, fontweight='bold')
+
+plt.xlabel(u'Experimentos e Observação', fontsize=16, fontweight='bold')
+plt.ylabel(u'Precipitação (mm/m)', fontsize=16, fontweight='bold')
+plt.ylim([0,40])
+
+objects = [u'RegCM4.6_EXP1', u'RegCM4.6_EXP2', u'CMAP', u'TRMM']
+plt.xticks(time, objects, fontsize=12)
+
+plt.savefig(os.path.join(path_out, 'precip_boxplot_amz_neb_a1_2005.png'), dpi=100)
 plt.show()
 raise SystemExit
 
