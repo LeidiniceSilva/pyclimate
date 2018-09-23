@@ -12,14 +12,13 @@ import numpy as np
 import matplotlib as mpl 
 # mpl.use('Agg')
 import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import shiftgrid
 
+from mpl_toolkits.basemap import shiftgrid
 from datetime import datetime, date
 from PyFuncemeClimateTools import PlotMaps as pm
-from hidropy.utils.hidropy_utils import create_path
-from vol3.nice.codes.PyClimateTools.comp_climate_stats import compute_anomaly
 from matplotlib.font_manager import FontProperties
 
+from pltsst import plotmap
 
 def import_exp_model(exp, season):
 
@@ -29,7 +28,7 @@ def import_exp_model(exp, season):
 	var1     = data1.variables['pr'][:]
 	lat      = data1.variables['lat'][:]
 	lon      = data1.variables['lon'][:]
-	sim      = var1[season][:,:,:]
+	sim      = var1[season,:,:]
 	
 	return sim
 	
@@ -44,26 +43,25 @@ def import_obs_data(obs, season):
 	var2     = data2.variables[vars_dic[obs]][:]
 	lat      = data2.variables['lat'][:]
 	lon      = data2.variables['lon'][:]
-	pre     = var2[season][:,:,:]
+	pre      = var2[season,:,:]
 
 	return pre
 	
 
-# Import simulations experiments and observed databases 3D
-season_dic = {u'0': u'DJF 2004/2005', u'1': u'MAM 2005', 
-			  u'2': u'JJA 2005', u'3': u'SON 2005' }
-			   
-for in season in range(0,4):
-	print season_list[season]
+# Import simulations experiments and observed databases 3D			   
+for season in range(0,4):
+	
+	season_dic = {0: u'DJF 2004/2005', 1: u'MAM 2005', 2: u'JJA 2005', 3: u'SON 2005'}
+	print season_dic[season]
 	
 	exp  = 'exp1'
 	exp1 = import_exp_model(exp, season)
-	print "exp1"
+	print "exp1", exp1
 	print
 
 	exp  = 'exp2'
 	exp2 = import_exp_model(exp, season)
-	print "exp2"
+	print "exp2", exp2
 	print
 	
 	obs  = 'cmap'
@@ -75,21 +73,30 @@ for in season in range(0,4):
 	trmm = import_obs_data(obs, season)
 	print "trmm", trmm
 	
+		
 	# RegCM4.6_EXP1 plotmaps
-	title1 = u'Precipitação Sazonal - RegCM4.6_EXP1 - {0}'.format(season_list[season])
-	figou1 = 'precip_season_map_amz_neb_regcm4.6_exp1_{0}.png'.format(season_list[season])
+	cor = ['#2372c9', '#3498ed', '#4ba7ef', '#76bbf3','#93d3f6', '#b0f0f7', '#ffffff', '#fbe78a', '#ff9d37', '#ff5f26',
+	       '#ff2e1b', '#ff0219', '#ae000c']
+	lev = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
 	
-	pm.plotmap(exp1[season, :, :], lats, lons, latsouthpoint=y1, latnorthpoint=y2, lonwestpoint=x1,
-		   loneastpoint=x2, ocean_mask=1, fig_name=figou1, fig_title=title1, barcolor=cor1, barlevs=lev1,
-		   barinf='max', barloc='right')
+	fig = plt.figure(figsize=(12, 8))
+	
+	title1 = u'Precipitação Sazonal - RegCM4.6_EXP1 - {0}'.format(season_dic[season])
+	figou1 = 'precip_season_map_amz_neb_regcm4.6_exp1_{0}.png'.format(season_dic[season])
+	
+	dvar, dlonew = shiftgrid(20., exp1, lon, start=False)
+			
+	plotmap(exp1, lat, dlonew, fig_title=title1, fig_name=figou1, barcolor=cor, barlevs=lev, barinf='both',
+	barloc='right')
+	plt.show()
+	exit()
 		   
 	# RegCM4.6_EXP2 plotmaps
 	title1 = u'Precipitação Sazonal - {0}'.format(season_list[season])
 	figou1 = 'precip_season_map_amz_neb_{0}.png'.format(season_list[season])
 	
-	pm.plotmap(exp2[season, :, :], lats, lons, latsouthpoint=y1, latnorthpoint=y2, lonwestpoint=x1,
-		   loneastpoint=x2, ocean_mask=1, fig_name=figou1, fig_title=title1, barcolor=cor1, barlevs=lev1,
-		   barinf='max', barloc='right')
+	pm.plotmap(exp2[season, :, :], lat, lon, fig_title=fig_title, fig_name=fig_out, barcolor=cor, barlevs=lev, barinf='both',
+	barloc='right')
 
 	# CMAP plotmaps
 	title1 = u'Precipitação Sazonal - {0}'.format(season_list[season])
@@ -106,5 +113,16 @@ for in season in range(0,4):
 	pm.plotmap(trmm[season, :, :], lats, lons, latsouthpoint=y1, latnorthpoint=y2, lonwestpoint=x1,
 		   loneastpoint=x2, ocean_mask=1, fig_name=figou1, fig_title=title1, barcolor=cor1, barlevs=lev1,
 		   barinf='max', barloc='right')
+		   
+	# cor = ['#2372c9', '#3498ed', '#4ba7ef', '#76bbf3','#93d3f6', '#b0f0f7', '#ffffff', '#fbe78a', '#ff9d37', '#ff5f26',
+	#        '#ff2e1b', '#ff0219', '#ae000c']
+	# lev = [-1., -0.8, -0.6, -0.4, -0.2, 0.2, 0.4, 0.6, 0.8, 1.]
+	#
+	# fig = plt.figure(figsize=(12, 8))
+	# fig_title = u'OLAMv.3.3_{0}_{1} x OBS - SON (1982-2012) \n Correlação de Precipitação Acumulada'.format(grad, paramet)
+	# fig_out = (os.path.join(path_out, 'correl_precip_acum_son_1982_2012_{0}_{1}.png'.format(grad, paramet)))
+	#
+	# pm.plotmap(corr_son, lat, lon, fig_title=fig_title, fig_name=fig_out, barcolor=cor, barlevs=lev, barinf='both',
+	#            barloc='right')
 		   
 	
