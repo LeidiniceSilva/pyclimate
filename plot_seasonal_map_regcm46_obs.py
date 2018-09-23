@@ -76,7 +76,7 @@ for season in range(0,4):
 		
 	# RegCM4.6_EXP1 plotmaps
 	cor = ['#2372c9', '#3498ed', '#4ba7ef', '#76bbf3','#93d3f6', '#b0f0f7', '#ffffff', '#fbe78a', '#ff9d37', '#ff5f26',
-	       '#ff2e1b', '#ff0219', '#ae000c']
+	'#ff2e1b', '#ff0219', '#ae000c']
 	lev = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
 	
 	fig = plt.figure(figsize=(12, 8))
@@ -102,27 +102,17 @@ for season in range(0,4):
 	title1 = u'Precipitação Sazonal - {0}'.format(season_list[season])
 	figou1 = 'precip_season_map_amz_neb_{0}.png'.format(season_list[season])
 	
-	pm.plotmap(cmap[season, :, :], lats, lons, latsouthpoint=y1, latnorthpoint=y2, lonwestpoint=x1,
-		   loneastpoint=x2, ocean_mask=1, fig_name=figou1, fig_title=title1, barcolor=cor1, barlevs=lev1,
-		   barinf='max', barloc='right')
+	pm.plotmap(cmap[season, :, :], lats, lons, latsouthpoint=y1, latnorthpoint=y2, lonwestpoint=x1, 
+	loneastpoint=x2, ocean_mask=1, fig_name=figou1, fig_title=title1, barcolor=cor1, barlevs=lev1,
+	barinf='max', barloc='right')
 
 	# TRMM plotmaps   
 	title1 = u'Precipitação Sazonal - {0}'.format(season_list[season])
 	figou1 = 'precip_season_map_amz_neb_{0}.png'.format(season_list[season])
 	
 	pm.plotmap(trmm[season, :, :], lats, lons, latsouthpoint=y1, latnorthpoint=y2, lonwestpoint=x1,
-		   loneastpoint=x2, ocean_mask=1, fig_name=figou1, fig_title=title1, barcolor=cor1, barlevs=lev1,
-		   barinf='max', barloc='right')
+	loneastpoint=x2, ocean_mask=1, fig_name=figou1, fig_title=title1, barcolor=cor1, barlevs=lev1,
+	barinf='max', barloc='right')
 		   
-	# cor = ['#2372c9', '#3498ed', '#4ba7ef', '#76bbf3','#93d3f6', '#b0f0f7', '#ffffff', '#fbe78a', '#ff9d37', '#ff5f26',
-	#        '#ff2e1b', '#ff0219', '#ae000c']
-	# lev = [-1., -0.8, -0.6, -0.4, -0.2, 0.2, 0.4, 0.6, 0.8, 1.]
-	#
-	# fig = plt.figure(figsize=(12, 8))
-	# fig_title = u'OLAMv.3.3_{0}_{1} x OBS - SON (1982-2012) \n Correlação de Precipitação Acumulada'.format(grad, paramet)
-	# fig_out = (os.path.join(path_out, 'correl_precip_acum_son_1982_2012_{0}_{1}.png'.format(grad, paramet)))
-	#
-	# pm.plotmap(corr_son, lat, lon, fig_title=fig_title, fig_name=fig_out, barcolor=cor, barlevs=lev, barinf='both',
-	#            barloc='right')
 		   
 	
