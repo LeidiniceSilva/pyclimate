@@ -97,14 +97,14 @@ for area in area_list:
 	plt.title(u'Boxplot de Precipitação - {0} - 2005'.format(area_dict[area]), fontsize=16, fontweight='bold')
 
 	plt.xlabel(u'Experimentos e Observação', fontsize=16, fontweight='bold')
-	plt.ylabel(u'Precipitação (mm/d)', fontsize=16, fontweight='bold')
+	plt.ylabel(u'Precipitação', fontsize=16, fontweight='bold')
 	plt.ylim([0,20])
 
 	objects = [u'Reg_EXP1', u'Reg_EXP2', u'CMAP', u'TRMM']
 	plt.xticks(time, objects, fontsize=12)
 
 	path_out = '/home/nice/'
-	plt.savefig(os.path.join(path_out, 'precip_boxplot_amz_neb_{0}_2005.jpeg'.format(area)), dpi=300)
+	plt.savefig(os.path.join(path_out, 'precip_boxplot_amz_neb_{0}_2005.png'.format(area)), dpi=100)
 
 	# Plot precipitation time series per region
 	# fig = plt.figure(figsize=(12,6))
@@ -121,7 +121,7 @@ for area in area_list:
 	# plt.title(u'Precipitação Média - AMZ_NEB (A1) - 2005', fontsize=16, fontweight='bold')
 
 	# plt.xlabel(u'Meses', fontsize=16, fontweight='bold')
-	# plt.ylabel(u'Precipitação (mm/d)', fontsize=16, fontweight='bold')
+	# plt.ylabel(u'Precipitação (mm/m)', fontsize=16, fontweight='bold')
 	# plt.ylim([0,40])
 
 	# objects = [u'JAN', u'FEV', u'MAR', u'ABR', u'MAI', u'JUN', u'JUL', u'AGO', u'SET', u'OUT', u'NOV', u'DEZ']
