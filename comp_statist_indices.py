@@ -5,14 +5,14 @@ __email__       = "leidinicesilvae@gmail.com"
 __date__        = "05/26/2018"
 __description__ = "Statistical indices to see performance of the model"
 
-
+from scipy.stats.stats import pearsonr
 from mpl_toolkits.basemap import shiftgrid, interp
 from PyFuncemeClimateTools import DefineGrid as dg
 from netCDF4 import Dataset
+
 import numpy as np
 import scipy.stats as st
 import matplotlib.pyplot as plt
-
 
 def check_dims(model, obs):
     
@@ -47,7 +47,7 @@ def compute_anomaly(model, obs):
     return anomaly, standard_anomaly
 
 
-def compute_corr(model, obs, **kwargs):
+def compute_corr(model, obs):
 
     """
     The input arrays must have the same dimentions
@@ -55,37 +55,11 @@ def compute_corr(model, obs, **kwargs):
     :Param obs: Numpy array with obs data
     :Return: Pearson Linear Correlation
     """
-
-    method = kwargs.pop('method', '3d') 
     
-    if method == '1d':
-	corr, pvalue = st.pearsonr(model, obs)
-        return corr
-
-    elif method == '3d':
-        check_dims(model, obs)
-        model, obs = filter_nan(model, obs)
-
-        timelen = float(obs.shape[0])
-
-        obs_mean = np.nanmean(obs, axis=0)
-        obs_std = np.nanstd(obs, axis=0)
-
-        model_mean = np.nanmean(model, axis=0)
-        model_std = np.nanstd(model, axis=0)
-
-        x1 = (obs - obs_mean)/obs_std
-        y1 = (model - model_mean)/model_std
-
-        xymult = x1 * y1
-        xysum = np.nansum(xymult, axis=0)
-        corr = xysum/timelen
-        return corr
-
-    else:
-        print('--- Compute_corr Function ---')
-        print('--- Input data error!---')
-        exit(1)
+    check_dims(model, obs)
+    model, obs = filter_nan(model, obs)
+    corr = np.corrcoef(model, obs)[0][1]
+    return corr
 
 
 def compute_rmse(model, obs):
@@ -129,7 +103,6 @@ def compute_pbias(model, obs):
     """
 
     check_dims(model, obs)
-    model, obs = filter_nan(model, obs)
     model, obs = filter_nan(model, obs)
     pbias = 100.0 * sum(model - obs) / sum(obs)
     return pbias

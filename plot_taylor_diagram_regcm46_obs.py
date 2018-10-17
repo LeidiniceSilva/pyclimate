@@ -12,18 +12,18 @@ import numpy as np
 import matplotlib as mpl 
 #mpl.use('Agg')
 import matplotlib.pyplot as plt
+import skill_metrics as sm
+
 from mpl_toolkits.basemap import shiftgrid
-
 from datetime import datetime, date
-from PyFuncemeClimateTools import PlotMaps as pm
-from hidropy.utils.hidropy_utils import create_path
 from matplotlib.font_manager import FontProperties
+from comp_statist_indices import compute_corr, compute_rmse
 
 
-def import_exp_model(exp, area):
+def import_exp_model(exp):
 	
-	mod_path = '/home/nice/subareas'
-	arq1     = '{0}/pre_amz_neb_regcm_{1}_2005_monmean_{2}.nc'.format(mod_path, exp, area)
+	mod_path = '/home/nice'
+	arq1     = '{0}/pre_amz_neb_regcm_{1}_2004-2005_yseasmean.nc'.format(mod_path, exp)
 	data1    = netCDF4.Dataset(arq1)
 	var1     = data1.variables['pr'][:]
 	lat      = data1.variables['lat'][:]
@@ -35,12 +35,12 @@ def import_exp_model(exp, area):
 	return np.squeeze(mod_end1)
 	
 
-def import_obs_data(obs, area):
+def import_obs_data(obs):
 
 	vars_dict = {u'cmap': u'precip', u'trmm': u'r'}
 
-	pre_path = '/home/nice/subareas'
-	arq2     = '{0}/pre_amz_neb_{1}_obs_2005_monmean_{2}.nc'.format(pre_path, obs, area)
+	pre_path = '/home/nice'
+	arq2     = '{0}/pre_amz_neb_{1}_obs_2004-2005_yseasmean.nc'.format(pre_path, obs)
 	data2    = netCDF4.Dataset(arq2)
 	var2     = data2.variables[vars_dict[obs]][:]
 	lat      = data2.variables['lat'][:]
@@ -50,89 +50,42 @@ def import_obs_data(obs, area):
 	pre_end1 = np.nanmean(pre_ini1, axis=1)
 
 	return np.squeeze(pre_end1)
-	
+sdev
 
-area_list = ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12']
-	
-for area in area_list:
-	
-	area_dict = {u'A1': u'A1_Sudoeste_AMZ', u'A2': u'A2_Norte_AMZ', u'A3': u'A3_Noroeste_AMZ', u'A4': u'A4_Nordeste_AMZ',
-	u'A5': u'A5_Sudeste_AMZ', u'A6': u'A6_Andes_sul', u'A7': u'A7_Andes_norte', u'A8': u'A8_Litoral_leste_NEB',
-	u'A9': u'A9_Semiárido_norte_NEB', u'A10': u'A10_Semiárido_sul_NEB', u'A11': u'A11_Litoral_sul_NEB',
-	u'A12': u'A12_Noroeste_NEB'}
-	
-	print "area -----------------> ", area_dict[area]
-	print 
-	
-	# Import simulations experiments and observed databases
-	exp  = 'exp1'
-	exp1 = import_exp_model(exp, area)
+# Import simulations experiments and observed databases
+exp  = 'exp1'
+exp1 = import_exp_model(exp)
 
-	exp  = 'exp2'
-	exp2 = import_exp_model(exp, area)
+obs  = 'cmap'
+cmap = import_obs_data(obs)
 
-	obs  = 'cmap'
-	cmap = import_obs_data(obs, area)
 
-	obs  = 'trmm'
-	trmm = import_obs_data(obs, area)
+print "exp1", exp1
+print
 
-	print "exp1", exp1
-	print
-	print "exp2", exp2
-	print
-	print "cmap", cmap
-	print
-	print "trmm", trmm
-	print
+print "cmap", cmap
+print
 
-	# Precipitation boxplot per region
-	fig = plt.figure(figsize=(12,6))
-	time = np.arange(1, 5)
+taylor_stats1 = sm.taylor_statistics(exp1,cmap,'data')
+taylor_stats2 = sm.taylor_statistics(exp1,cmap,'data')
+taylor_stats3 = sm.taylor_statistics(exp1,cmap,'data')
 
-	data = [exp1, exp2, cmap, trmm]
+# Store statistics in arrays
+sdev = np.array([taylor_stats1['sdev'][0], taylor_stats1['sdev'][1], taylor_stats2['sdev'][1], taylor_stats3['sdev'][1]])
+crmsd = np.array([taylor_stats1['crmsd'][0], taylor_stats1['crmsd'][1], taylor_stats2['crmsd'][1], taylor_stats3['crmsd'][1]])
+ccoef = np.array([taylor_stats1['ccoef'][0], taylor_stats1['ccoef'][1], taylor_stats2['ccoef'][1], taylor_stats3['ccoef'][1]])
 
-	a2 = plt.boxplot(data, notch=0, sym='+', vert=1, whis=1.5)
+print sdev
+print crmsd
+print ccoef
+exit()
 
-	plt.title(u'Boxplot de Precipitação - {0} - 2005'.format(area_dict[area]), fontsize=16, fontweight='bold')
 
-	plt.xlabel(u'Experimentos e Observação', fontsize=16, fontweight='bold')
-	plt.ylabel(u'Precipitação', fontsize=16, fontweight='bold')
-	plt.ylim([0,20])
+label = ['Non-Dimensional Observation', 'M1', 'M2', 'M3']
 
-	objects = [u'Reg_EXP1', u'Reg_EXP2', u'CMAP', u'TRMM']
-	plt.xticks(time, objects, fontsize=12)
+sm.taylor_diagram(sdev, crmsd, ccoef, markerLabel = label, styleOBS = '-', colOBS = 'r', 
+markerobs = 'o', titleOBS = 'observation')
 
-	path_out = '/home/nice/'
-	plt.savefig(os.path.join(path_out, 'precip_boxplot_amz_neb_{0}_2005.png'.format(area)), dpi=100)
-
-	# Plot precipitation time series per region
-	# fig = plt.figure(figsize=(12,6))
-	# time = np.arange(0, 11+1)
-
-	# a1 = plt.plot(time, exp1, time, exp2, time, cmap, time, trmm)
-
-	# l1, l2, l3, l4 = a1
-	# plt.setp(l1,  linewidth=2, markeredgewidth=4, marker='+', color='blue')
-	# plt.setp(l2,  linewidth=2, markeredgewidth=4, marker='+', color='green')
-	# plt.setp(l3,  linewidth=2, markeredgewidth=4, marker='+', color='red')
-	# plt.setp(l4,  linewidth=2, markeredgewidth=4, marker='+', color='black')
-						 
-	# plt.title(u'Precipitação Média - AMZ_NEB (A1) - 2005', fontsize=16, fontweight='bold')
-
-	# plt.xlabel(u'Meses', fontsize=16, fontweight='bold')
-	# plt.ylabel(u'Precipitação (mm/m)', fontsize=16, fontweight='bold')
-	# plt.ylim([0,40])
-
-	# objects = [u'JAN', u'FEV', u'MAR', u'ABR', u'MAI', u'JUN', u'JUL', u'AGO', u'SET', u'OUT', u'NOV', u'DEZ']
-	# plt.xticks(time, objects, fontsize=12)
-	# plt.grid(True, which='major', linestyle='--', linewidth='0.5', zorder=0.5)
-
-	# font = FontProperties(size=10)
-	# plt.legend([u'RegCM4.6_EXP1', U'RegCM4.6_EXP2', u'CMAP', u'TRMM'], loc='best', ncol=2, prop=font)
-
-	# path_out = '/home/nice/'
-	# plt.savefig(os.path.join(path_out, 'precip_serie_temp_amz_neb_a1_2005.png'), bbox_inches='tight')
-	# raise SystemExit
-
+plt.savefig('taylor1.png')
+plt.show()
 exit()
