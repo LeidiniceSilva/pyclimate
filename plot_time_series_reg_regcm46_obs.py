@@ -106,33 +106,33 @@ for area in area_list:
 	path_out = '/home/nice/'
 	plt.savefig(os.path.join(path_out, 'precip_boxplot_amz_neb_{0}_2005.jpeg'.format(area)), dpi=300)
 
-	# Plot precipitation time series per region
-	# fig = plt.figure(figsize=(12,6))
-	# time = np.arange(0, 11+1)
+	Plot precipitation time series per region
+	fig = plt.figure(figsize=(12,6))
+	time = np.arange(0, 11+1)
 
-	# a1 = plt.plot(time, exp1, time, exp2, time, cmap, time, trmm)
+	a1 = plt.plot(time, exp1, time, exp2, time, cmap, time, trmm)
 
-	# l1, l2, l3, l4 = a1
-	# plt.setp(l1,  linewidth=2, markeredgewidth=4, marker='+', color='blue')
-	# plt.setp(l2,  linewidth=2, markeredgewidth=4, marker='+', color='green')
-	# plt.setp(l3,  linewidth=2, markeredgewidth=4, marker='+', color='red')
-	# plt.setp(l4,  linewidth=2, markeredgewidth=4, marker='+', color='black')
+	l1, l2, l3, l4 = a1
+	plt.setp(l1,  linewidth=2, markeredgewidth=4, marker='+', color='blue')
+	plt.setp(l2,  linewidth=2, markeredgewidth=4, marker='+', color='green')
+	plt.setp(l3,  linewidth=2, markeredgewidth=4, marker='+', color='red')
+	plt.setp(l4,  linewidth=2, markeredgewidth=4, marker='+', color='black')
 						 
-	# plt.title(u'Precipitação Média - AMZ_NEB (A1) - 2005', fontsize=16, fontweight='bold')
+	plt.title(u'Precipitação Média - AMZ_NEB (A1) - 2005', fontsize=16, fontweight='bold')
 
-	# plt.xlabel(u'Meses', fontsize=16, fontweight='bold')
-	# plt.ylabel(u'Precipitação (mm/d)', fontsize=16, fontweight='bold')
-	# plt.ylim([0,40])
+	plt.xlabel(u'Meses', fontsize=16, fontweight='bold')
+	plt.ylabel(u'Precipitação (mm/d)', fontsize=16, fontweight='bold')
+	plt.ylim([0,40])
 
-	# objects = [u'JAN', u'FEV', u'MAR', u'ABR', u'MAI', u'JUN', u'JUL', u'AGO', u'SET', u'OUT', u'NOV', u'DEZ']
-	# plt.xticks(time, objects, fontsize=12)
-	# plt.grid(True, which='major', linestyle='--', linewidth='0.5', zorder=0.5)
+	objects = [u'JAN', u'FEV', u'MAR', u'ABR', u'MAI', u'JUN', u'JUL', u'AGO', u'SET', u'OUT', u'NOV', u'DEZ']
+	plt.xticks(time, objects, fontsize=12)
+	plt.grid(True, which='major', linestyle='--', linewidth='0.5', zorder=0.5)
 
-	# font = FontProperties(size=10)
-	# plt.legend([u'RegCM4.6_EXP1', U'RegCM4.6_EXP2', u'CMAP', u'TRMM'], loc='best', ncol=2, prop=font)
+	font = FontProperties(size=10)
+	plt.legend([u'RegCM4.6_EXP1', U'RegCM4.6_EXP2', u'CMAP', u'TRMM'], loc='best', ncol=2, prop=font)
 
-	# path_out = '/home/nice/'
-	# plt.savefig(os.path.join(path_out, 'precip_serie_temp_amz_neb_a1_2005.png'), bbox_inches='tight')
-	# raise SystemExit
+	path_out = '/home/nice/'
+	plt.savefig(os.path.join(path_out, 'precip_serie_temp_amz_neb_a1_2005.png'), bbox_inches='tight')
+	raise SystemExit
 
 exit()
