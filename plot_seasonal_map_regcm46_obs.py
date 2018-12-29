@@ -2,7 +2,7 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilvae@gmail.com"
-__date__        = "05/26/2018"
+__date__        = "12/26/2018"
 __description__ = "This script plot precipitation seasonal simulation"
 
 
@@ -60,40 +60,53 @@ for season in range(0,4):
 	
 	exp  = u'exp1'
 	lat, lon, exp1 = import_exp_model(exp, season)
-	print "exp1", lat, lon, exp1
+	print "exp1"
 	print
 
 	exp  = u'exp2'
 	exp2 = import_exp_model(exp, season)
-	print "exp2", exp2
+	print "exp2"
 	print
 	
 	obs  = u'cmap'
 	cmap = import_obs_data(obs, season)
-	print "cmap", cmap
+	print "cmap"
 	print
 	
 	obs  = u'trmm'
 	trmm = import_obs_data(obs, season)
-	print "trmm", trmm
+	print "trmm"
 
 	# Plot precipitation first season amz_neb 
-	fig = plt.figure(figsize=(12,10))    
-
-	title = u'Precipitação média sazonal (mm/d) \n{0}'.format(season_dic[season])      
-	plt.title(title, size=14)
-
-	s1 = u'Modelo: RegCM4.6'
-
-	plt.text(0, -4, s1, fontsize=9)
+	map_type = 'fill' # or fill
 	
-	levs   = (0, 1, 2, 3, 4, 6, 8, 10, 12, 20, 25, 30)
-	colors = ('#2372c9', '#3498ed', '#4ba7ef', '#76bbf3','#93d3f6', '#b0f0f7', '#ffffff', '#fbe78a', '#ff9d37', '#ff5f26', '#ff2e1b', '#ff0219', '#ae000c')
+	if map_type == 'fill': # Or fill
+
+		deltalat = np.mean(np.diff(lat))/2.
+		deltalon = np.mean(np.diff(lon))/2.
+		lat = lat - deltalat
+		lon = lon - deltalon
 	
-	maps = Basemap(projection='cyl', llcrnrlat=-19.75, urcrnrlat=9.75, llcrnrlon=275., urcrnrlon=345.)
-	maps.drawmeridians(np.arange(maps.lonmin,maps.lonmax+3,2),labels=[0,0,0,1], linewidth=0.0)
-	maps.drawparallels(np.arange(maps.latmin,maps.latmax+3,2),labels=[1,0,0,0], linewidth=0.0)
+	fig = plt.figure(figsize=(12,10))
 	
+	plt.title(u'Precipitação média sazonal (mm/d) \n RegCM4.6 - {0}'.format(season_dic[season]), fontsize=12, fontweight='bold')
+	
+	s1 = u'Condições de contorno: ERA15 (1981-2010)'
+	plt.text(-85, -24, s1, fontsize=8)
+    
+	plt.xlabel(u'Longitude', fontsize=12, labelpad=30)
+	plt.ylabel(u'Latitude', fontsize=12, labelpad=30)
+
+	levs   = [0, 1, 2, 4, 6, 8, 10, 12, 15, 20, 25, 30, 35]
+	colors = ['#FFFFFF', '#D1E6E5', '#A6DDDF', '#9AC6FE', '#5059F9', '#451BB5', '#00FF83', '#00EC0F',
+	'#00CD1E', '#F6F76D', '#F9D001', '#FF5600', '#E60000', '#FA394E']
+
+	maps = Basemap(projection='cyl', llcrnrlat=np.min(lat), urcrnrlat=np.max(lat), llcrnrlon=np.min(lon), urcrnrlon=np.max(lon))
+
+	maps.drawmeridians(np.arange(maps.lonmin+0.25, maps.lonmax+3+0.25, 10), labels=[0,0,0,1], linewidth=0.1)
+	maps.drawparallels(np.arange(maps.latmin+3, maps.latmax+3, 5), labels=[1,0,0,0], linewidth=0.1)
+
+	x, y = maps(lon, lat)
 	cpalunder = colors[0]
 	cpalover = colors[-1]
 	barcolor = colors[1:-1]
@@ -101,24 +114,36 @@ for season in range(0,4):
 	my_cmap.set_under(cpalunder)
 	my_cmap.set_over(cpalover)
 	norml = BoundaryNorm(levs, ncolors=my_cmap.N, clip=True)
+
+	if map_type=='fill':
+		plot_maps = plt.contourf(x, y, exp1, cmap=my_cmap, norm=norml, levels=levs, extend='both')
+
+	if map_type=='shade':
+		plot_maps = plt.pcolormesh(x, y, exp1, cmap=my_cmap, norm=norml)
+
+	# 	Drawing the line boundries
+	maps.drawcoastlines(linewidth=1, color='k')
+	maps.drawcountries(linewidth=1, color='k')
+
+	maps.readshapefile('/home/nice/Documentos/shp/states_brazil', 'states_brazil', drawbounds=True, linewidth=.5, color='k')
+
+	cbar_ax = fig.add_axes([0.92, 0.14, 0.04, 0.7])
+
+	bar = fig.colorbar(plot_maps, cax=cbar_ax, spacing='uniform', ticks=levs, extend='both',
+	extendfrac='auto', pad=0.05, drawedges=True)
 	
-	plot_maps = plt.contourf(exp1, cmap=my_cmap, norm=norml, levels=levs, extend='both',)
-			    
-	bar = fig.colorbar(plot_maps, spacing='uniform', ticks=levs, extendfrac='auto', extend='both', drawedges=True)
 	bar.set_ticklabels(levs)
 
-	plt.show()
-	exit()
-	
-	path_out = '/home/nice/Documentos/ufrn/papers/regcm_exp/exp_pbl/results/results_new/'
-	fig_name = 'pre_season_amz_neb_{0}.png'.format(season_dic[season])
+	path_out = '/home/nice/Documentos/ufrn/papers/regcm_exp/exp_pbl/results/'
+	fig_name = 'pre_sasonal_amz_neb_exp1.png'
 
 	if not os.path.exists(path_out):
 		os.makedirs(path_out)
+
+	plt.savefig(os.path.join(path_out, fig_name), dpi=300, bbox_inches='tight')
 	
-	plt.savefig(os.path.join(path_out, fig_name))
-	
+	plt.show()
 	raise SystemExit
 	exit()
-	
+
 
