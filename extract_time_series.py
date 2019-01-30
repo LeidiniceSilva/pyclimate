@@ -17,7 +17,7 @@ model = 'BCC-CSM1.1'
 exp   = 'historical_r1i1p1'
 data  = '185001-201212'
 
-mod_path = '/home/nice/Documentos/cmip/cmip5_hist/BCC-CSM1.1'
+mod_path = '/home/nice/Documentos/cmip_data/cmip5_hist'
 arq1     = '{0}/{1}_Amon_{2}_{3}_{4}.nc'.format(mod_path, var, model, exp, data)
 data1    = netCDF4.Dataset(arq1)
 
@@ -28,9 +28,9 @@ mod      = var1[:][:,:,:]
 mod_ini1 = np.nanmean(mod, axis=1)
 mod_end1 = np.nanmean(mod_ini1, axis=1)
 
-#~ print mod_end1
-#~ print
-#~ exit()
+print mod_end1
+print
+exit()
 
 # plot pluma graphs of all models
 fig  = plt.figure(figsize=(12, 10))
