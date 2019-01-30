@@ -98,8 +98,9 @@ for season in range(0,4):
 	# 	Drawing the line boundries
 	maps.drawcoastlines(linewidth=1, color='k')
 	maps.drawcountries(linewidth=1, color='k')
-
-	maps.readshapefile('/home/nice/Downloads/estados_2010', 'estados_2010', drawbounds=True, linewidth=.5, color='k')
+	maps.drawstates(linewidth=1, color='k')
+	
+	maps.readshapefile('/home/nice/Documentos/shp/states_brazil', 'states_brazil', drawbounds=True, linewidth=.5, color='k')
 
 	cbar_ax = fig.add_axes([0.92, 0.14, 0.04, 0.7])
 
