@@ -3,11 +3,12 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilvae@gmail.com"
 __date__        = "01/08/2019"
-__description__ = "This script plot boxplot and time series from CMIP5 models"
+__description__ = "This script plot climatology graphics from CMIP5 models end OBS basedata"
 
 import os
 import netCDF4
 import numpy as np
+import matplotlib.pyplot as plt
 
 from pylab import *
 from netCDF4 import Dataset
@@ -15,16 +16,15 @@ from scipy.stats import norm
 from matplotlib.font_manager import FontProperties
 
 
-
 def import_cmip5_clim(model):
 	
-	param = 'pr'
+	param = 'tas'
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/cmip5_hist'
-	arq   = '{0}/{1}_amz_neb_Amon_{2}_{3}_{4}_seamask.nc'.format(path,
-	param, model, exp, date)	
+	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/cmip5_hist'
+	arq   = '{0}/{1}_amz_neb_Amon_{2}_{3}_{4}.nc'.format(path, param,
+	model, exp, date)	
 	
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
@@ -44,11 +44,11 @@ def import_cmip5_clim(model):
 
 def import_obs_clim(database):
 	
-	param = 'pre'
+	param = 'tmp'
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/obs_data'
-	arq   = '{0}/{1}_amz_neb_{2}_obs_mon_197512-200511.nc'.format(path,
+	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/obs_data'
+	arq   = '{0}/{1}_amz_neb_{2}_obs_mon_{3}.nc'.format(path,
 	param, database, date)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -77,7 +77,7 @@ def import_obs_clim(database):
 	return obs_clim, obs_clim_p5, obs_clim_p95
 	
 	
-# Import model end obs database climatology
+# Import cmip5 model end obs database climatology
 model  = u'BCC-CSM1.1'
 mdl1_clim = import_cmip5_clim(model)
 		
@@ -236,22 +236,27 @@ plt.setp(l36, linewidth=8, markeredgewidth=1, linestyle='--', color='dimgray')
 
 plt.fill_between(time, obs1_clim_p5, obs1_clim_p95, facecolor='slategray', alpha=0.2, interpolate=True)
 
-fig.suptitle(u'Climatologia de precipitação (1975-2005)', fontsize=30, fontweight='bold', y=0.92)
+fig.suptitle(u'Climatologia de temperatura 2m - CMIP5-hist x CRU-ts4.02: 1975-2005', fontsize=32, y=0.92)
 
-plt.xlabel(u'Meses', fontsize=30)
-plt.ylabel(u'Precipitação (mm/d)', fontsize=30)
+plt.xlabel(u'Meses', fontsize=32)
+plt.ylabel(u'Temperatura 2m (°C)', fontsize=32)
+
 xaxis = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-plt.xticks(time, xaxis, fontsize=30)
-plt.yticks(np.arange(0, 14, 2), fontsize=30)
-plt.tick_params(axis='both', which='major', labelsize=30, length=8, width=2, pad=4, labelcolor='black')
+yaxis = np.arange(20, 32, 2)
+
+plt.xticks(time, xaxis, fontsize=32)
+plt.yticks(yaxis, fontsize=32)
+plt.tick_params(axis='both', which='major', labelsize=32, length=8, width=2, pad=4, labelcolor='black')
 
 legend = (u'CMIP5', u'HadGEM-ES', u'ENSMEAN_CMIP5', u'CRU', u'CRU_p5%', u'CRU_p95%')
-font = FontProperties(size=25)		    
+
+font = FontProperties(size=28)	
+	    
 plt.legend(plt_l[30:], legend, loc='upper center', bbox_to_anchor=(0.5, -0.07), shadow=True, ncol=6, prop=font)
 plt.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
 			    
-path_out = '/home/nice/Documentos/cmip5_hist'
-name_out = 'clim_cmip5_obs.png'
+path_out = '/home/nice/Documentos/ufrn/PhD_project/results/cmip5'
+name_out = 'plt_clim_temp2m_amz_neb_cmip5_cru_1975-2005.png'
 
 if not os.path.exists(path_out):
 	create_path(path_out)
