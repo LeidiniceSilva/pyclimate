@@ -30,8 +30,8 @@ def import_cmip5_model(model):
 	exp  = 'historical_r1i1p1'
 	date = '197512-200511'
 
-	path  = '/home/nice/Documentos/cmip_data/cmip5_hist'
-	arq   = '{0}/{1}_amz_neb_Amon_{2}_{3}_{4}.nc'.format(path, var, model, exp, date)	
+	path  = '/home/nice/Documentos'
+	arq   = '{0}/{1}_amz_neb_Amon_{2}_{3}_{4}_mask_ocean.nc'.format(path, var, model, exp, date)	
 	data  = netCDF4.Dataset(arq)
 	value = data.variables[var][:] 
 	lat   = data.variables['lat'][:]
@@ -39,7 +39,6 @@ def import_cmip5_model(model):
 	mod   = value[1,:,:]
 
 	return lat, lon, mod
-
 
 # Import CMIP5 models databases 3D			   
 for season in range(0,4):
@@ -86,7 +85,8 @@ for season in range(0,4):
 	barcolor = colors[1:-1]
 	my_cmap = c.ListedColormap(barcolor)
 	my_cmap.set_under(cpalunder)
-	my_cmap.set_over(cpalover)
+	my_cmap.set_over(cpalover)	
+		
 	norml = BoundaryNorm(levs, ncolors=my_cmap.N, clip=True)
 
 	if map_type=='fill':
@@ -109,13 +109,13 @@ for season in range(0,4):
 	
 	bar.set_ticklabels(levs)
 
-	path_out = '/home/nice/Documentos/ufrn/papers/regcm_exp/exp_pbl/results/'
-	fig_name = 'pre_sasonal_amz_neb_exp1.png'
+	#~ path_out = '/home/nice/Documentos/ufrn/papers/regcm_exp/exp_pbl/results/'
+	#~ fig_name = 'pre_sasonal_amz_neb_exp1.png'
 
-	if not os.path.exists(path_out):
-		os.makedirs(path_out)
+	#~ if not os.path.exists(path_out):
+		#~ os.makedirs(path_out)
 
-	plt.savefig(os.path.join(path_out, fig_name), dpi=300, bbox_inches='tight')
+	#~ plt.savefig(os.path.join(path_out, fig_name), dpi=300, bbox_inches='tight')
 	
 	plt.show()
 	raise SystemExit
