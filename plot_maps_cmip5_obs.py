@@ -11,15 +11,17 @@ import netCDF4
 import numpy as np
 import matplotlib as mpl 
 import matplotlib.pyplot as plt
+# mpl.use('Agg')
 
-from pylab import *
-from netCDF4 import Dataset
 from matplotlib import colors as c
 from matplotlib.colors import BoundaryNorm
 from matplotlib.font_manager import FontProperties
+
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.basemap import shiftgrid
 from mpl_toolkits.basemap import interp
+
+from os.path import expanduser
 
 
 def import_cmip5_clim(model):
@@ -35,12 +37,12 @@ def import_cmip5_clim(model):
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
 	lat   = data.variables['lat'][:]
-	lon   = data.variables['lon'][:]
+	lon   = data.variables['lon'][:] - 360
 	value = var[:][:,:,:]
-
-	mdl_data = np.nanmean(value)
 	
-	return mdl_data
+	mdl_data = value[0:360:360,:,:].mean(axis=1) 
+
+	return lat, lon, mdl_data
 
 
 def import_obs_clim(database):
@@ -57,25 +59,27 @@ def import_obs_clim(database):
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
-
-	obs_data = np.nanmean(value)
 	
-	return obs_data
+	obs_data = value[0:360:360,:,:].mean(axis=1) 
+	
+	return lat, lon, obs_data
 	
 	
 # Import cmip5 model end obs database 
 model = u'HadGEM2-ES'
-mdl1  = import_cmip5_clim(model)
-print mdl1
-exit()s
+lat, lon, mdl1  = import_cmip5_clim(model)
 
 model = u'ensmean_cmip5'
-mdl2  = import_cmip5_clim(model)
+lat, lon, mdl2  = import_cmip5_clim(model)
 
 database = u'cru_ts4.02'
-obs1     = import_obs_clim(database)
+lat, lon, obs1 = import_obs_clim(database)
 
-# Plot model end obs data maps 
+# Compute bias 
+#~ bias1 = mdl1 - obs1
+#~ bias2 = mdl2 - obs1
+
+# Plot maps cmip5 model end obs database 
 map_type = 'fill' # shade or fill
 
 if map_type == 'fill': 
@@ -95,10 +99,14 @@ plt.title(u'Média de precipitação do modelo HadGEM2-ES (mm/dia)', fontsize=12
 plt.xlabel(u'Longitude', fontsize=12, labelpad=30)
 plt.ylabel(u'Latitude', fontsize=12, labelpad=30)
 
-levs   = [0, 1, 2, 4, 6, 8, 10, 12, 15, 20, 25, 30, 35]
-colors = ['#FFFFFF', '#D1E6E5', '#A6DDDF', '#9AC6FE', '#5059F9', '#451BB5', '#00FF83', '#00EC0F',
-'#00CD1E', '#F6F76D', '#F9D001', '#FF5600', '#E60000', '#FA394E']
+#~ levs   = [0, 1, 2, 4, 6, 8, 10, 12, 15]
+#~ colors = ['#FFFFFF', '#D1E6E5', '#A6DDDF', '#9AC6FE', '#5059F9', '#451BB5', '#00FF83', '#00EC0F',
+#~ '#00CD1E', '#F6F76D', '#F9D001', '#FF5600', '#E60000', '#FA394E']
 
+# Accumuled levs
+levs   = [0, 1, 2, 4, 6, 8, 10, 12, 15]
+colors = ['#FFFFFF', '#4734F7', '#1E69A1', '#009B4A', '#58BD2E', '#AFDF10', '#FFF700', '#FF8200', '#FF0300', '#9A0000']
+		 
 maps = Basemap(projection='cyl', llcrnrlat=np.min(lat), urcrnrlat=np.max(lat), llcrnrlon=np.min(lon), urcrnrlon=np.max(lon))
 
 maps.drawmeridians(np.arange(maps.lonmin+0.25, maps.lonmax+3+0.25, 10), labels=[0,0,0,1], linewidth=0.1)
@@ -114,12 +122,12 @@ my_cmap.set_over(cpalover)
 norml = BoundaryNorm(levs, ncolors=my_cmap.N, clip=True)
 
 if map_type=='fill':
-	plot_maps = plt.contourf(x, y, exp1, cmap=my_cmap, norm=norml, levels=levs, extend='both')
+	plot_maps = plt.contourf(x, y, mdl1, cmap=my_cmap, norm=norml, levels=levs, extend='both')
 
 if map_type=='shade':
-	plot_maps = plt.pcolormesh(x, y, exp1, cmap=my_cmap, norm=norml)
+	plot_maps = plt.pcolormesh(x, y, mdl1, cmap=my_cmap, norm=norml)
 
-# 	Drawing the line boundries
+# Drawing the line boundries
 maps.drawcoastlines(linewidth=1, color='k')
 maps.drawcountries(linewidth=1, color='k')
 

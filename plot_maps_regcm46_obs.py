@@ -31,7 +31,7 @@ def import_exp_model(exp, season):
 	data1    = netCDF4.Dataset(arq1)
 	var1     = data1.variables['pr'][:]
 	lat      = data1.variables['lat'][:]
-	lon      = data1.variables['lon'][:] -360
+	lon      = data1.variables['lon'][:] 
 	sim      = var1[season,:,:]
 	
 	return lat, lon, sim
