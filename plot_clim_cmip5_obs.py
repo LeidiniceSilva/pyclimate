@@ -18,7 +18,7 @@ from matplotlib.font_manager import FontProperties
 
 def import_cmip5_clim(model):
 	
-	param = 'tas'
+	param = 'pr' # pr or tas
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
@@ -44,7 +44,7 @@ def import_cmip5_clim(model):
 
 def import_obs_clim(database):
 	
-	param = 'tmp'
+	param = 'pre' # pre or tas
 	date  = '197512-200511'
 
 	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/obs_data'
@@ -171,20 +171,20 @@ mdl30_clim = import_cmip5_clim(model)
 model  = u'NorESM1-M'
 mdl31_clim = import_cmip5_clim(model)
 
-model  = u'HadGEM2-ES'
+model  = u'ensmean_cmip5'
 mdl32_clim = import_cmip5_clim(model)
 
-model  = u'ensmean_cmip5'
+model  = u'HadGEM2-ES'
 mdl33_clim = import_cmip5_clim(model)
 
 database  = u'cru_ts4.02'
 obs1_clim, obs1_clim_p5 , obs1_clim_p95  = import_obs_clim(database)
 
 # Plot model end obs data climatology
-fig   = plt.figure(figsize=(26, 18))
-time = np.arange(1, 12 + 1)
+fig, ax = plt.subplots(figsize=(28, 16))
+time = np.arange(1, 13)
 
-plt_l = plt.plot(time, mdl1_clim, time, mdl2_clim, time, mdl3_clim,
+plt_clim = plt.plot(time, mdl1_clim, time, mdl2_clim, time, mdl3_clim,
 time,  mdl4_clim, time, mdl5_clim, time, mdl6_clim, time, mdl7_clim,
 time, mdl8_clim, time, mdl9_clim, time, mdl10_clim, time, mdl11_clim,
 time, mdl12_clim, time, mdl13_clim, time, mdl14_clim, time, mdl15_clim, 
@@ -195,7 +195,7 @@ time, mdl28_clim, time, mdl29_clim, time, mdl30_clim, time, mdl31_clim,
 time, mdl32_clim, time, mdl33_clim, time, obs1_clim, time, obs1_clim_p5, 
 time, obs1_clim_p95)
 
-l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34, l35, l36 = plt_l
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34, l35, l36 = plt_clim
 
 plt.setp(l1,  linewidth=3, markeredgewidth=1, color='gainsboro')
 plt.setp(l2,  linewidth=3, markeredgewidth=1, color='gainsboro')
@@ -228,40 +228,51 @@ plt.setp(l28, linewidth=3, markeredgewidth=1, color='gainsboro')
 plt.setp(l29, linewidth=3, markeredgewidth=1, color='gainsboro')
 plt.setp(l30, linewidth=3, markeredgewidth=1, color='gainsboro')
 plt.setp(l31, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l32, linewidth=8, markeredgewidth=1, color='gray')
-plt.setp(l33, linewidth=8, markeredgewidth=1, color='black')
-plt.setp(l34, linewidth=8, markeredgewidth=1, linestyle='--', color='black')
-plt.setp(l35, linewidth=8, markeredgewidth=1, linestyle='--', color='lightgray')
-plt.setp(l36, linewidth=8, markeredgewidth=1, linestyle='--', color='dimgray')
+plt.setp(l32, linewidth=6, markeredgewidth=1, color='blue')
+plt.setp(l33, linewidth=6, markeredgewidth=1, color='red')
+plt.setp(l34, linewidth=6, markeredgewidth=1, color='black')
+plt.setp(l35, linewidth=3, markeredgewidth=3, color='slategray')
+plt.setp(l36, linewidth=3, markeredgewidth=3, color='slategray')
 
-plt.fill_between(time, obs1_clim_p5, obs1_clim_p95, facecolor='slategray', alpha=0.2, interpolate=True)
+plt.fill_between(time, obs1_clim_p5, obs1_clim_p95, facecolor='slategray', alpha=0.8, interpolate=True)
 
-fig.suptitle(u'Climatologia de temperatura 2m - CMIP5-hist x CRU-ts4.02: 1975-2005', fontsize=32, y=0.92)
+# choice ariable: Rainfall or Temperature
+out_var    = u'pre'
+out_area   = u'amz_neb'
+var_name   = u'Rainfall'
+label_name = u'Rain (mm/day)' # deg.C = $^\circ$C when to tmp
+area_name  = u'AMZ_NEB (Lat:85S 15N, Lon:20E 10W)'
 
-plt.xlabel(u'Meses', fontsize=32)
-plt.ylabel(u'Temperatura 2m (°C)', fontsize=32)
+fig.suptitle(u'{0} Climatology - {1} \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Reference period: 1850-2005)'.format(var_name, area_name), fontsize=30, y=0.98)
 
-xaxis = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-yaxis = np.arange(20, 32, 2)
+plt.xlabel(u'Months', fontsize=30)
+plt.ylabel(u'{0}'.format(label_name), fontsize=30)
 
-plt.xticks(time, xaxis, fontsize=32)
-plt.yticks(yaxis, fontsize=32)
-plt.tick_params(axis='both', which='major', labelsize=32, length=8, width=2, pad=4, labelcolor='black')
+xaxis = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Ouc', 'Nov', 'Dec']
 
-legend = (u'CMIP5', u'HadGEM-ES', u'ENSMEAN_CMIP5', u'CRU', u'CRU_p5%', u'CRU_p95%')
+if var_name == 'Rainfall':
+	yaxis = np.arange(0, 14, 2)
 
-font = FontProperties(size=28)	
-	    
-plt.legend(plt_l[30:], legend, loc='upper center', bbox_to_anchor=(0.5, -0.07), shadow=True, ncol=6, prop=font)
-plt.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
-			    
+else:
+	yaxis = np.arange(18, 34, 2)
+
+plt.xticks(time, xaxis, fontsize=30)
+plt.yticks(yaxis, fontsize=30)
+plt.tick_params(axis='both', which='major', labelsize=30, length=10, width=4, pad=8, labelcolor='black')
+
+font = FontProperties(size=24)	
+legend = (u'CMIP5-hist', u'ENSMEAN_CMIP5', u'HadGEM-ES', u'CRU', u'CRU_p5%', u'CRU_p95%')    
+plt.legend(plt_clim[30:], legend, loc='upper center', bbox_to_anchor=(0.5, -0.07), shadow=True, ncol=6, prop=font)
+ax.xaxis.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
+ax.yaxis.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
+    
 path_out = '/home/nice/Documentos/ufrn/PhD_project/results/cmip5'
-name_out = 'plt_clim_temp2m_amz_neb_cmip5_cru_1975-2005.png'
+name_out = 'pyplt_clim_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area)
 
 if not os.path.exists(path_out):
 	create_path(path_out)
 	
-plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
+plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
 plt.show()
 exit()
 
