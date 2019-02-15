@@ -2,9 +2,8 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilvae@gmail.com"
-__date__        = "09/22/2018"
+__date__        = "02/14/2019"
 __description__ = "This script plot boxplot and from CMIP5 models end OBS basedata"
-
 
 import os
 import netCDF4
@@ -18,7 +17,6 @@ from pylab import *
 from netCDF4 import Dataset
 from scipy.stats import norm
 from matplotlib.font_manager import FontProperties
-
 
 
 def import_cmip5_clim(model):

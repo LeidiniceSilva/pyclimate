@@ -9,11 +9,15 @@ import os
 import netCDF4
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+# mpl.use('agg')
 
 from pylab import *
 from netCDF4 import Dataset
 from scipy.stats import norm
 from matplotlib.font_manager import FontProperties
+from comp_statist_indices import compute_corr, compute_rmse, compute_pbias
 
 
 def import_cmip5_clim(model):
@@ -44,7 +48,7 @@ def import_cmip5_clim(model):
 
 def import_obs_clim(database):
 	
-	param = 'pre' # pre or tas
+	param = 'pre' # pre or tmp
 	date  = '197512-200511'
 
 	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/obs_data'
@@ -75,8 +79,8 @@ def import_obs_clim(database):
 		obs_clim_p95.append(obs_p95)
 	
 	return obs_clim, obs_clim_p5, obs_clim_p95
-	
-	
+	              
+               
 # Import cmip5 model end obs database climatology
 model  = u'BCC-CSM1.1'
 mdl1_clim = import_cmip5_clim(model)
@@ -180,9 +184,14 @@ mdl33_clim = import_cmip5_clim(model)
 database  = u'cru_ts4.02'
 obs1_clim, obs1_clim_p5 , obs1_clim_p95  = import_obs_clim(database)
 
+# Compute statiscts index from CMIP5 HadGEM2-ES model and CRU obs database
+r = compute_corr(mdl33_clim, obs1_clim) # Compute Pearson Linear Correlattion Coeficient
+rmse = compute_rmse(mdl33_clim, obs1_clim) # Compute Root Mean Square Error
+pbias = compute_pbias(mdl33_clim, obs1_clim) # Compute Percentual Bias Error
+
 # Plot model end obs data climatology
 fig, ax = plt.subplots(figsize=(28, 16))
-time = np.arange(1, 13)
+time = np.arange(0.5, 12 + 0.5)
 
 plt_clim = plt.plot(time, mdl1_clim, time, mdl2_clim, time, mdl3_clim,
 time,  mdl4_clim, time, mdl5_clim, time, mdl6_clim, time, mdl7_clim,
@@ -237,25 +246,36 @@ plt.setp(l36, linewidth=3, markeredgewidth=3, color='slategray')
 plt.fill_between(time, obs1_clim_p5, obs1_clim_p95, facecolor='slategray', alpha=0.8, interpolate=True)
 
 # choice ariable: Rainfall or Temperature
-out_var    = u'pre'
+out_var    = u'pre' # pre or tmp
 out_area   = u'amz_neb'
-var_name   = u'Rainfall'
-label_name = u'Rain (mm/day)' # deg.C = $^\circ$C when to tmp
 area_name  = u'AMZ_NEB (Lat:85S 15N, Lon:20E 10W)'
 
-fig.suptitle(u'{0} Climatology - {1} \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Reference period: 1850-2005)'.format(var_name, area_name), fontsize=30, y=0.98)
-
-plt.xlabel(u'Months', fontsize=30)
-plt.ylabel(u'{0}'.format(label_name), fontsize=30)
-
-xaxis = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Ouc', 'Nov', 'Dec']
-
-if var_name == 'Rainfall':
+if out_var == 'pre':
 	yaxis = np.arange(0, 14, 2)
+	var_name   = u'Rainfall'
+	label_name = u'Rain (mm/day)' 
+	plt.text(9, 11, u'HadGEM-ES', color='red', fontsize=24, fontweight='bold')
+	plt.text(10.25, 11, u'x CRU-ts4.02', fontsize=24, fontweight='bold')
+	plt.text(9.5, 10.5, u'r = {0}'.format(round(r, 3)), fontsize=24, fontweight='bold')
+	plt.text(9.5, 10, u'rmse = {0}'.format(round(rmse, 3)), fontsize=24, fontweight='bold')
+	plt.text(9.5, 9.5, u'pbias = {0}'.format(round(pbias, 3)), fontsize=24, fontweight='bold')
 
 else:
 	yaxis = np.arange(18, 34, 2)
+	var_name   = u'Temperature' 
+	label_name = u'TEmperature 2m ($^\circ$C)' 
+	plt.text(9, 31, u'HadGEM-ES', color='red', fontsize=24, fontweight='bold')
+	plt.text(10.25, 31, u'x CRU-ts4.02', fontsize=24, fontweight='bold')
+	plt.text(9.5, 30.5, u'r = {0}'.format(round(r, 3)), fontsize=24, fontweight='bold')
+	plt.text(9.5, 30, u'rmse = {0}'.format(round(rmse, 3)), fontsize=24, fontweight='bold')
+	plt.text(9.5, 29.5, u'pbias = {0}'.format(round(pbias, 3)), fontsize=24, fontweight='bold')
 
+fig.suptitle(u'{0} Climatology - {1} \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Reference period: 1850-2005)'.format(var_name, area_name), fontsize=30, y=0.98)
+
+xaxis = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Ouc', 'Nov', 'Dec']
+
+plt.xlabel(u'Months', fontsize=30)
+plt.ylabel(u'{0}'.format(label_name), fontsize=30)
 plt.xticks(time, xaxis, fontsize=30)
 plt.yticks(yaxis, fontsize=30)
 plt.tick_params(axis='both', which='major', labelsize=30, length=10, width=4, pad=8, labelcolor='black')
@@ -272,7 +292,7 @@ name_out = 'pyplt_clim_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area
 if not os.path.exists(path_out):
 	create_path(path_out)
 	
-plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
+plt.savefig(os.path.join(path_out, name_out), dpi=100, bbox_inches='tight')
 plt.show()
 exit()
 
