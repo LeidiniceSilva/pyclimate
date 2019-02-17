@@ -157,9 +157,9 @@ if __name__=='__main__':
 	# Reference database
 	database  = u'cru_ts4.02'
 	x = import_obs_clim(database)
-	data = np.cos(x)
 	
 	# Reference database standard desviation
+	data = np.cos(x)
 	refstd = data.std(ddof=1)
 	
 	# Models

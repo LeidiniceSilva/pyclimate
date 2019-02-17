@@ -22,12 +22,13 @@ from comp_statist_indices import compute_corr, compute_rmse, compute_pbias
 
 def import_cmip5_clim(model):
 	
-	param = 'pr' # pr or tas
+	param = 'tas' # pr or tas
+	area  = 'amz' # amz or neb
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
 	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/cmip5_hist'
-	arq   = '{0}/{1}_amz_neb_Amon_{2}_{3}_{4}.nc'.format(path, param,
+	arq   = '{0}/{1}_{2}_Amon_{3}_{4}_{5}.nc'.format(path, param, area,
 	model, exp, date)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -48,12 +49,13 @@ def import_cmip5_clim(model):
 
 def import_obs_clim(database):
 	
-	param = 'pre' # pre or tmp
+	param = 'tmp' # pre or tmp
+	area  = 'amz' # amz or neb
 	date  = '197512-200511'
 
 	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/obs_data'
-	arq   = '{0}/{1}_amz_neb_{2}_obs_mon_{3}.nc'.format(path,
-	param, database, date)	
+	arq   = '{0}/{1}_{2}_{3}_obs_mon_{4}.nc'.format(path, param, area, 
+	database, date)	
 	
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
@@ -245,10 +247,10 @@ plt.setp(l36, linewidth=3, markeredgewidth=3, color='slategray')
 
 plt.fill_between(time, obs1_clim_p5, obs1_clim_p95, facecolor='slategray', alpha=0.8, interpolate=True)
 
-# choice ariable: Rainfall or Temperature
-out_var    = u'pre' # pre or tmp
-out_area   = u'amz_neb'
-area_name  = u'AMZ_NEB (Lat:85S 15N, Lon:20E 10W)'
+# choice ariable: Rainfall (AMZ and AMZ) or Temperature (AMZ and AMZ) 
+out_var    = u'tmp' # pre or tmp
+out_area   = u'amz' # amz or neb
+area_name  = u'AMZ (Lat:16S 4N, Lon:74W 48W)' # AMZ (Lat:16S 4N, Lon:74W 48W) or NEB (Lat:15S 2N, Lon:46W 34W)
 
 if out_var == 'pre':
 	yaxis = np.arange(0, 14, 2)
@@ -292,7 +294,7 @@ name_out = 'pyplt_clim_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area
 if not os.path.exists(path_out):
 	create_path(path_out)
 	
-plt.savefig(os.path.join(path_out, name_out), dpi=100, bbox_inches='tight')
+plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
 plt.show()
 exit()
 
