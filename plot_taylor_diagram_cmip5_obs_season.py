@@ -8,6 +8,7 @@ __description__ = "This script plot Taylor Diagram seasonal from CMIP5 models en
 import os
 import netCDF4
 import numpy as np
+import numpy.ma as ma
 import matplotlib.pyplot as plt
 
 from plot_taylor_diagram_cmip5_obs import TaylorDiagram
@@ -30,13 +31,21 @@ def import_cmip5_season(model):
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
 	
-	sea_mdl = np.nanmean(np.nanmean(value[0:360:3,:,:], axis=1), axis=1)
+	mdl_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
 	
-	sea1_mdl = sea_mdl[0:120:4]
-	sea2_mdl = sea_mdl[1:120:4]
-	sea3_mdl = sea_mdl[2:120:4]
-	sea4_mdl = sea_mdl[3:120:4]
-
+	dec = mdl_data[0::12]
+	jan = mdl_data[1::12]
+	feb = mdl_data[2::12]
+	mar = np.nanmean(mdl_data[3::12], axis=0)
+	apr = np.nanmean(mdl_data[4::12], axis=0)
+	may = np.nanmean(mdl_data[5::12], axis=0)
+	jun = np.nanmean(mdl_data[6::12], axis=0)
+	jul = np.nanmean(mdl_data[7::12], axis=0)
+	aug = np.nanmean(mdl_data[8::12], axis=0)
+	sep = np.nanmean(mdl_data[9::12], axis=0)
+	out = np.nanmean(mdl_data[10::12], axis=0)
+	nov = np.nanmean(mdl_data[11::12], axis=0)
+	
 	return sea1_mdl, sea2_mdl, sea3_mdl, sea4_mdl
 
 
@@ -384,6 +393,9 @@ fig.legend(dia.samplePoints,
 
 fig.tight_layout()
 
+plt.show()
+exit()
+
 path_out = '/home/nice/Documentos/ufrn/PhD_project/results/cmip5'
 name_out = 'pyplt_taylor_diagram_{0}_{1}_cmip5_cru_season_1975-2005.png'.format(out_var, out_area)
 
@@ -391,7 +403,6 @@ if not os.path.exists(path_out):
 	create_path(path_out)
 	
 plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
-plt.show()
 
 
 
