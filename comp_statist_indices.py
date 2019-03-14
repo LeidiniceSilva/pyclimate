@@ -55,7 +55,7 @@ def compute_mae(model, obs):
 
     check_dims(model, obs)
     model, obs = filter_nan(model, obs)
-    mae = np.mean(abs(model, obs))
+    mae = np.mean(np.abs(model, obs))
     
     return mae
     
@@ -119,7 +119,8 @@ def compute_apb(model, obs):
 
     check_dims(model, obs)
     model, obs = filter_nan(model, obs)
-    apb = 100.0 * sum(abs(model, obs)) / sum(obs)
+    apb = 100.0 * sum(np.abs(model, obs)) / sum(obs)
+    
     return apb
     
     
@@ -167,7 +168,7 @@ def compute_fcst_correc(model, obs, fcst):
     return fcst_correc
 
 
-def compute_efficient_coefficient(model, obs):
+def compute_effic_coeffic(model, obs):
 
     """
     The input arrays must have the same dimentions
