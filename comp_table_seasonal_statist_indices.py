@@ -32,8 +32,9 @@ def import_cmip5(model):
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
 	mdl_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
+	mdl_seas = np.nanmean(mdl_data[0::3], axis=0)
 
-	return mdl_data
+	return mdl_seas
 
 
 def import_obs(database):
@@ -52,8 +53,11 @@ def import_obs(database):
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
 	obs_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
+	obs_seas = np.nanmean(obs_data[::3], axis=0)
+	print obs_seas
+	exit()
 
-	return obs_data
+	return obs_seas
 
 
 tab = tt.Texttable()
@@ -72,6 +76,7 @@ for mdl in mdl_list:
 	
 	obs  = u'cru_ts4.02'
 	obs_clim = import_obs(obs)
+	
 	
 	# Compute statiscts index from CMIP5 models
 	r     = compute_corr(obs_clim, mdl_clim)
@@ -94,7 +99,7 @@ tab.set_cols_align(['c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'])
 tab.header([u'CMIP5 Models', u'R', u'R2_score', u'MAE', u'MSE', U'RMSE', U'BIAS', U'PBIAS', U'APB', U'NASH', u'Mae'])
 table = str(tab.draw())
 	
-file_name = 'table_monthly_pre_neb_statist_indices_cmip5_models_1975-2005.asc'
+file_name = 'table_seasonal_pre_neb_statist_indices_cmip5_models_1975-2005.asc'
 file_save = open(file_name, 'w')
 file_save.write(table)
 file_save.close()
