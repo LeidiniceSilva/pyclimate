@@ -32,9 +32,8 @@ def import_cmip5(model):
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
 	mdl_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
-	mdl_seas = np.nanmean(mdl_data[0::3], axis=0)
 
-	return mdl_seas
+	return mdl_data
 
 
 def import_obs(database):
@@ -53,33 +52,35 @@ def import_obs(database):
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
 	obs_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
-	obs_seas = np.nanmean(obs_data[::3], axis=0)
-	print obs_seas
-	exit()
 
-	return obs_seas
+	return obs_data
+	
 
-
-tab = tt.Texttable()
+tab = tt.Texttable(max_width=200)
 tab_inform = [[]]
     
 mdl_list = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCESS-1','CSIRO-ACCESS-3','CSIRO-MK36',
 'FIO-ESM','GISS-E2-H-CC','GISS-E2-H','GISS-E2-R','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','INMCM4','IPSL-CM5A-LR',
 'IPSL-CM5A-MR','IPSL-CM5B-LR','LASG-FGOALS-G2','LASG-FGOALS-S2','MIROC5','MIROC-ESM-CHEM','MIROC-ESM','MPI-ESM-LR',
 'MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-ME','NorESM1-M','ensmean_cmip5']
-		
+
+test = []
+
 for mdl in mdl_list:
 	print 'CMIP5 Model:', mdl
 	
 	# Import cmip5 model end obs database monthly	
 	mdl_clim = import_cmip5(mdl)
 	
+	casa = [1,2,3,4,5,6,7,8,9]
+	print np.nanmean(casa[0:9:3])
+	exit()
+	
 	obs  = u'cru_ts4.02'
 	obs_clim = import_obs(obs)
 	
-	
 	# Compute statiscts index from CMIP5 models
-	r     = compute_corr(obs_clim, mdl_clim)
+	r     = round((np.corrcoef(np.array(mdl_clim), np.array(obs_clim)))[0][1], 3)
 	r2    = metrics.r2_score(obs_clim, mdl_clim)
 	mae   = metrics.mean_absolute_error(obs_clim, mdl_clim)
 	mse   = metrics.mean_squared_error(obs_clim, mdl_clim)

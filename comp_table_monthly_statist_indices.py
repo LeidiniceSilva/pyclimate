@@ -56,7 +56,7 @@ def import_obs(database):
 	return obs_data
 
 
-tab = tt.Texttable()
+tab = tt.Texttable(max_width=200)
 tab_inform = [[]]
     
 mdl_list = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCESS-1','CSIRO-ACCESS-3','CSIRO-MK36',
@@ -74,7 +74,7 @@ for mdl in mdl_list:
 	obs_clim = import_obs(obs)
 	
 	# Compute statiscts index from CMIP5 models
-	r     = compute_corr(obs_clim, mdl_clim)
+	r     = round((np.corrcoef(np.array(mdl_clim), np.array(obs_clim)))[0][1], 3)
 	r2    = metrics.r2_score(obs_clim, mdl_clim)
 	mae   = metrics.mean_absolute_error(obs_clim, mdl_clim)
 	mse   = metrics.mean_squared_error(obs_clim, mdl_clim)
@@ -84,7 +84,7 @@ for mdl in mdl_list:
 	apb   = compute_apb(mdl_clim, obs_clim)
 	effic = compute_effic_coeffic(mdl_clim, obs_clim)
 	Mae = metrics.median_absolute_error(obs_clim, mdl_clim)
-	
+		
 	print r, r2, mae, mse, rmse, bias, pbias, apb, effic, Mae
 	
 	tab_inform.append([mdl, r, r2, mae, mse, rmse, bias, pbias, apb, effic, Mae])
