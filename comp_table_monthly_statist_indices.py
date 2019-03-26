@@ -83,15 +83,15 @@ for mdl in mdl_list:
 	pbias = compute_pbias(mdl_clim, obs_clim)
 	apb   = compute_apb(mdl_clim, obs_clim)
 	effic = compute_effic_coeffic(mdl_clim, obs_clim)
-	Mae = metrics.median_absolute_error(obs_clim, mdl_clim)
+	mae = metrics.median_absolute_error(obs_clim, mdl_clim)
 		
 	print r, r2, mae, mse, rmse, bias, pbias, apb, effic, Mae
 	
-	tab_inform.append([mdl, r, r2, mae, mse, rmse, bias, pbias, apb, effic, Mae])
+	tab_inform.append([mdl, r, r2, mae, mse, rmse, bias, pbias, apb, effic, mae])
 
 tab.add_rows(tab_inform)
 tab.set_cols_align(['c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'])
-tab.header([u'CMIP5 Models', u'R', u'R2_score', u'MAE', u'MSE', U'RMSE', U'BIAS', U'PBIAS', U'APB', U'NASH', u'Mae'])
+tab.header([u'CMIP5 Models', u'R', u'R2_score', u'MAE', u'MSE', U'RMSE', U'BIAS', U'PBIAS', U'APB', U'NASH', u'MAE'])
 table = str(tab.draw())
 	
 file_name = 'table_monthly_pre_neb_statist_indices_cmip5_models_1975-2005.asc'
