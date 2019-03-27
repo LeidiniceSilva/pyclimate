@@ -76,7 +76,7 @@ for season in range(0,4):
 	obs  = u'trmm'
 	trmm = import_obs_data(obs, season)
 	print "trmm"
-
+	
 	# Plot precipitation first season amz_neb 
 	map_type = 'fill' # or fill
 	
@@ -125,7 +125,7 @@ for season in range(0,4):
 	maps.drawcoastlines(linewidth=1, color='k')
 	maps.drawcountries(linewidth=1, color='k')
 
-	maps.readshapefile('/home/nice/Documentos/shp/states_brazil', 'states_brazil', drawbounds=True, linewidth=.5, color='k')
+	maps.readshapefile('/home/nice/Documentos/shp/shp_brasil/br_estados_brasil/states_brazil', 'states_brazil', drawbounds=True, linewidth=.5, color='k')
 
 	cbar_ax = fig.add_axes([0.92, 0.14, 0.04, 0.7])
 
