@@ -24,7 +24,7 @@ from comp_statist_indices import compute_corr, compute_rmse, compute_pbias
 
 def import_cmip5_clim(model):
 	
-	param = 'pr' # pr or tas
+	param = 'tas' # pr or tas
 	area  = 'amz' # amz or neb
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
@@ -51,7 +51,7 @@ def import_cmip5_clim(model):
 
 def import_obs_clim(database):
 	
-	param = 'pre' # pre or tmp
+	param = 'tmp' # pre or tmp
 	area  = 'amz' # amz or neb
 	date  = '197512-200511'
 
@@ -248,7 +248,7 @@ plt.setp(l36, linewidth=3, markeredgewidth=3, color='slategray')
 plt.fill_between(time, obs1_clim_p5, obs1_clim_p95, facecolor='slategray', alpha=0.8, interpolate=True)
 
 # choice variable: Rainfall (AMZ and AMZ) or Temperature (AMZ and AMZ) 
-out_var    = u'pre' # pre or tmp
+out_var    = u'tmp' # pre or tmp
 out_area   = u'amz' # amz or neb
 area_name  = u'AMZ (Lat:16S 4N, Lon:74W 48W)' # AMZ (Lat:16S 4N, Lon:74W 48W) or NEB (Lat:15S 2N, Lon:46W 34W)
 
