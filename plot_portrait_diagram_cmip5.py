@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilvae@gmail.com"
 __date__        = "03/25/2019"
-__description__ = "This script plot Portrait Diagram from CMIP5 models"
+__description__ = "This script plot correlation Portrait Diagram from CMIP5 models"
 
 import os
 import netCDF4
@@ -17,7 +17,7 @@ from comp_statist_indices import compute_bias
 def import_cmip5(model):
 	
 	param = 'pr' # pr or tas
-	area  = 'amz' # amz or neb
+	area  = 'neb' # amz or neb
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
@@ -43,7 +43,7 @@ def import_cmip5(model):
 def import_obs(database):
 	
 	param = 'pre' # pre or tmp
-	area  = 'amz' # amz or neb
+	area  = 'neb' # amz or neb
 	date  = '197512-200511'
 
 	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/obs_data'
@@ -94,37 +94,36 @@ def heatmap(data, row_labels, col_labels, ax=None,
 
     # Create colorbar
     cbar = ax.figure.colorbar(im, ax=ax, **cbar_kw)
-    cbar.ax.set_ylabel(cbarlabel, rotation=-90, va="center")
+    cbar.ax.set_ylabel(cbarlabel, rotation=-90, fontsize=20, va="center")
 
-    # We want to show all ticks...
+    # We want to show all ticks.
     ax.set_xticks(np.arange(data.shape[1]))
     ax.set_yticks(np.arange(data.shape[0]))
-    # ... and label them with the respective list entries.
+    # And label them with the respective list entries.
     ax.set_xticklabels(col_labels)
     ax.set_yticklabels(row_labels)
 
-    # Let the horizontal axes labeling appear on top.
-    #~ ax.tick_params(top=True, bottom=False,
-                   #~ labeltop=True, labelbottom=False)
-
     # Rotate the tick labels and set their alignment.
     plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
-             rotation_mode="anchor")
-
+             rotation_mode="anchor", fontsize=20)
+             
+    plt.setp(ax.get_yticklabels(), ha="right", rotation_mode="anchor", 
+			 fontsize=20)
+             
     # Turn spines off and create white grid.
     for edge, spine in ax.spines.items():
         spine.set_visible(False)
 
     ax.set_xticks(np.arange(data.shape[1]+1)-.5, minor=True)
     ax.set_yticks(np.arange(data.shape[0]+1)-.5, minor=True)
-    ax.grid(which="minor", color="w", linestyle='-', linewidth=3)
+    ax.grid(which="minor", color="white", linestyle='-', linewidth=5)
     ax.tick_params(which="minor", bottom=False, left=False)
 
     return im, cbar
 
 
 def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
-                     textcolors=["black", "white"],
+                     textcolors=["gray", "black"],
                      threshold=None, **textkw):
     """
     A function to annotate a heatmap.
@@ -155,8 +154,7 @@ def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
     else:
         threshold = im.norm(data.max())/2.
 
-    # Set default alignment to center, but allow it to be
-    # overwritten by textkw.
+    # Set default alignment to center, but allow it to be overwritten by textkw.
     kw = dict(horizontalalignment="center",
               verticalalignment="center")
     kw.update(textkw)
@@ -173,12 +171,15 @@ def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
             kw.update(color=textcolors[im.norm(data[i, j]) > threshold])
             text = im.axes.text(j, i, valfmt(data[i, j], None), **kw)
             texts.append(text)
-
+	
     return texts
 
 
-vegetables = ['DJF','MAM','JJA','SON','All seasons', 'Annual']
-farmers = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCESS-1','CSIRO-ACCESS-3']   
+seasons = ['DJF','MAM','JJA','SON','All seasons', 'Annual']
+models = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCESS-1','CSIRO-ACCESS-3','CSIRO-MK36',
+'FIO-ESM','GISS-E2-H-CC','GISS-E2-H','GISS-E2-R','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','INMCM4','IPSL-CM5A-LR',
+'IPSL-CM5A-MR','IPSL-CM5B-LR','LASG-FGOALS-G2','LASG-FGOALS-S2','MIROC5','MIROC-ESM-CHEM','MIROC-ESM','MPI-ESM-LR',
+'MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-ME','NorESM1-M','ensmean_cmip5']
 
 djf = []
 mam = []
@@ -187,7 +188,7 @@ son = []
 season = []
 annual = []
 
-for mdl in farmers:
+for mdl in models:
 	print 'CMIP5 Model:', mdl
 	
 	# Import cmip5 model end obs database monthly	
@@ -213,20 +214,30 @@ for mdl in farmers:
 harvest = np.array([djf, mam, jja, son, season, annual])
 print harvest
                     
-fig, ax = plt.subplots(figsize=(14,10))
+fig, ax = plt.subplots(figsize=(28,10))
 
-fig.suptitle(u'Rainfall Portrait Diagram CMIP5 \n AMZ (Lat:85S 15N, Lon:20E 10W) - 1975-2005 (Reference period: 1850-2005)', fontsize=15)
-im, cbar = heatmap(harvest, vegetables, farmers, ax=ax, cmap='bwr', cbarlabel='Bias')
-texts = annotate_heatmap(im, valfmt="{x:.1f}")
+# Choice variable: Rainfall (AMZ and AMZ) or Temperature (AMZ and AMZ) 
+out_var    = u'pre' # pre or tmp
+out_area   = u'neb' # amz or neb
+area_name  = u'NEB (Lat:15S 2N, Lon:46W 34W)' # AMZ (Lat:16S 4N, Lon:74W 48W) or NEB (Lat:15S 2N, Lon:46W 34W)
+
+if out_var == 'pre':
+	var_name   = u'Rainfall'
+else:
+	var_name   = u'Temperature' 
+
+fig.suptitle(u'{0} Bias - {1}  \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Reference period: 1850-2005)'.format(var_name, area_name), fontsize=30, x=0.45, y=0.80)
+im, cbar = heatmap(harvest, seasons, models, vmin=-6, vmax=6, ax=ax, cmap='bwr', cbarlabel='Bias')
+texts = annotate_heatmap(im, valfmt="{x:.1f}", fontsize=20)
 
 # Save figure
 path_out = '/home/nice/Documentos/ufrn/PhD_project/results/cmip5'
-name_out = 'pyplt_portrait_diagram_pre_amz_cmip5_cru_1975-2005.png'
+name_out = 'pyplt_portrait_diagram_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area)
 
 if not os.path.exists(path_out):
 	create_path(path_out)
 	
-plt.savefig(os.path.join(path_out, name_out))
+plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
 
 fig.tight_layout()
 plt.show()
