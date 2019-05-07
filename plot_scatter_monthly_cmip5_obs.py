@@ -112,12 +112,13 @@ for i,type in enumerate(types):
     c = z[i]
     
     ax.scatter(a, b, c, c='b', s=30, marker='o')
-    ax.set_xlabel('MAE')
-    ax.set_ylabel('MSE')
-    ax.set_zlabel('PBIAS')
-    
-    plt.title('3D Scatter plot from CMIP5 models')
+    ax.set_xlabel('MAE', fontsize=10)
+    ax.set_ylabel('MSE', fontsize=10)
+    ax.set_zlabel('PBIAS', fontsize=10)
 
+	fig.legend(, numpoints=1, prop=dict(size='small'), loc='upper right')
+
+    
 plt.show()
 exit()
 
