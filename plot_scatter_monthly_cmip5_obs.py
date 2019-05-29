@@ -116,7 +116,7 @@ for i,type in enumerate(types):
     ax.set_ylabel('MSE', fontsize=10)
     ax.set_zlabel('PBIAS', fontsize=10)
 
-	fig.legend(, numpoints=1, prop=dict(size='small'), loc='upper right')
+    # fig.legend(a, numpoints=1, prop=dict(size='small'), loc='upper right')
 
     
 plt.show()
