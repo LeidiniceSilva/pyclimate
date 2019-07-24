@@ -24,32 +24,47 @@ from mpl_toolkits.basemap import interp
 from os.path import expanduser
 
 
-def import_exp_model(exp, season):
-
-	path_in1 = '/home/nice/Documentos/ufrn/papers/regcm_exp/exp_pbl/datas'
-	arq1     = '{0}/pre_amz_neb_regcm_{1}_2004-2005_yseasmean.nc'.format(path_in1, exp)
-	data1    = netCDF4.Dataset(arq1)
-	var1     = data1.variables['pr'][:]
-	lat      = data1.variables['lat'][:]
-	lon      = data1.variables['lon'][:] 
-	sim      = var1[season,:,:]
+def import_sim(exp):
 	
-	return lat, lon, sim
+	param = 'pr' # pr or tas
+	area  = 'amz_neb' # amz or neb
+	date  = '2001-2010'
+
+	path  = '/home/nice/Documentos/ufrn/papers/regcm_pbl/datas'
+	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, exp, date)	
 	
+	data  = netCDF4.Dataset(arq)
+	var   = data.variables[param][:] 
+	lat   = data.variables['lat'][:]
+	lon   = data.variables['lon'][:]
+	value = var[:][:,:,:]
 
-def import_obs_data(obs, season):
+	exp_mdl = np.nanmean(np.nanmean(value, axis=1), axis=1)
 
-	vars_dic = {u'cmap': u'precip', u'trmm': u'r'}
+	mdl_clim = []
+	for mon in range(1, 12 + 1):
+		mdl = np.nanmean(exp_mdl[mon::12], axis=0)
+		mdl_clim.append(mdl)
+
+	return mdl_clim
+
+
+def import_obs(obs):
 	
-	path_in2 = '/home/nice/Documentos/ufrn/papers/regcm_exp/exp_pbl/datas'
-	arq2     = '{0}/pre_amz_neb_{1}_obs_2004-2005_yseasmean.nc'.format(path_in2, obs)
-	data2    = netCDF4.Dataset(arq2)
-	var2     = data2.variables[vars_dic[obs]][:]
-	lat      = data2.variables['lat'][:]
-	lon      = data2.variables['lon'][:]
-	pre      = var2[season,:,:]
+	param = 'precip' # precip, pre or tmp
+	area  = 'amz_neb' # amz or neb
+	date  = '2001-2010'
 
-	return lat, lon, pre
+	path  = '/home/nice/Documentos/ufrn/papers/regcm_pbl/datas'
+	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, obs, date)	
+		
+	data  = netCDF4.Dataset(arq)
+	var   = data.variables[param][:] 
+	lat   = data.variables['lat'][:]
+	lon   = data.variables['lon'][:]
+	obs = var[:][:,:,:]
+	
+	return obs
 	
 
 # Import simulations experiments and observed databases 3D			   
