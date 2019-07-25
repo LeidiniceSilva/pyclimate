@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 __author__      = "Leidinice Silva"
-__email__       = "leidinicesilvae@gmail.com"
-__date__        = "01/08/2019"
-__description__ = "This script plot climatology graphics from CMIP5 models end OBS basedata"
+__email__       = "leidinicesilva@gmail.com"
+__date__        = "12/26/2018"
+__description__ = "This script plot climatology graphics from Rec_EXP models end OBS basedata"
 
 
 import os
@@ -27,7 +27,7 @@ def import_sim(exp):
 	area  = 'amz_neb' # amz or neb
 	date  = '2001-2010'
 
-	path  = '/home/nice/Documentos/ufrn/papers/regcm_pbl/datas'
+	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
 	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, exp, date)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -52,7 +52,7 @@ def import_obs(obs):
 	area  = 'amz_neb' # amz or neb
 	date  = '2001-2010'
 
-	path  = '/home/nice/Documentos/ufrn/papers/regcm_pbl/datas'
+	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
 	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, obs, date)	
 		
 	data  = netCDF4.Dataset(arq)
@@ -88,7 +88,7 @@ exp1_clim = import_sim(exp)
 exp  = u'regcm_exp2'
 exp2_clim = import_sim(exp)
 
-obs  = u'gpcp_v2.2_obs'
+obs  = u'cru_ts4.02_obs'
 obs_clim, obs_clim_p5, obs_clim_p95  = import_obs(obs)
 
 # Plot model end obs data climatology
@@ -122,8 +122,8 @@ plt.legend(loc='upper center', shadow=True, ncol=2, prop=FontProperties(size=30)
 plt.tick_params(axis='both', which='major', labelsize=30, length=10, width=4, pad=8, labelcolor='black')
 
 # Path out to save figure
-path_out = '/home/nice/Documentos/ufrn/papers/regcm_pbl/results'
-name_out = 'pyplt_clim_regcm_pbl_obs_2001-2010.png'
+path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
+name_out = 'pyplt_clim_tas_regcm_pbl_obs_2001-2010.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
@@ -192,7 +192,7 @@ ax.xaxis.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
 ax.yaxis.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
     
 path_out = '/home/nice/Documentos/ufrn/papers/regcm_exp/results'
-name_out = 'pyplt_clim_{0}_{1}_regcm_exp_gpcp_2001-2010.png'.format(out_var, out_area)
+name_out = 'pyplt_clim_pr_{0}_{1}_regcm_exp_gpcp_2001-2010.png'.format(out_var, out_area)
 
 if not os.path.exists(path_out):
 	create_path(path_out)

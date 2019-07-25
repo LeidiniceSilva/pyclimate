@@ -1,164 +1,168 @@
 # -*- coding: utf-8 -*-
 
 __author__      = "Leidinice Silva"
-__email__       = "leidinicesilvae@gmail.com"
+__email__       = "leidinicesilva@gmail.com"
 __date__        = "12/26/2018"
-__description__ = "This script plot precipitation seasonal simulation"
-
+__description__ = "This script plot climatology maps from Rec_EXP models end OBS basedata"
 
 import os
+import conda
 import netCDF4
 import numpy as np
 import matplotlib as mpl 
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+
 # mpl.use('Agg')
+
+conda_file_dir = conda.__file__
+conda_dir = conda_file_dir.split('lib')[0]
+proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
+os.environ["PROJ_LIB"] = proj_lib
 
 from matplotlib import colors as c
 from matplotlib.colors import BoundaryNorm
-from matplotlib.font_manager import FontProperties
-
 from mpl_toolkits.basemap import Basemap
-from mpl_toolkits.basemap import shiftgrid
-from mpl_toolkits.basemap import interp
-
 from os.path import expanduser
 
 
-def import_sim(exp):
+def import_sim(param, exp):
 	
-	param = 'pr' # pr or tas
-	area  = 'amz_neb' # amz or neb
-	date  = '2001-2010'
-
-	path  = '/home/nice/Documentos/ufrn/papers/regcm_pbl/datas'
-	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, exp, date)	
+	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
+	arq   = '{0}/{1}_amz_neb_{2}_mon_2001-2010.nc'.format(path, param, exp)	
 	
 	data  = netCDF4.Dataset(arq)
-	var   = data.variables[param][:] 
+	var   = data.variables[param][:]
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
-	value = var[:][:,:,:]
+	exp = var[:,:,:]
 
-	exp_mdl = np.nanmean(np.nanmean(value, axis=1), axis=1)
-
-	mdl_clim = []
-	for mon in range(1, 12 + 1):
-		mdl = np.nanmean(exp_mdl[mon::12], axis=0)
-		mdl_clim.append(mdl)
-
-	return mdl_clim
+	return lat, lon, exp
 
 
-def import_obs(obs):
+def import_obs(param, obs):
 	
-	param = 'precip' # precip, pre or tmp
-	area  = 'amz_neb' # amz or neb
-	date  = '2001-2010'
-
-	path  = '/home/nice/Documentos/ufrn/papers/regcm_pbl/datas'
-	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, obs, date)	
+	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
+	arq   = '{0}/{1}_amz_neb_{2}_mon_2001-2010.nc'.format(path, param, obs)	
 		
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
-	obs = var[:][:,:,:]
+	obs = var[:,:,:]
 	
-	return obs
+	return lat, lon, obs
 	
 
-# Import simulations experiments and observed databases 3D			   
-for season in range(0,4):
+def basemap(lat, lon):
 	
-	season_dic = {0: u'DJF-2004/2005', 1: u'MAM-2005', 2: u'JJA-2005', 3: u'SON-2005'}
-	print season_dic[season]
+	aux_lon1 = []
+	aux_lon2 = []
+	for l in lon:
+		if l <= 180:
+			aux_lon1.append(l)
+		else:
+			aux_lon2.append(l-360)
+		
+	lon = np.array(aux_lon1[::-1] + aux_lon2[::-1])
+	new_lat = lat[::-1]
+	new_lon = lon[::-1]
 	
-	exp  = u'exp1'
-	lat, lon, exp1 = import_exp_model(exp, season)
-	print "exp1"
-	print
-
-	exp  = u'exp2'
-	exp2 = import_exp_model(exp, season)
-	print "exp2"
-	print
+	map = Basemap(projection='cyl', llcrnrlon=-85., llcrnrlat=-20., urcrnrlon=-15.,urcrnrlat=10., resolution='c')
+	map.drawmeridians(np.arange(-85.,-5.,10.), labels=[0,0,0,1], linewidth=0.2)
+	map.drawparallels(np.arange(-20.,15.,5.), labels=[1,0,0,0], linewidth=0.2)
+	map.drawcoastlines(linewidth=1, color='k')
+	map.drawcountries(linewidth=1, color='k')
 	
-	obs  = u'cmap'
-	cmap = import_obs_data(obs, season)
-	print "cmap"
-	print
+	xin = np.linspace(map.xmin,map.xmax,20) 
+	yin = np.linspace(map.ymin,map.ymax,20) 
+	lons = np.arange(-85.,-5.,0.25) 
+	lats = np.arange(-20.,15.,-0.25) 
+	lons, lats = np.meshgrid(new_lon, new_lat)
+	xx, yy = map(lons,lats)
 	
-	obs  = u'trmm'
-	trmm = import_obs_data(obs, season)
-	print "trmm"
+	return map, xx, yy
 	
-	# Plot precipitation first season amz_neb 
-	map_type = 'fill' # or fill
 	
-	if map_type == 'fill': # Or fill
-
-		deltalat = np.mean(np.diff(lat))/2.
-		deltalon = np.mean(np.diff(lon))/2.
-		lat = lat - deltalat
-		lon = lon - deltalon
+def colormap():
 	
-	fig = plt.figure(figsize=(12,10))
+	param = 'tas'
 	
-	plt.title(u'Precipitação média sazonal (mm/d) \n RegCM4.6 - {0}'.format(season_dic[season]), fontsize=12, fontweight='bold')
+	if param == 'pr':
+		precip_colors = ['#FDFDFD', '#04E9E7', '#019FF4', '#0300F4',
+		'#02FD02', '#01C501', '#008E00', '#FDF802', '#E5BC00', '#FD9500',
+		'#FD0000', '#D40000', '#BF0000', '#F800FD', '#9854C6']
+		#~ precip_colors = ['#FFFFFF', '#78F573','#37D23C','#0FA00F',
+		#~ '#96D2FA','#50A5F5','#1464D2','#FFFAAA','#FDD802','#FFC03C',
+		#~ '#FF6000','#E11400','#BC0000','#F800FD','#9854C6']
+		
+		mpl.colors.ListedColormap(precip_colors)
+		levs = [0, 0.5, 1, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10., 15.0, 20.0]
+		norm = mpl.colors.BoundaryNorm(levs, 16)
+
+	else:
+		levs = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
+		var_colormap = cm.coolwarm
+		norm = mpl.colors.BoundaryNorm(levs, 16)	
 	
-	s1 = u'Condições de contorno: ERA15 (1981-2010)'
-	plt.text(-85, -24, s1, fontsize=8)
-    
-	plt.xlabel(u'Longitude', fontsize=12, labelpad=30)
-	plt.ylabel(u'Latitude', fontsize=12, labelpad=30)
-
-	levs   = [0, 1, 2, 4, 6, 8, 10, 12, 15, 20, 25, 30, 35]
-	colors = ['#FFFFFF', '#D1E6E5', '#A6DDDF', '#9AC6FE', '#5059F9', '#451BB5', '#00FF83', '#00EC0F',
-	'#00CD1E', '#F6F76D', '#F9D001', '#FF5600', '#E60000', '#FA394E']
-
-	maps = Basemap(projection='cyl', llcrnrlat=np.min(lat), urcrnrlat=np.max(lat), llcrnrlon=np.min(lon), urcrnrlon=np.max(lon))
-
-	maps.drawmeridians(np.arange(maps.lonmin+0.25, maps.lonmax+3+0.25, 10), labels=[0,0,0,1], linewidth=0.1)
-	maps.drawparallels(np.arange(maps.latmin+3, maps.latmax+3, 5), labels=[1,0,0,0], linewidth=0.1)
-
-	x, y = maps(lon, lat)
-	cpalunder = colors[0]
-	cpalover = colors[-1]
-	barcolor = colors[1:-1]
-	my_cmap = c.ListedColormap(barcolor)
-	my_cmap.set_under(cpalunder)
-	my_cmap.set_over(cpalover)
-	norml = BoundaryNorm(levs, ncolors=my_cmap.N, clip=True)
-
-	if map_type=='fill':
-		plot_maps = plt.contourf(x, y, exp1, cmap=my_cmap, norm=norml, levels=levs, extend='both')
-
-	if map_type=='shade':
-		plot_maps = plt.pcolormesh(x, y, exp1, cmap=my_cmap, norm=norml)
-
-	# 	Drawing the line boundries
-	maps.drawcoastlines(linewidth=1, color='k')
-	maps.drawcountries(linewidth=1, color='k')
-
-	maps.readshapefile('/home/nice/Documentos/shp/shp_brasil/br_estados_brasil/states_brazil', 'states_brazil', drawbounds=True, linewidth=.5, color='k')
-
-	cbar_ax = fig.add_axes([0.92, 0.14, 0.04, 0.7])
-
-	bar = fig.colorbar(plot_maps, cax=cbar_ax, spacing='uniform', ticks=levs, extend='both',
-	extendfrac='auto', pad=0.05, drawedges=True)
+	return var_colormap, levs, norm
 	
-	bar.set_ticklabels(levs)
-
-	path_out = '/home/nice/Documentos/ufrn/papers/regcm_exp/exp_pbl/results/'
-	fig_name = 'pre_sasonal_amz_neb_exp1.png'
-
-	if not os.path.exists(path_out):
-		os.makedirs(path_out)
-
-	plt.savefig(os.path.join(path_out, fig_name), dpi=300, bbox_inches='tight')
 	
-	plt.show()
-	raise SystemExit
-	exit()
+def function_plot(exp1, exp2, obs1):
+		
+	fig = plt.figure(figsize=(24,34))
+	
+	# Plot firt maps reg_exp1 model 
+	ax = fig.add_subplot(311)
+	plt.title('Temperatura 2m Reg_Exp1 ($^\circ$C)', fontsize=30, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=30, labelpad=30, fontweight='bold')
+
+	map, xx, yy = basemap(lat, lon)
+	var_colormap, levs, norm = colormap()
+	plt_map = map.contourf(xx, yy, exp1[2,:,:], levels=levs, latlon=True, norm=norm, cmap=var_colormap)
+	map.colorbar(ticks=levs, drawedges=True)
+
+	# Plot firt maps reg_exp2 model 
+	ax = fig.add_subplot(312)
+	plt.title(u'Temperatura 2m Reg_Exp2 ($^\circ$C)', fontsize=30, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=30, labelpad=30, fontweight='bold')
+
+	map, xx, yy = basemap(lat, lon)
+	precip_colormap, levs, norm = colormap()
+	plt_map = map.contourf(xx, yy, exp2[2,:,:], levels=levs, latlon=True, norm=norm, cmap=var_colormap)
+	map.colorbar(ticks=levs, drawedges=True)
+
+	# Plot thirth maps cru obs 
+	ax = fig.add_subplot(313)
+	plt.title(u'Temperatura 2m CRU ($^\circ$C)', fontsize=30, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=30, labelpad=30, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=30, labelpad=30, fontweight='bold')
+
+	map, xx, yy = basemap(lat, lon)
+	precip_colormap, levs, norm = colormap()
+	plt_map = map.contourf(xx, yy, obs1[2,:,:], levels=levs, latlon=True, norm=norm, cmap=var_colormap)
+	map.colorbar(ticks=levs, drawedges=True)
+	
+	return plt_map
+
+
+# Import regcm exp and cru databases 	   
+lat, lon, exp1 = import_sim('tas', 'regcm_exp1')
+lat, lon, exp2 = import_sim('tas', 'regcm_exp2')
+lat, lon, obs1  = import_obs('tmp', 'cru_ts4.02_obs')
+
+# Plot maps with the function
+plt_map = function_plot(exp1, exp2, obs1)
+
+# Path out to save figure
+path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
+name_out = 'pyplt_maps_tas_regcm_pbl_obs_2001-2010.png'
+if not os.path.exists(path_out):
+	create_path(path_out)
+plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
+
+plt.show()
+exit()
+
 
 
