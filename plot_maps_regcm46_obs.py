@@ -35,7 +35,7 @@ def import_sim(param, exp):
 	var   = data.variables[param][:]
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
-	exp = var[:,:,:]
+	exp = np.nanmean(var[:][:,:,:], axis=0)
 
 	return lat, lon, exp
 
@@ -49,7 +49,7 @@ def import_obs(param, obs):
 	var   = data.variables[param][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
-	obs = var[:,:,:]
+	obs   = np.nanmean(var[:][:,:,:], axis=0)
 	
 	return lat, lon, obs
 	
@@ -65,12 +65,12 @@ def basemap(lat, lon):
 			aux_lon2.append(l-360)
 		
 	lon = np.array(aux_lon1[::-1] + aux_lon2[::-1])
-	new_lat = lat[::-1]
+	new_lat = lat
 	new_lon = lon[::-1]
 	
 	map = Basemap(projection='cyl', llcrnrlon=-85., llcrnrlat=-20., urcrnrlon=-15.,urcrnrlat=10., resolution='c')
-	map.drawmeridians(np.arange(-85.,-5.,10.), labels=[0,0,0,1], linewidth=0.2)
-	map.drawparallels(np.arange(-20.,15.,5.), labels=[1,0,0,0], linewidth=0.2)
+	map.drawmeridians(np.arange(-85.,-5.,10.), size=6, labels=[0,0,0,1], linewidth=0.4)
+	map.drawparallels(np.arange(-20.,15.,5.), size=6, labels=[1,0,0,0], linewidth=0.4)
 	map.drawcoastlines(linewidth=1, color='k')
 	map.drawcountries(linewidth=1, color='k')
 	
@@ -79,6 +79,7 @@ def basemap(lat, lon):
 	lons = np.arange(-85.,-5.,0.25) 
 	lats = np.arange(-20.,15.,-0.25) 
 	lons, lats = np.meshgrid(new_lon, new_lat)
+
 	xx, yy = map(lons,lats)
 	
 	return map, xx, yy
@@ -86,77 +87,58 @@ def basemap(lat, lon):
 	
 def colormap():
 	
-	param = 'tas'
+	var_colormap = cm.YlGnBu  # If precipitation
+	levs = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 	
-	if param == 'pr':
-		precip_colors = ['#FDFDFD', '#04E9E7', '#019FF4', '#0300F4',
-		'#02FD02', '#01C501', '#008E00', '#FDF802', '#E5BC00', '#FD9500',
-		'#FD0000', '#D40000', '#BF0000', '#F800FD', '#9854C6']
-		#~ precip_colors = ['#FFFFFF', '#78F573','#37D23C','#0FA00F',
-		#~ '#96D2FA','#50A5F5','#1464D2','#FFFAAA','#FDD802','#FFC03C',
-		#~ '#FF6000','#E11400','#BC0000','#F800FD','#9854C6']
-		
-		mpl.colors.ListedColormap(precip_colors)
-		levs = [0, 0.5, 1, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10., 15.0, 20.0]
-		norm = mpl.colors.BoundaryNorm(levs, 16)
-
-	else:
-		levs = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
-		var_colormap = cm.coolwarm
-		norm = mpl.colors.BoundaryNorm(levs, 16)	
-	
-	return var_colormap, levs, norm
+	return var_colormap, levs
 	
 	
 def function_plot(exp1, exp2, obs1):
 		
-	fig = plt.figure(figsize=(24,34))
-	
+	fig = plt.figure()
+
 	# Plot firt maps reg_exp1 model 
 	ax = fig.add_subplot(311)
-	plt.title('Temperatura 2m Reg_Exp1 ($^\circ$C)', fontsize=30, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=30, labelpad=30, fontweight='bold')
-
+	plt.title('Precipitação (mm/d) 2001-2010', fontsize=8, fontweight='bold')
+	plt.text(-37, -18, u'A) Reg_Exp1', fontsize=8, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	var_colormap, levs, norm = colormap()
-	plt_map = map.contourf(xx, yy, exp1[2,:,:], levels=levs, latlon=True, norm=norm, cmap=var_colormap)
+	var_colormap, levs = colormap()
+	plt_map = map.contourf(xx, yy, exp1[:,:], levels=levs, latlon=True, cmap=var_colormap)
 	map.colorbar(ticks=levs, drawedges=True)
 
 	# Plot firt maps reg_exp2 model 
 	ax = fig.add_subplot(312)
-	plt.title(u'Temperatura 2m Reg_Exp2 ($^\circ$C)', fontsize=30, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=30, labelpad=30, fontweight='bold')
-
+	plt.text(-37, -18, u'B) Reg_Exp2', fontsize=8, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	precip_colormap, levs, norm = colormap()
-	plt_map = map.contourf(xx, yy, exp2[2,:,:], levels=levs, latlon=True, norm=norm, cmap=var_colormap)
+	var_colormap, levs = colormap()
+	plt_map = map.contourf(xx, yy, exp2[:,:], levels=levs, latlon=True, cmap=var_colormap)
 	map.colorbar(ticks=levs, drawedges=True)
 
 	# Plot thirth maps cru obs 
 	ax = fig.add_subplot(313)
-	plt.title(u'Temperatura 2m CRU ($^\circ$C)', fontsize=30, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=30, labelpad=30, fontweight='bold')
-	plt.xlabel(u'Longitude', fontsize=30, labelpad=30, fontweight='bold')
-
+	plt.text(-37, -18, u'C) GPCP', fontsize=8, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=8, labelpad=16, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	precip_colormap, levs, norm = colormap()
-	plt_map = map.contourf(xx, yy, obs1[2,:,:], levels=levs, latlon=True, norm=norm, cmap=var_colormap)
-	map.colorbar(ticks=levs, drawedges=True)
+	var_colormap, levs = colormap()
+	plt_map = map.contourf(xx, yy, obs1[:,:], levels=levs, latlon=True, cmap=var_colormap)
+	map.colorbar(ticks=levs, drawedges=True, ax=ax)
 	
 	return plt_map
 
-
 # Import regcm exp and cru databases 	   
-lat, lon, exp1 = import_sim('tas', 'regcm_exp1')
-lat, lon, exp2 = import_sim('tas', 'regcm_exp2')
-lat, lon, obs1  = import_obs('tmp', 'cru_ts4.02_obs')
+lat, lon, exp1 = import_sim('pr', 'regcm_exp1')
+lat, lon, exp2 = import_sim('pr', 'regcm_exp2')
+lat, lon, obs1  = import_obs('precip', 'gpcp_v2.2_obs')
 
 # Plot maps with the function
 plt_map = function_plot(exp1, exp2, obs1)
 
 # Path out to save figure
 path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
-name_out = 'pyplt_maps_tas_regcm_pbl_obs_2001-2010.png'
+name_out = 'pyplt_maps_pr_regcm_pbl_obs_2001-2010.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')

@@ -3,12 +3,13 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "02/15/2019"
-__description__ = "This script plot Taylor Diagram from CMIP5 models end OBS basedata"
+__description__ = "This function compute Taylor Diagram"
 
 import os
 import netCDF4
 import numpy as np
 import matplotlib.pyplot as plt
+
 
 class TaylorDiagram(object):
 	
@@ -279,8 +280,6 @@ if __name__=='__main__':
 	ax1.plot(x,data,'ko', label='Data')
 	
 	for i,m in enumerate([np.cos(m1),np.cos(m2),np.cos(m3),np.cos(m4),np.cos(m5),np.cos(m6),np.cos(m7),np.cos(m8),np.cos(m9),np.cos(m10),np.cos(m11),np.cos(m12),np.cos(m13),np.cos(m14),np.cos(m15),np.cos(m16),np.cos(m17),np.cos(m18),np.cos(m19),np.cos(m20),np.cos(m21),np.cos(m22),np.cos(m23),np.cos(m24),np.cos(m25),np.cos(m26),np.cos(m27),np.cos(m28),np.cos(m29),np.cos(m30),np.cos(m31),np.cos(m32),np.cos(m33)]):
-
-	#~ for i,m in enumerate([np.sin(m1),np.sin(m2),np.sin(m3),np.sin(m4),np.sin(m5),np.sin(m6),np.sin(m7),np.sin(m8),np.sin(m9),np.sin(m10),np.sin(m11),np.sin(m12),np.sin(m13),np.sin(m14),np.sin(m15),np.sin(m16),np.sin(m17),np.sin(m18),np.sin(m19),np.sin(m20),np.sin(m21),np.sin(m22),np.sin(m23),np.sin(m24),np.sin(m25),np.sin(m26),np.sin(m27),np.sin(m28),np.sin(m29),np.sin(m30),np.sin(m31),np.sin(m32),np.sin(m33)]):
 		ax1.plot(x,m, c=colors[i])
 	
 	# Add samples to Taylor diagram

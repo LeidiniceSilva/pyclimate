@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 __author__      = "Leidinice Silva"
-__email__       = "leidinicesilvae@gmail.com"
+__email__       = "leidinicesilva@gmail.com"
 __date__        = "02/15/2019"
-__description__ = "This script plot Taylor Diagram seasonal from CMIP5 models end OBS basedata"
+__description__ = "This script plot taylor diagram graphics from CMIP5 models end OBS basedata"
 
 import os
 import netCDF4
@@ -11,18 +11,17 @@ import numpy as np
 import numpy.ma as ma
 import matplotlib.pyplot as plt
 
-from plot_taylor_diagram_cmip5_obs import TaylorDiagram
+from comp_taylor_diagram import TaylorDiagram
 
 
 def import_cmip5_season(model):
-	
-	param = 'tas' # pr or tas
-	area  = 'neb' # amz or neb
+		
+	param = 'pr' # pr or tas
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
 	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/cmip5_hist'
-	arq   = '{0}/{1}_{2}_Amon_{3}_{4}_{5}.nc'.format(path, param, area,
+	arq   = '{0}/{1}_amz_neb_Amon_{2}_{3}_{4}.nc'.format(path, param,
 	model, exp, date)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -31,33 +30,23 @@ def import_cmip5_season(model):
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
 	
-	mdl_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
-	
-	dec = mdl_data[0::12]
-	jan = mdl_data[1::12]
-	feb = mdl_data[2::12]
-	mar = np.nanmean(mdl_data[3::12], axis=0)
-	apr = np.nanmean(mdl_data[4::12], axis=0)
-	may = np.nanmean(mdl_data[5::12], axis=0)
-	jun = np.nanmean(mdl_data[6::12], axis=0)
-	jul = np.nanmean(mdl_data[7::12], axis=0)
-	aug = np.nanmean(mdl_data[8::12], axis=0)
-	sep = np.nanmean(mdl_data[9::12], axis=0)
-	out = np.nanmean(mdl_data[10::12], axis=0)
-	nov = np.nanmean(mdl_data[11::12], axis=0)
-	
+	sea_mdl = np.nanmean(np.nanmean(value[0:360:3,:,:], axis=1), axis=1)
+	sea1_mdl = sea_mdl[0:120:4]
+	sea2_mdl = sea_mdl[1:120:4]
+	sea3_mdl = sea_mdl[2:120:4]
+	sea4_mdl = sea_mdl[3:120:4]
+
 	return sea1_mdl, sea2_mdl, sea3_mdl, sea4_mdl
 
 
 def import_obs_season(database):
 	
-	param = 'tmp' # pre or tmp
-	area  = 'neb' # amz or neb
+	param = 'pre' # pre or tmp
 	date  = '197512-200511'
 
 	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/obs_data'
-	arq   = '{0}/{1}_{2}_{3}_obs_mon_{4}.nc'.format(path, param,
-	area, database, date)	
+	arq   = '{0}/{1}_amz_neb_{2}_obs_mon_{3}.nc'.format(path,
+	param, database, date)	
 	
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
@@ -74,6 +63,7 @@ def import_obs_season(database):
 	return sea1_obs, sea2_obs, sea3_obs, sea4_obs
 
 
+# Import cmip5 model end obs database seasonaly
 model  = u'BCC-CSM1.1'
 sea1_mdl1, sea2_mdl1, sea3_mdl1, sea4_mdl1 = import_cmip5_season(model)
 
@@ -392,10 +382,6 @@ fig.legend(dia.samplePoints,
            numpoints=1, prop=dict(size=14), loc='center')
 
 fig.tight_layout()
-
-plt.show()
-exit()
-
 path_out = '/home/nice/Documentos/ufrn/PhD_project/results/cmip5'
 name_out = 'pyplt_taylor_diagram_{0}_{1}_cmip5_cru_season_1975-2005.png'.format(out_var, out_area)
 
