@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 __author__      = "Leidinice Silva"
-__email__       = "leidinicesilvae@gmail.com"
+__email__       = "leidinicesilva@gmail.com"
 __date__        = "06/03/2019"
 __description__ = "This script plot Rclimdex based in HadGEM2-ES model CMIP5"
 

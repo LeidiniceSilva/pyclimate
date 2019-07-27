@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 __author__      = "Leidinice Silva"
-__email__       = "leidinicesilvae@gmail.com"
+__email__       = "leidinicesilva@gmail.com"
 __date__        = "09/22/2018"
 __description__ = "This script plot box and time series simulation and obs databases per region"
 

@@ -28,28 +28,28 @@ from os.path import expanduser
 
 def import_sim(param, exp):
 	
-	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
-	arq   = '{0}/{1}_amz_neb_{2}_mon_2001-2010.nc'.format(path, param, exp)	
+	path = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
+	arq  = '{0}/{1}_amz_neb_{2}_mon_2001-2010.nc'.format(path, param, exp)	
 	
-	data  = netCDF4.Dataset(arq)
-	var   = data.variables[param][:]
-	lat   = data.variables['lat'][:]
-	lon   = data.variables['lon'][:]
-	exp = np.nanmean(var[:][:,:,:], axis=0)
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[param][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	exp  = np.nanmean(var[:][:,:,:], axis=0)
 
 	return lat, lon, exp
 
 
 def import_obs(param, obs):
 	
-	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
-	arq   = '{0}/{1}_amz_neb_{2}_mon_2001-2010.nc'.format(path, param, obs)	
+	path = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
+	arq  = '{0}/{1}_amz_neb_{2}_mon_2001-2010.nc'.format(path, param, obs)	
 		
-	data  = netCDF4.Dataset(arq)
-	var   = data.variables[param][:] 
-	lat   = data.variables['lat'][:]
-	lon   = data.variables['lon'][:]
-	obs   = np.nanmean(var[:][:,:,:], axis=0)
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[param][:] 
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	obs  = np.nanmean(var[:][:,:,:], axis=0)
 	
 	return lat, lon, obs
 	
@@ -85,17 +85,11 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 	
-def colormap():
-	
-	var_colormap = cm.YlGnBu  # If precipitation
-	levs = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-	
-	return var_colormap, levs
-	
-	
-def function_plot(exp1, exp2, obs1):
+def plot_maps_clim(exp1, exp2, obs1):
 		
 	fig = plt.figure()
+
+	levs = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 	# Plot firt maps reg_exp1 model 
 	ax = fig.add_subplot(311)
@@ -103,45 +97,83 @@ def function_plot(exp1, exp2, obs1):
 	plt.text(-37, -18, u'A) Reg_Exp1', fontsize=8, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	var_colormap, levs = colormap()
-	plt_map = map.contourf(xx, yy, exp1[:,:], levels=levs, latlon=True, cmap=var_colormap)
-	map.colorbar(ticks=levs, drawedges=True)
-
+	plt_map = map.contourf(xx, yy, exp1[:,:], levels=levs, latlon=True, cmap=cm.YlGnBu)
+	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6) 
+	
 	# Plot firt maps reg_exp2 model 
 	ax = fig.add_subplot(312)
 	plt.text(-37, -18, u'B) Reg_Exp2', fontsize=8, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	var_colormap, levs = colormap()
-	plt_map = map.contourf(xx, yy, exp2[:,:], levels=levs, latlon=True, cmap=var_colormap)
-	map.colorbar(ticks=levs, drawedges=True)
-
+	plt_maps_clim = map.contourf(xx, yy, exp2[:,:], levels=levs, latlon=True, cmap=cm.YlGnBu)
+	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6) 
+	
 	# Plot thirth maps cru obs 
 	ax = fig.add_subplot(313)
 	plt.text(-37, -18, u'C) GPCP', fontsize=8, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=8, labelpad=16, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	var_colormap, levs = colormap()
-	plt_map = map.contourf(xx, yy, obs1[:,:], levels=levs, latlon=True, cmap=var_colormap)
-	map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	plt_maps_clim = map.contourf(xx, yy, obs1[:,:], levels=levs, latlon=True, cmap=cm.YlGnBu)
+	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6) 
 	
-	return plt_map
+	return plt_maps_clim
+	
+	
+def plot_maps_bias(bias_exp1, bias_exp2):
+		
+	fig = plt.figure()
+
+	levs = [-6, -5, -4, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3, 4, 5, 6]
+
+	# Plot firt maps reg_exp1 model 
+	ax = fig.add_subplot(211)
+	plt.title('Bias de precipitação (mm/d) 2001-2010', fontsize=8, fontweight='bold')
+	plt.text(-37, -18, u'A) Reg_Exp1 - GPCP', fontsize=8, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_bias = map.contourf(xx, yy, bias_exp1[:,:], levels=levs, latlon=True, cmap=cm.RdBu)
+	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6) 
+	
+	# Plot firt maps reg_exp2 model 
+	ax = fig.add_subplot(212)
+	plt.text(-37, -18, u'B) Reg_Exp2 - GPCP', fontsize=8, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=8, labelpad=16, fontweight='bold')
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_bias = map.contourf(xx, yy, bias_exp2[:,:], levels=levs, latlon=True, cmap=cm.RdBu)
+	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6) 
+	
+	return plt_maps_bias
+
 
 # Import regcm exp and cru databases 	   
 lat, lon, exp1 = import_sim('pr', 'regcm_exp1')
 lat, lon, exp2 = import_sim('pr', 'regcm_exp2')
-lat, lon, obs1  = import_obs('precip', 'gpcp_v2.2_obs')
+lat, lon, obs1 = import_obs('precip', 'gpcp_v2.2_obs')
 
 # Plot maps with the function
-plt_map = function_plot(exp1, exp2, obs1)
+# plt_map = plot_maps_clim(exp1, exp2, obs1)
+
+# Compute and plot bias from regcm exp and cru database
+bias_exp1 = exp1 - obs1
+bias_exp2 = exp2 - obs1
+
+plt_map = plot_maps_bias(bias_exp1, bias_exp2)
 
 # Path out to save figure
 path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
-name_out = 'pyplt_maps_pr_regcm_pbl_obs_2001-2010.png'
+name_out = 'pyplt_maps_bias_pr_regcm_pbl_obs_2001-2010.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
+
+
 
 plt.show()
 exit()
