@@ -17,7 +17,6 @@ conda_dir = conda_file_dir.split('lib')[0]
 proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
 os.environ["PROJ_LIB"] = proj_lib
 
-from netCDF4 import Dataset
 from mpl_toolkits.basemap import Basemap
 
 # Open hadgem2-es model 
