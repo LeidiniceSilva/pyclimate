@@ -1,27 +1,25 @@
 # -*- coding: utf-8 -*-
 
 __author__      = "Leidinice Silva"
-__email__       = "leidinicesilvae@gmail.com"
+__email__       = "leidinicesilva@gmail.com"
 __date__        = "12/26/2018"
 __description__ = "This script plot maps from CMIP5 models end OBS basedata"
 
-
 import os
+import conda
 import netCDF4
 import numpy as np
 import matplotlib as mpl 
 import matplotlib.pyplot as plt
-# mpl.use('Agg')
+import matplotlib.cm as cm
+
+conda_file_dir = conda.__file__
+conda_dir = conda_file_dir.split('lib')[0]
+proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
+os.environ["PROJ_LIB"] = proj_lib
 
 from matplotlib import colors as c
-from matplotlib.colors import BoundaryNorm
-from matplotlib.font_manager import FontProperties
-
 from mpl_toolkits.basemap import Basemap
-from mpl_toolkits.basemap import shiftgrid
-from mpl_toolkits.basemap import interp
-
-from os.path import expanduser
 
 
 def import_cmip5_mean(model):
