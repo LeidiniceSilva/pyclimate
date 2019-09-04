@@ -104,9 +104,10 @@ lat, lon, idx = import_rclimdex('txnETCCDI')
 # Plot rclimdex database
 ax, plt_map = plot_maps_rclimdex(idx)
 
-print(sf)
-print 
-print(df)
+#~ print(sf)
+#~ print 
+#~ print(df)
+#~ exit()
 
 for shape_rec in sf.shapeRecords():
 	x = [i[0] for i in shape_rec.shape.points[:]]
