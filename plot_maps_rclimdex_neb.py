@@ -79,11 +79,66 @@ def basemap(lat, lon):
 
                                 
 # Import rclimdex database 
-lat, lon, idx_his = import_rclimdex_his(u'altcwdETCCDI', u'1859-2005')
-lat, lon, idx_rcp = import_rclimdex_rcp(u'altcwdETCCDI', u'2005-2299')
+lat, lon, idx_his_cdd = import_rclimdex_his(u'altcddETCCDI', u'1859-2005')
+lat, lon, idx_rcp_cdd = import_rclimdex_rcp(u'altcddETCCDI', u'2005-2299')
+
+lat, lon, idx_his_r95p = import_rclimdex_his(u'r95pETCCDI', u'1859-2005')
+lat, lon, idx_rcp_r95p = import_rclimdex_rcp(u'r95pETCCDI', u'2005-2299')
+
+lat, lon, idx_his_txx = import_rclimdex_his(u'txxETCCDI', u'1859-2005')
+lat, lon, idx_rcp_txx = import_rclimdex_rcp(u'txxETCCDI', u'2005-2299')
+
+# Compute difference into rcp and hist
+diff_cdd = idx_rcp_cdd - idx_his_cdd
+diff_r95p = idx_rcp_r95p - idx_his_r95p
+diff_txx = idx_rcp_txx - idx_his_txx
 
 # Plot rclimdex database
-fig = plt.figure(figsize=(8,4))
+fig = plt.figure(figsize=(12,6))
+
+levs1 = [-14, -12, -10, -8, -6, -4, -2, 0, 2, 4, 6, 8, 10, 12, 14]
+ax = fig.add_subplot(131)
+plt.title(u'A) CDD_HadGEM2-ES (dias) RCP85 - Hist', loc='left', fontsize=6, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=6, labelpad=20, fontweight='bold')
+plt.ylabel(u'Latitude', fontsize=6, labelpad=20, fontweight='bold')
+
+map, xx, yy = basemap(lat, lon)
+plt_map = map.contourf(xx, yy, diff_cdd, levels=levs1, latlon=True, cmap=cm.bwr)
+cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar.ax.tick_params(labelsize=6)
+
+# Plot second map 
+levs2 = [-500, -400, -300, -200, -100, 0, 100, 200, 300, 400, 500]
+ax = fig.add_subplot(132)
+plt.title(u'B) R95p_HadGEM2-ES (%) RCP85 - Hist', loc='left', fontsize=6, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=6, labelpad=20, fontweight='bold')
+
+map, xx, yy = basemap(lat, lon)
+plt_map = map.contourf(xx, yy, diff_r95p, levels=levs2, latlon=True, cmap=cm.RdBu)
+cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
+cbar.ax.tick_params(labelsize=6)
+
+# Plot three map 
+levs3 = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6]
+ax = fig.add_subplot(133)
+plt.title(u'B) Txx_HadGEM2-ES (ºC) RCP85 - Hist', loc='left', fontsize=6, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=6, labelpad=20, fontweight='bold')
+
+map, xx, yy = basemap(lat, lon)
+plt_map = map.contourf(xx, yy, diff_txx, levels=levs3, latlon=True, cmap=cm.Reds)
+cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax)
+cbar.ax.tick_params(labelsize=6)
+
+# Path out to save figure
+path_out = '/home/nice/Documentos/ufrn/papers/wmrn/results'
+name_out = 'pyplt_maps_diff_rclimdex_hadgem_neb_his_rcp.png'
+if not os.path.exists(path_out):
+	create_path(path_out)
+plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
+
+plt.show()
+exit()
+
 
 levs = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80]
 
