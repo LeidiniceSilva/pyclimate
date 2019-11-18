@@ -71,6 +71,7 @@ def basemap(lat, lon):
 	map.drawcoastlines(linewidth=2, color='k')
 	map.drawcountries(linewidth=2, color='k')
 	map.drawstates(linewidth=2, color='k')
+	map.drawmapboundary()
 
 	lons, lats = np.meshgrid(new_lon, new_lat)
 	xx, yy = map(lons,lats)
@@ -92,6 +93,62 @@ lat, lon, idx_rcp_txx = import_rclimdex_rcp(u'txxETCCDI', u'2005-2299')
 diff_cdd = idx_rcp_cdd - idx_his_cdd
 diff_r95p = idx_rcp_r95p - idx_his_r95p
 diff_txx = idx_rcp_txx - idx_his_txx
+
+# Plot rclimdex database
+fig = plt.figure(figsize=(12,6))
+
+ax = fig.add_subplot(131)
+plt.title(u'A) CDD_HadGEM2-ES (dias) RCP85 - Hist', loc='left', fontsize=6, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=6, labelpad=20, fontweight='bold')
+plt.ylabel(u'Latitude', fontsize=6, labelpad=20, fontweight='bold')
+
+map, xx, yy = basemap(lat, lon)
+plt_map = map.contourf(xx, yy, diff_cdd*0, latlon=True, cmap=cm.Greys)
+
+lons = [-41., -40., -38.]
+lats = [-10., -9., -8.]
+x,y = map(lons, lats)
+map.plot(x, y, 'bo', markersize=10)
+
+#~ min_marker_size = 2.5
+#~ msize = mag * min_marker_size
+
+# Plot second map 
+ax = fig.add_subplot(132)
+plt.title(u'B) R95p_HadGEM2-ES (%) RCP85 - Hist', loc='left', fontsize=6, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=6, labelpad=20, fontweight='bold')
+
+map, xx, yy = basemap(lat, lon)
+plt_map = map.contourf(xx, yy, diff_r95p*0, latlon=True, cmap=cm.Greys)
+
+lons = [-41., -40., -38.]
+lats = [-10., -9., -8.]
+x,y = map(lons, lats)
+map.plot(x, y, 'bo', markersize=10)
+
+# Plot three map 
+ax = fig.add_subplot(133)
+plt.title(u'B) Txx_HadGEM2-ES (ºC) RCP85 - Hist', loc='left', fontsize=6, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=6, labelpad=20, fontweight='bold')
+
+map, xx, yy = basemap(lat, lon)
+plt_map = map.contourf(xx, yy, diff_txx*0, latlon=True, cmap=cm.Greys)
+
+# Capitais: São Luís, Piaui, Bahia, Pernambuco, Paraiba, Natal, Fortaleza.
+lons = [-42, -41., -34., -35., -36., -35., -38.5270] 
+lats = [-7., -12., -9., -8., -7., -5., -3.]
+x,y = map(lons, lats)
+map.plot(x, y, 'bo', markersize=8)
+
+# Path out to save figure
+path_out = '/home/nice/Documentos/ufrn/papers/wmrn/results'
+name_out = 'pyplt_maps_trends_rclimdex_hadgem_neb_his_rcp.png'
+if not os.path.exists(path_out):
+	create_path(path_out)
+plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
+plt.show()
+exit()
+
 
 # Plot rclimdex database
 fig = plt.figure(figsize=(12,6))
@@ -135,14 +192,12 @@ name_out = 'pyplt_maps_diff_rclimdex_hadgem_neb_his_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
-
 plt.show()
 exit()
 
 
-levs = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80]
-
 ax = fig.add_subplot(121)
+levs = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80]
 plt.title(u'A) CWD (days) Historical: 1986-2005', loc='left', fontsize=8, fontweight='bold')
 plt.xlabel(u'Longitude', fontsize=8, labelpad=20, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
@@ -154,6 +209,7 @@ cbar.ax.tick_params(labelsize=6)
 
 # Plot second map 
 ax = fig.add_subplot(122)
+levs = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80]
 plt.title(u'B) CWD (days) RCP85: 2080-2099', loc='left', fontsize=8, fontweight='bold')
 plt.xlabel(u'Longitude', fontsize=8, labelpad=20, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
@@ -169,7 +225,6 @@ name_out = 'pyplt_maps_cwd_rclimdex_hadgem_neb_his_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
-
 plt.show()
 exit()
 
