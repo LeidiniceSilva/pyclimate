@@ -53,3 +53,4 @@ for n in range(len(lat)):
     if ~np.isnan(var_ar[0, n]):
         file = var_ar[:, n::len(lon)]
         pd.DataFrame(file, index=time, columns=var_names).to_csv(name_file, float_format='%.1f')
+
