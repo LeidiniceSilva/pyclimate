@@ -11,17 +11,20 @@ import pandas as pd
 import time
 
 # Set latitude and longitude
-lat = [-6.43, -4.28, -7.01, -9.44]
-lon = [-36.58, -39.0, -37.26, -36.7]
+lat = [-9.06, -7.32, -5.30, -10.43, -8.96, -12.00]
+lon = [-45.56, -46.02, -45.13, -48.25, -48.18, -48.22]
+#~ lat = [-12.24, -6.46, -9.06, -5.08, -12.09, -13.20]
+#~ lon = [-46.25, -43.01, -44.07, -42.81, -45.00, -43.37]
 
-# Capitals (AL - BA - CE - MA - PB - PE - PI - RN - SE)
-list_city = ['cruzeta', 'guaramiranga', 'patos', 'alagoas']
+# MATOPIBA stations 
+list_city = ['alto_parnaiba', 'balsas', 'barra_corda', 'porto_nacional', 'pedro_afonso', 'peixe']
+#~ list_city = ['taguatinga', 'floriano', 'bom_jesus', 'teresina', 'barreiras', 'correntina']
 
 # Variables names
 var_names = ['Tmax', 'Tmin', 'prec']
 
 # Set correct path of the netcdf files
-path_var = '/home/nice/Downloads/'
+path_var = '/home/nice/Documents/'
 
 # Function to read the netcdf files
 def rawData(var2get_xr, var_name2get):
