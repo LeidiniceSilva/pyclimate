@@ -18,6 +18,7 @@ conda_dir = conda_file_dir.split('lib')[0]
 proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
 os.environ["PROJ_LIB"] = proj_lib
 
+from matplotlib.patches import Polygon
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
@@ -47,12 +48,31 @@ axins.set_ylim(-20, 10)
 
 # Second plot
 map2 = Basemap(llcrnrlon=-85, llcrnrlat=-20, urcrnrlon=-15, urcrnrlat=10, ax=axins)
+map2.drawmeridians(np.arange(-85.,-5.,10.), labels=[0,0,0,1], linewidth=0.)
+map2.drawparallels(np.arange(-20.,20.,10.), labels=[1,0,0,0], linewidth=0.)
 map2.etopo()
 map2.drawcoastlines(linewidth=1, color='k')
+map2.drawcountries(linewidth=1, color='k')
 mark_inset(ax, axins, loc1=4, loc2=2)
-
 plt.text(-22, 3.5, u'\u25B2 \nN ', ha='center', fontsize=10, family='Arial', rotation = 0)
+plt.text(-62, -9, u'AMZ', ha='center', fontsize=10, family='Arial', rotation = 0)
+plt.text(-41, -8, u'NEB', ha='center', fontsize=10, family='Arial', rotation = 0)
 
+x1,y1 = map2(-47,-16)
+x2,y2 = map2(-47,-1)
+x3,y3 = map2(-35,-1)
+x4,y4 = map2(-35,-16)
+
+poly1 = Polygon([(x1,y1),(x2,y2),(x3,y3),(x4,y4)], facecolor='none', edgecolor='k', linewidth=1)
+plt.gca().add_patch(poly1)
+
+i1,j1 = map2(-73,-13)
+i2,j2 = map2(-73,4)
+i3,j3 = map2(-50,4)
+i4,j4 = map2(-50,-13)
+
+poly2 = Polygon([(i1,j1),(i2,j2),(i3,j3),(i4,j4)], facecolor='none', edgecolor='k', linewidth=1)
+plt.gca().add_patch(poly2)
 
 # Path out to save figure
 path_out = '/home/nice'

@@ -11,14 +11,14 @@ import pandas as pd
 import time
 
 # Set latitude and longitude
-lat = [-9.06, -7.32, -5.30, -10.43, -8.96, -12.00]
-lon = [-45.56, -46.02, -45.13, -48.25, -48.18, -48.22]
-#~ lat = [-12.24, -6.46, -9.06, -5.08, -12.09, -13.20]
-#~ lon = [-46.25, -43.01, -44.07, -42.81, -45.00, -43.37]
+#~ lat = [-9.06, -7.32, -5.30, -10.43, -8.96, -12.00]
+#~ lon = [-45.56, -46.02, -45.13, -48.25, -48.18, -48.22]
+lat = [-12.24, -6.46, -9.06, -5.08, -12.09, -13.20]
+lon = [-46.25, -43.01, -44.07, -42.81, -45.00, -43.37]
 
 # MATOPIBA stations 
-list_city = ['alto_parnaiba', 'balsas', 'barra_corda', 'porto_nacional', 'pedro_afonso', 'peixe']
-#~ list_city = ['taguatinga', 'floriano', 'bom_jesus', 'teresina', 'barreiras', 'correntina']
+#~ list_city = ['alto_parnaiba', 'balsas', 'barra_corda', 'porto_nacional', 'pedro_afonso', 'peixe']
+list_city = ['taguatinga', 'floriano', 'bom_jesus', 'teresina', 'barreiras', 'correntina']
 
 # Variables names
 var_names = ['Tmax', 'Tmin', 'prec']
