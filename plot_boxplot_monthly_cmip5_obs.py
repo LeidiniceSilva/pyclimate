@@ -22,11 +22,11 @@ from matplotlib.font_manager import FontProperties
 def import_cmip5_clim(model):
 	
 	param = 'pr' # pr or tas
-	area  = 'neb' # amz or neb
+	area  = 'amz' # amz or neb
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/cmip5_hist'
+	path  = '/home/nice/Documents/ufrn/PhD_project/datas/cmip5_hist'
 	arq   = '{0}/{1}_{2}_Amon_{3}_{4}_{5}.nc'.format(path, param, area,
 	model, exp, date)	
 	
@@ -43,10 +43,10 @@ def import_cmip5_clim(model):
 def import_obs_clim(database):
 	
 	param = 'pre' # pre or tmp
-	area  = 'neb' # amz or neb
+	area  = 'amz' # amz or neb
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/obs_data'
+	path  = '/home/nice/Documents/ufrn/PhD_project/datas/obs_data'
 	arq   = '{0}/{1}_{2}_{3}_obs_mon_{4}.nc'.format(path, param, area, 
 	database, date)	
 	
@@ -164,7 +164,7 @@ database  = u'cru_ts4.02'
 obs1_clim = import_obs_clim(database)
 
 # Plot model end obs data boxplot
-fig, ax = plt.subplots(figsize=(28, 16))
+fig, ax = plt.subplots(figsize=(12, 6))
 time = np.arange(1, 35)
 
 data = [mdl1_clim, mdl2_clim, mdl3_clim, mdl4_clim, mdl5_clim, mdl6_clim, mdl7_clim, mdl8_clim, mdl9_clim,
@@ -197,39 +197,38 @@ for flier in plt_bp['fliers']:
    
 # choice ariable: Rainfall or Temperature
 out_var    = u'pre' # pre or tmp
-out_area   = u'neb' # amz or neb
-area_name  = u'NEB (Lat:15S 2N, Lon:46W 34W)' # AMZ (Lat:16S 4N, Lon:74W 48W) or NEB (Lat:15S 2N, Lon:46W 34W)
+out_area   = u'amz' # amz or neb
+area_name  = u'AMZ (Lat:16S 4N, Lon:74W 48W)' # AMZ (Lat:16S 4N, Lon:74W 48W) or NEB (Lat:15S 2N, Lon:46W 34W)
 
 if out_var == 'pre':
 	yaxis = np.arange(0, 20, 2)
-	var_name   = u'Rainfall'
-	label_name = u'Rain (mm/day)' 
+	var_name   = u'Precipitação'
+	label_name = u'Precipitação (mm/d)' 
 
 else:
 	yaxis = np.arange(18, 34, 2)
-	var_name   = u'Temperature' 
-	label_name = u'TEmperature 2m ($^\circ$C)'
+	var_name   = u'Temperatura' 
+	label_name = u'Temperatura 2m ($^\circ$C)'
 	
-fig.suptitle((u'{0} Boxplot - {1} \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Reference period: 1850-2005)'.format(var_name, area_name)), fontsize=30, y=0.98)
+fig.suptitle((u'Boxplot de {0} - {1} \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Período de Referência: 1850-2005)'.format(var_name, area_name)), fontsize=12, y=0.98)
 
 xaxis = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCESS-1','CSIRO-ACCESS-3','CSIRO-MK36',
 'FIO-ESM','GISS-E2-H-CC','GISS-E2-H','GISS-E2-R','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','INMCM4','IPSL-CM5A-LR',
 'IPSL-CM5A-MR','IPSL-CM5B-LR','LASG-FGOALS-G2','LASG-FGOALS-S2','MIROC','MIROC-ESM-CHEM','MIROC-ESM','MPI-ESM-LR',
-'MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-ME','NorESM1-M','ensmean_cmip5','cru_ts4.02']
+'MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-ME','NorESM1-M','ENSMEAN_CMIP5','CRU']
 
-plt.xlabel(u'CMIP5-hist and CRU-ts4.02', fontsize=30)
-plt.ylabel(u'{}'.format(label_name), fontsize=30) 
-plt.xticks(time, xaxis, rotation=90, fontsize=10)
-plt.yticks(yaxis, fontsize=30)
-plt.tick_params(axis='both', which='major', length=10, width=4, pad=8, labelcolor='black')
+plt.ylabel(u'{}'.format(label_name), fontsize=12) 
+plt.xticks(time, xaxis, rotation=90, fontsize=12)
+plt.yticks(yaxis, fontsize=12)
+plt.tick_params(axis='both', which='major', length=5, width=2, pad=4, labelcolor='black')
 ax.yaxis.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
 
-path_out = '/home/nice/Documentos/ufrn/PhD_project/results/cmip5'
+path_out = '/home/nice'
 name_out = 'pyplt_boxplot_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area)
 
 if not os.path.exists(path_out):
 	create_path(path_out)
 	
-plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
+plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
 plt.show()
 exit()

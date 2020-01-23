@@ -24,12 +24,12 @@ from mpl_toolkits.basemap import Basemap
 
 def import_cmip5_mean(model):
 	
-	param = 'pr' # pr or tas
+	param = 'tas' # pr or tas
 	area  = 'amz_neb' # amz or neb
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/cmip5_hist'
+	path  = '/home/nice/Documents/ufrn/PhD_project/datas/cmip5_hist'
 	arq   = '{0}/{1}_{2}_Amon_{3}_{4}_{5}.nc'.format(path, param, area,
 	model, exp, date)	
 	
@@ -37,18 +37,18 @@ def import_cmip5_mean(model):
 	var   = data.variables[param][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:] 
-	sim   = var[:,:,:]
+	sim   = np.nanmean(var[:][:,:,:], axis=0)
 			
 	return lat, lon, sim
 
 
 def import_obs_mean(database):
 	
-	param = 'pre' # pre or tmp
+	param = 'tmp' # pre or tmp
 	area  = 'amz_neb' # amz or neb
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/obs_data'
+	path  = '/home/nice/Documents/ufrn/PhD_project/datas/obs_data'
 	arq   = '{0}/{1}_{2}_{3}_obs_mon_{4}.nc'.format(path, param, area, 
 	database, date)	
 	
@@ -56,87 +56,93 @@ def import_obs_mean(database):
 	var   = data.variables[param][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]	
-	obs   = var[:,:,:]
+	obs   = np.nanmean(var[:][:,:,:], axis=0)
 
 	return lat, lon, obs
+
+
+def basemap(lat, lon):
+
+	aux_lon1 = []
+	aux_lon2 = []
+	for l in lon:
+		if l <= 180:
+			aux_lon1.append(l)
+		else:
+			aux_lon2.append(l-360)
+
+	lon = np.array(aux_lon1[::-1] + aux_lon2[::-1])
+	new_lat = lat
+	new_lon = lon[::-1]
+
+	map = Basemap(projection='cyl', llcrnrlon=-85., llcrnrlat=-20., urcrnrlon=-15.,urcrnrlat=10., resolution='c')
+	map.drawmeridians(np.arange(-85.,-5.,10.), size=4, labels=[0,0,0,1], linewidth=0.4)
+	map.drawparallels(np.arange(-20.,15.,5.), size=4, labels=[1,0,0,0], linewidth=0.4)
+	map.drawcoastlines(linewidth=1, color='k')
+	map.drawcountries(linewidth=1, color='k')
+
+	xin = np.linspace(map.xmin,map.xmax,20) 
+	yin = np.linspace(map.ymin,map.ymax,20) 
+	lons = np.arange(-85.,-5.,0.25) 
+	lats = np.arange(-20.,15.,-0.25) 
+	lons, lats = np.meshgrid(new_lon, new_lat)
+
+	xx, yy = map(lons,lats)
+
+	return map, xx, yy
+
+
+def plot_maps_clim(mdl1, mdl2, mdl3, mdl4):
+
+	fig = plt.figure()
+
+	levs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16]
+	levs = [12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34]
+
+	# Plot firt map cmip6 models 
+	ax = fig.add_subplot(141)
+	plt.title(u'A) CanESM2', fontsize=8, fontweight='bold')
+	map, xx, yy = basemap(lat, lon)
+	plt_map = map.contourf(xx, yy, mdl1[:,:], levels=levs, latlon=True, cmap=cm.Reds)
+
+	# Plot firt map cmip6 models 
+	ax = fig.add_subplot(142)
+	plt.title(u'B) HadGEM2-ES', fontsize=8, fontweight='bold')
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_clim = map.contourf(xx, yy, mdl2[:,:], levels=levs, latlon=True, cmap=cm.Reds)
+
+	# Plot firt map cmip6 models 
+	ax = fig.add_subplot(143)
+	plt.title(u'C) MPI-ESM-MR', fontsize=8, fontweight='bold')
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_clim = map.contourf(xx, yy, mdl3[:,:], levels=levs, latlon=True, cmap=cm.Reds)
+
+	# Plot firt map cmip6 models 
+	ax = fig.add_subplot(144)
+	plt.title(u'D) NorESM1-M', fontsize=8, fontweight='bold')
+	map, xx, yy = basemap(lat, lon)
+	plt_map = map.contourf(xx, yy, mdl4[:,:], levels=levs, latlon=True, cmap=cm.Reds)
+	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=4) 
 	
+	return plt_maps_clim
 
-mdl_list = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM']
-          
-for mdl in mdl_list:
-	print 'CMIP5 Model:', mdl
-		
-	lat, lon, sim_mean = import_cmip5_mean(mdl)
-	
-	obs  = u'cru_ts4.02'
-	lat, lon, obs_mean = import_obs_mean(obs)
-	
-	# Plot maps cmip5 model end obs database 
-	var_name  = 'pre'
-	area_name = 'amz_neb' 
-	map_type  = 'fill' # shade or fill
 
-	if map_type == 'fill': 
+# Import regcm exp and cru databases 	   
+lat, lon, mdl1 = import_cmip5_mean('CanESM2')
+lat, lon, mdl2 = import_cmip5_mean('HadGEM2-ES')
+lat, lon, mdl3 = import_cmip5_mean('MPI-ESM-MR')
+lat, lon, mdl4 = import_cmip5_mean('NorESM1-M')
 
-		deltalat = np.mean(np.diff(lat))/2.
-		deltalon = np.mean(np.diff(lon))/2.
-		lat = lat - deltalat
-		lon = lon - deltalon
+# Plot maps with the function
+plt_map = plot_maps_clim(mdl1, mdl2, mdl3, mdl4)
 
-	fig = plt.figure(figsize=(12,10))
+# Path out to save figure
+path_out = '/home/nice'
+name_out = 'pyplt_maps_tmp_cmip5_obs_1975-2005.png'
+if not os.path.exists(path_out):
+	create_path(path_out)
+plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
 
-	fig.suptitle(u'Rainfall Mean - AMZ_NEB \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Reference period: 1850-2005)')
-
-	s1 = u'Condições de contorno: ERA15 (1981-2010)'
-	plt.text(-85, -24, s1, fontsize=8)
-
-	plt.xlabel(u'Longitude', fontsize=12, labelpad=30)
-	plt.ylabel(u'Latitude', fontsize=12, labelpad=30)
-
-	levs   = [0, 1, 2, 4, 6, 8, 10, 12, 15]
-	colors = ['#FFFFFF', '#4734F7', '#1E69A1', '#009B4A', '#58BD2E', '#AFDF10', '#FFF700', '#FF8200', '#FF0300', '#9A0000']
-
-	maps = Basemap(projection='cyl', llcrnrlat=np.min(lat), urcrnrlat=np.max(lat), llcrnrlon=np.min(lon), urcrnrlon=np.max(lon))
-
-	maps.drawmeridians(np.arange(maps.lonmin+0.25, maps.lonmax+3+0.25, 10), labels=[0,0,0,1], linewidth=0.1)
-	maps.drawparallels(np.arange(maps.latmin+3, maps.latmax+3, 5), labels=[1,0,0,0], linewidth=0.1)
-
-	x, y = maps(lon, lat)
-	cpalunder = colors[0]
-	cpalover = colors[-1]
-	barcolor = colors[1:-1]
-	my_cmap = c.ListedColormap(barcolor)
-	my_cmap.set_under(cpalunder)
-	my_cmap.set_over(cpalover)
-	norml = BoundaryNorm(levs, ncolors=my_cmap.N, clip=True)
-	
-	if map_type=='fill':
-		plot_maps = plt.contourf(x, y, sim_mean, cmap=my_cmap, norm=norml, levels=levs, extend='both')
-
-	if map_type=='shade':
-		plot_maps = plt.pcolormesh(x, y, sim_mean, cmap=my_cmap, norm=norml)
-
-	# 	Drawing the line boundries
-	maps.drawcoastlines(linewidth=1, color='k')
-	maps.drawcountries(linewidth=1, color='k')
-
-	maps.readshapefile('/home/nice/Documentos/shp/shp_brasil/br_estados_brasil/states_brazil', 'states_brazil', drawbounds=True, linewidth=.5, color='k')
-
-	cbar_ax = fig.add_axes([0.92, 0.14, 0.04, 0.7])
-
-	bar = fig.colorbar(plot_maps, cax=cbar_ax, spacing='uniform', ticks=levs, extend='both',
-	extendfrac='auto', pad=0.05, drawedges=True)
-
-	bar.set_ticklabels(levs)
-
-	path_out = '/home/nice/Documentos/ufrn/PhD_project/results/cmip5'
-	fig_name = 'pyplt_maps_pre_amz_neb_cmip5_cru_1975-2005.png'
-
-	if not os.path.exists(path_out):
-		os.makedirs(path_out)
-
-	plt.savefig(os.path.join(path_out, fig_name), dpi=100, bbox_inches='tight')
-
-	plt.show()
-	raise SystemExit
-	exit()
+plt.show()
+exit()

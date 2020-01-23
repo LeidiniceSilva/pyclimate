@@ -23,12 +23,12 @@ from matplotlib.font_manager import FontProperties
 
 def import_cmip5_clim(model):
 	
-	param = 'pr' # pr or tas
+	param = 'tas' # pr or tas
 	area  = 'amz' # amz or neb
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/cmip5_hist'
+	path  = '/home/nice/Documents/ufrn/PhD_project/datas/cmip5_hist'
 	arq   = '{0}/{1}_{2}_Amon_{3}_{4}_{5}.nc'.format(path, param, area,
 	model, exp, date)	
 	
@@ -50,11 +50,11 @@ def import_cmip5_clim(model):
 
 def import_obs_clim(database):
 	
-	param = 'pre' # pre or tmp
+	param = 'tmp' # pre or tmp
 	area  = 'amz' # amz or neb
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/obs_data'
+	path  = '/home/nice/Documents/ufrn/PhD_project/datas/obs_data'
 	arq   = '{0}/{1}_{2}_{3}_obs_mon_{4}.nc'.format(path, param, area, 
 	database, date)	
 	
@@ -84,7 +84,6 @@ mdl_list = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACC
 'MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-ME','NorESM1-M','ensmean_cmip5']
 
 for mdl in mdl_list:
-	print 'CMIP5 Model:', mdl
 	
 	# Import cmip5 model end obs database monthly	
 	mdl_clim = import_cmip5_clim(mdl)
@@ -97,28 +96,48 @@ for mdl in mdl_list:
 	y.append(metrics.mean_squared_error(obs_clim, mdl_clim))
 	z.append(compute_pbias(obs_clim, mdl_clim))
 
-fig = pyplot.figure()
+fig = plt.figure()
 ax = Axes3D(fig)
 
-types = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCESS-1','CSIRO-ACCESS-3','CSIRO-MK36',
-'FIO-ESM','GISS-E2-H-CC','GISS-E2-H','GISS-E2-R','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','INMCM4','IPSL-CM5A-LR',
-'IPSL-CM5A-MR','IPSL-CM5B-LR','LASG-FGOALS-G2','LASG-FGOALS-S2','MIROC5','MIROC-ESM-CHEM','MIROC-ESM','MPI-ESM-LR',
-'MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-ME','NorESM1-M','ensmean_cmip5']
+a = []
+b = []
+c = []
 
-for i,type in enumerate(types):
-    
-    a = x[i]
-    b = y[i]
-    c = z[i]
-    
-    ax.scatter(a, b, c, c='b', s=30, marker='o')
-    ax.set_xlabel('MAE', fontsize=10)
-    ax.set_ylabel('MSE', fontsize=10)
-    ax.set_zlabel('PBIAS', fontsize=10)
+colors=plt.matplotlib.cm.Set1(np.linspace(0,1,len(x)))
 
-    # fig.legend(a, numpoints=1, prop=dict(size='small'), loc='upper right')
+for i,type in enumerate(mdl_list):
+	print(mdl_list[i])
+	
+	a = (x[i])
+	b = (y[i])
+	c = (z[i])
 
-    
+	ax.scatter(a, b, c, c=colors[i], s=250,  marker='$%d$' % (i+1))
+
+ax.set_xlabel('EMA', fontsize=12)
+ax.set_ylabel('EQM', fontsize=12)
+ax.set_zlabel('VIÉS (%)', fontsize=12)
+
+# Choice variable: Rainfall (AMZ and AMZ) or Temperature (AMZ and AMZ) 
+out_var    = u'tmp' # pre or tmp
+out_area   = u'amz' # amz or neb
+area_name  = u'AMZ (Lat:16S 4N, Lon:74W 48W)' # AMZ (Lat:16S 4N, Lon:74W 48W) or NEB (Lat:15S 2N, Lon:46W 34W)
+
+if out_var == 'pre':
+	var_name   = u'Precipitação'
+else:
+	var_name   = u'Temperatura' 
+	
+plt.title(u'Scatter plot de {0} - {1}  \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Período de Referência: 1850-2005)'.format(var_name, area_name), fontsize=12, y=0.99)
+
+# Save figure
+path_out = '/home/nice'
+name_out = 'pyplt_scatter_plot_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area)
+
+if not os.path.exists(path_out):
+	create_path(path_out)
+	
+plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
 plt.show()
 exit()
 

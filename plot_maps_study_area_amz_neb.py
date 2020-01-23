@@ -58,18 +58,20 @@ plt.text(-22, 3.5, u'\u25B2 \nN ', ha='center', fontsize=10, family='Arial', rot
 plt.text(-62, -9, u'AMZ', ha='center', fontsize=10, family='Arial', rotation = 0)
 plt.text(-41, -8, u'NEB', ha='center', fontsize=10, family='Arial', rotation = 0)
 
-x1,y1 = map2(-47,-16)
-x2,y2 = map2(-47,-1)
-x3,y3 = map2(-35,-1)
-x4,y4 = map2(-35,-16)
+x1,y1 = map2(-46,-15)
+x2,y2 = map2(-46,-2)
+x3,y3 = map2(-34,-2)
+x4,y4 = map2(-34,-15)
 
 poly1 = Polygon([(x1,y1),(x2,y2),(x3,y3),(x4,y4)], facecolor='none', edgecolor='k', linewidth=1)
 plt.gca().add_patch(poly1)
 
-i1,j1 = map2(-73,-13)
-i2,j2 = map2(-73,4)
-i3,j3 = map2(-50,4)
-i4,j4 = map2(-50,-13)
+i1,j1 = map2(-74,-16)
+i2,j2 = map2(-74,4)
+i3,j3 = map2(-48,4)
+i4,j4 = map2(-48,-16)
+
+# AMZ (Lat:16S 4N, Lon:74W 48W) or NEB (Lat:15S 2N, Lon:46W 34W)
 
 poly2 = Polygon([(i1,j1),(i2,j2),(i3,j3),(i4,j4)], facecolor='none', edgecolor='k', linewidth=1)
 plt.gca().add_patch(poly2)

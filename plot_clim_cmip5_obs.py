@@ -28,7 +28,7 @@ def import_cmip5_clim(model):
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/cmip5_hist'
+	path  = '/home/nice/Documents/ufrn/PhD_project/datas/cmip5_hist'
 	arq   = '{0}/{1}_{2}_Amon_{3}_{4}_{5}.nc'.format(path, param, area,
 	model, exp, date)	
 	
@@ -54,7 +54,7 @@ def import_obs_clim(database):
 	area  = 'amz' # amz or neb
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/obs_data'
+	path  = '/home/nice/Documents/ufrn/PhD_project/datas/obs_data'
 	arq   = '{0}/{1}_{2}_{3}_obs_mon_{4}.nc'.format(path, param, area, 
 	database, date)	
 	
@@ -121,7 +121,7 @@ mdl11_clim = import_cmip5_clim(model)
 model  = u'INMCM4'
 mdl12_clim = import_cmip5_clim(model)
 
-model  = u'IPSL-CM5A-MR'
+model  = u'IPSL-CM5A-LR'
 mdl13_clim = import_cmip5_clim(model)
 
 model  = u'IPSL-CM5B-LR'
@@ -139,7 +139,7 @@ mdl17_clim = import_cmip5_clim(model)
 model  = u'MIROC-ESM'
 mdl18_clim = import_cmip5_clim(model)
 
-model  = u'MPI-ESM-MR'
+model  = u'MPI-ESM-LR'
 mdl19_clim = import_cmip5_clim(model)
 
 model  = u'MRI-CGCM3'
@@ -172,13 +172,13 @@ mdl28_clim = import_cmip5_clim(model)
 model  = u'HadGEM2-ES'
 mdl29_clim = import_cmip5_clim(model)
 
-model  = u'IPSL-CM5A-LR'
+model  = u'IPSL-CM5A-MR'
 mdl30_clim = import_cmip5_clim(model)
 
 model  = u'MIROC5'
 mdl31_clim = import_cmip5_clim(model)
 
-model  = u'MPI-ESM-LR'
+model  = u'MPI-ESM-MR'
 mdl32_clim = import_cmip5_clim(model)
 
 model  = u'NorESM1-M'
@@ -191,7 +191,7 @@ obs1_clim, obs1_clim_p5 , obs1_clim_p95  = import_obs_clim(database)
 r2 = metrics.r2_score(mdl26_clim, obs1_clim)
 
 # Plot model end obs data climatology
-fig, ax = plt.subplots(figsize=(28, 16))
+fig, ax = plt.subplots(figsize=(12, 6))
 time = np.arange(0.5, 12 + 0.5)
 
 plt_clim = plt.plot(time, mdl1_clim, time, mdl2_clim, time, mdl3_clim,
@@ -207,42 +207,42 @@ time, obs1_clim_p95)
 
 l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34, l35, l36 = plt_clim
 
-plt.setp(l1,  linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l2,  linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l3,  linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l4,  linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l5,  linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l6,  linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l7,  linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l8,  linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l9,  linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l10, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l11, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l12, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l13, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l14, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l15, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l16, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l17, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l18, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l19, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l20, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l21, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l22, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l23, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l24, linewidth=3, markeredgewidth=1, color='gainsboro')
-plt.setp(l25, linewidth=6, markeredgewidth=1, color='darkgray')
-plt.setp(l26, linewidth=6, markeredgewidth=1, color='green')
-plt.setp(l27, linewidth=6, markeredgewidth=1, color='orange')
-plt.setp(l28, linewidth=6, markeredgewidth=1, color='pink')
-plt.setp(l29, linewidth=6, markeredgewidth=1, color='purple')
-plt.setp(l30, linewidth=6, markeredgewidth=1, color='brown')
-plt.setp(l31, linewidth=6, markeredgewidth=1, color='yellow')
-plt.setp(l32, linewidth=6, markeredgewidth=1, color='blue')
-plt.setp(l33, linewidth=6, markeredgewidth=1, color='red')
-plt.setp(l34, linewidth=6, markeredgewidth=1, color='black')
-plt.setp(l35, linewidth=3, markeredgewidth=3, color='slategray')
-plt.setp(l36, linewidth=3, markeredgewidth=3, color='slategray')
+plt.setp(l1,  linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l2,  linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l3,  linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l4,  linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l5,  linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l6,  linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l7,  linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l8,  linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l9,  linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l10, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l11, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l12, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l13, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l14, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l15, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l16, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l17, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l18, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l19, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l20, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l21, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l22, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l23, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l24, linewidth=2, markeredgewidth=1, color='gainsboro')
+plt.setp(l25, linewidth=3, markeredgewidth=1, color='darkgray')
+plt.setp(l26, linewidth=3, markeredgewidth=1, color='green')
+plt.setp(l27, linewidth=3, markeredgewidth=1, color='orange')
+plt.setp(l28, linewidth=3, markeredgewidth=1, color='pink')
+plt.setp(l29, linewidth=3, markeredgewidth=1, color='purple')
+plt.setp(l30, linewidth=3, markeredgewidth=1, color='brown')
+plt.setp(l31, linewidth=3, markeredgewidth=1, color='yellow')
+plt.setp(l32, linewidth=3, markeredgewidth=1, color='blue')
+plt.setp(l33, linewidth=3, markeredgewidth=1, color='red')
+plt.setp(l34, linewidth=3, markeredgewidth=1, color='black')
+plt.setp(l35, linewidth=2, markeredgewidth=3, color='slategray')
+plt.setp(l36, linewidth=2, markeredgewidth=3, color='slategray')
 
 plt.fill_between(time, obs1_clim_p5, obs1_clim_p95, facecolor='slategray', alpha=0.8, interpolate=True)
 
@@ -253,40 +253,38 @@ area_name  = u'AMZ (Lat:16S 4N, Lon:74W 48W)' # AMZ (Lat:16S 4N, Lon:74W 48W) or
 
 if out_var == 'pre':
 	yaxis = np.arange(0, 14, 2)
-	var_name   = u'Rainfall'
-	label_name = u'Rain (mm/day)' 
-	plt.text(9.5, 10.5, u'r2 = {0}'.format(round(r2, 3)), fontsize=24, fontweight='bold')
+	var_name   = u'Precipitação'
+	label_name = u'Precipitação (mm/d)' 
+	plt.text(9.5, 10.5, u'r2 = {0}'.format(round(r2, 3)), fontsize=12, fontweight='bold')
 
 else:
 	yaxis = np.arange(18, 34, 2)
-	var_name   = u'Temperature' 
-	label_name = u'Temperature 2m ($^\circ$C)' 
-	plt.text(9.5, 30.5, u'r2 = {0}'.format(round(r2, 3)), fontsize=24, fontweight='bold')
+	var_name   = u'Temperatura' 
+	label_name = u'Temperatura 2m ($^\circ$C)' 
+	plt.text(9.5, 30.5, u'r2 = {0}'.format(round(r2, 3)), fontsize=12, fontweight='bold')
 
-fig.suptitle(u'{0} Climatology - {1} \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Reference period: 1850-2005)'.format(var_name, area_name), fontsize=30, y=0.98)
+fig.suptitle(u'Ciclo Anual de {0} - {1} \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Período de Referência: 1850-2005)'.format(var_name, area_name), fontsize=15, y=0.98)
 
-xaxis = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+xaxis = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
 
-plt.xlabel(u'Months', fontsize=30)
-plt.ylabel(u'{0}'.format(label_name), fontsize=30)
-plt.xticks(time, xaxis, fontsize=30)
-plt.yticks(yaxis, fontsize=30)
-plt.tick_params(axis='both', which='major', labelsize=30, length=10, width=4, pad=8, labelcolor='black')
+plt.ylabel(u'{0}'.format(label_name), fontsize=12)
+plt.xticks(time, xaxis, fontsize=12)
+plt.yticks(yaxis, fontsize=12)
+plt.tick_params(axis='both', which='major', labelsize=12, length=5, width=2, pad=4, labelcolor='black')
 
-font = FontProperties(size=24)	
 legend = (u'CMIP5-hist', u'ENSMEAN_CMIP5', u'BNU-ESM', u'CanESM2', u'CSIRO-ACCESS-1', u'HadGEM-ES', 
-		  u'IPSL-CM5A-LR', u'MIROC5', u'MPI-ESM-LR', u'NorESM1-M', u'CRU', u'CRU_p5%', u'CRU_p95%')    
-plt.legend(plt_clim[23:], legend, loc='upper center', bbox_to_anchor=(0.5, -0.07), shadow=True, ncol=6, prop=font)
+		  u'IPSL-CM5A-MR', u'MIROC5', u'MPI-ESM-MR', u'NorESM1-M', u'CRU', u'CRU_p5%', u'CRU_p95%')    
+plt.legend(plt_clim[23:], legend, loc='upper center', bbox_to_anchor=(0.5, -0.07), shadow=True, ncol=7, prop=FontProperties(size=10))
 ax.xaxis.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
 ax.yaxis.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
     
-path_out = '/home/nice/Documentos/ufrn/PhD_project/results/cmip5'
+path_out = '/home/nice'
 name_out = 'pyplt_clim_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area)
 
 if not os.path.exists(path_out):
 	create_path(path_out)
 	
-plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
+plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
 plt.show()
 exit()
 
