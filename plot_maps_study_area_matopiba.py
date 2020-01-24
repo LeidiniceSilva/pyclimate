@@ -122,7 +122,7 @@ bmap.plot(-45.00, -12.09, 'ko', mfc='red', markersize=5)
 bmap.plot(-43.37, -13.20, 'ko', mfc='red', markersize=5)
 
 # Path out to save figure
-path_out = '/home/nice/Downloads'
+path_out = '/home/nice'
 name_out = 'pyplt_maps_study_area_matopiba.png'
 if not os.path.exists(path_out):
 	create_path(path_out)

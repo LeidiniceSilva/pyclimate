@@ -2,123 +2,69 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
-__date__        = "08/03/2019"
-__description__ = "This script plot Rclimdex based in HadGEM2-ES model CMIP5"
+__date__        = "24/01/2020"
+__description__ = "This script plot trend from extremes index"
 
 import os
 import conda
 import numpy as np
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
+import warnings ; warnings.filterwarnings("ignore")
 
 conda_file_dir = conda.__file__
 conda_dir = conda_file_dir.split('lib')[0]
 proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
 os.environ["PROJ_LIB"] = proj_lib
 
-from netCDF4 import Dataset
+from matplotlib.path import Path
 from mpl_toolkits.basemap import Basemap
+from matplotlib.patches import PathPatch
+from matplotlib.colors import ListedColormap, BoundaryNorm
 
 
-def import_rclimdex_xavier(variable):
+def basemap():
 	
-	path = '/home/nice/Documentos/ufrn/papers/wmrn/data/xavier'
-	arq  = '{0}/{1}.nc'.format(path, variable)
+	lat = np.arange( -90,  91, 2)
+	lon = np.arange(-180, 180, 2)
+	
+	lat = lat - np.mean(np.diff(lat))/2.
+	lon = lon - np.mean(np.diff(lon))/2.
 
-	data = Dataset(arq)
-	var  = data.variables[variable][:] 
-	lat  = data.variables['latitude'][:]
-	lon  = data.variables['longitude'][:]
-	idx  = var[:][0,:,:]
-	return lat, lon, idx
+	bmap = Basemap(projection='cyl', llcrnrlat=-18, urcrnrlat=0, llcrnrlon=-53, urcrnrlon=-40, resolution=None, suppress_ticks=True, lon_0=0, celestial=False)
+	bmap.drawparallels(np.arange( -90,  91, 2), labels=[1, 0, 0, 0], color='gray', linewidth=0.01, dashes=[4, 6], fontsize=8, zorder=1)
+	bmap.drawmeridians(np.arange(-180, 180, 4), labels=[0, 0, 0, 1], color='gray', linewidth=0.01, dashes=[4, 6], fontsize=8, zorder=1)
 	
-def import_rclimdex_erain(variable):
+	lons, lats = np.meshgrid(lon, lat)
+	x, y = bmap(lons, lats)
 	
-	path = '/home/nice/Documentos/ufrn/papers/wmrn/data/erain'
-	arq  = '{0}/{1}_yr_ERAInterim_historical_r1i1p1_1979-2012.nc'.format(path, variable)
-
-	data = Dataset(arq)
-	var  = data.variables[variable][:] 
-	lat  = data.variables['lat'][:]
-	lon  = data.variables['lon'][:]
-	idx  = np.nanmean(var[:][7:26,:,:], axis=0)
-	
-	return lat, lon, idx
+	return bmap, x, y
 	
 
-def import_rclimdex_his(variable, date):
+def shipefile():
 	
-	path = '/home/nice/Documentos/ufrn/papers/wmrn/data/hadgem2-es'
-	arq  = '{0}/{1}_yr_HadGEM2-ES_historical_r1i1p1_{2}.nc'.format(path, variable, date)
+	bmap, x, y = basemap()
 
-	data = Dataset(arq)
-	var  = data.variables[variable][:] 
-	lat  = data.variables['lat'][:]
-	lon  = data.variables['lon'][:]
-	idx  = np.nanmean(var[:][127:146,:,:], axis=0)
+	# Import shapefile from word and matopiba 
+	bmap.readshapefile('/home/nice/Documents/github_projects/shp/shp_world/world', 'world', drawbounds=True, color='white')
+	bmap.readshapefile('/home/nice/Documents/github_projects/shp/shp_matopiba/matopiba', 'matopiba', drawbounds=True, color='black', linewidth=2)
+
+	# Masking map with shape
+	x0, x1 = plt.xlim()
+	y0, y1 = plt.ylim()
+
+	map_edges = np.array([[x0, y0], [x1, y0], [x1, y1], [x0, y1]])
+	polys = [map_edges]
+
+	bmap.readshapefile('/home/nice/Documents/github_projects/shp/shp_matopiba/matopiba', 'matopiba2', drawbounds=False)
+	polys = polys + getattr(bmap, 'matopiba2')
+	codes = [[Path.MOVETO] + [Path.LINETO for p in p[1:]] for p in polys] # creating a PathPatch
+
+	polys_lin = [v for p in polys for v in p]
+	codes_lin = [cdg for cdgs in codes for cdg in cdgs]
+	path  = Path(polys_lin, codes_lin)
+	patch = PathPatch(path, facecolor='white', lw=0)
 	
-	return lat, lon, idx
-
-def import_rclimdex_rcp(variable, date):
-	
-	path = '/home/nice/Documentos/ufrn/papers/wmrn/data/hadgem2-es'
-	arq  = '{0}/{1}_yr_HadGEM2-ES_rcp85_r1i1p1_{2}.nc'.format(path, variable, date)
-
-	data = Dataset(arq)
-	var  = data.variables[variable][:] 
-	lat  = data.variables['lat'][:]
-	lon  = data.variables['lon'][:]
-	idx  = np.nanmean(var[:][76:95,:,:], axis=0)
-	
-	return lat, lon, idx 
-
-def basemap(lat, lon):
-     
-	aux_lon1 = []
-	aux_lon2 = []
-	for l in lon:
-		if l <= 180:
-			aux_lon1.append(l)
-		else:
-			aux_lon2.append(l-360)
-		
-	lon = np.array(aux_lon1[::-1] + aux_lon2[::-1])
-	new_lat = lat[::-1]
-	new_lon = lon[::-1]
-									  
-	map = Basemap(projection='cyl', llcrnrlon=-50., llcrnrlat=-20., urcrnrlon=-34.,urcrnrlat=0., resolution='c')
-	map.drawmeridians(np.arange(-48.,-34.,4.), size=6, labels=[0,0,0,1], linewidth=0.4)
-	map.drawparallels(np.arange(-18.,2.,2.), size=6, labels=[1,0,0,0], linewidth=0.4)
-	map.drawcoastlines(linewidth=2, color='k')
-	map.drawcountries(linewidth=2, color='k')
-	map.drawstates(linewidth=2, color='k')
-	map.drawmapboundary()
-
-	lons, lats = np.meshgrid(new_lon, new_lat)
-	xx, yy = map(lons,lats)
-
-	return map, xx, yy
-
-                                
-# Import rclimdex database 
-lat, lon, idx_xavier_cdd = import_rclimdex_xavier(u'consecutive_dry_days_index_per_time_period')
-lat, lon, idx_xavier_cwd = import_rclimdex_xavier(u'consecutive_wet_days_index_per_time_period')
-
-lat, lon, idx_erain_cdd = import_rclimdex_erain(u'altcddETCCDI')
-lat, lon, idx_erain_cwd = import_rclimdex_erain(u'altcwdETCCDI')
-
-lat, lon, idx_his_cdd = import_rclimdex_his(u'altcddETCCDI', u'1859-2005')
-lat, lon, idx_rcp_cdd = import_rclimdex_rcp(u'altcddETCCDI', u'2005-2299')
-
-lat, lon, idx_his_cwd = import_rclimdex_his(u'altcwdETCCDI', u'1859-2005')
-lat, lon, idx_rcp_cwd = import_rclimdex_rcp(u'altcwdETCCDI', u'2005-2299')
-
-lat, lon, idx_his_r95p = import_rclimdex_his(u'r95pETCCDI', u'1859-2005')
-lat, lon, idx_rcp_r95p = import_rclimdex_rcp(u'r95pETCCDI', u'2005-2299')
-
-lat, lon, idx_his_txx = import_rclimdex_his(u'txxETCCDI', u'1859-2005')
-lat, lon, idx_rcp_txx = import_rclimdex_rcp(u'txxETCCDI', u'2005-2299')
-
+	return patch
 
 
 lons = [-36.70, -44.61, -40.79, -41.86, -39.00, -47.48, -45.93, -37.26, -43.35, -40.46, -43.71, -37.04]
@@ -127,113 +73,166 @@ trend_cdd = [0.872, 1.190, -0.654, 0.444, 3.16, -0.789, -1.198, 0.718, 0.68, -1.
 trend_cwd = [-3.388, 0.296, 0.098, -0.428, -1.242, -0.226, 0.854, 0.059, -0.004, -0.002, 1.0212, 0.0273]
 trend_r95p = [12,14, -2.03, -1.515, 3.4922, 4.2, 9.478, 6.717, -4.784, 6.522, 2.04, 1.021, 14.152]
 trend_txx = [0.077, 0.062, 0.087, 0.11, -0.121, 0.066, 0.12, 0.112, 0.169, 0.126, 0.138, -0.068]
+
+#~ # Define size from marker
+#~ def get_marker_color(trend):
+    #~ if trend > 0.0:
+        #~ return ('r^')
+    #~ elif trend < 0.0:
+        #~ return ('bv')
+    #~ else:
+        #~ return ('ro')
+
+#~ for n in range(len(lats)):
+    #~ x,y = map(lons, lats)
+    #~ marker_string = get_marker_color(trend_cwd[n])
+    #~ map.plot(x[n], y[n], marker_string, markersize=trend_cwd[n]*1)
+    #~ print(x[n], y[n], marker_string, trend_cwd[n]*1)
     
-# Plot trend from xavier dataset
-fig = plt.figure(figsize=(12,6))
+# Plot maps with trend from extremes index - Rainfall
+fig = plt.figure()
 
 # Plot firt map 
-ax = fig.add_subplot(141)
-plt.title(u'A) CDD_Xavier (dias) Hist', loc='left', fontsize=8, fontweight='bold')
-plt.xlabel(u'Longitude', fontsize=8, labelpad=20, fontweight='bold')
-plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
-map, xx, yy = basemap(lat, lon)
-ax.text(-35, -18,u'\u25B2 \nN ', ha='center', fontsize=10, family='Arial', rotation = 0)    
+ax = fig.add_subplot(231)
+bmap, x, y = basemap()
+patch = shipefile()
 
-map.plot(-36.70, -9.44, 'r^', markersize=4.36)
-map.plot(-44.61, -13.33, 'r^', markersize=5.94)
-map.plot(-40.79, -14.88, 'bv', markersize=3.27)
-map.plot(-41.86, -11.30, 'r^', markersize=2.22)
-map.plot(-39.00, -4.28, 'r^', markersize=14.8)
-map.plot(-47.48, -5.53, 'bv', markersize=3.94)
-map.plot(-45.93, -9.10, 'bv', markersize=5.99)
-map.plot(-37.26, -7.01, 'r^', markersize=4.59)
-map.plot(-43.35, -4.86, 'r^', markersize=4.4)
-map.plot(-40.46, -9.36, 'bv', markersize=8.9)
-map.plot(-43.71, -8.41, 'r^', markersize=3.98)
-map.plot(-37.04, -10.95, 'bv', markersize=1.685)
+plt.text(-52.5, -2, u'A) Pr95p', fontsize=10)
+plt.text(-42, -17, u'\u25B2 \nN ', fontsize=8)
+plt.ylabel(u'Latitude', fontsize=8, labelpad=25)
+
+bmap.plot(-45.56, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.02, -7.32, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.13, -5.30, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.25, -10.43, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.18, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.22, -12.00, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.25, -12.24, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.01, -6.46, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-44.07, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-42.81, -5.08, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.00, -12.09, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.37, -13.20, 'b^', mfc='cornflowerblue', markersize=5)
 
 # Plot second map 
-ax = fig.add_subplot(142)
-plt.title(u'B) CWD_Xavier (ºC) Hist', loc='left', fontsize=8, fontweight='bold')
-plt.xlabel(u'Longitude', fontsize=8, labelpad=20, fontweight='bold')
-map, xx, yy = basemap(lat, lon)
-ax.text(-35, -18,u'\u25B2 \nN ', ha='center', fontsize=10, family='Arial', rotation = 0)
+ax = fig.add_subplot(232)
+bmap, x, y = basemap()
+patch = shipefile()
 
-map.plot(-36.70, -9.44, 'bv', markersize=4.388)
-map.plot(-44.61, -13.33, 'r^', markersize=2.296)
-map.plot(-40.79, -14.88, 'r^', markersize=2.098)
-map.plot(-41.86, -11.30, 'bv', markersize=2.428)
-map.plot(-39.00, -4.28, 'bv', markersize=3.242)
-map.plot(-47.48, -5.53, 'bv', markersize=2.226)
-map.plot(-45.93, -9.10, 'r^', markersize=2.854)
-map.plot(-37.26, -7.01, 'r^', markersize=2.059)
-map.plot(-43.35, -4.86, 'bv', markersize=2.004)
-map.plot(-40.46, -9.36, 'bv', markersize=2.002)
-map.plot(-43.71, -8.41, 'r^', markersize=3.0212)
-map.plot(-37.04, -10.95, 'r^', markersize=2.0273)
+plt.text(-52.5, -2, u'B) Pr99p', fontsize=10)
+plt.text(-42, -17, u'\u25B2 \nN ', fontsize=8)
 
-# Plot thirth map 
-ax = fig.add_subplot(143)
-plt.title(u'C) R95p_Xavier (mm) Hist', loc='left', fontsize=8, fontweight='bold')
-plt.xlabel(u'Longitude', fontsize=8, labelpad=20, fontweight='bold')
-map, xx, yy = basemap(lat, lon)
-ax.text(-35, -18,u'\u25B2 \nN ', ha='center', fontsize=10, family='Arial', rotation = 0)
+bmap.plot(-45.56, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.02, -7.32, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.13, -5.30, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.25, -10.43, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.18, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.22, -12.00, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.25, -12.24, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.01, -6.46, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-44.07, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-42.81, -5.08, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.00, -12.09, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.37, -13.20, 'b^', mfc='cornflowerblue', markersize=5)
 
-map.plot(-36.70, -9.44, 'r^', markersize=12)
-map.plot(-44.61, -13.33, 'r^', markersize=14)
-map.plot(-40.79, -14.88, 'bv', markersize=3.03)
-map.plot(-41.86, -11.30, 'bv', markersize=2.515)
-map.plot(-39.00, -4.28, 'r^', markersize=3.4822)
-map.plot(-47.48, -5.53, 'r^', markersize=4.2)
-map.plot(-45.93, -9.10, 'r^', markersize=9.478)
-map.plot(-37.26, -7.01, 'r^', markersize=6.717)
-map.plot(-43.35, -4.86, 'bv', markersize=4.784)
-map.plot(-40.46, -9.36, 'r^', markersize=6.522)
-map.plot(-43.71, -8.41, 'r^', markersize=3.04)
-map.plot(-37.04, -10.95, 'r^', markersize=2.021)
+# Plot third map 
+ax = fig.add_subplot(233)
+bmap, x, y = basemap()
+patch = shipefile()
+
+plt.text(-52.5, -2, u'C) Rx1dia', fontsize=10)
+plt.text(-42, -17, u'\u25B2 \nN ', fontsize=8)
+
+bmap.plot(-45.56, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.02, -7.32, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.13, -5.30, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.25, -10.43, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.18, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.22, -12.00, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.25, -12.24, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.01, -6.46, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-44.07, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-42.81, -5.08, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.00, -12.09, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.37, -13.20, 'b^', mfc='cornflowerblue', markersize=5)
 
 # Plot fourth map 
-ax = fig.add_subplot(144)
-plt.title(u'D) Txx_Xavier (ºC) Hist', loc='left', fontsize=8, fontweight='bold')
-plt.xlabel(u'Longitude', fontsize=8, labelpad=20, fontweight='bold')
-map, xx, yy = basemap(lat, lon)
-ax.text(-35, -18,u'\u25B2 \nN ', ha='center', fontsize=10, family='Arial', rotation = 0)
+ax = fig.add_subplot(234)
+bmap, x, y = basemap()
+patch = shipefile()
 
-map.plot(-36.70, -9.44, 'r^', markersize=4.85)
-map.plot(-44.61, -13.33, 'r^', markersize=4.10)
-map.plot(-40.79, -14.88, 'r^', markersize=5.35)
-map.plot(-41.86, -11.30, 'r^', markersize=6.50)
-map.plot(-39.00, -4.28, 'bv', markersize=7.05)
-map.plot(-47.48, -5.53, 'r^', markersize=4.30)
-map.plot(-45.93, -9.10, 'r^', markersize=7.00)
-map.plot(-37.26, -7.01, 'r^', markersize=6.56)
-map.plot(-43.35, -4.86, 'r^', markersize=9.4)
-map.plot(-40.46, -9.36, 'r^', markersize=7.3)
-map.plot(-43.71, -8.41, 'r^', markersize=6.9)
-map.plot(-37.04, -10.95, 'bv', markersize=4.40)
+plt.text(-52.5, -2, u'D) Rx5dia', fontsize=10)
+plt.text(-42, -17, u'\u25B2 \nN ', fontsize=8)
+plt.xlabel(u'Longitude', fontsize=8, labelpad=20)
+plt.ylabel(u'Latitude', fontsize=8, labelpad=25)
 
-def get_marker_color(trend):
-    if trend > 0.0:
-        return ('r^')
-    elif trend < 0.0:
-        return ('bv')
-    else:
-        return ('ro')
+bmap.plot(-45.56, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.02, -7.32, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.13, -5.30, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.25, -10.43, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.18, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.22, -12.00, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.25, -12.24, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.01, -6.46, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-44.07, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-42.81, -5.08, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.00, -12.09, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.37, -13.20, 'b^', mfc='cornflowerblue', markersize=5)
 
-for n in range(len(lats)):
-    x,y = map(lons, lats)
-    marker_string = get_marker_color(trend_cwd[n])
-    map.plot(x[n], y[n], marker_string, markersize=trend_cwd[n]*1)
-    print(x[n], y[n], marker_string, trend_cwd[n]*1)
+# Plot fifth map 
+ax = fig.add_subplot(235)
+bmap, x, y = basemap()
+patch = shipefile()
+
+plt.text(-52.5, -2, u'E) SDII', fontsize=10)
+plt.text(-42, -17, u'\u25B2 \nN ', fontsize=8)
+plt.xlabel(u'Longitude', fontsize=8, labelpad=20)
+
+bmap.plot(-45.56, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.02, -7.32, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.13, -5.30, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.25, -10.43, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.18, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.22, -12.00, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.25, -12.24, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.01, -6.46, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-44.07, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-42.81, -5.08, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.00, -12.09, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.37, -13.20, 'b^', mfc='cornflowerblue', markersize=5)
+
+# Plot sixth map 
+ax = fig.add_subplot(236)
+bmap, x, y = basemap()
+patch = shipefile()
+
+plt.text(-52.5, -2, u'F) PRECTOT', fontsize=10)
+plt.text(-42, -17, u'\u25B2 \nN ', fontsize=8)
+plt.xlabel(u'Longitude', fontsize=8, labelpad=20)
+
+bmap.plot(-45.56, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.02, -7.32, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.13, -5.30, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.25, -10.43, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.18, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-48.22, -12.00, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-46.25, -12.24, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.01, -6.46, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-44.07, -9.06, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-42.81, -5.08, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-45.00, -12.09, 'b^', mfc='cornflowerblue', markersize=5)
+bmap.plot(-43.37, -13.20, 'b^', mfc='cornflowerblue', markersize=5)
 
 # Path out to save figure
-path_out = '/home/nice/Documents'
-name_out = 'pyplt_maps_trend_rclimdex_xavier_matobiba.png'
+path_out = '/home/nice'
+name_out = 'pyplt_maps_trend_rclimdex_xavier_matopiba.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
+
 plt.show()
 exit()
+
 
 
 
