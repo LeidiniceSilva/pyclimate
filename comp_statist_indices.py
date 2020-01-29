@@ -182,3 +182,22 @@ def compute_effic_coeffic(model, obs):
     nash = 1 - sum((model - obs) ** 2) / sum((obs - np.mean(obs)) ** 2)
     
     return nash
+    
+    
+def compute_index_agreement(model, obs):
+
+    """
+    The input arrays must have the same dimentions
+    :Param model: Numpy array with model data
+    :Param obs: Numpy array with obs data
+    :Return: Index of Agreement
+    """
+    
+    parte_1 = (model - obs)**2
+    parte_2 = np.abs(model - np.mean(obs))
+    parte_3 = np.abs(obs - np.mean(obs))
+    icw = 1 - sum(parte_1) / sum((parte_2 + parte_3)**2)
+    
+    return icw
+    
+    
