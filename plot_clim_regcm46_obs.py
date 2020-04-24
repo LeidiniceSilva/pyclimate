@@ -23,10 +23,9 @@ from scipy.stats import norm
 from matplotlib.font_manager import FontProperties
 
 
-def import_sim(exp):
+def import_sim(area, exp):
 	
 	param = 'pr' # pr or tas
-	area  = 'amz_neb' # amz or neb
 	date  = '2001-2010'
 
 	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
@@ -48,10 +47,9 @@ def import_sim(exp):
 	return mdl_clim
 
 
-def import_obs(obs):
+def import_obs(area, obs):
 	
 	param = 'precip' # precip, pre or tmp
-	area  = 'amz_neb' # amz or neb
 	date  = '2001-2010'
 
 	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
@@ -74,18 +72,29 @@ def import_obs(obs):
 	              
                
 # Import regcm exps model end obs database climatology
-exp  = u'regcm_exp1'
-exp1_clim = import_sim(exp)
-		
-exp  = u'regcm_exp2'
-exp2_clim = import_sim(exp)
+nam_exp1_clim = import_sim(u'nam', u'regcm_exp1')
+sam_exp1_clim = import_sim(u'sam', u'regcm_exp1')
+neb_exp1_clim = import_sim(u'neb', u'regcm_exp1')
 
-obs  = u'gpcp_v2.2_obs'
-obs_clim = import_obs(obs)
+nam_exp2_clim = import_sim(u'nam', u'regcm_exp2')
+sam_exp2_clim = import_sim(u'sam', u'regcm_exp2')
+neb_exp2_clim = import_sim(u'neb', u'regcm_exp2')
 
-median_exp1=statistics.median(exp1_clim)
-median_exp2=statistics.median(exp2_clim)
-median_obs=statistics.median(obs_clim)
+nam_obs_clim = import_obs(u'nam', u'gpcp_v2.2_obs')
+sam_obs_clim = import_obs(u'sam', u'gpcp_v2.2_obs')
+neb_obs_clim = import_obs(u'neb', u'gpcp_v2.2_obs')
+
+nam_exp1_median = statistics.median(nam_exp1_clim)
+sam_exp1_median = statistics.median(sam_exp1_clim)
+neb_exp1_median = statistics.median(neb_exp1_clim)
+
+nam_exp2_median = statistics.median(nam_exp2_clim)
+sam_exp2_median = statistics.median(sam_exp2_clim)
+neb_exp2_median = statistics.median(neb_exp2_clim)
+
+nam_obs_median = statistics.median(nam_obs_clim)
+sam_obs_median = statistics.median(sam_obs_clim)
+neb_obs_median = statistics.median(neb_obs_clim)
 
 # Plot model end obs data climatology
 fig = plt.figure()
@@ -94,31 +103,30 @@ bar_width = .30
 
 # Subplot one
 plt.subplot(311)
-plt_clim1 = plt.bar(time, exp1_clim, alpha=0.8, color='blue', label='Reg_Exp1', width = 0.25, edgecolor='black')
-plt_clim2 = plt.bar(time + .30, exp2_clim, alpha=0.8, color='red', label='Reg_Exp2', width = 0.25, edgecolor='black')
-plt_clim3 = plt.bar(time + .60, obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
+plt_clim1 = plt.bar(time, nam_exp1_clim, alpha=0.8, color='blue', label='Reg_Exp1', width = 0.25, edgecolor='black')
+plt_clim2 = plt.bar(time + .30, nam_exp2_clim, alpha=0.8, color='red', label='Reg_Exp2', width = 0.25, edgecolor='black')
+plt_clim3 = plt.bar(time + .60, nam_obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
 
-plt.axhline(median_exp1, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
-plt.axhline(median_exp2, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
-plt.axhline(median_obs, linewidth=1, linestyle='dashed', color='black', alpha=0.8)
-plt.ylabel('Precipitação (mm)', fontsize=8, fontweight='bold')
-plt.title('Climatologia de Precipitação (2001-2010)', fontsize=8, fontweight='bold')
+plt.axhline(nam_exp1_median, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
+plt.axhline(nam_exp2_median, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
+plt.axhline(nam_obs_median, linewidth=1, linestyle='dashed', color='black', alpha=0.8)
+plt.title('Ciclo Anual de Precipitação (2001-2010)', fontsize=8, fontweight='bold')
 plt.text(0.5, 10, u'A) NAMZ', fontsize=8, fontweight='bold')
 plt.xticks(time + .30, ('Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'))
 plt.yticks(np.arange(0, 14, 2))
-plt.legend(loc='upper center', shadow=True, ncol=3, prop=FontProperties(size=8))
+plt.legend(loc='upper right', shadow=True, ncol=3, prop=FontProperties(size=8))
 plt.tick_params(axis='both', which='major', labelsize=8, length=5, width=1.5, pad=1.5, labelcolor='black')
 
 # Subplot two
 plt.subplot(312)
-plt_clim1 = plt.bar(time, exp1_clim, alpha=0.8, color='blue', label='Reg_Exp1', width = 0.25, edgecolor='black')
-plt_clim2 = plt.bar(time + .30, exp2_clim, alpha=0.8, color='red', label='Reg_Exp2', width = 0.25, edgecolor='black')
-plt_clim3 = plt.bar(time + .60, obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
+plt_clim1 = plt.bar(time, sam_exp1_clim, alpha=0.8, color='blue', label='Reg_Exp1', width = 0.25, edgecolor='black')
+plt_clim2 = plt.bar(time + .30, sam_exp2_clim, alpha=0.8, color='red', label='Reg_Exp2', width = 0.25, edgecolor='black')
+plt_clim3 = plt.bar(time + .60, sam_obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
 
-plt.axhline(median_exp1, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
-plt.axhline(median_exp2, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
-plt.axhline(median_obs, linewidth=1, linestyle='dashed', color='black', alpha=0.8)
-plt.ylabel('Precipitação (mm)', fontsize=8, fontweight='bold')
+plt.axhline(sam_exp1_median, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
+plt.axhline(sam_exp2_median, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
+plt.axhline(sam_obs_median, linewidth=1, linestyle='dashed', color='black', alpha=0.8)
+plt.ylabel('Precipitação (mm/d)', fontsize=8, fontweight='bold')
 plt.text(0.5, 10, u'B) SAMZ', fontsize=8, fontweight='bold')
 plt.xticks(time + .30, ('Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'))
 plt.yticks(np.arange(0, 14, 2))
@@ -126,16 +134,15 @@ plt.tick_params(axis='both', which='major', labelsize=8, length=5, width=1.5, pa
 
 # Subplot three
 plt.subplot(313)
-plt_clim1 = plt.bar(time, exp1_clim, alpha=0.8, color='blue', label='Reg_Exp1', width = 0.25, edgecolor='black')
-plt_clim2 = plt.bar(time + .30, exp2_clim, alpha=0.8, color='red', label='Reg_Exp2', width = 0.25, edgecolor='black')
-plt_clim3 = plt.bar(time + .60, obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
+plt_clim1 = plt.bar(time, neb_exp1_clim, alpha=0.8, color='blue', label='Reg_Exp1', width = 0.25, edgecolor='black')
+plt_clim2 = plt.bar(time + .30, neb_exp2_clim, alpha=0.8, color='red', label='Reg_Exp2', width = 0.25, edgecolor='black')
+plt_clim3 = plt.bar(time + .60, neb_obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
 
-plt.axhline(median_exp1, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
-plt.axhline(median_exp2, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
-plt.axhline(median_obs, linewidth=1, linestyle='dashed', color='black', alpha=0.8)
+plt.axhline(neb_exp1_median, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
+plt.axhline(neb_exp2_median, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
+plt.axhline(neb_obs_median, linewidth=1, linestyle='dashed', color='black', alpha=0.8)
 plt.xlabel('Meses', fontsize=8, fontweight='bold')
 plt.text(0.5, 10, u'C) NEB', fontsize=8, fontweight='bold')
-plt.ylabel('Precipitação (mm)', fontsize=8, fontweight='bold')
 plt.xticks(time + .30, ('Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'))
 plt.yticks(np.arange(0, 14, 2))
 plt.tick_params(axis='both', which='major', labelsize=8, length=5, width=1.5, pad=1.5, labelcolor='black')

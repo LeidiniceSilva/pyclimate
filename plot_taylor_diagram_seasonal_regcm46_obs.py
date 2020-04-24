@@ -116,14 +116,13 @@ class TaylorDiagram(object):
         return contours
 
 
-def import_sim_season(exp):
+def import_sim_season(area, exp, season):
 	
 	param = 'pr' # pr or tas
-	area  = 'amz_neb' # amz or neb
 	date  = '2001-2010'
 
 	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
-	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, exp, date)	
+	arq   = '{0}/{1}_{2}_{3}_{4}_{5}.nc'.format(path, param, area, exp, season, date)	
 	
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
@@ -131,23 +130,18 @@ def import_sim_season(exp):
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
 	
-	sea_exp = np.nanmean(np.nanmean(value[2:120:3,:,:], axis=1), axis=1)
-	sea1_exp = sea_exp[3:40:4]
-	sea2_exp = sea_exp[0:40:4]
-	sea3_exp = sea_exp[1:40:4]
-	sea4_exp = sea_exp[2:40:4]
+	season_exp = np.nanmean(np.nanmean(value[:,:,:], axis=1), axis=1)
 	
-	return sea1_exp, sea2_exp, sea3_exp, sea4_exp
+	return season_exp
 
 
-def import_obs_season(database):
+def import_obs_season(area, obs, season):
 	
 	param = 'precip' # precip, pre or tmp
-	area  = 'amz_neb' # amz or neb
 	date  = '2001-2010'
 
 	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
-	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, obs, date)	
+	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, obs, season, date)	
 		
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
@@ -155,55 +149,56 @@ def import_obs_season(database):
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
 	
-	sea_obs = np.nanmean(np.nanmean(value[2:120:3,:,:], axis=1), axis=1)
-	sea1_obs = sea_obs[3:40:4]
-	sea2_obs = sea_obs[0:40:4]
-	sea3_obs = sea_obs[1:40:4]
-	sea4_obs = sea_obs[2:40:4]
+	season_obs = np.nanmean(np.nanmean(value[:,:,:], axis=1), axis=1)
 
-	return sea_obs, sea1_obs, sea2_obs, sea3_obs, sea4_obs
+	return season_obs
 
 
 if __name__=='__main__':
 
 	# Import regcm exps model end obs database seasonaly
-	exp  = u'regcm_exp1'
-	sea1_exp1, sea2_exp1, sea3_exp1, sea4_exp1 = import_sim_season(exp)
-			
-	exp  = u'regcm_exp2'
-	sea1_exp2, sea2_exp2, sea3_exp2, sea4_exp2 = import_sim_season(exp)
+	
+	nam_exp1_djf = import_sim_season(u'nam', u'regcm_exp1', u'djf')
+	sam_exp1_djf = import_sim_season(u'sam', u'regcm_exp1', u'djf')
+	neb_exp1_djf = import_sim_season(u'neb', u'regcm_exp1', u'djf')
 
-	obs  = u'gpcp_v2.2_obs'
-	sea_obs1, sea1_obs1, sea2_obs1, sea3_obs1, sea4_obs1 = import_obs_season(obs)
+	nam_exp1_jja = import_sim_season(u'nam', u'regcm_exp1', u'jja')
+	sam_exp1_jja = import_sim_season(u'sam', u'regcm_exp1', u'jja')
+	neb_exp1_jja = import_sim_season(u'neb', u'regcm_exp1', u'jja')
+		
+	nam_exp2_djf = import_sim_season(u'nam', u'regcm_exp2', u'djf')
+	sam_exp2_djf = import_sim_season(u'sam', u'regcm_exp2', u'djf')
+	neb_exp2_djf = import_sim_season(u'neb', u'regcm_exp2', u'djf')
+
+	nam_exp2_jja = import_sim_season(u'nam', u'regcm_exp2', u'jja')
+	sam_exp2_jja = import_sim_season(u'sam', u'regcm_exp2', u'jja')
+	neb_exp2_jja = import_sim_season(u'neb', u'regcm_exp2', u'jja')
+	
+	nam_obs_djf = import_obs_season(u'nam', u'gpcp_v2.2_obs', u'djf')
+	sam_obs_djf = import_obs_season(u'sam', u'gpcp_v2.2_obs', u'djf')
+	neb_obs_djf = import_obs_season(u'neb', u'gpcp_v2.2_obs', u'djf')
+
+	nam_obs_jja = import_obs_season(u'nam', u'gpcp_v2.2_obs', u'jja')
+	sam_obs_jja = import_obs_season(u'sam', u'gpcp_v2.2_obs', u'jja')
+	neb_obs_jja = import_obs_season(u'neb', u'gpcp_v2.2_obs', u'jja')
+
 
 	# Reference database standard desviation		   
 	stdrefs=sea_obs1.std(ddof=1)          
 	
 	# Sample std, rho: Be sure to check order and that correct numbers are placed!
-	samples = dict(DJF=[[sea1_exp1.std(ddof=1), st.pearsonr(sea1_exp1, sea1_obs1)[1], 'Exp1_NAMZ'],
-						[sea1_exp1.std(ddof=1), st.pearsonr(sea1_exp1, sea1_obs1)[1], 'Exp1_SAMZ'],
-						[sea1_exp1.std(ddof=1), st.pearsonr(sea1_exp1, sea1_obs1)[1], 'Exp1_NEB'],
-						[sea1_exp2.std(ddof=1), st.pearsonr(sea1_exp2, sea1_obs1)[1], 'Exp2_NAMZ'],
-						[sea1_exp2.std(ddof=1), st.pearsonr(sea1_exp2, sea1_obs1)[1], 'Exp2_SAMZ'],
-						[sea1_exp2.std(ddof=1), st.pearsonr(sea1_exp2, sea1_obs1)[1], 'Exp2_NEB']],              
-				   MAM=[[sea2_exp1.std(ddof=1), st.pearsonr(sea2_exp1, sea2_obs1)[1], 'Exp1_NAMZ'],
-						[sea2_exp1.std(ddof=1), st.pearsonr(sea2_exp1, sea2_obs1)[1], 'Exp1_SAMZ'],
-						[sea2_exp1.std(ddof=1), st.pearsonr(sea2_exp1, sea2_obs1)[1], 'Exp1_NEB'],
-						[sea2_exp2.std(ddof=1), st.pearsonr(sea2_exp2, sea2_obs1)[1], 'Exp2_NAMZ'],
-						[sea2_exp2.std(ddof=1), st.pearsonr(sea2_exp2, sea2_obs1)[1], 'Exp2_SAMZ'],
-						[sea2_exp2.std(ddof=1), st.pearsonr(sea2_exp2, sea2_obs1)[1], 'Exp2_NEB']],
-				   JJA=[[sea3_exp1.std(ddof=1), st.pearsonr(sea3_exp1, sea3_obs1)[1], 'Exp1_NAMZ'],
-						[sea3_exp1.std(ddof=1), st.pearsonr(sea3_exp1, sea3_obs1)[1], 'Exp1_SAMZ'],
-						[sea3_exp1.std(ddof=1), st.pearsonr(sea3_exp1, sea3_obs1)[1], 'Exp1_NEB'],
-						[sea3_exp2.std(ddof=1), st.pearsonr(sea3_exp2, sea3_obs1)[1], 'Exp2_NAMZ'],
-						[sea3_exp2.std(ddof=1), st.pearsonr(sea3_exp2, sea3_obs1)[1], 'Exp2_SAMZ'],
-						[sea3_exp2.std(ddof=1), st.pearsonr(sea3_exp2, sea3_obs1)[1], 'Exp2_NEB']],
-				   SON=[[sea4_exp1.std(ddof=1), st.pearsonr(sea4_exp1, sea4_obs1)[1], 'Exp1_NAMZ'],
-						[sea4_exp1.std(ddof=1), st.pearsonr(sea4_exp1, sea4_obs1)[1], 'Exp1_SAMZ'],
-						[sea4_exp1.std(ddof=1), st.pearsonr(sea4_exp1, sea4_obs1)[1], 'Exp1_NEB'],
-						[sea4_exp2.std(ddof=1), st.pearsonr(sea4_exp2, sea4_obs1)[1], 'Exp2_NAMZ'],
-						[sea4_exp2.std(ddof=1), st.pearsonr(sea4_exp2, sea4_obs1)[1], 'Exp2_SAMZ'],
-						[sea4_exp2.std(ddof=1), st.pearsonr(sea4_exp2, sea4_obs1)[1], 'Exp2_NEB']])	
+	samples = dict(DJF=[[nam_exp1_djf.std(ddof=1), st.pearsonr(nam_exp1_djf, nam_obs_djf)[1], 'Exp1_NAMZ_DJF'],
+						[sam_exp1_djf.std(ddof=1), st.pearsonr(sam_exp1_djf, sam_obs_djf)[1], 'Exp1_SAMZ_DJF'],
+						[neb_exp1_djf.std(ddof=1), st.pearsonr(neb_exp1_djf, neb_obs_djf)[1], 'Exp1_NEB_DJF'],
+						[nam_exp2_djf.std(ddof=1), st.pearsonr(nam_exp2_djf, nam_obs_djf)[1], 'Exp2_NAMZ_DJF'],
+						[sam_exp2_djf.std(ddof=1), st.pearsonr(sam_exp2_djf, sam_obs_djf)[1], 'Exp2_SAMZ_DJF'],
+						[neb_exp2_djf.std(ddof=1), st.pearsonr(neb_exp2_djf, neb_obs_djf)[1], 'Exp2_NEB_DJF']],
+					JJA=[[nam_exp1_jja.std(ddof=1), st.pearsonr(nam_exp1_jja, nam_obs_jja)[1], 'Exp1_NAMZ_JJA'],
+						[sam_exp1_jja.std(ddof=1), st.pearsonr(sam_exp1_jja, sam_obs_jja)[1], 'Exp1_SAMZ_JJA'],
+						[neb_exp1_jja.std(ddof=1), st.pearsonr(neb_exp1_jja, neb_obs_jja)[1], 'Exp1_NEB_JJA'],
+						[nam_exp2_jja.std(ddof=1), st.pearsonr(nam_exp2_jja, nam_obs_jja)[1], 'Exp2_NAMZ_JJA'],
+						[sam_exp2_jja.std(ddof=1), st.pearsonr(sam_exp2_jja, sam_obs_jja)[1], 'Exp2_SAMZ_JJA'],
+						[neb_exp2_jja.std(ddof=1), st.pearsonr(neb_exp2_jja, neb_obs_jja)[1], 'Exp2_NEB_JJA']])	
 						   
 	# Colormap (see http://www.scipy.org/Cookbook/Matplotlib/Show_colormaps)
 	colors = plt.matplotlib.cm.Set1(np.linspace(0,1,len(samples['DJF'])))
@@ -224,17 +219,15 @@ if __name__=='__main__':
 	x99 = [0.05, 10.0] # For Prcp, this is for 99th level (r = 0.254)
 	y99 = [0.0, 80.0]
 
-	rects = dict(DJF=221,
-				 MAM=222,
-				 JJA=223,
-				 SON=224)
+	rects = dict(DJF=121,
+				 JJA=122)
 
 	# Plot model end obs data taylor diagram 
 	fig = plt.figure()
 
-	fig.suptitle('Diagrama de Taylor de Precipitação (mm) 2001-2010 \n NAMZ () SAMZ () NEB()')
+	fig.suptitle('Diagrama de Taylor de Precipitação (mm/d) 2001-2010')
 
-	for season in ['DJF','MAM','JJA','SON']:
+	for season in ['DJF','JJA']:
 
 		dia = TaylorDiagram(stdrefs, fig=fig, rect=rects[season], label='Reference')
 
