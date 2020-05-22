@@ -43,7 +43,22 @@ def compute_corr(model, obs):
     
     return corr
 
+def compute_r2(model, obs):
 
+	"""
+	The input arrays must have the same dimentions
+	:Param model: Numpy array with model data
+	:Param obs: Numpy array with obs data
+	:Return: R-squared
+	"""
+
+	# check_dims(model, obs)
+	# model, obs = filter_nan(model, obs)
+	corr = np.corrcoef(model, obs)[0][1]
+	r2 = corr ** 2
+
+	return r2
+    
 def compute_mae(model, obs):
 
     """
@@ -143,7 +158,7 @@ def compute_anomaly(model, obs):
     return anomaly, standard_anomaly
    
     
-def compute_fcst_correc(model, obs, fcst):
+def compute_fcst_correct(model, obs, fcst):
 
     """
     The input arrays must have the same dimentions
@@ -165,7 +180,7 @@ def compute_fcst_correc(model, obs, fcst):
         prob = ss.gamma.cdf(i, alpha_mod, scale=beta_mod)
         fcst_correc.append(ss.gamma.ppf(prob, alpha_obs, scale=beta_obs))
         
-    return fcst_correc
+    return fcst_correct
 
 
 def compute_effic_coeffic(model, obs):
@@ -200,4 +215,4 @@ def compute_index_agreement(model, obs):
     
     return icw
     
-    
+
