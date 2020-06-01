@@ -11,8 +11,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
-from topsis import topsis
-from sklearn import preprocessing
+
 from comp_statist_indices import compute_corr
 from comp_statist_indices import compute_rmse
 from comp_statist_indices import compute_mae
@@ -75,21 +74,22 @@ for mdl in models:
 	month_cru = import_obs(obs)
 	
 	corr = compute_corr(month_gcm, month_cru)
+	r2 = compute_r2(month_gcm, month_cru)
 	rmse = compute_rmse(month_gcm, month_cru)
 	mae = compute_mae(month_gcm, month_cru)
-	r2 = compute_r2(month_gcm, month_cru)
 	
-	metrics = [corr, rmse, mae, r2]
+	metrics = [corr, r2, rmse, mae]
 	metrics_gcm.append(metrics)
-
-	print(mdl, " -------> ", metrics)
 	
 # Compute TOPSIS to CMIP5 models
 # Method 1 (Import topsis)
-x = metrics_gcm
+a = metrics_gcm
 w = [0.25, 0.25, 0.25, 0.25]
-i = [1, 1, 1, 1]
-topsis_gcm = topsis(x, w, i)
+j = [1, 1, 1, 1]
+
+print(metrics_gcm)
+
+exit()
 
 # Compute TOPSIS to CMIP5 models
 # Method 2 (Steps)
