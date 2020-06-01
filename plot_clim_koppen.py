@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/15/2020"
-__description__ = "This script plot to koppen classification"
+__description__ = "This script plot maps with koppen classification"
 
 import xarray as xr
 import numpy as np
@@ -12,7 +12,7 @@ import scipy.interpolate
 import cartopy.crs as ccrs
 from cartopy.feature import NaturalEarthFeature
 import matplotlib.patches as mpatches
-import koppen
+import comp_koppen
 
 # Testando para uma localidade, neste exemplo, cidade de Verdelandia na Bahia.
 
@@ -26,7 +26,7 @@ avgtemp = [25.5, 25.9, 25.76, 25.1, 23.7, 22.2, 21.9, 23.0, 25.0, 26.3, 25.6, 25
 lat = -15.5
 
 # Definindo o clima
-clima_localidade = koppen.koppen_classification(prec, avgtemp, lat)
+clima_localidade = comp_koppen.koppen_classification(prec, avgtemp, lat)
 print(clima_localidade)  # Cfa
 
 # plotando os dados de precipitacao e temperatura

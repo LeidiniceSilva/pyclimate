@@ -9,6 +9,7 @@ import numpy as np
 
 
 def koppen_classification(precip, avgtemp, lat):
+    
     """
     # codigo baseado em:
     # https://github.com/jgodwinWX/koppen/blob/master/koppen.py
@@ -21,6 +22,7 @@ def koppen_classification(precip, avgtemp, lat):
     lat = -33.55
     koppen.koppen_classification(precip, avgtemp, lat)
     """
+    
     precip = np.array(precip)
     avgtemp = np.array(avgtemp)
     total_prec = precip.sum()
