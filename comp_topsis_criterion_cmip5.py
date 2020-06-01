@@ -2,15 +2,13 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
-__date__        = "03/25/2019"
-__description__ = "This script plot correlation Portrait Diagram from CMIP5 models"
+__date__        = "06/01/2020"
+__description__ = "This script compute criterion TOPSIS from CMIP5 models end OBS basedata"
 
 import os
 import netCDF4
 import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-
+import texttable as tt
 
 from comp_statist_indices import compute_corr
 from comp_statist_indices import compute_rmse
@@ -78,68 +76,9 @@ for mdl in models:
 	rmse = compute_rmse(month_gcm, month_cru)
 	mae = compute_mae(month_gcm, month_cru)
 	
-	metrics = [corr, r2, rmse, mae]
+	metrics = [mdl, round((corr),3), round((r2),3), round((rmse),3), round((mae),3)]
 	metrics_gcm.append(metrics)
-	
-# Compute TOPSIS to CMIP5 models
-# Method 1 (Import topsis)
-a = metrics_gcm
-w = [0.25, 0.25, 0.25, 0.25]
-j = [1, 1, 1, 1]
 
 print(metrics_gcm)
-
 exit()
-
-# Compute TOPSIS to CMIP5 models
-# Method 2 (Steps)
-x = np.array([[8,7,2,1], [5,3,7,5], [7,5,6,4], 
-		[9,9,7,3], [11,10,3,7], [6,9,5,4]])
-weigths = np.array([0.4, 0.3, 0.1, 0.2])
-
-# Step 1 - Vertor normalization: cumsum() produces the cumulative sum of the values in the array 
-# and the can also be used with a second argument to indicated the axix to use
-col_sums = np.array(sum(x**2, 0))
-
-norm_x = np.array([[round(x[i, j] / np.sqrt(col_sums[x.shape[0] 
-	- 1, j]), 3) for j in range (4)] for i in range(6)])
-
-# Step  2 - Multiple each evaluation by the associated weigth:
-# wnx is the weighted normalizerd x matrix
-wnx = np.array([[round(weigth[i] * norm_x[j, i], 3) 
-	for i in range(4)] for j in range(6)])
-
-# Step3 - Positive and negative idea solution
-pis = np.array([amax(wnx[:, :1]), amax(wnx[:, 1:2]), 
-	amax(wnx[:, 2:3]), amax(wnx[:, 3:4])])
-nis = np.array([amin(wnx[:, :1]), amin(wnx[:, 1:2]), 
-	amin(wnx[:, 2:3]), amin(wnx[:, 3:4])])
-
-# Step 4a - Determine the distance  to the positive ideal solution (dpis)
-b1 = np.array([[(wnx[j, i] - pis[i])**2 for i in range(4)] 
-	for j in range(6)])
-dpis = np.sqrt(sum(b1, 1))
-
-# Step 4b - Determine the distance  to the negative ideal solution (dnis)
-b2 = np.array([[(wnx[j, i] - nis[i])**2 for i in range(4)] 
-	for j in range(6)])
-dnis = np.sqrt(sum(b2, 1))
-
-# Step 5 - Calculate the relative closeness to the ideal solution
-final_solution = np.array([round(dnis[i] / (dpis[i] + dnis[i]), 
-	3) for i in range(6)])
-print('Closeness coeficient = ', final_solution)
-exit()
-
-# Save figure
-path_out = '/home/nice'
-name_out = 'pyplt_topsis_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area)
-
-if not os.path.exists(path_out):
-	create_path(path_out)
-	
-plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
-plt.show()
-exit()
-
 
