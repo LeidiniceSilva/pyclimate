@@ -187,9 +187,6 @@ mdl33_clim = import_cmip5_clim(model)
 database  = u'cru_ts4.02'
 obs1_clim, obs1_clim_p5 , obs1_clim_p95  = import_obs_clim(database)
 
-# Compute statiscts index from best CMIP5 models and CRU obs database
-r2 = metrics.r2_score(mdl26_clim, obs1_clim)
-
 # Plot model end obs data climatology
 fig, ax = plt.subplots(figsize=(12, 6))
 time = np.arange(0.5, 12 + 0.5)

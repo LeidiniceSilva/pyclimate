@@ -17,7 +17,7 @@ from comp_statist_indices import compute_r2
 def import_cmip5(model):
 	
 	param = 'tas' # pr or tas
-	area  = 'neb' # amz, matopiba or neb
+	area  = 'matopiba' # amz, matopiba or neb
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
@@ -38,7 +38,7 @@ def import_cmip5(model):
 def import_obs(database):
 	
 	param = 'tmp' # pre or tmp
-	area  = 'neb' # amz, matopiba or neb
+	area  = 'matopiba' # amz, matopiba or neb
 	date  = '197512-200511'
 
 	path  = '/home/nice/Documents/ufrn/phd_project/datas/obs_data'

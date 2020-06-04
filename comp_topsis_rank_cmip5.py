@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 
 # Import data Prec and Temp(AMZ - NEB - MATOPIBA)
-data = pd.read_csv('/home/nice/Documents/ufrn/phd_project/datas/cmip5/topsis/temp_neb_cmip5.csv')
+data = pd.read_csv('/home/nice/Documents/ufrn/phd_project/datas/cmip5/topsis/temp_matopiba_cmip5.csv')
 data = data.values[:,1:]
 
 w=np.array([0.25, 0.25, 0.25, 0.25])
@@ -59,14 +59,14 @@ totalDistance = distanceFromBest+distanceFromWorst
 
 performance = distanceFromWorst/totalDistance
 
-#~ list1=[]
-#~ for i in performance:
-	#~ list1.append(np.squeeze(i))
-#~ list2=np.squeeze(list1)
-#~ list3=sorted(list2)
-#~ list4=sorted(list3, reverse=True)
-#~ print(list4)
-#~ exit()
+list1=[]
+for i in performance:
+	list1.append(np.squeeze(i))
+list2=np.squeeze(list1)
+list3=sorted(list2)
+list4=sorted(list3, reverse=True)
+print(list4)
+exit()
 
 order = performance.argsort(axis=0)
 
