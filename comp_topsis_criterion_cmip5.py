@@ -8,7 +8,6 @@ __description__ = "This script compute criterion TOPSIS from CMIP5 models end OB
 import os
 import netCDF4
 import numpy as np
-import texttable as tt
 
 from comp_statist_indices import compute_corr
 from comp_statist_indices import compute_rmse
@@ -18,11 +17,11 @@ from comp_statist_indices import compute_r2
 def import_cmip5(model):
 	
 	param = 'tas' # pr or tas
-	area  = 'amz' # amz or neb
+	area  = 'neb' # amz, matopiba or neb
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documents/ufrn/phd_project/datas/cmip5_hist'
+	path  = '/home/nice/Documents/ufrn/phd_project/datas/cmip5/hist'
 	arq   = '{0}/{1}_{2}_Amon_{3}_{4}_{5}.nc'.format(path, param, area,	model, exp, date)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -39,7 +38,7 @@ def import_cmip5(model):
 def import_obs(database):
 	
 	param = 'tmp' # pre or tmp
-	area  = 'amz' # amz or neb
+	area  = 'neb' # amz, matopiba or neb
 	date  = '197512-200511'
 
 	path  = '/home/nice/Documents/ufrn/phd_project/datas/obs_data'

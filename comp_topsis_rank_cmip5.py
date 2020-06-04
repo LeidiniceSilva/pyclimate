@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 
 # Import data Prec and Temp(AMZ - NEB - MATOPIBA)
-data = pd.read_csv('temp_amz_cmip5.csv')
+data = pd.read_csv('/home/nice/Documents/ufrn/phd_project/datas/cmip5/topsis/temp_neb_cmip5.csv')
 data = data.values[:,1:]
 
 w=np.array([0.25, 0.25, 0.25, 0.25])
@@ -18,14 +18,14 @@ i=np.array([1, 1, 1, 1])
 # Step 1 -  Normalize data
 # Taking axis=0 to sum values along column
 normalizationFactor = np.sqrt(np.sum(data**2, axis=0, dtype=float), dtype=float)
-#~ print(normalizationFactor.shape)
 
 # Broadcasting operation to divide Xij with normalization factor
 normalizedData = (data/normalizationFactor)
 
 #Rounding normalized data values to 3 decimal places
-normalizedData = np.round(normalizedData.astype(np.float64),decimals=2)
+normalizedData = np.round(normalizedData.astype(np.float64),decimals=3)
 #~ print("Normalized Data:", normalizedData)
+#~ exit()
 
 # Step  2 - Multiple each evaluation by the associated weigth:
 wgtNormalizedData = normalizedData*w
@@ -58,18 +58,29 @@ totalDistance = distanceFromBest+distanceFromWorst
 #~ print("TD",totalDistance)
 
 performance = distanceFromWorst/totalDistance
-print((performance.tolist()).sort)
+
+#~ list1=[]
+#~ for i in performance:
+	#~ list1.append(np.squeeze(i))
+#~ list2=np.squeeze(list1)
+#~ list3=sorted(list2)
+#~ list4=sorted(list3, reverse=True)
+#~ print(list4)
+#~ exit()
 
 order = performance.argsort(axis=0)
-print(order)
 
 ranks = order.argsort(axis=0)
-#~ print(ranks)
 
 # Converting ranks to 1-d numpy array
 ranks=ranks.reshape(ranks.shape[0],)
 
 # Print rank table
-print('Item', 'Rank', sep='\t')
+print('Rank', sep='\t')
 for idx,x in enumerate(ranks):
-	print(idx+1, ranks.shape[0]-(x), sep='\t', end='\n')
+	print(ranks.shape[0]-(x), sep='\t', end='\n')
+	
+#~ # Print rank table
+#~ print('Item', 'Rank', sep='\t')
+#~ for idx,x in enumerate(ranks):
+	#~ print(idx+1, ranks.shape[0]-(x), sep='\t', end='\n')
