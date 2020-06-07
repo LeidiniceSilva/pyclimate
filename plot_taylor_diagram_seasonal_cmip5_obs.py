@@ -11,7 +11,7 @@ import numpy as np
 import numpy.ma as ma
 import matplotlib.pyplot as plt
 
-from comp_taylor_diagram import TaylorDiagram
+from plot_taylor_diagram_monthly_cmip5_obs import TaylorDiagram
 
 
 def import_cmip5_season(model):
@@ -20,7 +20,7 @@ def import_cmip5_season(model):
 	exp   = 'historical_r1i1p1'
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/cmip5_hist'
+	path  = '/home/nice/Documents/ufrn/phd_project/datas/cmip5/hist'
 	arq   = '{0}/{1}_amz_neb_Amon_{2}_{3}_{4}.nc'.format(path, param,
 	model, exp, date)	
 	
@@ -44,7 +44,7 @@ def import_obs_season(database):
 	param = 'pre' # pre or tmp
 	date  = '197512-200511'
 
-	path  = '/home/nice/Documentos/ufrn/PhD_project/datas/obs_data'
+	path  = '/home/nice/Documents/ufrn/phd_project/datas/obs_data'
 	arq   = '{0}/{1}_amz_neb_{2}_obs_mon_{3}.nc'.format(path,
 	param, database, date)	
 	
@@ -382,8 +382,8 @@ fig.legend(dia.samplePoints,
            numpoints=1, prop=dict(size=14), loc='center')
 
 fig.tight_layout()
-path_out = '/home/nice/Documentos/ufrn/PhD_project/results/cmip5'
-name_out = 'pyplt_taylor_diagram_{0}_{1}_cmip5_cru_season_1975-2005.png'.format(out_var, out_area)
+path_out = '/home/nice'
+name_out = 'pyplt_taylor_diagram_cmip5_cru_season_1975-2005.png'
 
 if not os.path.exists(path_out):
 	create_path(path_out)

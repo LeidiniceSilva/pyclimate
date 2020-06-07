@@ -11,9 +11,9 @@ import numpy as np
 import numpy.ma as ma
 import scipy.stats as st
 import matplotlib.pyplot as plt
-
 import mpl_toolkits.axisartist.floating_axes as FA
 import mpl_toolkits.axisartist.grid_finder as GF
+
 from matplotlib.projections import PolarAxes
 
 
@@ -267,6 +267,7 @@ if __name__=='__main__':
 	# Add a figure legend and title. For loc option, place x,y tuple inside [ ].
 	# Can also use special options here: http://matplotlib.sourceforge.net/users/legend_guide.html
 
+	# Add a figure legend
 	fig.legend(dia.samplePoints,
 			   [ p.get_label() for p in dia.samplePoints ],
 			   numpoints=1, prop=dict(size=7.75), ncol=4, loc='lower center')

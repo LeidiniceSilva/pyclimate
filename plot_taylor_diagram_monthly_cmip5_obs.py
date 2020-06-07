@@ -5,15 +5,15 @@ __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/08/2019"
 __description__ = "This script plot taylor diagram from CMIP5 models end OBS basedata"
 
-
 import os
 import netCDF4
-import numpy as NP
-import matplotlib.pyplot as PLT
+import numpy as np
+import matplotlib.pyplot as plt
 import mpl_toolkits.axisartist.floating_axes as FA
 import mpl_toolkits.axisartist.grid_finder as GF
 
 from matplotlib.projections import PolarAxes
+
 
 class TaylorDiagram(object):
     """
@@ -23,7 +23,7 @@ class TaylorDiagram(object):
     theta=arccos(correlation).
     """
 
-    def __init__(self, refstd, fig=None, rect=111, label='_', srange=(0, 5), extend=False):
+    def __init__(self, refstd, fig=None, rect=336, label='_', srange=(0., 5.), extend=False):
         """
         Set up Taylor diagram axes, i.e. single quadrant polar
         plot, using `mpl_toolkits.axisartist.floating_axes`.
@@ -40,17 +40,17 @@ class TaylorDiagram(object):
         tr = PolarAxes.PolarTransform()
 
         # Correlation labels
-        rlocs = NP.array([0, 0.2, 0.4, 0.6, 0.8, 0.9, 0.98, 1])
+        rlocs = np.array([0, 0.2, 0.4, 0.6, 0.8, 0.9, 0.98, 1])
         
         if extend:
             # Diagram extended to negative correlations
-            self.tmax = NP.pi
-            rlocs = NP.concatenate((-rlocs[:0:-1], rlocs))
+            self.tmax = np.pi
+            rlocs = np.concatenate((-rlocs[:0:-1], rlocs))
         else:
             # Diagram limited to positive correlations
-            self.tmax = NP.pi/2
+            self.tmax = np.pi/2
             
-        tlocs = NP.arccos(rlocs)        # Conversion to polar angles
+        tlocs = np.arccos(rlocs)        # Conversion to polar angles
         gl1 = GF.FixedLocator(tlocs)    # Positions
         tf1 = GF.DictFormatter(dict(zip(tlocs, map(str, rlocs))))
 
@@ -64,7 +64,7 @@ class TaylorDiagram(object):
             grid_locator1=gl1, tick_formatter1=tf1)
 
         if fig is None:
-            fig = PLT.figure()
+            fig = plt.figure()
 
         ax = FA.FloatingSubplot(fig, rect, grid_helper=ghelper)
         fig.add_subplot(ax)
@@ -74,10 +74,10 @@ class TaylorDiagram(object):
         ax.axis["top"].toggle(ticklabels=True, label=True)
         ax.axis["top"].major_ticklabels.set_axis_direction("top")
         ax.axis["top"].label.set_axis_direction("top")
-        ax.axis["top"].label.set_text(u'Correlação')
+        ax.axis["top"].label.set_text(u'')
 
         ax.axis["left"].set_axis_direction("bottom")  # "X axis"
-        ax.axis["left"].label.set_text(u'Desvio Padrão')
+        ax.axis["left"].label.set_text(u'')
         
         ax.axis["right"].set_axis_direction("top")    # "Y-axis"
         ax.axis["right"].toggle(ticklabels=True)
@@ -93,8 +93,8 @@ class TaylorDiagram(object):
 
         # Add reference point and stddev contour
         l, = self.ax.plot([0], self.refstd, 'k*', ls='', ms=10, label=label)
-        t = NP.linspace(0, self.tmax)
-        r = NP.zeros_like(t) + self.refstd
+        t = np.linspace(0, self.tmax)
+        r = np.zeros_like(t) + self.refstd
         self.ax.plot(t, r, 'k--', label='_')
 
         # Collect sample points for latter use (e.g. legend)
@@ -107,13 +107,15 @@ class TaylorDiagram(object):
         `Figure.plot` command.
         """
 
-        l, = self.ax.plot(NP.arccos(corrcoef), stddev, *args, **kwargs)  # (theta, radius)
+        l, = self.ax.plot(np.arccos(corrcoef), stddev, *args, **kwargs)  # (theta, radius)
         self.samplePoints.append(l)
+        
         return l
         
 
     def add_grid(self, *args, **kwargs):
         """Add a grid."""
+        
         self._ax.grid(*args, **kwargs)
         
 
@@ -122,216 +124,560 @@ class TaylorDiagram(object):
         Add constant centered RMS difference contours, defined by *levels*.
         """
         
-        rs, ts = NP.meshgrid(NP.linspace(self.smin, self.smax), NP.linspace(0, self.tmax))
+        rs, ts = np.meshgrid(np.linspace(self.smin, self.smax), np.linspace(0, self.tmax))
         
         # Compute centered RMS difference
-        rms = NP.sqrt(self.refstd**2 + rs**2 - 2*self.refstd*rs*NP.cos(ts))
+        rms = np.sqrt(self.refstd**2 + rs**2 - 2*self.refstd*rs*np.cos(ts))
         contours = self.ax.contour(ts, rs, rms, levels, **kwargs)
+        
         return contours
 
 
-def import_cmip5_clim(model):
-	
-	param = 'pr' # pr or tas
-	area  = 'amz' # amz or neb
-	exp   = 'historical_r1i1p1'
-	date  = '197512-200511'
+def import_cmip5(param, area, model):
 
-	path  = '/home/nice/Documents/ufrn/PhD_project/datas/cmip5_hist'
-	arq   = '{0}/{1}_{2}_Amon_{3}_{4}_{5}.nc'.format(path, param, area,
-	model, exp, date)	
+	path  = '/home/nice/Documents/ufrn/phd_project/datas/cmip5/hist'
+	arq   = '{0}/{1}_{2}_Amon_{3}_historical_r1i1p1_197512-200511.nc'.format(path, param, area,	model)	
 	
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
-	mdl_data = NP.nanmean(NP.nanmean(value, axis=1), axis=1)
+	
+	mdl_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
 
 	return mdl_data
 
 
-def import_obs_clim(database):
-	
-	param = 'pre' # pre or tmp
-	area  = 'amz' # amz or neb
-	date  = '197512-200511'
+def import_obs(param, area, database):
 
-	path  = '/home/nice/Documents/ufrn/PhD_project/datas/obs_data'
-	arq   = '{0}/{1}_{2}_{3}_obs_mon_{4}.nc'.format(path, param, area, 
-	database, date)	
+	path  = '/home/nice/Documents/ufrn/phd_project/datas/obs_data'
+	arq   = '{0}/{1}_{2}_{3}_obs_mon_197512-200511.nc'.format(path, param, area, database)	
 	
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
-	obs_data = NP.nanmean(NP.nanmean(value, axis=1), axis=1)
+	
+	obs_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
 
-	return obs_data
+	return obs_data	
 
 
 if __name__=='__main__':
 
-	# Reference database
-	database  = u'cru_ts4.02'
-	x = import_obs_clim(database)
+	# Import cmip5 model end obs database climatology
 	
-	# Models
-	model  = u'BCC-CSM1.1'
-	m1 = import_cmip5_clim(model)
-	
-	model  = u'BCC-CSM1.1M'
-	m2 = import_cmip5_clim(model)
-	
-	model  = u'BNU-ESM'
-	m3 = import_cmip5_clim(model)
-	
-	model  = u'CanESM2'
-	m4 = import_cmip5_clim(model)
-	
-	model  = u'CNRM-CM5'
-	m5 = import_cmip5_clim(model)
-	
-	model  = u'CSIRO-ACCESS-1'
-	m6 = import_cmip5_clim(model)
-	
-	model  = u'CSIRO-ACCESS-3'
-	m7 = import_cmip5_clim(model)
-	
-	model  = u'CSIRO-MK36'
-	m8 = import_cmip5_clim(model)
-	
-	model  = u'FIO-ESM'
-	m9 = import_cmip5_clim(model)
-	
-	model  = u'GISS-E2-H-CC'
-	m10 = import_cmip5_clim(model)
-	
-	model  = u'GISS-E2-H'
-	m11 = import_cmip5_clim(model)
-	
-	model  = u'GISS-E2-R'
-	m12 = import_cmip5_clim(model)
+	pre_amz_gcm1 = import_cmip5(u'pr', u'amz', u'BCC-CSM1.1')
+	tmp_amz_gcm1 = import_cmip5(u'tas', u'amz', u'BCC-CSM1.1')
+	pre_neb_gcm1 = import_cmip5(u'pr', u'neb', u'BCC-CSM1.1')
+	tmp_neb_gcm1 = import_cmip5(u'tas', u'neb', u'BCC-CSM1.1')
+	pre_mato_gcm1 = import_cmip5(u'pr', u'matopiba', u'BCC-CSM1.1')
+	tmp_mato_gcm1 = import_cmip5(u'tas', u'matopiba', u'BCC-CSM1.1')
 
-	model  = u'HadGEM2-AO'
-	m13 = import_cmip5_clim(model)
+	pre_amz_gcm2 = import_cmip5(u'pr', u'amz', u'BCC-CSM1.1M')
+	tmp_amz_gcm2 = import_cmip5(u'tas', u'amz', u'BCC-CSM1.1M')
+	pre_neb_gcm2 = import_cmip5(u'pr', u'neb', u'BCC-CSM1.1M')
+	tmp_neb_gcm2 = import_cmip5(u'tas', u'neb', u'BCC-CSM1.1M')
+	pre_mato_gcm2 = import_cmip5(u'pr', u'matopiba', u'BCC-CSM1.1M')
+	tmp_mato_gcm2 = import_cmip5(u'tas', u'matopiba', u'BCC-CSM1.1M')
 
-	model  = u'HadGEM2-CC'
-	m14 = import_cmip5_clim(model)
-	
-	model  = u'HadGEM2-ES'
-	m15 = import_cmip5_clim(model)
+	pre_amz_gcm3 = import_cmip5(u'pr', u'amz', u'BNU-ESM')
+	tmp_amz_gcm3 = import_cmip5(u'tas', u'amz', u'BNU-ESM')
+	pre_neb_gcm3 = import_cmip5(u'pr', u'neb', u'BNU-ESM')
+	tmp_neb_gcm3 = import_cmip5(u'tas', u'neb', u'BNU-ESM')
+	pre_mato_gcm3 = import_cmip5(u'pr', u'matopiba', u'BNU-ESM')
+	tmp_mato_gcm3 = import_cmip5(u'tas', u'matopiba', u'BNU-ESM')
 
-	model  = u'INMCM4'
-	m16 = import_cmip5_clim(model)
+	pre_amz_gcm4 = import_cmip5(u'pr', u'amz', u'CanESM2')
+	tmp_amz_gcm4 = import_cmip5(u'tas', u'amz', u'CanESM2')
+	pre_neb_gcm4 = import_cmip5(u'pr', u'neb', u'CanESM2')
+	tmp_neb_gcm4 = import_cmip5(u'tas', u'neb', u'CanESM2')
+	pre_mato_gcm4 = import_cmip5(u'pr', u'matopiba', u'CanESM2')
+	tmp_mato_gcm4 = import_cmip5(u'tas', u'matopiba', u'CanESM2')
 
-	model  = u'IPSL-CM5A-LR'
-	m17 = import_cmip5_clim(model)
+	pre_amz_gcm5 = import_cmip5(u'pr', u'amz', u'CNRM-CM5')
+	tmp_amz_gcm5 = import_cmip5(u'tas', u'amz', u'CNRM-CM5')
+	pre_neb_gcm5 = import_cmip5(u'pr', u'neb', u'CNRM-CM5')
+	tmp_neb_gcm5 = import_cmip5(u'tas', u'neb', u'CNRM-CM5')
+	pre_mato_gcm5 = import_cmip5(u'pr', u'matopiba', u'CNRM-CM5')
+	tmp_mato_gcm5 = import_cmip5(u'tas', u'matopiba', u'CNRM-CM5')
 
-	model  = u'IPSL-CM5A-MR'
-	m18 = import_cmip5_clim(model)
+	pre_amz_gcm6 = import_cmip5(u'pr', u'amz', u'CSIRO-ACCESS-1')
+	tmp_amz_gcm6 = import_cmip5(u'tas', u'amz', u'CSIRO-ACCESS-1')
+	pre_neb_gcm6 = import_cmip5(u'pr', u'neb', u'CSIRO-ACCESS-1')
+	tmp_neb_gcm6 = import_cmip5(u'tas', u'neb', u'CSIRO-ACCESS-1')
+	pre_mato_gcm6 = import_cmip5(u'pr', u'matopiba', u'CSIRO-ACCESS-1')
+	tmp_mato_gcm6 = import_cmip5(u'tas', u'matopiba', u'CSIRO-ACCESS-1')
 
-	model  = u'IPSL-CM5B-LR'
-	m19 = import_cmip5_clim(model)
+	pre_amz_gcm7 = import_cmip5(u'pr', u'amz', u'CSIRO-ACCESS-3')
+	tmp_amz_gcm7 = import_cmip5(u'tas', u'amz', u'CSIRO-ACCESS-3')
+	pre_neb_gcm7 = import_cmip5(u'pr', u'neb', u'CSIRO-ACCESS-3')
+	tmp_neb_gcm7 = import_cmip5(u'tas', u'neb', u'CSIRO-ACCESS-3')
+	pre_mato_gcm7 = import_cmip5(u'pr', u'matopiba', u'CSIRO-ACCESS-3')
+	tmp_mato_gcm7 = import_cmip5(u'tas', u'matopiba', u'CSIRO-ACCESS-3')
 
-	model  = u'LASG-FGOALS-G2'
-	m20 = import_cmip5_clim(model)
+	pre_amz_gcm8 = import_cmip5(u'pr', u'amz', u'CSIRO-MK36')
+	tmp_amz_gcm8 = import_cmip5(u'tas', u'amz', u'CSIRO-MK36')
+	pre_neb_gcm8 = import_cmip5(u'pr', u'neb', u'CSIRO-MK36')
+	tmp_neb_gcm8 = import_cmip5(u'tas', u'neb', u'CSIRO-MK36')
+	pre_mato_gcm8 = import_cmip5(u'pr', u'matopiba', u'CSIRO-MK36')
+	tmp_mato_gcm8 = import_cmip5(u'tas', u'matopiba', u'CSIRO-MK36')
 
-	model  = u'LASG-FGOALS-S2'
-	m21 = import_cmip5_clim(model)
-	
-	model  = u'MIROC5'
-	m22 = import_cmip5_clim(model)
+	pre_amz_gcm9 = import_cmip5(u'pr', u'amz', u'FIO-ESM')
+	tmp_amz_gcm9 = import_cmip5(u'tas', u'amz', u'FIO-ESM')
+	pre_neb_gcm9 = import_cmip5(u'pr', u'neb', u'FIO-ESM')
+	tmp_neb_gcm9 = import_cmip5(u'tas', u'neb', u'FIO-ESM')
+	pre_mato_gcm9 = import_cmip5(u'pr', u'matopiba', u'FIO-ESM')
+	tmp_mato_gcm9 = import_cmip5(u'tas', u'matopiba', u'FIO-ESM')
 
-	model  = u'MIROC-ESM-CHEM'
-	m23 = import_cmip5_clim(model)
+	pre_amz_gcm10 = import_cmip5(u'pr', u'amz', u'GISS-E2-H-CC')
+	tmp_amz_gcm10 = import_cmip5(u'tas', u'amz', u'GISS-E2-H-CC')
+	pre_neb_gcm10 = import_cmip5(u'pr', u'neb', u'GISS-E2-H-CC')
+	tmp_neb_gcm10 = import_cmip5(u'tas', u'neb', u'GISS-E2-H-CC')
+	pre_mato_gcm10 = import_cmip5(u'pr', u'matopiba', u'GISS-E2-H-CC')
+	tmp_mato_gcm10 = import_cmip5(u'tas', u'matopiba', u'GISS-E2-H-CC')
 
-	model  = u'MIROC-ESM'
-	m24 = import_cmip5_clim(model)
+	pre_amz_gcm11 = import_cmip5(u'pr', u'amz', u'GISS-E2-H')
+	tmp_amz_gcm11 = import_cmip5(u'tas', u'amz', u'GISS-E2-H')
+	pre_neb_gcm11 = import_cmip5(u'pr', u'neb', u'GISS-E2-H')
+	tmp_neb_gcm11 = import_cmip5(u'tas', u'neb', u'GISS-E2-H')
+	pre_mato_gcm11 = import_cmip5(u'pr', u'matopiba', u'GISS-E2-H')
+	tmp_mato_gcm11 = import_cmip5(u'tas', u'matopiba', u'GISS-E2-H')
 
-	model  = u'MPI-ESM-LR'
-	m25 = import_cmip5_clim(model)
+	pre_amz_gcm12 = import_cmip5(u'pr', u'amz', u'GISS-E2-R')
+	tmp_amz_gcm12 = import_cmip5(u'tas', u'amz', u'GISS-E2-R')
+	pre_neb_gcm12 = import_cmip5(u'pr', u'neb', u'GISS-E2-R')
+	tmp_neb_gcm12 = import_cmip5(u'tas', u'neb', u'GISS-E2-R')
+	pre_mato_gcm12 = import_cmip5(u'pr', u'matopiba', u'GISS-E2-R')
+	tmp_mato_gcm12 = import_cmip5(u'tas', u'matopiba', u'GISS-E2-R')
 
-	model  = u'MPI-ESM-MR'
-	m26 = import_cmip5_clim(model)
+	pre_amz_gcm13 = import_cmip5(u'pr', u'amz', u'HadGEM2-AO')
+	tmp_amz_gcm13 = import_cmip5(u'tas', u'amz', u'HadGEM2-AO')
+	pre_neb_gcm13 = import_cmip5(u'pr', u'neb', u'HadGEM2-AO')
+	tmp_neb_gcm13 = import_cmip5(u'tas', u'neb', u'HadGEM2-AO')
+	pre_mato_gcm13 = import_cmip5(u'pr', u'matopiba', u'HadGEM2-AO')
+	tmp_mato_gcm13 = import_cmip5(u'tas', u'matopiba', u'HadGEM2-AO')
 
-	model  = u'MRI-CGCM3'
-	m27 = import_cmip5_clim(model)
+	pre_amz_gcm14 = import_cmip5(u'pr', u'amz', u'HadGEM2-CC')
+	tmp_amz_gcm14 = import_cmip5(u'tas', u'amz', u'HadGEM2-CC')
+	pre_neb_gcm14 = import_cmip5(u'pr', u'neb', u'HadGEM2-CC')
+	tmp_neb_gcm14 = import_cmip5(u'tas', u'neb', u'HadGEM2-CC')
+	pre_mato_gcm14 = import_cmip5(u'pr', u'matopiba', u'HadGEM2-CC')
+	tmp_mato_gcm14 = import_cmip5(u'tas', u'matopiba', u'HadGEM2-CC')
 
-	model  = u'NCAR-CCSM4'
-	m28 = import_cmip5_clim(model)
-	
-	model  = u'NCAR-CESM1-BGC'
-	m29 = import_cmip5_clim(model)
+	pre_amz_gcm15 = import_cmip5(u'pr', u'amz', u'HadGEM2-ES')
+	tmp_amz_gcm15 = import_cmip5(u'tas', u'amz', u'HadGEM2-ES')
+	pre_neb_gcm15 = import_cmip5(u'pr', u'neb', u'HadGEM2-ES')
+	tmp_neb_gcm15 = import_cmip5(u'tas', u'neb', u'HadGEM2-ES')
+	pre_mato_gcm15 = import_cmip5(u'pr', u'matopiba', u'HadGEM2-ES')
+	tmp_mato_gcm15 = import_cmip5(u'tas', u'matopiba', u'HadGEM2-ES')
 
-	model  = u'NCAR-CESM1-CAM5'
-	m30 = import_cmip5_clim(model)
+	pre_amz_gcm16 = import_cmip5(u'pr', u'amz', u'INMCM4')
+	tmp_amz_gcm16 = import_cmip5(u'tas', u'amz', u'INMCM4')
+	pre_neb_gcm16 = import_cmip5(u'pr', u'neb', u'INMCM4')
+	tmp_neb_gcm16 = import_cmip5(u'tas', u'neb', u'INMCM4')
+	pre_mato_gcm16 = import_cmip5(u'pr', u'matopiba', u'INMCM4')
+	tmp_mato_gcm16 = import_cmip5(u'tas', u'matopiba', u'INMCM4')
 
-	model  = u'NorESM1-ME'
-	m31 = import_cmip5_clim(model)
+	pre_amz_gcm17 = import_cmip5(u'pr', u'amz', u'IPSL-CM5A-LR')
+	tmp_amz_gcm17 = import_cmip5(u'tas', u'amz', u'IPSL-CM5A-LR')
+	pre_neb_gcm17 = import_cmip5(u'pr', u'neb', u'IPSL-CM5A-LR')
+	tmp_neb_gcm17 = import_cmip5(u'tas', u'neb', u'IPSL-CM5A-LR')
+	pre_mato_gcm17 = import_cmip5(u'pr', u'matopiba', u'IPSL-CM5A-LR')
+	tmp_mato_gcm17 = import_cmip5(u'tas', u'matopiba', u'IPSL-CM5A-LR')
 
-	model  = u'NorESM1-M'
-	m32 = import_cmip5_clim(model)
+	pre_amz_gcm18 = import_cmip5(u'pr', u'amz', u'IPSL-CM5A-MR')
+	tmp_amz_gcm18 = import_cmip5(u'tas', u'amz', u'IPSL-CM5A-MR')
+	pre_neb_gcm18 = import_cmip5(u'pr', u'neb', u'IPSL-CM5A-MR')
+	tmp_neb_gcm18 = import_cmip5(u'tas', u'neb', u'IPSL-CM5A-MR')
+	pre_mato_gcm18 = import_cmip5(u'pr', u'matopiba', u'IPSL-CM5A-MR')
+	tmp_mato_gcm18 = import_cmip5(u'tas', u'matopiba', u'IPSL-CM5A-MR')
 
-	model  = u'ensmean_cmip5'
-	m33 = import_cmip5_clim(model)
-	
-		
-def plot_diagram():
+	pre_amz_gcm19 = import_cmip5(u'pr', u'amz', u'IPSL-CM5B-LR')
+	tmp_amz_gcm19 = import_cmip5(u'tas', u'amz', u'IPSL-CM5B-LR')
+	pre_neb_gcm19 = import_cmip5(u'pr', u'neb', u'IPSL-CM5B-LR')
+	tmp_neb_gcm19 = import_cmip5(u'tas', u'neb', u'IPSL-CM5B-LR')
+	pre_mato_gcm19 = import_cmip5(u'pr', u'matopiba', u'IPSL-CM5B-LR')
+	tmp_mato_gcm19 = import_cmip5(u'tas', u'matopiba', u'IPSL-CM5B-LR')
+
+	pre_amz_gcm20 = import_cmip5(u'pr', u'amz', u'LASG-FGOALS-G2')
+	tmp_amz_gcm20 = import_cmip5(u'tas', u'amz', u'LASG-FGOALS-G2')
+	pre_neb_gcm20 = import_cmip5(u'pr', u'neb', u'LASG-FGOALS-G2')
+	tmp_neb_gcm20 = import_cmip5(u'tas', u'neb', u'LASG-FGOALS-G2')
+	pre_mato_gcm20 = import_cmip5(u'pr', u'matopiba', u'LASG-FGOALS-G2')
+	tmp_mato_gcm20 = import_cmip5(u'tas', u'matopiba', u'LASG-FGOALS-G2')
+
+	pre_amz_gcm21 = import_cmip5(u'pr', u'amz', u'LASG-FGOALS-S2')
+	tmp_amz_gcm21 = import_cmip5(u'tas', u'amz', u'LASG-FGOALS-S2')
+	pre_neb_gcm21 = import_cmip5(u'pr', u'neb', u'LASG-FGOALS-S2')
+	tmp_neb_gcm21 = import_cmip5(u'tas', u'neb', u'LASG-FGOALS-S2')
+	pre_mato_gcm21 = import_cmip5(u'pr', u'matopiba', u'LASG-FGOALS-S2')
+	tmp_mato_gcm21 = import_cmip5(u'tas', u'matopiba', u'LASG-FGOALS-S2')
+
+	pre_amz_gcm22 = import_cmip5(u'pr', u'amz', u'MIROC5')
+	tmp_amz_gcm22 = import_cmip5(u'tas', u'amz', u'MIROC5')
+	pre_neb_gcm22 = import_cmip5(u'pr', u'neb', u'MIROC5')
+	tmp_neb_gcm22 = import_cmip5(u'tas', u'neb', u'MIROC5')
+	pre_mato_gcm22 = import_cmip5(u'pr', u'matopiba', u'MIROC5')
+	tmp_mato_gcm22 = import_cmip5(u'tas', u'matopiba', u'MIROC5')
+
+	pre_amz_gcm23 = import_cmip5(u'pr', u'amz', u'MIROC-ESM-CHEM')
+	tmp_amz_gcm23 = import_cmip5(u'tas', u'amz', u'MIROC-ESM-CHEM')
+	pre_neb_gcm23 = import_cmip5(u'pr', u'neb', u'MIROC-ESM-CHEM')
+	tmp_neb_gcm23 = import_cmip5(u'tas', u'neb', u'MIROC-ESM-CHEM')
+	pre_mato_gcm23 = import_cmip5(u'pr', u'matopiba', u'MIROC-ESM-CHEM')
+	tmp_mato_gcm23 = import_cmip5(u'tas', u'matopiba', u'MIROC-ESM-CHEM')
+
+	pre_amz_gcm24 = import_cmip5(u'pr', u'amz', u'MIROC-ESM')
+	tmp_amz_gcm24 = import_cmip5(u'tas', u'amz', u'MIROC-ESM')
+	pre_neb_gcm24 = import_cmip5(u'pr', u'neb', u'MIROC-ESM')
+	tmp_neb_gcm24 = import_cmip5(u'tas', u'neb', u'MIROC-ESM')
+	pre_mato_gcm24 = import_cmip5(u'pr', u'matopiba', u'MIROC-ESM')
+	tmp_mato_gcm24 = import_cmip5(u'tas', u'matopiba', u'MIROC-ESM')
+
+	pre_amz_gcm25 = import_cmip5(u'pr', u'amz', u'MPI-ESM-LR')
+	tmp_amz_gcm25 = import_cmip5(u'tas', u'amz', u'MPI-ESM-LR')
+	pre_neb_gcm25 = import_cmip5(u'pr', u'neb', u'MPI-ESM-LR')
+	tmp_neb_gcm25 = import_cmip5(u'tas', u'neb', u'MPI-ESM-LR')
+	pre_mato_gcm25 = import_cmip5(u'pr', u'matopiba', u'MPI-ESM-LR')
+	tmp_mato_gcm25 = import_cmip5(u'tas', u'matopiba', u'MPI-ESM-LR')
+
+	pre_amz_gcm26 = import_cmip5(u'pr', u'amz', u'MPI-ESM-MR')
+	tmp_amz_gcm26 = import_cmip5(u'tas', u'amz', u'MPI-ESM-MR')
+	pre_neb_gcm26 = import_cmip5(u'pr', u'neb', u'MPI-ESM-MR')
+	tmp_neb_gcm26 = import_cmip5(u'tas', u'neb', u'MPI-ESM-MR')
+	pre_mato_gcm26 = import_cmip5(u'pr', u'matopiba', u'MPI-ESM-MR')
+	tmp_mato_gcm26 = import_cmip5(u'tas', u'matopiba', u'MPI-ESM-MR')
+
+	pre_amz_gcm27 = import_cmip5(u'pr', u'amz', u'MRI-CGCM3')
+	tmp_amz_gcm27 = import_cmip5(u'tas', u'amz', u'MRI-CGCM3')
+	pre_neb_gcm27 = import_cmip5(u'pr', u'neb', u'MRI-CGCM3')
+	tmp_neb_gcm27 = import_cmip5(u'tas', u'neb', u'MRI-CGCM3')
+	pre_mato_gcm27 = import_cmip5(u'pr', u'matopiba', u'MRI-CGCM3')
+	tmp_mato_gcm27 = import_cmip5(u'tas', u'matopiba', u'MRI-CGCM3')
+
+	pre_amz_gcm28 = import_cmip5(u'pr', u'amz', u'NCAR-CCSM4')
+	tmp_amz_gcm28 = import_cmip5(u'tas', u'amz', u'NCAR-CCSM4')
+	pre_neb_gcm28 = import_cmip5(u'pr', u'neb', u'NCAR-CCSM4')
+	tmp_neb_gcm28 = import_cmip5(u'tas', u'neb', u'NCAR-CCSM4')
+	pre_mato_gcm28 = import_cmip5(u'pr', u'matopiba', u'NCAR-CCSM4')
+	tmp_mato_gcm28 = import_cmip5(u'tas', u'matopiba', u'NCAR-CCSM4')
+
+	pre_amz_gcm29 = import_cmip5(u'pr', u'amz', u'NCAR-CESM1-BGC')
+	tmp_amz_gcm29 = import_cmip5(u'tas', u'amz', u'NCAR-CESM1-BGC')
+	pre_neb_gcm29 = import_cmip5(u'pr', u'neb', u'NCAR-CESM1-BGC')
+	tmp_neb_gcm29 = import_cmip5(u'tas', u'neb', u'NCAR-CESM1-BGC')
+	pre_mato_gcm29 = import_cmip5(u'pr', u'matopiba', u'NCAR-CESM1-BGC')
+	tmp_mato_gcm29 = import_cmip5(u'tas', u'matopiba', u'NCAR-CESM1-BGC')
+
+	pre_amz_gcm30 = import_cmip5(u'pr', u'amz', u'NCAR-CESM1-CAM5')
+	tmp_amz_gcm30 = import_cmip5(u'tas', u'amz', u'NCAR-CESM1-CAM5')
+	pre_neb_gcm30 = import_cmip5(u'pr', u'neb', u'NCAR-CESM1-CAM5')
+	tmp_neb_gcm30 = import_cmip5(u'tas', u'neb', u'NCAR-CESM1-CAM5')
+	pre_mato_gcm30 = import_cmip5(u'pr', u'matopiba', u'NCAR-CESM1-CAM5')
+	tmp_mato_gcm30 = import_cmip5(u'tas', u'matopiba', u'NCAR-CESM1-CAM5')
+
+	pre_amz_gcm31 = import_cmip5(u'pr', u'amz', u'NorESM1-ME')
+	tmp_amz_gcm31 = import_cmip5(u'tas', u'amz', u'NorESM1-ME')
+	pre_neb_gcm31 = import_cmip5(u'pr', u'neb', u'NorESM1-ME')
+	tmp_neb_gcm31 = import_cmip5(u'tas', u'neb', u'NorESM1-ME')
+	pre_mato_gcm31 = import_cmip5(u'pr', u'matopiba', u'NorESM1-ME')
+	tmp_mato_gcm31 = import_cmip5(u'tas', u'matopiba', u'NorESM1-ME')
+
+	pre_amz_gcm32 = import_cmip5(u'pr', u'amz', u'NorESM1-M')
+	tmp_amz_gcm32 = import_cmip5(u'tas', u'amz', u'NorESM1-M')
+	pre_neb_gcm32 = import_cmip5(u'pr', u'neb', u'NorESM1-M')
+	tmp_neb_gcm32 = import_cmip5(u'tas', u'neb', u'NorESM1-M')
+	pre_mato_gcm32 = import_cmip5(u'pr', u'matopiba', u'NorESM1-M')
+	tmp_mato_gcm32 = import_cmip5(u'tas', u'matopiba', u'NorESM1-M')
+
+	pre_amz_gcm33 = import_cmip5(u'pr', u'amz', u'ensmean_cmip5')
+	tmp_amz_gcm33 = import_cmip5(u'tas', u'amz', u'ensmean_cmip5')
+	pre_neb_gcm33 = import_cmip5(u'pr', u'neb', u'ensmean_cmip5')
+	tmp_neb_gcm33 = import_cmip5(u'tas', u'neb', u'ensmean_cmip5')
+	pre_mato_gcm33 = import_cmip5(u'pr', u'matopiba', u'ensmean_cmip5')
+	tmp_mato_gcm33 = import_cmip5(u'tas', u'matopiba', u'ensmean_cmip5')
+
+	pre_amz_obs  = import_obs(u'pre', u'amz', u'cru_ts4.02')
+	tmp_amz_obs  = import_obs(u'tmp', u'amz', u'cru_ts4.02')
+	pre_neb_obs  = import_obs(u'pre', u'neb', u'cru_ts4.02')
+	tmp_neb_obs  = import_obs(u'tmp', u'neb', u'cru_ts4.02')
+	pre_mato_obs  = import_obs(u'pre', u'matopiba', u'cru_ts4.02')
+	tmp_mato_obs  = import_obs(u'tmp', u'matopiba', u'cru_ts4.02')
+
+    # Reference database standard desviation		   
+	stdrefs = pre_amz_obs.std(ddof=1)      
 
 	# Compute stddev and correlation coefficient of models
-	samples = NP.array([[m.std(ddof=1), NP.corrcoef(x, m)[0,1]]
-					     for m in (m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32,m33)])
+	# Sample std, rho: Be sure to check order and that correct numbers are placed!
+	samples = dict(PRE1=[[pre_amz_gcm1.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm1)[0,1], 'BCC-CSM1.1'],
+                       [pre_amz_gcm2.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm2)[0,1], 'BCC-CSM1.1M'],
+                       [pre_amz_gcm3.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm3)[0,1], 'BNU-ESM'],
+                       [pre_amz_gcm4.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm4)[0,1], 'CanESM2'],
+                       [pre_amz_gcm5.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm5)[0,1], 'CNRM-CM5'],
+                       [pre_amz_gcm6.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm6)[0,1], 'CSIRO-ACCESS-1'],
+                       [pre_amz_gcm7.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [pre_amz_gcm8.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm8)[0,1], 'CSIRO-MK36'],
+                       [pre_amz_gcm9.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm9)[0,1], 'FIO-ESM'],
+                       [pre_amz_gcm10.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm10)[0,1], 'GISS-E2-H-CC'],
+                       [pre_amz_gcm11.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm11)[0,1], 'GISS-E2-H'],
+                       [pre_amz_gcm12.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm12)[0,1], 'GISS-E2-R'],
+                       [pre_amz_gcm13.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm13)[0,1], 'HadGEM2-AO'],
+                       [pre_amz_gcm14.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm14)[0,1], 'HadGEM2-CC'],
+                       [pre_amz_gcm15.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm15)[0,1], 'HadGEM2-ES'],
+                       [pre_amz_gcm16.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm16)[0,1], 'INMCM4'],
+                       [pre_amz_gcm17.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm17)[0,1], 'IPSL-CM5A-LR'],
+                       [pre_amz_gcm18.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm18)[0,1], 'IPSL-CM5A-MR'],
+                       [pre_amz_gcm19.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm19)[0,1], 'IPSL-CM5B-LR'],
+                       [pre_amz_gcm20.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm20)[0,1], 'LASG-FGOALS-G2'],
+                       [pre_amz_gcm21.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm21)[0,1], 'LASG-FGOALS-S2'],
+                       [pre_amz_gcm22.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm22)[0,1], 'MIROC5'],
+                       [pre_amz_gcm23.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm23)[0,1], 'MIROC-ESM-CHEM'],
+                       [pre_amz_gcm24.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm24)[0,1], 'MIROC-ESM'],
+                       [pre_amz_gcm25.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm25)[0,1], 'MPI-ESM-LR'],
+                       [pre_amz_gcm26.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm26)[0,1], 'MPI-ESM-MR'],
+                       [pre_amz_gcm27.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm27)[0,1], 'MRI-CGCM3'],
+                       [pre_amz_gcm28.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm28)[0,1], 'NCAR-CCSM4'],
+                       [pre_amz_gcm29.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm29)[0,1], 'NCAR-CESM1-BGC'],
+                       [pre_amz_gcm30.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm30)[0,1], 'NCAR-CESM1-CAM5'],
+                       [pre_amz_gcm31.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm31)[0,1], 'NorESM1-ME'],
+                       [pre_amz_gcm32.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm32)[0,1], 'NorESM1-M'],
+                       [pre_amz_gcm33.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm33)[0,1], 'ensmean_cmip5']],              
+                 TMP1=[[tmp_amz_gcm1.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm1)[0,1], 'BCC-CSM1.1'],
+                       [tmp_amz_gcm2.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm2)[0,1], 'BCC-CSM1.1M'],
+                       [tmp_amz_gcm3.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm3)[0,1], 'BNU-ESM'],
+                       [tmp_amz_gcm4.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm4)[0,1], 'CanESM2'],
+                       [tmp_amz_gcm5.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm5)[0,1], 'CNRM-CM5'],
+                       [tmp_amz_gcm6.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm6)[0,1], 'CSIRO-ACCESS-1'],
+                       [tmp_amz_gcm7.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [tmp_amz_gcm8.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm8)[0,1], 'CSIRO-MK36'],
+                       [tmp_amz_gcm9.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm9)[0,1], 'FIO-ESM'],
+                       [tmp_amz_gcm10.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm10)[0,1], 'GISS-E2-H-CC'],
+                       [tmp_amz_gcm11.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm11)[0,1], 'GISS-E2-H'],
+                       [tmp_amz_gcm12.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm12)[0,1], 'GISS-E2-R'],
+                       [tmp_amz_gcm13.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm13)[0,1], 'HadGEM2-AO'],
+                       [tmp_amz_gcm14.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm14)[0,1], 'HadGEM2-CC'],
+                       [tmp_amz_gcm15.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm15)[0,1], 'HadGEM2-ES'],
+                       [tmp_amz_gcm16.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm16)[0,1], 'INMCM4'],
+                       [tmp_amz_gcm17.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm17)[0,1], 'IPSL-CM5A-LR'],
+                       [tmp_amz_gcm18.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm18)[0,1], 'IPSL-CM5A-MR'],
+                       [tmp_amz_gcm19.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm19)[0,1], 'IPSL-CM5B-LR'],
+                       [tmp_amz_gcm20.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm20)[0,1], 'LASG-FGOALS-G2'],
+                       [tmp_amz_gcm21.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm21)[0,1], 'LASG-FGOALS-S2'],
+                       [tmp_amz_gcm22.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm22)[0,1], 'MIROC5'],
+                       [tmp_amz_gcm23.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm23)[0,1], 'MIROC-ESM-CHEM'],
+                       [tmp_amz_gcm24.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm24)[0,1], 'MIROC-ESM'],
+                       [tmp_amz_gcm25.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm25)[0,1], 'MPI-ESM-LR'],
+                       [tmp_amz_gcm26.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm26)[0,1], 'MPI-ESM-MR'],
+                       [tmp_amz_gcm27.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm27)[0,1], 'MRI-CGCM3'],
+                       [tmp_amz_gcm28.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm28)[0,1], 'NCAR-CCSM4'],
+                       [tmp_amz_gcm29.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm29)[0,1], 'NCAR-CESM1-BGC'],
+                       [tmp_amz_gcm30.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm30)[0,1], 'NCAR-CESM1-CAM5'],
+                       [tmp_amz_gcm31.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm31)[0,1], 'NorESM1-ME'],
+                       [tmp_amz_gcm32.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm32)[0,1], 'NorESM1-M'],
+                       [tmp_amz_gcm33.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm33)[0,1], 'ensmean_cmip5']],
+                 PRE2=[[pre_neb_gcm1.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm1)[0,1], 'BCC-CSM1.1'],
+                       [pre_neb_gcm2.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm2)[0,1], 'BCC-CSM1.1M'],
+                       [pre_neb_gcm3.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm3)[0,1], 'BNU-ESM'],
+                       [pre_neb_gcm4.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm4)[0,1], 'CanESM2'],
+                       [pre_neb_gcm5.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm5)[0,1], 'CNRM-CM5'],
+                       [pre_neb_gcm6.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm6)[0,1], 'CSIRO-ACCESS-1'],
+                       [pre_neb_gcm7.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [pre_neb_gcm8.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm8)[0,1], 'CSIRO-MK36'],
+                       [pre_neb_gcm9.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm9)[0,1], 'FIO-ESM'],
+                       [pre_neb_gcm10.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm10)[0,1], 'GISS-E2-H-CC'],
+                       [pre_neb_gcm11.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm11)[0,1], 'GISS-E2-H'],
+                       [pre_neb_gcm12.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm12)[0,1], 'GISS-E2-R'],
+                       [pre_neb_gcm13.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm13)[0,1], 'HadGEM2-AO'],
+                       [pre_neb_gcm14.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm14)[0,1], 'HadGEM2-CC'],
+                       [pre_neb_gcm15.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm15)[0,1], 'HadGEM2-ES'],
+                       [pre_neb_gcm16.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm16)[0,1], 'INMCM4'],
+                       [pre_neb_gcm17.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm17)[0,1], 'IPSL-CM5A-LR'],
+                       [pre_neb_gcm18.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm18)[0,1], 'IPSL-CM5A-MR'],
+                       [pre_neb_gcm19.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm19)[0,1], 'IPSL-CM5B-LR'],
+                       [pre_neb_gcm20.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm20)[0,1], 'LASG-FGOALS-G2'],
+                       [pre_neb_gcm21.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm21)[0,1], 'LASG-FGOALS-S2'],
+                       [pre_neb_gcm22.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm22)[0,1], 'MIROC5'],
+                       [pre_neb_gcm23.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm23)[0,1], 'MIROC-ESM-CHEM'],
+                       [pre_neb_gcm24.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm24)[0,1], 'MIROC-ESM'],
+                       [pre_neb_gcm25.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm25)[0,1], 'MPI-ESM-LR'],
+                       [pre_neb_gcm26.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm26)[0,1], 'MPI-ESM-MR'],
+                       [pre_neb_gcm27.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm27)[0,1], 'MRI-CGCM3'],
+                       [pre_neb_gcm28.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm28)[0,1], 'NCAR-CCSM4'],
+                       [pre_neb_gcm29.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm29)[0,1], 'NCAR-CESM1-BGC'],
+                       [pre_neb_gcm30.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm30)[0,1], 'NCAR-CESM1-CAM5'],
+                       [pre_neb_gcm31.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm31)[0,1], 'NorESM1-ME'],
+                       [pre_neb_gcm32.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm32)[0,1], 'NorESM1-M'],
+                       [pre_neb_gcm33.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm33)[0,1], 'ensmean_cmip5']],
+                 TMP2=[[tmp_neb_gcm1.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm1)[0,1], 'BCC-CSM1.1'],
+                       [tmp_neb_gcm2.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm2)[0,1], 'BCC-CSM1.1M'],
+                       [tmp_neb_gcm3.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm3)[0,1], 'BNU-ESM'],
+                       [tmp_neb_gcm4.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm4)[0,1], 'CanESM2'],
+                       [tmp_neb_gcm5.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm5)[0,1], 'CNRM-CM5'],
+                       [tmp_neb_gcm6.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm6)[0,1], 'CSIRO-ACCESS-1'],
+                       [tmp_neb_gcm7.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [tmp_neb_gcm8.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm8)[0,1], 'CSIRO-MK36'],
+                       [tmp_neb_gcm9.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm9)[0,1], 'FIO-ESM'],
+                       [tmp_neb_gcm10.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm10)[0,1], 'GISS-E2-H-CC'],
+                       [tmp_neb_gcm11.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm11)[0,1], 'GISS-E2-H'],
+                       [tmp_neb_gcm12.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm12)[0,1], 'GISS-E2-R'],
+                       [tmp_neb_gcm13.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm13)[0,1], 'HadGEM2-AO'],
+                       [tmp_neb_gcm14.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm14)[0,1], 'HadGEM2-CC'],
+                       [tmp_neb_gcm15.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm15)[0,1], 'HadGEM2-ES'],
+                       [tmp_neb_gcm16.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm16)[0,1], 'INMCM4'],
+                       [tmp_neb_gcm17.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm17)[0,1], 'IPSL-CM5A-LR'],
+                       [tmp_neb_gcm18.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm18)[0,1], 'IPSL-CM5A-MR'],
+                       [tmp_neb_gcm19.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm19)[0,1], 'IPSL-CM5B-LR'],
+                       [tmp_neb_gcm20.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm20)[0,1], 'LASG-FGOALS-G2'],
+                       [tmp_neb_gcm21.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm21)[0,1], 'LASG-FGOALS-S2'],
+                       [tmp_neb_gcm22.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm22)[0,1], 'MIROC5'],
+                       [tmp_neb_gcm23.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm23)[0,1], 'MIROC-ESM-CHEM'],
+                       [tmp_neb_gcm24.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm24)[0,1], 'MIROC-ESM'],
+                       [tmp_neb_gcm25.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm25)[0,1], 'MPI-ESM-LR'],
+                       [tmp_neb_gcm26.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm26)[0,1], 'MPI-ESM-MR'],
+                       [tmp_neb_gcm27.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm27)[0,1], 'MRI-CGCM3'],
+                       [tmp_neb_gcm28.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm28)[0,1], 'NCAR-CCSM4'],
+                       [tmp_neb_gcm29.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm29)[0,1], 'NCAR-CESM1-BGC'],
+                       [tmp_neb_gcm30.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm30)[0,1], 'NCAR-CESM1-CAM5'],
+                       [tmp_neb_gcm31.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm31)[0,1], 'NorESM1-ME'],
+                       [tmp_neb_gcm32.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm32)[0,1], 'NorESM1-M'],
+                       [tmp_neb_gcm33.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm33)[0,1], 'ensmean_cmip5']],
+                 PRE3=[[pre_mato_gcm1.std(ddof=1), np.corrcoef(pre_mato_obs, pre_neb_gcm1)[0,1], 'BCC-CSM1.1'],
+                       [pre_mato_gcm2.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm2)[0,1], 'BCC-CSM1.1M'],
+                       [pre_mato_gcm3.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm3)[0,1], 'BNU-ESM'],
+                       [pre_mato_gcm4.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm4)[0,1], 'CanESM2'],
+                       [pre_mato_gcm5.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm5)[0,1], 'CNRM-CM5'],
+                       [pre_mato_gcm6.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm6)[0,1], 'CSIRO-ACCESS-1'],
+                       [pre_mato_gcm7.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [pre_mato_gcm8.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm8)[0,1], 'CSIRO-MK36'],
+                       [pre_mato_gcm9.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm9)[0,1], 'FIO-ESM'],
+                       [pre_mato_gcm10.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm10)[0,1], 'GISS-E2-H-CC'],
+                       [pre_mato_gcm11.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm11)[0,1], 'GISS-E2-H'],
+                       [pre_mato_gcm12.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm12)[0,1], 'GISS-E2-R'],
+                       [pre_mato_gcm13.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm13)[0,1], 'HadGEM2-AO'],
+                       [pre_mato_gcm14.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm14)[0,1], 'HadGEM2-CC'],
+                       [pre_mato_gcm15.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm15)[0,1], 'HadGEM2-ES'],
+                       [pre_mato_gcm16.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm16)[0,1], 'INMCM4'],
+                       [pre_mato_gcm17.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm17)[0,1], 'IPSL-CM5A-LR'],
+                       [pre_mato_gcm18.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm18)[0,1], 'IPSL-CM5A-MR'],
+                       [pre_mato_gcm19.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm19)[0,1], 'IPSL-CM5B-LR'],
+                       [pre_mato_gcm20.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm20)[0,1], 'LASG-FGOALS-G2'],
+                       [pre_mato_gcm21.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm21)[0,1], 'LASG-FGOALS-S2'],
+                       [pre_mato_gcm22.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm22)[0,1], 'MIROC5'],
+                       [pre_mato_gcm23.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm23)[0,1], 'MIROC-ESM-CHEM'],
+                       [pre_mato_gcm24.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm24)[0,1], 'MIROC-ESM'],
+                       [pre_mato_gcm25.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm25)[0,1], 'MPI-ESM-LR'],
+                       [pre_mato_gcm26.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm26)[0,1], 'MPI-ESM-MR'],
+                       [pre_mato_gcm27.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm27)[0,1], 'MRI-CGCM3'],
+                       [pre_mato_gcm28.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm28)[0,1], 'NCAR-CCSM4'],
+                       [pre_mato_gcm29.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm29)[0,1], 'NCAR-CESM1-BGC'],
+                       [pre_mato_gcm30.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm30)[0,1], 'NCAR-CESM1-CAM5'],
+                       [pre_mato_gcm31.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm31)[0,1], 'NorESM1-ME'],
+                       [pre_mato_gcm32.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm32)[0,1], 'NorESM1-M'],
+                       [pre_mato_gcm33.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm33)[0,1], 'ensmean_cmip5']],
+                 TMP3=[[tmp_mato_gcm1.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm1)[0,1], 'BCC-CSM1.1'],
+                       [tmp_mato_gcm2.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm2)[0,1], 'BCC-CSM1.1M'],
+                       [tmp_mato_gcm3.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm3)[0,1], 'BNU-ESM'],
+                       [tmp_mato_gcm4.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm4)[0,1], 'CanESM2'],
+                       [tmp_mato_gcm5.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm5)[0,1], 'CNRM-CM5'],
+                       [tmp_mato_gcm6.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm6)[0,1], 'CSIRO-ACCESS-1'],
+                       [tmp_mato_gcm7.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [tmp_mato_gcm8.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm8)[0,1], 'CSIRO-MK36'],
+                       [tmp_mato_gcm9.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm9)[0,1], 'FIO-ESM'],
+                       [tmp_mato_gcm10.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm10)[0,1], 'GISS-E2-H-CC'],
+                       [tmp_mato_gcm11.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm11)[0,1], 'GISS-E2-H'],
+                       [tmp_mato_gcm12.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm12)[0,1], 'GISS-E2-R'],
+                       [tmp_mato_gcm13.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm13)[0,1], 'HadGEM2-AO'],
+                       [tmp_mato_gcm14.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm14)[0,1], 'HadGEM2-CC'],
+                       [tmp_mato_gcm15.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm15)[0,1], 'HadGEM2-ES'],
+                       [tmp_mato_gcm16.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm16)[0,1], 'INMCM4'],
+                       [tmp_mato_gcm17.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm17)[0,1], 'IPSL-CM5A-LR'],
+                       [tmp_mato_gcm18.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm18)[0,1], 'IPSL-CM5A-MR'],
+                       [tmp_mato_gcm19.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm19)[0,1], 'IPSL-CM5B-LR'],
+                       [tmp_mato_gcm20.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm20)[0,1], 'LASG-FGOALS-G2'],
+                       [tmp_mato_gcm21.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm21)[0,1], 'LASG-FGOALS-S2'],
+                       [tmp_mato_gcm22.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm22)[0,1], 'MIROC5'],
+                       [tmp_mato_gcm23.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm23)[0,1], 'MIROC-ESM-CHEM'],
+                       [tmp_mato_gcm24.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm24)[0,1], 'MIROC-ESM'],
+                       [tmp_mato_gcm25.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm25)[0,1], 'MPI-ESM-LR'],
+                       [tmp_mato_gcm26.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm26)[0,1], 'MPI-ESM-MR'],
+                       [tmp_mato_gcm27.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm27)[0,1], 'MRI-CGCM3'],
+                       [tmp_mato_gcm28.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm28)[0,1], 'NCAR-CCSM4'],
+                       [tmp_mato_gcm29.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm29)[0,1], 'NCAR-CESM1-BGC'],
+                       [tmp_mato_gcm30.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm30)[0,1], 'NCAR-CESM1-CAM5'],
+                       [tmp_mato_gcm31.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm31)[0,1], 'NorESM1-ME'],
+                       [tmp_mato_gcm32.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm32)[0,1], 'NorESM1-M'],
+                       [tmp_mato_gcm33.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm33)[0,1], 'ensmean_cmip5']])
+                       
+	# Colormap (see http://www.scipy.org/Cookbook/Matplotlib/Show_colormaps)
+
+	# Here set placement of the points marking 95th and 99th significance
+	# levels. For more than 102 samples (degrees freedom > 100), critical
+	# correlation levels are 0.195 and 0.254 for 95th and 99th
+	# significance levels respectively. Set these by eyeball using the
+	# standard deviation x and y axis.
+
+	#~ x95 = [0.01, 0.68] # For Tair, this is for 95th level (r = 0.195)
+	#~ y95 = [0.0, 3.45]
+	#~ x99 = [0.01, 0.95] # For Tair, this is for 99th level (r = 0.254)
+	#~ y99 = [0.0, 3.45]
+
+	x95 = [0.05, 10.9] # For Prcp, this is for 95th level (r = 0.195)
+	y95 = [0.0, 80.0]
+	x99 = [0.05, 10.0] # For Prcp, this is for 99th level (r = 0.254)
+	y99 = [0.0, 80.0]
 	
-	stdref = 1.
-	fig = PLT.figure(figsize=(11.5,5))
-	dia = TaylorDiagram(stdref, fig=fig, label='Reference', extend=True)
-	dia.samplePoints[0].set_color('r')
+	rects = dict(PRE1=321,
+				 TMP1=322,
+				 PRE2=323,
+				 TMP2=324,
+				 PRE3=325,
+				 TMP3=326)
+
+	# Plot model end obs data taylor diagram 			 
+	fig = plt.figure(figsize=(8, 68))
 	
-	for i, (stddev, corrcoef) in enumerate(samples):
-		mld_dic = {0:'BCC-CSM1.1',1:'BCC-CSM1.1M',2:'BNU-ESM',3:'CanESM2',4:'CNRM-CM5',5:'CSIRO-ACCESS-1',6:'CSIRO-ACCESS-3',
-		7:'CSIRO-MK36',8:'FIO-ESM',9:'GISS-E2-H-CC',10:'GISS-E2-H',11:'GISS-E2-R',12:'HadGEM2-AO',13:'HadGEM2-CC',14:'HadGEM2-ES',
-		15:'INMCM4',16:'IPSL-CM5A-LR',17:'IPSL-CM5A-MR',18:'IPSL-CM5B-LR',19:'LASG-FGOALS-G2',20:'LASG-FGOALS-S2',21:'MIROC',
-		22:'MIROC-ESM-CHEM',23:'MIROC-ESM',24:'MPI-ESM-LR',25:'MPI-ESM-MR',26:'MRI-CGCM3',27:'NCAR-CCSM4',28:'NCAR-CESM1-BGC',
-		29:'NCAR-CESM1-CAM5',30:'NorESM1-ME',31:'NorESM1-M',32:'ENSMEAN_CMIP5'}
-		colors = PLT.matplotlib.cm.Set1(NP.linspace(0,1,len(samples)))
+	
+	for var in ['PRE1', 'TMP1', 'PRE2', 'TMP2', 'PRE3', 'TMP3']:
+
+		dia = TaylorDiagram(stdrefs, fig=fig, rect=rects[var], label='Reference', extend=False)
+		dia.samplePoints[0].set_color('r')
+		dia.ax.plot(x95,y95,color='b')
+		dia.ax.plot(x99,y99,color='b')
 		
-		dia.add_sample(stddev, corrcoef, marker='$%d$' % (i+1), ms=13, ls='', mfc=colors[i], mec=colors[i], label=mld_dic[i])
-	
-	# Add RMS contours, and label them
-	contours = dia.add_contours(levels=5, colors='0.4')
-	PLT.clabel(contours, inline=1, fontsize=13, fmt='%.0f')
-	
-	dia.add_grid()
-	dia._ax.axis[:].major_ticks.set_tick_out(True)
-	
-	out_var    = u'pre' # pre or tmp
-	out_area   = u'amz' # amz or neb
-	area_name  = u'AMZ (Lat:16S 4N, Lon:74W 48W)' # AMZ (Lat:16S 4N, Lon:74W 48W) or NEB (Lat:15S 2N, Lon:46W 34W)
-	
-	if out_var == 'pre':
-		var_name   = u'Precipitação'
-	else:
-		var_name   = u'Temperatura' 
-	
-	# Add a figure legend and title
-	fig.legend(dia.samplePoints, [ p.get_label() for p in dia.samplePoints ], numpoints=1, prop=dict(size=8), loc='right')		
-	PLT.title(u'Diagrama de Taylor de {0} - {1}  \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Período de Referência: 1850-2005)'.format(var_name, area_name), fontsize=15, y=1.1)
+		# Add samples to Taylor diagram
+		for i,(stddev,corrcoef,name) in enumerate(samples[var]):
+			dia.add_sample(stddev, corrcoef,
+						   marker='$%d$' % (i+1), ms=9, ls='',
+						   mfc='k', mec='k', # Colors
+						   label=name)
+
+		# Add RMS contours, and label them
+		contours = dia.add_contours(levels=5, colors='0.5') 
+		dia.ax.clabel(contours, inline=1, fontsize=8, fmt='%.1f')
 		
-	return dia, out_var, out_area
+		# Tricky: ax is the polar ax (used for plots), _ax is the container (used for layout)
+
+	# Add a figure legend and title. For loc option, place x,y tuple inside [ ].
+	# Can also use special options here: http://matplotlib.sourceforge.net/users/legend_guide.html
+	
+	# Add a figure legend
+	fig.legend(dia.samplePoints, 
+			   [ p.get_label() for p in dia.samplePoints ], 
+			   numpoints=1, prop=dict(size=8), loc='right')
+
+	plt.subplots_adjust(left=0.30, bottom=0.10, right=0.70, top=0.90, wspace=0.30, hspace=0.40)
 
 
-if __name__ == '__main__':
-
-    dia, out_var, out_area = plot_diagram()
-    
-    path_out = '/home/nice'
-    name_out = 'pyplt_taylor_diagram_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area)
-    if not os.path.exists(path_out): create_path(path_out)
-    
-    PLT.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
-    PLT.show()
-    exit()
+	# Path out to save figure
+	path_out = '/home/nice'
+	name_out = 'pyplt_taylor_diagram_cmip5_cru_1975-2005.png'
+	if not os.path.exists(path_out):
+		create_path(path_out)
+	plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
+	plt.show()
+	exit()
 
 

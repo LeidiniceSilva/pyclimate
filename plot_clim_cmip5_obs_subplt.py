@@ -40,7 +40,7 @@ def import_cmip5_clim(param, area, model):
 	return mdl_clim
 
 
-def import_obs_climp(param, area, database):
+def import_obs_clim(param, area, database):
 
 	path  = '/home/nice/Documents/ufrn/phd_project/datas/obs_data'
 	arq   = '{0}/{1}_{2}_{3}_obs_mon_197512-200511.nc'.format(path, param, area, database)	
@@ -186,43 +186,139 @@ tmp_neb_gcm18 = import_cmip5_clim(u'tas', u'neb', u'IPSL-CM5A-MR')
 pre_mato_gcm18 = import_cmip5_clim(u'pr', u'matopiba', u'IPSL-CM5A-MR')
 tmp_mato_gcm18 = import_cmip5_clim(u'tas', u'matopiba', u'IPSL-CM5A-MR')
 
-pre_amz_gcm19 = import_cmip5_clim(u'pr', u'amz', u'IPSL-CM5-LR')
-tmp_amz_gcm19 = import_cmip5_clim(u'tas', u'amz', u'IPSL-CM5A-LR')
-pre_neb_gcm19 = import_cmip5_clim(u'pr', u'neb', u'IPSL-CM5A-LR')
-tmp_neb_gcm19 = import_cmip5_clim(u'tas', u'neb', u'IPSL-CM5A-LR')
-pre_mato_gcm19 = import_cmip5_clim(u'pr', u'matopiba', u'IPSL-CM5A-LR')
-tmp_mato_gcm19 = import_cmip5_clim(u'tas', u'matopiba', u'IPSL-CM5A-LR')
+pre_amz_gcm19 = import_cmip5_clim(u'pr', u'amz', u'IPSL-CM5B-LR')
+tmp_amz_gcm19 = import_cmip5_clim(u'tas', u'amz', u'IPSL-CM5B-LR')
+pre_neb_gcm19 = import_cmip5_clim(u'pr', u'neb', u'IPSL-CM5B-LR')
+tmp_neb_gcm19 = import_cmip5_clim(u'tas', u'neb', u'IPSL-CM5B-LR')
+pre_mato_gcm19 = import_cmip5_clim(u'pr', u'matopiba', u'IPSL-CM5B-LR')
+tmp_mato_gcm19 = import_cmip5_clim(u'tas', u'matopiba', u'IPSL-CM5B-LR')
+
+pre_amz_gcm20 = import_cmip5_clim(u'pr', u'amz', u'LASG-FGOALS-G2')
+tmp_amz_gcm20 = import_cmip5_clim(u'tas', u'amz', u'LASG-FGOALS-G2')
+pre_neb_gcm20 = import_cmip5_clim(u'pr', u'neb', u'LASG-FGOALS-G2')
+tmp_neb_gcm20 = import_cmip5_clim(u'tas', u'neb', u'LASG-FGOALS-G2')
+pre_mato_gcm20 = import_cmip5_clim(u'pr', u'matopiba', u'LASG-FGOALS-G2')
+tmp_mato_gcm20 = import_cmip5_clim(u'tas', u'matopiba', u'LASG-FGOALS-G2')
+
+pre_amz_gcm21 = import_cmip5_clim(u'pr', u'amz', u'LASG-FGOALS-S2')
+tmp_amz_gcm21 = import_cmip5_clim(u'tas', u'amz', u'LASG-FGOALS-S2')
+pre_neb_gcm21 = import_cmip5_clim(u'pr', u'neb', u'LASG-FGOALS-S2')
+tmp_neb_gcm21 = import_cmip5_clim(u'tas', u'neb', u'LASG-FGOALS-S2')
+pre_mato_gcm21 = import_cmip5_clim(u'pr', u'matopiba', u'LASG-FGOALS-S2')
+tmp_mato_gcm21 = import_cmip5_clim(u'tas', u'matopiba', u'LASG-FGOALS-S2')
+
+pre_amz_gcm22 = import_cmip5_clim(u'pr', u'amz', u'MIROC5')
+tmp_amz_gcm22 = import_cmip5_clim(u'tas', u'amz', u'MIROC5')
+pre_neb_gcm22 = import_cmip5_clim(u'pr', u'neb', u'MIROC5')
+tmp_neb_gcm22 = import_cmip5_clim(u'tas', u'neb', u'MIROC5')
+pre_mato_gcm22 = import_cmip5_clim(u'pr', u'matopiba', u'MIROC5')
+tmp_mato_gcm22 = import_cmip5_clim(u'tas', u'matopiba', u'MIROC5')
+
+pre_amz_gcm23 = import_cmip5_clim(u'pr', u'amz', u'MIROC-ESM-CHEM')
+tmp_amz_gcm23 = import_cmip5_clim(u'tas', u'amz', u'MIROC-ESM-CHEM')
+pre_neb_gcm23 = import_cmip5_clim(u'pr', u'neb', u'MIROC-ESM-CHEM')
+tmp_neb_gcm23 = import_cmip5_clim(u'tas', u'neb', u'MIROC-ESM-CHEM')
+pre_mato_gcm23 = import_cmip5_clim(u'pr', u'matopiba', u'MIROC-ESM-CHEM')
+tmp_mato_gcm23 = import_cmip5_clim(u'tas', u'matopiba', u'MIROC-ESM-CHEM')
+
+pre_amz_gcm24 = import_cmip5_clim(u'pr', u'amz', u'MIROC-ESM')
+tmp_amz_gcm24 = import_cmip5_clim(u'tas', u'amz', u'MIROC-ESM')
+pre_neb_gcm24 = import_cmip5_clim(u'pr', u'neb', u'MIROC-ESM')
+tmp_neb_gcm24 = import_cmip5_clim(u'tas', u'neb', u'MIROC-ESM')
+pre_mato_gcm24 = import_cmip5_clim(u'pr', u'matopiba', u'MIROC-ESM')
+tmp_mato_gcm24 = import_cmip5_clim(u'tas', u'matopiba', u'MIROC-ESM')
+
+pre_amz_gcm25 = import_cmip5_clim(u'pr', u'amz', u'MPI-ESM-LR')
+tmp_amz_gcm25 = import_cmip5_clim(u'tas', u'amz', u'MPI-ESM-LR')
+pre_neb_gcm25 = import_cmip5_clim(u'pr', u'neb', u'MPI-ESM-LR')
+tmp_neb_gcm25 = import_cmip5_clim(u'tas', u'neb', u'MPI-ESM-LR')
+pre_mato_gcm25 = import_cmip5_clim(u'pr', u'matopiba', u'MPI-ESM-LR')
+tmp_mato_gcm25 = import_cmip5_clim(u'tas', u'matopiba', u'MPI-ESM-LR')
+
+pre_amz_gcm26 = import_cmip5_clim(u'pr', u'amz', u'MPI-ESM-MR')
+tmp_amz_gcm26 = import_cmip5_clim(u'tas', u'amz', u'MPI-ESM-MR')
+pre_neb_gcm26 = import_cmip5_clim(u'pr', u'neb', u'MPI-ESM-MR')
+tmp_neb_gcm26 = import_cmip5_clim(u'tas', u'neb', u'MPI-ESM-MR')
+pre_mato_gcm26 = import_cmip5_clim(u'pr', u'matopiba', u'MPI-ESM-MR')
+tmp_mato_gcm26 = import_cmip5_clim(u'tas', u'matopiba', u'MPI-ESM-MR')
+
+pre_amz_gcm27 = import_cmip5_clim(u'pr', u'amz', u'MRI-CGCM3')
+tmp_amz_gcm27 = import_cmip5_clim(u'tas', u'amz', u'MRI-CGCM3')
+pre_neb_gcm27 = import_cmip5_clim(u'pr', u'neb', u'MRI-CGCM3')
+tmp_neb_gcm27 = import_cmip5_clim(u'tas', u'neb', u'MRI-CGCM3')
+pre_mato_gcm27 = import_cmip5_clim(u'pr', u'matopiba', u'MRI-CGCM3')
+tmp_mato_gcm27 = import_cmip5_clim(u'tas', u'matopiba', u'MRI-CGCM3')
+
+pre_amz_gcm28 = import_cmip5_clim(u'pr', u'amz', u'NCAR-CCSM4')
+tmp_amz_gcm28 = import_cmip5_clim(u'tas', u'amz', u'NCAR-CCSM4')
+pre_neb_gcm28 = import_cmip5_clim(u'pr', u'neb', u'NCAR-CCSM4')
+tmp_neb_gcm28 = import_cmip5_clim(u'tas', u'neb', u'NCAR-CCSM4')
+pre_mato_gcm28 = import_cmip5_clim(u'pr', u'matopiba', u'NCAR-CCSM4')
+tmp_mato_gcm28 = import_cmip5_clim(u'tas', u'matopiba', u'NCAR-CCSM4')
+
+pre_amz_gcm29 = import_cmip5_clim(u'pr', u'amz', u'NCAR-CESM1-BGC')
+tmp_amz_gcm29 = import_cmip5_clim(u'tas', u'amz', u'NCAR-CESM1-BGC')
+pre_neb_gcm29 = import_cmip5_clim(u'pr', u'neb', u'NCAR-CESM1-BGC')
+tmp_neb_gcm29 = import_cmip5_clim(u'tas', u'neb', u'NCAR-CESM1-BGC')
+pre_mato_gcm29 = import_cmip5_clim(u'pr', u'matopiba', u'NCAR-CESM1-BGC')
+tmp_mato_gcm29 = import_cmip5_clim(u'tas', u'matopiba', u'NCAR-CESM1-BGC')
+
+pre_amz_gcm30 = import_cmip5_clim(u'pr', u'amz', u'NCAR-CESM1-CAM5')
+tmp_amz_gcm30 = import_cmip5_clim(u'tas', u'amz', u'NCAR-CESM1-CAM5')
+pre_neb_gcm30 = import_cmip5_clim(u'pr', u'neb', u'NCAR-CESM1-CAM5')
+tmp_neb_gcm30 = import_cmip5_clim(u'tas', u'neb', u'NCAR-CESM1-CAM5')
+pre_mato_gcm30 = import_cmip5_clim(u'pr', u'matopiba', u'NCAR-CESM1-CAM5')
+tmp_mato_gcm30 = import_cmip5_clim(u'tas', u'matopiba', u'NCAR-CESM1-CAM5')
+
+pre_amz_gcm31 = import_cmip5_clim(u'pr', u'amz', u'NorESM1-ME')
+tmp_amz_gcm31 = import_cmip5_clim(u'tas', u'amz', u'NorESM1-ME')
+pre_neb_gcm31 = import_cmip5_clim(u'pr', u'neb', u'NorESM1-ME')
+tmp_neb_gcm31 = import_cmip5_clim(u'tas', u'neb', u'NorESM1-ME')
+pre_mato_gcm31 = import_cmip5_clim(u'pr', u'matopiba', u'NorESM1-ME')
+tmp_mato_gcm31 = import_cmip5_clim(u'tas', u'matopiba', u'NorESM1-ME')
+
+pre_amz_gcm32 = import_cmip5_clim(u'pr', u'amz', u'NorESM1-M')
+tmp_amz_gcm32 = import_cmip5_clim(u'tas', u'amz', u'NorESM1-M')
+pre_neb_gcm32 = import_cmip5_clim(u'pr', u'neb', u'NorESM1-M')
+tmp_neb_gcm32 = import_cmip5_clim(u'tas', u'neb', u'NorESM1-M')
+pre_mato_gcm32 = import_cmip5_clim(u'pr', u'matopiba', u'NorESM1-M')
+tmp_mato_gcm32 = import_cmip5_clim(u'tas', u'matopiba', u'NorESM1-M')
+
+pre_amz_gcm33 = import_cmip5_clim(u'pr', u'amz', u'ensmean_cmip5')
+tmp_amz_gcm33 = import_cmip5_clim(u'tas', u'amz', u'ensmean_cmip5')
+pre_neb_gcm33 = import_cmip5_clim(u'pr', u'neb', u'ensmean_cmip5')
+tmp_neb_gcm33 = import_cmip5_clim(u'tas', u'neb', u'ensmean_cmip5')
+pre_mato_gcm33 = import_cmip5_clim(u'pr', u'matopiba', u'ensmean_cmip5')
+tmp_mato_gcm33 = import_cmip5_clim(u'tas', u'matopiba', u'ensmean_cmip5')
 
 pre_amz_obs  = import_obs_clim(u'pre', u'amz', u'cru_ts4.02')
 tmp_amz_obs  = import_obs_clim(u'tmp', u'amz', u'cru_ts4.02')
 pre_neb_obs  = import_obs_clim(u'pre', u'neb', u'cru_ts4.02')
 tmp_neb_obs  = import_obs_clim(u'tmp', u'neb', u'cru_ts4.02')
-pre_mato_obs  = import_obs_clim(u'pre', u'mato', u'cru_ts4.02')
-tmp_mato_obs  = import_obs_clim(u'tmp', u'mato', u'cru_ts4.02')
+pre_mato_obs  = import_obs_clim(u'pre', u'matopiba', u'cru_ts4.02')
+tmp_mato_obs  = import_obs_clim(u'tmp', u'matopiba', u'cru_ts4.02')
 
 # Plot model end obs data climatology
 fig = plt.figure(figsize=(10, 8))
 time = np.arange(0.5, 12 + 0.5)
 
 ax1 = fig.add_subplot(321)
-plt_clim1 = ax1.plot(time, mdl1_clim, time, mdl2_clim, time, mdl3_clim,
-time,  mdl4_clim, time, mdl5_clim, time, mdl6_clim, time, mdl7_clim,
-time, mdl8_clim, time, mdl9_clim, time, mdl10_clim, time, mdl11_clim,
-time, mdl12_clim, time, mdl13_clim, time, mdl14_clim, time, mdl15_clim, 
-time, mdl16_clim, time, mdl17_clim, time, mdl18_clim, time, mdl19_clim, 
-time, mdl20_clim, time, mdl21_clim, time, mdl22_clim, time, mdl23_clim, 
-time, mdl24_clim, time, mdl25_clim, time, mdl26_clim, time, mdl27_clim, 
-time, mdl28_clim, time, mdl29_clim, time, mdl30_clim, time, mdl31_clim, 
-time, mdl32_clim, time, mdl33_clim, time, obs1_clim, time, obs1_clim_p5, 
-time, obs1_clim_p95)
+plt_clim1 = ax1.plot(time, pre_amz_gcm1, time, pre_amz_gcm2, time, pre_amz_gcm3,
+time, pre_amz_gcm4, time, pre_amz_gcm5, time, pre_amz_gcm6, time, pre_amz_gcm7,
+time, pre_amz_gcm8, time, pre_amz_gcm9, time, pre_amz_gcm10, time, pre_amz_gcm11,
+time, pre_amz_gcm12, time, pre_amz_gcm13, time, pre_amz_gcm14, time, pre_amz_gcm15, 
+time, pre_amz_gcm16, time, pre_amz_gcm17, time, pre_amz_gcm18, time, pre_amz_gcm19, 
+time, pre_amz_gcm20, time, pre_amz_gcm21, time, pre_amz_gcm22, time, pre_amz_gcm23, 
+time, pre_amz_gcm24, time, pre_amz_gcm25, time, pre_amz_gcm26, time, pre_amz_gcm27, 
+time, pre_amz_gcm28, time, pre_amz_gcm29, time, pre_amz_gcm30, time, pre_amz_gcm31, 
+time, pre_amz_gcm32, time, pre_amz_gcm33, time, pre_amz_obs)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
 plt.yticks(np.arange(0, 14, 2))
 plt.title(u'A)', loc='left', fontweight='bold')
 ax1.xaxis.grid(True, which='major', linestyle='--')
 ax1.yaxis.grid(True, which='major', linestyle='--')
 
-
-l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34, l35, l36 = plt_clim1
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34 = plt_clim1
 plt.setp(l1,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l2,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l3,  linewidth=1, markeredgewidth=1, color='gainsboro')
@@ -257,27 +353,24 @@ plt.setp(l31, linewidth=1, markeredgewidth=1, color='gold')
 plt.setp(l32, linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l33, linewidth=1, markeredgewidth=1, color='blue')
 plt.setp(l34, linewidth=1, markeredgewidth=1, color='black')
-plt.setp(l35, linewidth=1, markeredgewidth=1, color='slategray')
-plt.setp(l36, linewidth=1, markeredgewidth=1, color='slategray')
 
 ax2 = fig.add_subplot(322)
-plt_clim2 = ax2.plot(time, mdl1_clim, time, mdl2_clim, time, mdl3_clim,
-time,  mdl4_clim, time, mdl5_clim, time, mdl6_clim, time, mdl7_clim,
-time, mdl8_clim, time, mdl9_clim, time, mdl10_clim, time, mdl11_clim,
-time, mdl12_clim, time, mdl13_clim, time, mdl14_clim, time, mdl15_clim, 
-time, mdl16_clim, time, mdl17_clim, time, mdl18_clim, time, mdl19_clim, 
-time, mdl20_clim, time, mdl21_clim, time, mdl22_clim, time, mdl23_clim, 
-time, mdl24_clim, time, mdl25_clim, time, mdl26_clim, time, mdl27_clim, 
-time, mdl28_clim, time, mdl29_clim, time, mdl30_clim, time, mdl31_clim, 
-time, mdl32_clim, time, mdl33_clim, time, obs1_clim, time, obs1_clim_p5, 
-time, obs1_clim_p95)
+plt_clim2 = ax2.plot(time, tmp_amz_gcm1, time, tmp_amz_gcm2, time, tmp_amz_gcm3,
+time, tmp_amz_gcm4, time, tmp_amz_gcm5, time, tmp_amz_gcm6, time, tmp_amz_gcm7,
+time, tmp_amz_gcm8, time, tmp_amz_gcm9, time, tmp_amz_gcm10, time, tmp_amz_gcm11,
+time, tmp_amz_gcm12, time, tmp_amz_gcm13, time, tmp_amz_gcm14, time, tmp_amz_gcm15, 
+time, tmp_amz_gcm16, time, tmp_amz_gcm17, time, tmp_amz_gcm18, time, tmp_amz_gcm19, 
+time, tmp_amz_gcm20, time, tmp_amz_gcm21, time, tmp_amz_gcm22, time, tmp_amz_gcm23, 
+time, tmp_amz_gcm24, time, tmp_amz_gcm25, time, tmp_amz_gcm26, time, tmp_amz_gcm27, 
+time, tmp_amz_gcm28, time, tmp_amz_gcm29, time, tmp_amz_gcm30, time, tmp_amz_gcm31, 
+time, tmp_amz_gcm32, time, tmp_amz_gcm33, time, tmp_amz_obs)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
 plt.yticks(np.arange(18, 32, 2))
 plt.title(u'B)', loc='left', fontweight='bold')
 ax2.xaxis.grid(True, which='major', linestyle='--')
 ax2.yaxis.grid(True, which='major', linestyle='--')
 
-l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34, l35, l36 = plt_clim2
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34 = plt_clim2
 plt.setp(l1,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l2,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l3,  linewidth=1, markeredgewidth=1, color='gainsboro')
@@ -312,20 +405,17 @@ plt.setp(l31, linewidth=1, markeredgewidth=1, color='gold')
 plt.setp(l32, linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l33, linewidth=1, markeredgewidth=1, color='blue')
 plt.setp(l34, linewidth=1, markeredgewidth=1, color='black')
-plt.setp(l35, linewidth=1, markeredgewidth=1, color='slategray')
-plt.setp(l36, linewidth=1, markeredgewidth=1, color='slategray')
 
 ax3 = fig.add_subplot(323)
-plt_clim3 = ax3.plot(time, mdl1_clim, time, mdl2_clim, time, mdl3_clim,
-time,  mdl4_clim, time, mdl5_clim, time, mdl6_clim, time, mdl7_clim,
-time, mdl8_clim, time, mdl9_clim, time, mdl10_clim, time, mdl11_clim,
-time, mdl12_clim, time, mdl13_clim, time, mdl14_clim, time, mdl15_clim, 
-time, mdl16_clim, time, mdl17_clim, time, mdl18_clim, time, mdl19_clim, 
-time, mdl20_clim, time, mdl21_clim, time, mdl22_clim, time, mdl23_clim, 
-time, mdl24_clim, time, mdl25_clim, time, mdl26_clim, time, mdl27_clim, 
-time, mdl28_clim, time, mdl29_clim, time, mdl30_clim, time, mdl31_clim, 
-time, mdl32_clim, time, mdl33_clim, time, obs1_clim, time, obs1_clim_p5, 
-time, obs1_clim_p95)
+plt_clim3 = ax3.plot(time, pre_neb_gcm1, time, pre_neb_gcm2, time, pre_neb_gcm3,
+time, pre_neb_gcm4, time, pre_neb_gcm5, time, pre_neb_gcm6, time, pre_neb_gcm7,
+time, pre_neb_gcm8, time, pre_neb_gcm9, time, pre_neb_gcm10, time, pre_neb_gcm11,
+time, pre_neb_gcm12, time, pre_neb_gcm13, time, pre_neb_gcm14, time, pre_neb_gcm15, 
+time, pre_neb_gcm16, time, pre_neb_gcm17, time, pre_neb_gcm18, time, pre_neb_gcm19, 
+time, pre_neb_gcm20, time, pre_neb_gcm21, time, pre_neb_gcm22, time, pre_neb_gcm23, 
+time, pre_neb_gcm24, time, pre_neb_gcm25, time, pre_neb_gcm26, time, pre_neb_gcm27, 
+time, pre_neb_gcm28, time, pre_neb_gcm29, time, pre_neb_gcm30, time, pre_neb_gcm31, 
+time, pre_neb_gcm32, time, pre_neb_gcm33, time, pre_neb_obs)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
 plt.yticks(np.arange(0, 14, 2))
 plt.ylabel(u'Rainfall (mm d⁻¹)')
@@ -333,7 +423,7 @@ plt.title(u'C)', loc='left', fontweight='bold')
 ax3.xaxis.grid(True, which='major', linestyle='--')
 ax3.yaxis.grid(True, which='major', linestyle='--')
 
-l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34, l35, l36 = plt_clim3
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34 = plt_clim3
 plt.setp(l1,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l2,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l3,  linewidth=1, markeredgewidth=1, color='gainsboro')
@@ -368,20 +458,17 @@ plt.setp(l31, linewidth=1, markeredgewidth=1, color='gold')
 plt.setp(l32, linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l33, linewidth=1, markeredgewidth=1, color='blue')
 plt.setp(l34, linewidth=1, markeredgewidth=1, color='black')
-plt.setp(l35, linewidth=1, markeredgewidth=1, color='slategray')
-plt.setp(l36, linewidth=1, markeredgewidth=1, color='slategray')
 
 ax4 = fig.add_subplot(324)
-plt_clim4 = ax4.plot(time, mdl1_clim, time, mdl2_clim, time, mdl3_clim,
-time,  mdl4_clim, time, mdl5_clim, time, mdl6_clim, time, mdl7_clim,
-time, mdl8_clim, time, mdl9_clim, time, mdl10_clim, time, mdl11_clim,
-time, mdl12_clim, time, mdl13_clim, time, mdl14_clim, time, mdl15_clim, 
-time, mdl16_clim, time, mdl17_clim, time, mdl18_clim, time, mdl19_clim, 
-time, mdl20_clim, time, mdl21_clim, time, mdl22_clim, time, mdl23_clim, 
-time, mdl24_clim, time, mdl25_clim, time, mdl26_clim, time, mdl27_clim, 
-time, mdl28_clim, time, mdl29_clim, time, mdl30_clim, time, mdl31_clim, 
-time, mdl32_clim, time, mdl33_clim, time, obs1_clim, time, obs1_clim_p5, 
-time, obs1_clim_p95)
+plt_clim4 = ax4.plot(time, tmp_neb_gcm1, time, tmp_neb_gcm2, time, tmp_neb_gcm3,
+time, tmp_neb_gcm4, time, tmp_neb_gcm5, time, tmp_neb_gcm6, time, tmp_neb_gcm7,
+time, tmp_neb_gcm8, time, tmp_neb_gcm9, time, tmp_neb_gcm10, time, tmp_neb_gcm11,
+time, tmp_neb_gcm12, time, tmp_neb_gcm13, time, tmp_neb_gcm14, time, tmp_neb_gcm15, 
+time, tmp_neb_gcm16, time, tmp_neb_gcm17, time, tmp_neb_gcm18, time, tmp_neb_gcm19, 
+time, tmp_neb_gcm20, time, tmp_neb_gcm21, time, tmp_neb_gcm22, time, tmp_neb_gcm23, 
+time, tmp_neb_gcm24, time, tmp_neb_gcm25, time, tmp_neb_gcm26, time, tmp_neb_gcm27, 
+time, tmp_neb_gcm28, time, tmp_neb_gcm29, time, tmp_neb_gcm30, time, tmp_neb_gcm31, 
+time, tmp_neb_gcm32, time, tmp_neb_gcm33, time, tmp_neb_obs)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
 plt.yticks(np.arange(18, 32, 2))
 plt.ylabel(u'Temperature (°C)')
@@ -389,7 +476,7 @@ plt.title(u'D)', loc='left', fontweight='bold')
 ax4.xaxis.grid(True, which='major', linestyle='--')
 ax4.yaxis.grid(True, which='major', linestyle='--')
 
-l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34, l35, l36 = plt_clim4
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34 = plt_clim4
 plt.setp(l1,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l2,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l3,  linewidth=1, markeredgewidth=1, color='gainsboro')
@@ -424,20 +511,17 @@ plt.setp(l31, linewidth=1, markeredgewidth=1, color='gold')
 plt.setp(l32, linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l33, linewidth=1, markeredgewidth=1, color='blue')
 plt.setp(l34, linewidth=1, markeredgewidth=1, color='black')
-plt.setp(l35, linewidth=1, markeredgewidth=1, color='slategray')
-plt.setp(l36, linewidth=1, markeredgewidth=1, color='slategray')
 
 ax5 = fig.add_subplot(325)
-plt_clim5 = ax5.plot(time, mdl1_clim, time, mdl2_clim, time, mdl3_clim,
-time,  mdl4_clim, time, mdl5_clim, time, mdl6_clim, time, mdl7_clim,
-time, mdl8_clim, time, mdl9_clim, time, mdl10_clim, time, mdl11_clim,
-time, mdl12_clim, time, mdl13_clim, time, mdl14_clim, time, mdl15_clim, 
-time, mdl16_clim, time, mdl17_clim, time, mdl18_clim, time, mdl19_clim, 
-time, mdl20_clim, time, mdl21_clim, time, mdl22_clim, time, mdl23_clim, 
-time, mdl24_clim, time, mdl25_clim, time, mdl26_clim, time, mdl27_clim, 
-time, mdl28_clim, time, mdl29_clim, time, mdl30_clim, time, mdl31_clim, 
-time, mdl32_clim, time, mdl33_clim, time, obs1_clim, time, obs1_clim_p5, 
-time, obs1_clim_p95)
+plt_clim5 = ax5.plot(time, pre_mato_gcm1, time, pre_mato_gcm2, time, pre_mato_gcm3,
+time, pre_mato_gcm4, time, pre_mato_gcm5, time, pre_mato_gcm6, time, pre_mato_gcm7,
+time, pre_mato_gcm8, time, pre_mato_gcm9, time, pre_mato_gcm10, time, pre_mato_gcm11,
+time, pre_mato_gcm12, time, pre_mato_gcm13, time, pre_mato_gcm14, time, pre_mato_gcm15, 
+time, pre_mato_gcm16, time, pre_mato_gcm17, time, pre_mato_gcm18, time, pre_mato_gcm19, 
+time, pre_mato_gcm20, time, pre_mato_gcm21, time, pre_mato_gcm22, time, pre_mato_gcm23, 
+time, pre_mato_gcm24, time, pre_mato_gcm25, time, pre_mato_gcm26, time, pre_mato_gcm27, 
+time, pre_mato_gcm28, time, pre_mato_gcm29, time, pre_mato_gcm30, time, pre_mato_gcm31, 
+time, pre_mato_gcm32, time, pre_mato_gcm33, time, pre_mato_obs)
 plt.xlabel('Months')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
 plt.yticks(np.arange(0, 14, 2))
@@ -445,7 +529,7 @@ plt.title(u'E)', loc='left', fontweight='bold')
 ax5.xaxis.grid(True, which='major', linestyle='--')
 ax5.yaxis.grid(True, which='major', linestyle='--')
 
-l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34, l35, l36 = plt_clim5
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34 = plt_clim5
 plt.setp(l1,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l2,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l3,  linewidth=1, markeredgewidth=1, color='gainsboro')
@@ -480,8 +564,6 @@ plt.setp(l31, linewidth=1, markeredgewidth=1, color='gold')
 plt.setp(l32, linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l33, linewidth=1, markeredgewidth=1, color='blue')
 plt.setp(l34, linewidth=1, markeredgewidth=1, color='black')
-plt.setp(l35, linewidth=1, markeredgewidth=1, color='slategray')
-plt.setp(l36, linewidth=1, markeredgewidth=1, color='slategray')
 
 legend = ('M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12', 'M13', 
 'M14', 'M15', 'M16', 'M17', 'M18', 'M19', 'M20', 'M21', 'M22', 'M23', 'M24', 'M25', 'M26',
@@ -489,16 +571,15 @@ legend = ('M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M
 plt.legend(plt_clim5, legend, loc='lower left', bbox_to_anchor=(-0.1, -.9), ncol=9)
 
 ax6 = fig.add_subplot(326)
-plt_clim6 = ax6.plot(time, mdl1_clim, time, mdl2_clim, time, mdl3_clim,
-time,  mdl4_clim, time, mdl5_clim, time, mdl6_clim, time, mdl7_clim,
-time, mdl8_clim, time, mdl9_clim, time, mdl10_clim, time, mdl11_clim,
-time, mdl12_clim, time, mdl13_clim, time, mdl14_clim, time, mdl15_clim, 
-time, mdl16_clim, time, mdl17_clim, time, mdl18_clim, time, mdl19_clim, 
-time, mdl20_clim, time, mdl21_clim, time, mdl22_clim, time, mdl23_clim, 
-time, mdl24_clim, time, mdl25_clim, time, mdl26_clim, time, mdl27_clim, 
-time, mdl28_clim, time, mdl29_clim, time, mdl30_clim, time, mdl31_clim, 
-time, mdl32_clim, time, mdl33_clim, time, obs1_clim, time, obs1_clim_p5, 
-time, obs1_clim_p95)
+plt_clim6 = ax6.plot(time, tmp_mato_gcm1, time, tmp_mato_gcm2, time, tmp_mato_gcm3,
+time, tmp_mato_gcm4, time, tmp_mato_gcm5, time, tmp_mato_gcm6, time, tmp_mato_gcm7,
+time, tmp_mato_gcm8, time, tmp_mato_gcm9, time, tmp_mato_gcm10, time, tmp_mato_gcm11,
+time, tmp_mato_gcm12, time, tmp_mato_gcm13, time, tmp_mato_gcm14, time, tmp_mato_gcm15, 
+time, tmp_mato_gcm16, time, tmp_mato_gcm17, time, tmp_mato_gcm18, time, tmp_mato_gcm19, 
+time, tmp_mato_gcm20, time, tmp_mato_gcm21, time, tmp_mato_gcm22, time, tmp_mato_gcm23, 
+time, tmp_mato_gcm24, time, tmp_mato_gcm25, time, tmp_mato_gcm26, time, tmp_mato_gcm27, 
+time, tmp_mato_gcm28, time, tmp_mato_gcm29, time, tmp_mato_gcm30, time, tmp_mato_gcm31, 
+time, tmp_mato_gcm32, time, tmp_mato_gcm33, time, tmp_mato_obs)
 plt.xlabel('Months')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
 plt.yticks(np.arange(18, 32, 2))
@@ -506,7 +587,7 @@ plt.title(u'F)', loc='left', fontweight='bold')
 ax6.xaxis.grid(True, which='major', linestyle='--')
 ax6.yaxis.grid(True, which='major', linestyle='--')
 
-l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34, l35, l36 = plt_clim6
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34 = plt_clim6
 plt.setp(l1,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l2,  linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l3,  linewidth=1, markeredgewidth=1, color='gainsboro')
@@ -541,8 +622,6 @@ plt.setp(l31, linewidth=1, markeredgewidth=1, color='gold')
 plt.setp(l32, linewidth=1, markeredgewidth=1, color='gainsboro')
 plt.setp(l33, linewidth=1, markeredgewidth=1, color='blue')
 plt.setp(l34, linewidth=1, markeredgewidth=1, color='black')
-plt.setp(l35, linewidth=1, markeredgewidth=1, color='slategray')
-plt.setp(l36, linewidth=1, markeredgewidth=1, color='slategray')
 
 plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.20, hspace=0.35)
 
