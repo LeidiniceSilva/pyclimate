@@ -671,8 +671,6 @@ if __name__=='__main__':
 			   numpoints=1, prop=dict(size=8), loc='right')
 
 	plt.subplots_adjust(left=0.10, bottom=0.10, right=0.70, top=0.90, wspace=0.25, hspace=0.20)
-	dia.add_grid()
-
     
 	# Path out to save figure
 	path_out = '/home/nice'
