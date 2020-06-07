@@ -74,10 +74,10 @@ class TaylorDiagram(object):
         ax.axis["top"].toggle(ticklabels=True, label=True)
         ax.axis["top"].major_ticklabels.set_axis_direction("top")
         ax.axis["top"].label.set_axis_direction("top")
-        ax.axis["top"].label.set_text(u'')
+        ax.axis["top"].label.set_text(u'Correlation')
 
         ax.axis["left"].set_axis_direction("bottom")  # "X axis"
-        ax.axis["left"].label.set_text(u'')
+        ax.axis["left"].label.set_text(u'SD')
         
         ax.axis["right"].set_axis_direction("top")    # "Y-axis"
         ax.axis["right"].toggle(ticklabels=True)
@@ -92,7 +92,7 @@ class TaylorDiagram(object):
         self.ax = ax.get_aux_axes(tr)   # Polar coordinates
 
         # Add reference point and stddev contour
-        l, = self.ax.plot([0], self.refstd, 'k*', ls='', ms=10, label=label)
+        l, = self.ax.plot([0], self.refstd, 'k*', ls='', ms=8, label=label)
         t = np.linspace(0, self.tmax)
         r = np.zeros_like(t) + self.refstd
         self.ax.plot(t, r, 'k--', label='_')
@@ -619,10 +619,10 @@ if __name__=='__main__':
 	# significance levels respectively. Set these by eyeball using the
 	# standard deviation x and y axis.
 
-	#~ x95 = [0.01, 0.68] # For Tair, this is for 95th level (r = 0.195)
-	#~ y95 = [0.0, 3.45]
+	#~ x95 = [0.01, 0.55] # For Tair, this is for 95th level (r = 0.195)
+	#~ y95 = [0.0, 10.45]
 	#~ x99 = [0.01, 0.95] # For Tair, this is for 99th level (r = 0.254)
-	#~ y99 = [0.0, 3.45]
+	#~ y99 = [0.0, 10.45]
 
 	x95 = [0.05, 10.9] # For Prcp, this is for 95th level (r = 0.195)
 	y95 = [0.0, 80.0]
@@ -637,28 +637,30 @@ if __name__=='__main__':
 				 TMP3=326)
 
 	# Plot model end obs data taylor diagram 			 
-	fig = plt.figure(figsize=(8, 68))
+	fig = plt.figure(figsize=(6, 8))
 	
 	
 	for var in ['PRE1', 'TMP1', 'PRE2', 'TMP2', 'PRE3', 'TMP3']:
 
 		dia = TaylorDiagram(stdrefs, fig=fig, rect=rects[var], label='Reference', extend=False)
 		dia.samplePoints[0].set_color('r')
-		dia.ax.plot(x95,y95,color='b')
-		dia.ax.plot(x99,y99,color='b')
+		dia.ax.plot(x95,y95,color='blue')
+		dia.ax.plot(x99,y99,color='blue')
 		
 		# Add samples to Taylor diagram
 		for i,(stddev,corrcoef,name) in enumerate(samples[var]):
 			dia.add_sample(stddev, corrcoef,
-						   marker='$%d$' % (i+1), ms=9, ls='',
+						   marker='$%d$' % (i+1), ms=8, ls='',
 						   mfc='k', mec='k', # Colors
 						   label=name)
 
 		# Add RMS contours, and label them
 		contours = dia.add_contours(levels=5, colors='0.5') 
 		dia.ax.clabel(contours, inline=1, fontsize=8, fmt='%.1f')
-		
+
 		# Tricky: ax is the polar ax (used for plots), _ax is the container (used for layout)
+		#~ dia.add_grid()                                  # Add grid
+		#~ dia._ax.axis[:].major_ticks.set_tick_out(True) 
 
 	# Add a figure legend and title. For loc option, place x,y tuple inside [ ].
 	# Can also use special options here: http://matplotlib.sourceforge.net/users/legend_guide.html
@@ -668,9 +670,10 @@ if __name__=='__main__':
 			   [ p.get_label() for p in dia.samplePoints ], 
 			   numpoints=1, prop=dict(size=8), loc='right')
 
-	plt.subplots_adjust(left=0.30, bottom=0.10, right=0.70, top=0.90, wspace=0.30, hspace=0.40)
+	plt.subplots_adjust(left=0.10, bottom=0.10, right=0.70, top=0.90, wspace=0.25, hspace=0.20)
+	dia.add_grid()
 
-
+    
 	# Path out to save figure
 	path_out = '/home/nice'
 	name_out = 'pyplt_taylor_diagram_cmip5_cru_1975-2005.png'
