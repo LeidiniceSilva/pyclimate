@@ -263,7 +263,9 @@ if __name__=='__main__':
 		dia.ax.clabel(contours, inline=1, fontsize=8, fmt='%.1f')
 		
 		# Tricky: ax is the polar ax (used for plots), _ax is the container (used for layout)
-
+		#~ dia.add_grid()                                  # Add grid
+		#~ dia._ax.axis[:].major_ticks.set_tick_out(True) 
+		
 	# Add a figure legend and title. For loc option, place x,y tuple inside [ ].
 	# Can also use special options here: http://matplotlib.sourceforge.net/users/legend_guide.html
 

@@ -10,9 +10,9 @@ import netCDF4
 import numpy as np
 
 from comp_statist_indices import compute_corr
+from comp_statist_indices import compute_r2
 from comp_statist_indices import compute_rmse
 from comp_statist_indices import compute_mae
-from comp_statist_indices import compute_r2
 
 def import_cmip5(model):
 	
