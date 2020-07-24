@@ -79,7 +79,7 @@ class TaylorDiagram(object):
         ax.axis["top"].label.set_text(u'Correlation')
 
         ax.axis["left"].set_axis_direction("bottom")  # "X axis"
-        ax.axis["left"].label.set_text(u'                Standard deviation')
+        ax.axis["left"].label.set_text(u'SD')
         
         ax.axis["right"].set_axis_direction("top")    # "Y-axis"
         ax.axis["right"].toggle(ticklabels=True)
@@ -406,7 +406,7 @@ if __name__=='__main__':
 				 PRE2='B)',
 				 TMP2='E)',
 				 PRE3='C)',
-				 TMP3='F')  
+				 TMP3='F)')  
 				 
 	# Compute stddev and correlation coefficient of models
 	# Sample std, rho: Be sure to check order and that correct numbers are placed!
@@ -605,15 +605,15 @@ if __name__=='__main__':
 	# significance levels respectively. Set these by eyeball using the
 	# standard deviation x and y axis.
 
-	#~ x95 = [0.01, 0.55] # For Tair, this is for 95th level (r = 0.195)
-	#~ y95 = [0.0, 8.45]
-	#~ x99 = [0.01, 0.95] # For Tair, this is for 99th level (r = 0.254)
-	#~ y99 = [0.0, 8.45]
+	x95 = [0.01, 0.55] # For Tair, this is for 95th level (r = 0.195)
+	y95 = [0.0, 6.45]
+	x99 = [0.01, 0.95] # For Tair, this is for 99th level (r = 0.254)
+	y99 = [0.0, 6.45]
 
-	x95 = [0.05, 10.9] # For Prcp, this is for 95th level (r = 0.195)
-	y95 = [0.0, 80.0]
-	x99 = [0.05, 10.0] # For Prcp, this is for 99th level (r = 0.254)
-	y99 = [0.0, 80.0]
+	#~ x95 = [0.05, 10.9] # For Prcp, this is for 95th level (r = 0.195)
+	#~ y95 = [0.0, 80.0]
+	#~ x99 = [0.05, 10.0] # For Prcp, this is for 99th level (r = 0.254)
+	#~ y99 = [0.0, 80.0]
 	
 	rects = dict(PRE1=321,
 				 TMP1=322,
@@ -623,7 +623,7 @@ if __name__=='__main__':
 				 TMP3=326)
 
 	# Plot model end obs data taylor diagram 			 
-	fig = plt.figure(figsize=(10, 10))
+	fig = plt.figure(figsize=(8, 9))
 	
 	for var in ['PRE1', 'TMP1', 'PRE2', 'TMP2', 'PRE3', 'TMP3']:
 
@@ -638,15 +638,16 @@ if __name__=='__main__':
 						   marker='$%d$' % (i+1), ms=10, ls='',
 						   mfc='k', mec='k', # Colors
 						   label=name)
-			plt.text(1.5, 5, text1[var])
+			plt.text(-0.95, 7, text1[var], fontweight='bold')
+			plt.text(3.2, 4., 'RSM', fontweight='bold', color='0.6')
 
 		# Add RMS contours, and label them
 		contours = dia.add_contours(colors='0.5')
 		plt.clabel(contours, inline=2, fontsize=10, fmt='%.1f')
 
 		# Tricky: ax is the polar ax (used for plots), _ax is the container (used for layout)
-		dia.add_grid()                                  
-		dia._ax.axis[:].major_ticks.set_tick_out(True) 
+		#~ dia.add_grid()                                  
+		#~ dia._ax.axis[:].major_ticks.set_tick_out(True) 
 
 	# Add a figure legend and title. For loc option, place x,y tuple inside [ ].
 	# Can also use special options here: http://matplotlib.sourceforge.net/users/legend_guide.html
@@ -654,7 +655,7 @@ if __name__=='__main__':
 	# Add a figure legend
 	fig.legend(dia.samplePoints, 
 			   [ p.get_label() for p in dia.samplePoints ], 
-			   prop=dict(size=10), numpoints=1, loc=(0.75, 0.15))
+			   prop=dict(size=10), numpoints=1, loc=(0.73, 0.10))
 
 	plt.subplots_adjust(left=0.10, bottom=0.10, right=0.70, top=0.90, wspace=0.25, hspace=0.20)
     
