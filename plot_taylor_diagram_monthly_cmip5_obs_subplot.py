@@ -23,7 +23,7 @@ class TaylorDiagram(object):
     theta=arccos(correlation).
     """
 
-    def __init__(self, refstd, fig=None, rect=336, label='_', srange=(0, 1.5), extend=False):
+    def __init__(self, refstd, fig=None, rect=336, label='_', srange=(0., 6.5), extend=False):
         """
         Set up Taylor diagram axes, i.e. single quadrant polar
         plot, using `mpl_toolkits.axisartist.floating_axes`.
@@ -58,10 +58,13 @@ class TaylorDiagram(object):
         self.smin = srange[0] * self.refstd
         self.smax = srange[1] * self.refstd
 
-        ghelper = FA.GridHelperCurveLinear(
-            tr, extremes=(0, self.tmax, self.smin, self.smax),
-            grid_locator1=gl1, tick_formatter1=tf1)
-
+        ghelper = FA.GridHelperCurveLinear(tr,
+                                           extremes=(0,self.tmax, # 1st quadrant
+                                                     self.smin,self.smax),
+                                           grid_locator1=gl1,
+                                           tick_formatter1=tf1,
+                                           )
+		
         if fig is None:
             fig = plt.figure()
 
@@ -76,11 +79,12 @@ class TaylorDiagram(object):
         ax.axis["top"].label.set_text(u'Correlation')
 
         ax.axis["left"].set_axis_direction("bottom")  # "X axis"
-        ax.axis["left"].label.set_text(u'SD')
+        ax.axis["left"].label.set_text(u'                Standard deviation')
         
         ax.axis["right"].set_axis_direction("top")    # "Y-axis"
         ax.axis["right"].toggle(ticklabels=True)
-        ax.axis["right"].major_ticklabels.set_axis_direction("bottom" if extend else "left")
+        ax.axis["right"].major_ticklabels.set_axis_direction(
+			"bottom" if extend else "left")
 
         if self.smin:
             ax.axis["bottom"].toggle(ticklabels=False, label=False)
@@ -108,7 +112,7 @@ class TaylorDiagram(object):
 
         l, = self.ax.plot(np.arccos(corrcoef), stddev, *args, **kwargs)  # (theta, radius)
         self.samplePoints.append(l)
-        
+   
         return l
         
 
@@ -124,8 +128,6 @@ class TaylorDiagram(object):
         """
         
         rs, ts = np.meshgrid(np.linspace(self.smin, self.smax), np.linspace(0, self.tmax))
-        
-        # Compute centered RMS difference
         rms = np.sqrt(self.refstd**2 + rs**2 - 2*self.refstd*rs*np.cos(ts))
         contours = self.ax.contour(ts, rs, rms, levels, **kwargs)
         
@@ -390,10 +392,22 @@ if __name__=='__main__':
 	tmp_neb_obs  = import_obs_clim(u'tmp', u'neb', u'cru_ts4.02')
 	pre_mato_obs  = import_obs_clim(u'pre', u'matopiba', u'cru_ts4.02')
 	tmp_mato_obs  = import_obs_clim(u'tmp', u'matopiba', u'cru_ts4.02')
+	
+	# Reference database standard desviation
+	stdrefs = dict(PRE1=1,
+				 TMP1=1,
+				 PRE2=1,
+				 TMP2=1,
+				 PRE3=1,
+				 TMP3=1)       
 
-    # Reference database standard desviation		   
-	stdrefs = 1
-
+	text1 = dict(PRE1='A)',
+				 TMP1='D)',
+				 PRE2='B)',
+				 TMP2='E)',
+				 PRE3='C)',
+				 TMP3='F')  
+				 
 	# Compute stddev and correlation coefficient of models
 	# Sample std, rho: Be sure to check order and that correct numbers are placed!
 	samples = dict(PRE1=[[pre_amz_gcm1.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm1)[0,1], 'BCC-CSM1.1'],
@@ -592,9 +606,9 @@ if __name__=='__main__':
 	# standard deviation x and y axis.
 
 	#~ x95 = [0.01, 0.55] # For Tair, this is for 95th level (r = 0.195)
-	#~ y95 = [0.0, 10.45]
+	#~ y95 = [0.0, 8.45]
 	#~ x99 = [0.01, 0.95] # For Tair, this is for 99th level (r = 0.254)
-	#~ y99 = [0.0, 10.45]
+	#~ y99 = [0.0, 8.45]
 
 	x95 = [0.05, 10.9] # For Prcp, this is for 95th level (r = 0.195)
 	y95 = [0.0, 80.0]
@@ -609,12 +623,11 @@ if __name__=='__main__':
 				 TMP3=326)
 
 	# Plot model end obs data taylor diagram 			 
-	fig = plt.figure(figsize=(6, 8))
-	
+	fig = plt.figure(figsize=(10, 10))
 	
 	for var in ['PRE1', 'TMP1', 'PRE2', 'TMP2', 'PRE3', 'TMP3']:
 
-		dia = TaylorDiagram(stdrefs, fig=fig, rect=rects[var], label='Reference', extend=False)
+		dia = TaylorDiagram(stdrefs[var], fig=fig, rect=rects[var], label='Reference', srange=(0., 6.5), extend=False)
 		dia.samplePoints[0].set_color('r')
 		dia.ax.plot(x95,y95,color='blue')
 		dia.ax.plot(x99,y99,color='blue')
@@ -622,17 +635,18 @@ if __name__=='__main__':
 		# Add samples to Taylor diagram
 		for i,(stddev,corrcoef,name) in enumerate(samples[var]):
 			dia.add_sample(stddev, corrcoef,
-						   marker='$%d$' % (i+1), ms=8, ls='',
+						   marker='$%d$' % (i+1), ms=10, ls='',
 						   mfc='k', mec='k', # Colors
 						   label=name)
+			plt.text(1.5, 5, text1[var])
 
 		# Add RMS contours, and label them
-		contours = dia.add_contours(levels=5, colors='0.5') 
-		dia.ax.clabel(contours, inline=1, fontsize=8, fmt='%.1f')
+		contours = dia.add_contours(colors='0.5')
+		plt.clabel(contours, inline=2, fontsize=10, fmt='%.1f')
 
 		# Tricky: ax is the polar ax (used for plots), _ax is the container (used for layout)
-		#~ dia.add_grid()                                  # Add grid
-		#~ dia._ax.axis[:].major_ticks.set_tick_out(True) 
+		dia.add_grid()                                  
+		dia._ax.axis[:].major_ticks.set_tick_out(True) 
 
 	# Add a figure legend and title. For loc option, place x,y tuple inside [ ].
 	# Can also use special options here: http://matplotlib.sourceforge.net/users/legend_guide.html
@@ -640,7 +654,7 @@ if __name__=='__main__':
 	# Add a figure legend
 	fig.legend(dia.samplePoints, 
 			   [ p.get_label() for p in dia.samplePoints ], 
-			   numpoints=1, prop=dict(size=8), loc='right')
+			   prop=dict(size=10), numpoints=1, loc=(0.75, 0.15))
 
 	plt.subplots_adjust(left=0.10, bottom=0.10, right=0.70, top=0.90, wspace=0.25, hspace=0.20)
     
