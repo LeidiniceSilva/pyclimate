@@ -13,12 +13,11 @@ import calendar
 cal = calendar.Calendar( )
 apiclient = cdsapi.Client( )
 
-ys = 1979
-ye = 1979
+ys = 2017
+ye = 2017
 
-vname = { 'geopotential' : 'geop',
+vname = { 'relative_humidity' : 'rhum',
           'specific_humidity' : 'qhum',
-          'temperature' : 'tatm',
           'u_component_of_wind' : 'uwnd',
           'v_component_of_wind' : 'vwnd' }
 
@@ -28,14 +27,14 @@ for year in range(ys,ye+1):
         os.mkdir(yy)
     except OSError:
         pass
-    for month in range(1,13):
+    for month in range(4,6):
         mm = '%02d' % month
         dlist = [ ]
         for d in cal.itermonthdays(year, month):
             if d > 0:
                 dlist.append('%02d' % d)
-        for var in ( 'geopotential','specific_humidity','temperature',
-            'u_component_of_wind','v_component_of_wind' ):
+        for var in ( 'relative_humidity','specific_humidity','u_component_of_wind',
+            'v_component_of_wind' ):
             netcdf = os.path.join(str(year),(vname[var]+"_"+yy+'_'+mm+'.nc'))
             if not os.path.isfile(netcdf):
                 apiclient.retrieve(
