@@ -8,6 +8,7 @@ __description__ = "This script compute criterion TOPSIS from CMIP5 models end OB
 import os
 import netCDF4
 import numpy as np
+import scipy.stats as st
 
 from comp_statist_indices import compute_corr
 from comp_statist_indices import compute_r2
@@ -31,6 +32,7 @@ def import_cmip5(model):
 	value = var[:][:,:,:]
 
 	month_sim = np.nanmean(np.nanmean(value, axis=1), axis=1)
+
 	
 	return month_sim
 
@@ -56,8 +58,8 @@ def import_obs(database):
 	
 
 models = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCESS-1','CSIRO-ACCESS-3','CSIRO-MK36',
-'FIO-ESM','GISS-E2-H-CC','GISS-E2-H','GISS-E2-R','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','INMCM4','IPSL-CM5A-LR',
-'IPSL-CM5A-MR','IPSL-CM5B-LR','LASG-FGOALS-G2','LASG-FGOALS-S2','MIROC5','MIROC-ESM-CHEM','MIROC-ESM','MPI-ESM-LR',
+'FIO-ESM','GISS-E2-H-CC','GISS-E2-H','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','INMCM4','IPSL-CM5A-LR',
+'IPSL-CM5A-MR','LASG-FGOALS-G2','LASG-FGOALS-S2','MIROC5','MIROC-ESM-CHEM','MIROC-ESM','MPI-ESM-LR',
 'MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-ME','NorESM1-M','ensmean_cmip5']
 
 metrics_gcm = []
@@ -74,10 +76,10 @@ for mdl in models:
 	r2 = compute_r2(month_gcm, month_cru)
 	rmse = compute_rmse(month_gcm, month_cru)
 	mae = compute_mae(month_gcm, month_cru)
-	
+
 	metrics = [mdl, round((corr),3), round((r2),3), round((rmse),3), round((mae),3)]
 	metrics_gcm.append(metrics)
 
-print(metrics_gcm)
+print(metrics_gcm)	
 exit()
 

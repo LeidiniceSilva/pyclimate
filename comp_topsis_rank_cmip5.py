@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 
 # Import data Prec and Temp(AMZ - NEB - MATOPIBA)
-data = pd.read_csv('/home/nice/Documents/ufrn/phd_project/datas/cmip5/topsis/temp_matopiba_cmip5.csv')
+data = pd.read_csv('/home/nice/temp_matopiba_cmip5.csv')
 data = data.values[:,1:]
 
 w=np.array([0.25, 0.25, 0.25, 0.25])
@@ -66,7 +66,6 @@ list2=np.squeeze(list1)
 list3=sorted(list2)
 list4=sorted(list3, reverse=True)
 print(list4)
-exit()
 
 order = performance.argsort(axis=0)
 
@@ -77,7 +76,7 @@ ranks=ranks.reshape(ranks.shape[0],)
 
 # Print rank table
 print('Rank', sep='\t')
-for idx,x in enumerate(ranks):
+for idx,x in enumerate(ranks, ):
 	print(ranks.shape[0]-(x), sep='\t', end='\n')
 	
 #~ # Print rank table

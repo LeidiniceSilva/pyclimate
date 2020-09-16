@@ -58,6 +58,7 @@ def compute_r2(model, obs):
 	r2 = corr ** 2
 
 	return r2
+
     
 def compute_mae(model, obs):
 
@@ -70,7 +71,7 @@ def compute_mae(model, obs):
 
     check_dims(model, obs)
     model, obs = filter_nan(model, obs)
-    mae = np.mean(np.abs(model, obs))
+    mae = np.mean(np.abs(model - obs))
     
     return mae
     

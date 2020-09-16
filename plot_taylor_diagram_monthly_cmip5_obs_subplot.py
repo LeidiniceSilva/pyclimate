@@ -162,6 +162,7 @@ def import_obs_clim(param, area, database):
 	value = var[:][:,:,:]
 	
 	obs_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
+	
 
 	return obs_data	
 
@@ -415,8 +416,8 @@ if __name__=='__main__':
                        [pre_amz_gcm3.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm3)[0,1], 'BNU-ESM'],
                        [pre_amz_gcm4.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm4)[0,1], 'CanESM2'],
                        [pre_amz_gcm5.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm5)[0,1], 'CNRM-CM5'],
-                       [pre_amz_gcm6.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm6)[0,1], 'CSIRO-ACCESS-1'],
-                       [pre_amz_gcm7.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [pre_amz_gcm6.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm6)[0,1], 'CSIRO-ACCESS1.0'],
+                       [pre_amz_gcm7.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm7)[0,1], 'CSIRO-ACCESS1.3'],
                        [pre_amz_gcm8.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm8)[0,1], 'CSIRO-MK36'],
                        [pre_amz_gcm9.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm9)[0,1], 'FIO-ESM'],
                        [pre_amz_gcm10.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm10)[0,1], 'GISS-E2-H'],
@@ -446,8 +447,8 @@ if __name__=='__main__':
                        [tmp_amz_gcm3.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm3)[0,1], 'BNU-ESM'],
                        [tmp_amz_gcm4.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm4)[0,1], 'CanESM2'],
                        [tmp_amz_gcm5.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm5)[0,1], 'CNRM-CM5'],
-                       [tmp_amz_gcm6.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm6)[0,1], 'CSIRO-ACCESS-1'],
-                       [tmp_amz_gcm7.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [tmp_amz_gcm6.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm6)[0,1], 'CSIRO-ACCESS1.0'],
+                       [tmp_amz_gcm7.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm7)[0,1], 'CSIRO-ACCESS1.3'],
                        [tmp_amz_gcm8.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm8)[0,1], 'CSIRO-MK36'],
                        [tmp_amz_gcm9.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm9)[0,1], 'FIO-ESM'],
                        [tmp_amz_gcm10.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm10)[0,1], 'GISS-E2-H'],
@@ -477,8 +478,8 @@ if __name__=='__main__':
                        [pre_neb_gcm3.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm3)[0,1], 'BNU-ESM'],
                        [pre_neb_gcm4.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm4)[0,1], 'CanESM2'],
                        [pre_neb_gcm5.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm5)[0,1], 'CNRM-CM5'],
-                       [pre_neb_gcm6.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm6)[0,1], 'CSIRO-ACCESS-1'],
-                       [pre_neb_gcm7.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [pre_neb_gcm6.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm6)[0,1], 'CSIRO-ACCESS1.0'],
+                       [pre_neb_gcm7.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm7)[0,1], 'CSIRO-ACCESS1.3'],
                        [pre_neb_gcm8.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm8)[0,1], 'CSIRO-MK36'],
                        [pre_neb_gcm9.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm9)[0,1], 'FIO-ESM'],
                        [pre_neb_gcm10.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm10)[0,1], 'GISS-E2-H'],
@@ -508,8 +509,8 @@ if __name__=='__main__':
                        [tmp_neb_gcm3.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm3)[0,1], 'BNU-ESM'],
                        [tmp_neb_gcm4.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm4)[0,1], 'CanESM2'],
                        [tmp_neb_gcm5.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm5)[0,1], 'CNRM-CM5'],
-                       [tmp_neb_gcm6.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm6)[0,1], 'CSIRO-ACCESS-1'],
-                       [tmp_neb_gcm7.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [tmp_neb_gcm6.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm6)[0,1], 'CSIRO-ACCESS1.0'],
+                       [tmp_neb_gcm7.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm7)[0,1], 'CSIRO-ACCESS1.3'],
                        [tmp_neb_gcm8.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm8)[0,1], 'CSIRO-MK36'],
                        [tmp_neb_gcm9.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm9)[0,1], 'FIO-ESM'],
                        [tmp_neb_gcm10.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm10)[0,1], 'GISS-E2-H'],
@@ -539,8 +540,8 @@ if __name__=='__main__':
                        [pre_mato_gcm3.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm3)[0,1], 'BNU-ESM'],
                        [pre_mato_gcm4.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm4)[0,1], 'CanESM2'],
                        [pre_mato_gcm5.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm5)[0,1], 'CNRM-CM5'],
-                       [pre_mato_gcm6.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm6)[0,1], 'CSIRO-ACCESS-1'],
-                       [pre_mato_gcm7.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [pre_mato_gcm6.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm6)[0,1], 'CSIRO-ACCESS1.0'],
+                       [pre_mato_gcm7.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm7)[0,1], 'CSIRO-ACCESS1.3'],
                        [pre_mato_gcm8.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm8)[0,1], 'CSIRO-MK36'],
                        [pre_mato_gcm9.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm9)[0,1], 'FIO-ESM'],
                        [pre_mato_gcm10.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm10)[0,1], 'GISS-E2-H'],
@@ -570,8 +571,8 @@ if __name__=='__main__':
                        [tmp_mato_gcm3.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm3)[0,1], 'BNU-ESM'],
                        [tmp_mato_gcm4.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm4)[0,1], 'CanESM2'],
                        [tmp_mato_gcm5.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm5)[0,1], 'CNRM-CM5'],
-                       [tmp_mato_gcm6.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm6)[0,1], 'CSIRO-ACCESS-1'],
-                       [tmp_mato_gcm7.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm7)[0,1], 'CSIRO-ACCESS-3'],
+                       [tmp_mato_gcm6.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm6)[0,1], 'CSIRO-ACCESS1.0'],
+                       [tmp_mato_gcm7.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm7)[0,1], 'CSIRO-ACCESS1.3'],
                        [tmp_mato_gcm8.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm8)[0,1], 'CSIRO-MK36'],
                        [tmp_mato_gcm9.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm9)[0,1], 'FIO-ESM'],
                        [tmp_mato_gcm10.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm10)[0,1], 'GISS-E2-H'],
@@ -596,7 +597,7 @@ if __name__=='__main__':
                        [tmp_mato_gcm29.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm29)[0,1], 'NorESM1-M'],
                        [tmp_mato_gcm30.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm30)[0,1], 'NorESM1-ME'],
                        [tmp_mato_gcm31.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm31)[0,1], 'ensmean_cmip5']])
-                       
+             
 	# Colormap (see http://www.scipy.org/Cookbook/Matplotlib/Show_colormaps)
 
 	# Here set placement of the points marking 95th and 99th significance
@@ -629,8 +630,8 @@ if __name__=='__main__':
 
 		dia = TaylorDiagram(stdrefs[var], fig=fig, rect=rects[var], label='Reference', srange=(0., 6.5), extend=False)
 		dia.samplePoints[0].set_color('r')
-		dia.ax.plot(x95,y95,color='blue')
-		dia.ax.plot(x99,y99,color='blue')
+		dia.ax.plot(x95,y95,color='black')
+		dia.ax.plot(x99,y99,color='black')
 		
 		colors = plt.matplotlib.cm.Set1(np.linspace(0, 1, len(samples['PRE1'])))
 		

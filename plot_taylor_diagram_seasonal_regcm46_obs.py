@@ -206,18 +206,18 @@ if __name__=='__main__':
 	stdrefs = nam_obs_djf.std(ddof=1)        
 	
 	# Sample std, rho: Be sure to check order and that correct numbers are placed!
-	samples = dict(DJF=[[nam_exp1_djf.std(ddof=1), st.pearsonr(nam_exp1_djf, nam_obs_djf)[1], 'Exp1_NAMZ'],
-						[sam_exp1_djf.std(ddof=1), st.pearsonr(sam_exp1_djf, sam_obs_djf)[1], 'Exp1_SAMZ'],
-						[neb_exp1_djf.std(ddof=1), st.pearsonr(neb_exp1_djf, neb_obs_djf)[1], 'Exp1_NEB'],
-						[nam_exp2_djf.std(ddof=1), st.pearsonr(nam_exp2_djf, nam_obs_djf)[1], 'Exp2_NAMZ'],
-						[sam_exp2_djf.std(ddof=1), st.pearsonr(sam_exp2_djf, sam_obs_djf)[1], 'Exp2_SAMZ'],
-						[neb_exp2_djf.std(ddof=1), st.pearsonr(neb_exp2_djf, neb_obs_djf)[1], 'Exp2_NEB']],
-					JJA=[[nam_exp1_jja.std(ddof=1), st.pearsonr(nam_exp1_jja, nam_obs_jja)[1], 'Exp1_NAMZ'],
-						[sam_exp1_jja.std(ddof=1), st.pearsonr(sam_exp1_jja, sam_obs_jja)[1], 'Exp1_SAMZ'],
-						[neb_exp1_jja.std(ddof=1), st.pearsonr(neb_exp1_jja, neb_obs_jja)[1], 'Exp1_NEB'],
-						[nam_exp2_jja.std(ddof=1), st.pearsonr(nam_exp2_jja, nam_obs_jja)[1], 'Exp2_NAMZ'],
-						[sam_exp2_jja.std(ddof=1), st.pearsonr(sam_exp2_jja, sam_obs_jja)[1], 'Exp2_SAMZ'],
-						[neb_exp2_jja.std(ddof=1), st.pearsonr(neb_exp2_jja, neb_obs_jja)[1], 'Exp2_NEB']])	
+	samples = dict(DJF=[[nam_exp1_djf.std(ddof=1), np.corrcoef(nam_exp1_djf, nam_obs_djf)[0,1], 'Exp1_NAMZ'],
+						[sam_exp1_djf.std(ddof=1), np.corrcoef(sam_exp1_djf, sam_obs_djf)[0,1], 'Exp1_SAMZ'],
+						[neb_exp1_djf.std(ddof=1), np.corrcoef(neb_exp1_djf, neb_obs_djf)[0,1], 'Exp1_NEB'],
+						[nam_exp2_djf.std(ddof=1), np.corrcoefr(nam_exp2_djf, nam_obs_djf)[0,1], 'Exp2_NAMZ'],
+						[sam_exp2_djf.std(ddof=1), np.corrcoef(sam_exp2_djf, sam_obs_djf)[0,1], 'Exp2_SAMZ'],
+						[neb_exp2_djf.std(ddof=1), np.corrcoef(neb_exp2_djf, neb_obs_djf)[0,1], 'Exp2_NEB']],
+					JJA=[[nam_exp1_jja.std(ddof=1), np.corrcoef(nam_exp1_jja, nam_obs_jja)[0,1], 'Exp1_NAMZ'],
+						[sam_exp1_jja.std(ddof=1), np.corrcoef(sam_exp1_jja, sam_obs_jja)[0,1], 'Exp1_SAMZ'],
+						[neb_exp1_jja.std(ddof=1), np.corrcoef(neb_exp1_jja, neb_obs_jja)[0,1], 'Exp1_NEB'],
+						[nam_exp2_jja.std(ddof=1), np.corrcoef(nam_exp2_jja, nam_obs_jja)[0,1], 'Exp2_NAMZ'],
+						[sam_exp2_jja.std(ddof=1), np.corrcoef(sam_exp2_jja, sam_obs_jja)[0,1], 'Exp2_SAMZ'],
+						[neb_exp2_jja.std(ddof=1), np.corrcoef(neb_exp2_jja, neb_obs_jja)[0,1], 'Exp2_NEB']])	
 				 			   
 	# Colormap (see http://www.scipy.org/Cookbook/Matplotlib/Show_colormaps)
 
