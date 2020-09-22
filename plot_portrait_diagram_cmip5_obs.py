@@ -119,7 +119,7 @@ areas = ['amz','neb','matopiba']
 models = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCESS-1','CSIRO-ACCESS-3','CSIRO-MK36',
 'FIO-ESM','GISS-E2-H-CC','GISS-E2-H','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','INMCM4','IPSL-CM5A-LR',
 'IPSL-CM5A-MR','LASG-FGOALS-G2','LASG-FGOALS-S2','MIROC5','MIROC-ESM-CHEM','MIROC-ESM','MPI-ESM-LR',
-'MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-ME','NorESM1-M','ensmean_cmip5']
+'MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-M','NorESM1-ME','ensmean_cmip5']
 
 djfap = []
 mamap = []
@@ -215,9 +215,9 @@ for model in models:
 	sonmp.append(bias_son_matopiba_pr)
 	annualmp.append(bias_anual_matopiba_pr)
 	
-	amz_pr = np.array([djfap, mamap, jjaap, sonap, annualap])
-	neb_pr = np.array([djfnp, mamnp, jjanp, sonnp, annualnp])
-	matopiba_pr = np.array([djfmp, mammp, jjamp, sonmp, annualmp])
+	amz_pr = np.array([sonap, jjaap, mamap, djfap, annualap])
+	neb_pr = np.array([sonnp, jjanp, mamnp, djfnp, annualnp])
+	matopiba_pr = np.array([sonmp, jjamp, mammp, djfmp, annualmp])
 	
 	# Compute bias tas
 	bias_djf_amz_tas = compute_bias(djf_sim_amz_tas, djf_cru_amz_tmp)
@@ -256,19 +256,19 @@ for model in models:
 	sonmt.append(bias_son_matopiba_tas)
 	annualmt.append(bias_anual_matopiba_tas)
 	
-	amz_tas = np.array([djfat, mamat, jjaat, sonat, annualat])
-	neb_tas = np.array([djfnt, mamnt, jjant, sonnt, annualnt])
-	matopiba_tas = np.array([djfmt, mammt, jjamt, sonmt, annualmt])
+	amz_tas = np.array([sonat, jjaat, mamat, djfat, annualat])
+	neb_tas = np.array([sonnt, jjant, mamnt, djfnt, annualnt])
+	matopiba_tas = np.array([sonmt, jjamt, mammt, djfmt, annualmt])
 
 
 # Plot model end obs data climatology
 fig, axes = plt.subplots(nrows=3, ncols=2, constrained_layout=True, figsize=(10, 8))
-norm = colors.BoundaryNorm(boundaries=np.linspace(-8, 8, 10), ncolors=256)
+norm = colors.BoundaryNorm(boundaries=np.arange(-8, 9, 1), ncolors=256)
 
-xlabels = [u'BCC-CSM1.1',u'',u'BNU-ESM',u'',u'CNRM-CM5',u'',u'CSIRO-ACCESS-3',u'',u'FIO-ESM',u'',
+xlabels = [u'BCC-CSM1.1',u'',u'BNU-ESM',u'',u'CNRM-CM5',u'',u'CSIRO-ACCESS1.3',u'',u'FIO-ESM',u'',
 u'GISS-E2-H',u'',u'HadGEM2-CC',u'',u'INMCM4',u'',u'IPSL-CM5A-MR',u'',u'LASG-FGOALS-S2',u'',u'MIROC-ESM-CHEM',
-u'',u'MPI-ESM-LR',u'',u'MRI-CGCM3',u'',u'NCAR-CESM1-BGC',u'',u'NorESM1-ME',u'',u'ensmean_cmip5']
-ylabels = [u'DJF', u'MAM', u'JJA', u'SON', u'Annual']
+u'',u'MPI-ESM-LR',u'',u'MRI-CGCM3',u'',u'NCAR-CESM1-BGC',u'',u'NorESM1-M',u'',u'ensmean_cmip5']
+ylabels = [u'SON', u'JJA', u'MAM', u'DJF', u'Annual']
 
 # First column heatmaps with same colormap
 pcm1 = axes[0, 0].pcolormesh(amz_pr, edgecolors ='k', linewidths = 1, cmap='BrBG')
@@ -279,34 +279,39 @@ axes[0, 0].set_yticklabels(ylabels)
 plt.setp(axes[0, 0].get_xticklabels(),visible=False)
 
 pcm2 = axes[1, 0].pcolormesh(neb_pr, edgecolors ='k', linewidths = 1, norm=norm, cmap='BrBG')
-axes[1, 0].set_title(u'C)', loc='left', fontweight='bold')
+axes[1, 0].set_title(u'B)', loc='left', fontweight='bold')
 axes[1, 0].set_xticks(np.arange(neb_pr.shape[1]) + 0.5)
 axes[1, 0].set_yticks(np.arange(neb_pr.shape[0]) + 0.5)
 axes[1, 0].set_yticklabels(ylabels)
 plt.setp(axes[1, 0].get_xticklabels(),visible=False)
 
 pcm3 = axes[2, 0].pcolormesh(matopiba_pr, edgecolors ='k', linewidths = 1, cmap='BrBG')
-axes[2, 0].set_title(u'E)', loc='left', fontweight='bold')
+axes[2, 0].set_title(u'C)', loc='left', fontweight='bold')
 axes[2, 0].set_xticks(np.arange(matopiba_pr.shape[1]) + 0.5)
 axes[2, 0].set_yticks(np.arange(matopiba_pr.shape[0]) + 0.5)
 axes[2, 0].set_xticklabels(xlabels, rotation=90)
 axes[2, 0].set_yticklabels(ylabels)
 clb=fig.colorbar(pcm2, ax=axes[:, 0], extend='both', shrink=0.7)
+clb.set_label('Precipitation (mm d⁻¹)', rotation=90)
+clb.ax.yaxis.set_label_position('left')
 
 # Second column heatmaps with same colormap
 pcm4 = axes[0, 1].pcolormesh(amz_tas, edgecolors ='k', linewidths = 1, cmap='coolwarm')
-axes[0, 1].set_title('B)', loc='left', fontweight='bold')
+axes[0, 1].set_title('D)', loc='left', fontweight='bold')
 axes[0, 1].set_xticks(np.arange(amz_tas.shape[1]) + 0.5)
 axes[0, 1].set_yticks(np.arange(amz_tas.shape[0]) + 0.5)
 axes[0, 1].set_yticklabels(ylabels)
 plt.setp(axes[0, 1].get_xticklabels(),visible=False)
 
 pcm5 = axes[1, 1].pcolormesh(neb_tas, edgecolors ='k', linewidths = 1, norm=norm, cmap='coolwarm')
-axes[1, 1].set_title('D)', loc='left', fontweight='bold')
+axes[1, 1].set_title('E)', loc='left', fontweight='bold')
 axes[1, 1].set_xticks(np.arange(neb_tas.shape[1]) + 0.5)
 axes[1, 1].set_yticks(np.arange(neb_tas.shape[0]) + 0.5)
 axes[1, 1].set_yticklabels(ylabels)
 plt.setp(axes[1, 1].get_xticklabels(),visible=False)
+clb=fig.colorbar(pcm5, ax=axes[:, 1], extend='both', shrink=0.7)
+clb.set_label('Temperature (°C)', rotation=90)
+clb.ax.yaxis.set_label_position('left')
 
 pcm6 = axes[2, 1].pcolormesh(matopiba_tas, edgecolors ='k', linewidths = 1, cmap='coolwarm')
 axes[2, 1].set_title('F)', loc='left', fontweight='bold')
@@ -315,8 +320,6 @@ axes[2, 1].set_yticks(np.arange(matopiba_tas.shape[0]) + 0.5)
 axes[2, 1].set_xticklabels(xlabels, rotation=90)
 axes[2, 1].set_yticklabels(ylabels)
 
-clb=fig.colorbar(pcm5, ax=axes[:, 1], extend='both', shrink=0.7)
-clb.ax.set_title('(°C)')
 
 # Save figure
 path_out = '/home/nice'

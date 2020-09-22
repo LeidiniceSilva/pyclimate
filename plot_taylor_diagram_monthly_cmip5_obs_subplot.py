@@ -633,14 +633,12 @@ if __name__=='__main__':
 		dia.ax.plot(x95,y95,color='black')
 		dia.ax.plot(x99,y99,color='black')
 		
-		colors = plt.matplotlib.cm.Set1(np.linspace(0, 1, len(samples['PRE1'])))
+		#~ colors = plt.matplotlib.cm.tab20(np.linspace(0, 1, len(samples['PRE1'])))
 		
 		# Add samples to Taylor diagram
 		for i, (stddev,corrcoef,name) in enumerate(samples[var]):
 			dia.add_sample(stddev, corrcoef,
-						   marker='$%d$' % (i+1), ms=10, ls='', 
-						   mfc=colors[i], mec=colors[i],
-						   label=name)
+						   marker='$%d$' % (i+1), ms=10, ls='', label=name)
 						   
 			plt.text(-0.95, 7., text1[var], fontweight='bold')
 			plt.text(3.2, 4., 'RSM', fontweight='bold', color='0.6')

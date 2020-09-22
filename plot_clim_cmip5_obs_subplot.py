@@ -398,7 +398,7 @@ time, pre_neb_gcm28, time, pre_neb_gcm29, time, pre_neb_gcm30, time, pre_neb_gcm
 time, pre_neb_obs)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
 plt.yticks(np.arange(0, 21, 3))
-plt.ylabel(u'Rainfall (mm d⁻¹)')
+plt.ylabel(u'Precipitation (mm d⁻¹)')
 plt.title(u'B)', loc='left', fontweight='bold')
 ax3.xaxis.grid(True, which='major', linestyle='--')
 ax3.yaxis.grid(True, which='major', linestyle='--')
@@ -589,11 +589,9 @@ plt.setp(l32, color='black')
 legend = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCESS1.0','CSIRO-ACCESS1.3',
 'CSIRO-MK36','FIO-ESM','GISS-E2-H','GISS-E2-H-CC','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','INMCM4',
 'IPSL-CM5A-LR','IPSL-CM5A-MR','LASG-FGOALS-G2','LASG-FGOALS-S2','MIROC5','MIROC-ESM','MIROC-ESM-CHEM',
-'MPI-ESM-LR','MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-ME',
-'NorESM1-M','ensmean_cmip5','CRU']
+'MPI-ESM-LR','MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-M',
+'NorESM1-ME','ensmean_cmip5','CRU']
 plt.legend(plt_clim6, legend, loc=(1.019, -0.19))
-#~ plt.legend(plt_clim6, legend, loc=(-0.5, -0.25), ncol=4)
-
 plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.20, hspace=0.35)
 
 # Save figure

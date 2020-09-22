@@ -103,7 +103,7 @@ def compute_bias(model, obs):
 
     check_dims(model, obs)
     model, obs = filter_nan(model, obs)
-    bias = np.nanmean((np.array(model) - np.array(obs)), axis=0)
+    bias = np.nanmean(np.array(model) - np.array(obs))
     
     return bias
 
