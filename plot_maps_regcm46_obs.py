@@ -95,6 +95,7 @@ def plot_maps_clim(exp1_djf, exp1_jja, exp2_djf, exp2_jja, obs_djf, obs_jja):
 	ax = fig.add_subplot(321)
 	plt.title(u'A) Reg_Exp1 DJF/2001-2010', fontsize=8, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
+	plt.text(-25, -15, u'\u25B2 \nN ', fontsize=8)
 	map, xx, yy = basemap(lat, lon)
 	plt_map = map.contourf(xx, yy, exp1_djf[0,:,:], levels=levs, latlon=True, cmap=cm.YlGnBu)
 	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
