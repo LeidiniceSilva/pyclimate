@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot climatology maps from Reg and Had models end Cru database"
+__description__ = "This script plot climatology maps from Reg and Had models end obs database"
 
 import os
 import conda
@@ -239,19 +239,6 @@ t_reg_era5 = reg_tas - era5_tas
 t_had_cru = had_tas- cru_tas
 t_had_udel = had_tas- udel_tas
 t_had_era5 = had_tas - era5_tas
-
-#~ print(reg_pre.shape)
-#~ print(had_pre.shape)
-#~ print(cru_pre.shape)
-#~ print(udel_pre.shape)
-#~ print(era5_pre.shape)
-
-#~ print(reg_tas.shape)
-#~ print(had_tas.shape)
-#~ print(cru_tas.shape)
-#~ print(udel_tas.shape)
-#~ print(era5_tas.shape)
-#~ exit()
 
 # Plot maps with the function
 plt_map = plot_maps_bias(p_reg_cru, p_reg_udel, p_reg_chirps, p_reg_era5, p_had_cru, p_had_udel, p_had_chirps, p_had_era5, t_reg_cru, t_reg_udel, t_reg_era5, t_had_cru, t_had_udel, t_had_era5)

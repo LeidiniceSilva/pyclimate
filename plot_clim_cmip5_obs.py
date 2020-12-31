@@ -21,267 +21,588 @@ from matplotlib.font_manager import FontProperties
 from comp_statist_indices import compute_corr, compute_rmse, compute_pbias
 
 
-def import_cmip5_clim(model):
-	
-	param = 'tas' # pr or tas
-	area  = 'amz' # amz or neb
-	exp   = 'historical_r1i1p1'
-	date  = '197512-200511'
+def import_cmip5_clim(param, area, model):
 
-	path  = '/home/nice/Documents/ufrn/PhD_project/datas/cmip5_hist'
-	arq   = '{0}/{1}_{2}_Amon_{3}_{4}_{5}.nc'.format(path, param, area,
-	model, exp, date)	
+	path  = '/home/nice/Documents/ufrn/phd_project/datas/cmip5/hist'
+	arq   = '{0}/{1}_{2}_Amon_{3}_historical_r1i1p1_197512-200511.nc'.format(path, param, area,	model)	
 	
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
-
 	mdl_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
 
 	mdl_clim = []
 	for mon in range(1, 12 + 1):
 		mdl = np.nanmean(mdl_data[mon::12], axis=0)
 		mdl_clim.append(mdl)
-	
 	return mdl_clim
 
 
-def import_obs_clim(database):
-	
-	param = 'tmp' # pre or tmp
-	area  = 'amz' # amz or neb
-	date  = '197512-200511'
+def import_obs_clim(param, area, database):
 
-	path  = '/home/nice/Documents/ufrn/PhD_project/datas/obs_data'
-	arq   = '{0}/{1}_{2}_{3}_obs_mon_{4}.nc'.format(path, param, area, 
-	database, date)	
+	path  = '/home/nice/Documents/ufrn/phd_project/datas/obs_data'
+	arq   = '{0}/{1}_{2}_{3}_obs_mon_197512-200511.nc'.format(path, param, area, database)	
 	
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
-
 	obs_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
 
 	obs_clim = []
-	obs_clim_p5 = []
-	obs_clim_p95 = []
-
 	for mon in range(1, 12 + 1):
-		
 		obs = np.nanmean(obs_data[mon::12], axis=0)
 		obs_clim.append(obs)
-	
-		obs_p5  = norm.ppf(0.05, loc=np.nanmean(obs_data[mon::12], axis=0), scale=np.nanstd(obs_data[mon::12], axis=0))
-		obs_clim_p5.append(obs_p5)
-		
-		obs_p95  = norm.ppf(0.95, loc=np.nanmean(obs_data[mon::12], axis=0), scale=np.nanstd(obs_data[mon::12], axis=0))
-		obs_clim_p95.append(obs_p95)
-	
-	return obs_clim, obs_clim_p5, obs_clim_p95
+	return obs_clim
 	              
-               
+
 # Import cmip5 model end obs database climatology
-model  = u'BCC-CSM1.1'
-mdl1_clim = import_cmip5_clim(model)
-		
-model  = u'BCC-CSM1.1M'
-mdl2_clim = import_cmip5_clim(model)
+pre_amz_gcm1 = import_cmip5_clim(u'pr', u'amz', u'BCC-CSM1.1')
+tmp_amz_gcm1 = import_cmip5_clim(u'tas', u'amz', u'BCC-CSM1.1')
+pre_neb_gcm1 = import_cmip5_clim(u'pr', u'neb', u'BCC-CSM1.1')
+tmp_neb_gcm1 = import_cmip5_clim(u'tas', u'neb', u'BCC-CSM1.1')
+pre_mato_gcm1 = import_cmip5_clim(u'pr', u'matopiba', u'BCC-CSM1.1')
+tmp_mato_gcm1 = import_cmip5_clim(u'tas', u'matopiba', u'BCC-CSM1.1')
 
-model  = u'CNRM-CM5'
-mdl3_clim = import_cmip5_clim(model)
+pre_amz_gcm2 = import_cmip5_clim(u'pr', u'amz', u'BCC-CSM1.1M')
+tmp_amz_gcm2 = import_cmip5_clim(u'tas', u'amz', u'BCC-CSM1.1M')
+pre_neb_gcm2 = import_cmip5_clim(u'pr', u'neb', u'BCC-CSM1.1M')
+tmp_neb_gcm2 = import_cmip5_clim(u'tas', u'neb', u'BCC-CSM1.1M')
+pre_mato_gcm2 = import_cmip5_clim(u'pr', u'matopiba', u'BCC-CSM1.1M')
+tmp_mato_gcm2 = import_cmip5_clim(u'tas', u'matopiba', u'BCC-CSM1.1M')
 
-model  = u'CSIRO-ACCESS-3'
-mdl4_clim = import_cmip5_clim(model)
+pre_amz_gcm3 = import_cmip5_clim(u'pr', u'amz', u'BNU-ESM')
+tmp_amz_gcm3 = import_cmip5_clim(u'tas', u'amz', u'BNU-ESM')
+pre_neb_gcm3 = import_cmip5_clim(u'pr', u'neb', u'BNU-ESM')
+tmp_neb_gcm3 = import_cmip5_clim(u'tas', u'neb', u'BNU-ESM')
+pre_mato_gcm3 = import_cmip5_clim(u'pr', u'matopiba', u'BNU-ESM')
+tmp_mato_gcm3 = import_cmip5_clim(u'tas', u'matopiba', u'BNU-ESM')
 
-model  = u'CSIRO-MK36'
-mdl5_clim = import_cmip5_clim(model)
+pre_amz_gcm4 = import_cmip5_clim(u'pr', u'amz', u'CanESM2')
+tmp_amz_gcm4 = import_cmip5_clim(u'tas', u'amz', u'CanESM2')
+pre_neb_gcm4 = import_cmip5_clim(u'pr', u'neb', u'CanESM2')
+tmp_neb_gcm4 = import_cmip5_clim(u'tas', u'neb', u'CanESM2')
+pre_mato_gcm4 = import_cmip5_clim(u'pr', u'matopiba', u'CanESM2')
+tmp_mato_gcm4 = import_cmip5_clim(u'tas', u'matopiba', u'CanESM2')
 
-model  = u'FIO-ESM'
-mdl6_clim = import_cmip5_clim(model)
+pre_amz_gcm5 = import_cmip5_clim(u'pr', u'amz', u'CNRM-CM5')
+tmp_amz_gcm5 = import_cmip5_clim(u'tas', u'amz', u'CNRM-CM5')
+pre_neb_gcm5 = import_cmip5_clim(u'pr', u'neb', u'CNRM-CM5')
+tmp_neb_gcm5 = import_cmip5_clim(u'tas', u'neb', u'CNRM-CM5')
+pre_mato_gcm5 = import_cmip5_clim(u'pr', u'matopiba', u'CNRM-CM5')
+tmp_mato_gcm5 = import_cmip5_clim(u'tas', u'matopiba', u'CNRM-CM5')
 
-model  = u'GISS-E2-H-CC'
-mdl7_clim = import_cmip5_clim(model)
+pre_amz_gcm6 = import_cmip5_clim(u'pr', u'amz', u'CSIRO-ACCESS-1')
+tmp_amz_gcm6 = import_cmip5_clim(u'tas', u'amz', u'CSIRO-ACCESS-1')
+pre_neb_gcm6 = import_cmip5_clim(u'pr', u'neb', u'CSIRO-ACCESS-1')
+tmp_neb_gcm6 = import_cmip5_clim(u'tas', u'neb', u'CSIRO-ACCESS-1')
+pre_mato_gcm6 = import_cmip5_clim(u'pr', u'matopiba', u'CSIRO-ACCESS-1')
+tmp_mato_gcm6 = import_cmip5_clim(u'tas', u'matopiba', u'CSIRO-ACCESS-1')
 
-model  = u'GISS-E2-H'
-mdl8_clim = import_cmip5_clim(model)
+pre_amz_gcm7 = import_cmip5_clim(u'pr', u'amz', u'CSIRO-ACCESS-3')
+tmp_amz_gcm7 = import_cmip5_clim(u'tas', u'amz', u'CSIRO-ACCESS-3')
+pre_neb_gcm7 = import_cmip5_clim(u'pr', u'neb', u'CSIRO-ACCESS-3')
+tmp_neb_gcm7 = import_cmip5_clim(u'tas', u'neb', u'CSIRO-ACCESS-3')
+pre_mato_gcm7 = import_cmip5_clim(u'pr', u'matopiba', u'CSIRO-ACCESS-3')
+tmp_mato_gcm7 = import_cmip5_clim(u'tas', u'matopiba', u'CSIRO-ACCESS-3')
 
-model  = u'GISS-E2-R'
-mdl9_clim = import_cmip5_clim(model)
+pre_amz_gcm8 = import_cmip5_clim(u'pr', u'amz', u'CSIRO-MK36')
+tmp_amz_gcm8 = import_cmip5_clim(u'tas', u'amz', u'CSIRO-MK36')
+pre_neb_gcm8 = import_cmip5_clim(u'pr', u'neb', u'CSIRO-MK36')
+tmp_neb_gcm8 = import_cmip5_clim(u'tas', u'neb', u'CSIRO-MK36')
+pre_mato_gcm8 = import_cmip5_clim(u'pr', u'matopiba', u'CSIRO-MK36')
+tmp_mato_gcm8 = import_cmip5_clim(u'tas', u'matopiba', u'CSIRO-MK36')
 
-model  = u'HadGEM2-AO'
-mdl10_clim = import_cmip5_clim(model)
+pre_amz_gcm9 = import_cmip5_clim(u'pr', u'amz', u'FIO-ESM')
+tmp_amz_gcm9 = import_cmip5_clim(u'tas', u'amz', u'FIO-ESM')
+pre_neb_gcm9 = import_cmip5_clim(u'pr', u'neb', u'FIO-ESM')
+tmp_neb_gcm9 = import_cmip5_clim(u'tas', u'neb', u'FIO-ESM')
+pre_mato_gcm9 = import_cmip5_clim(u'pr', u'matopiba', u'FIO-ESM')
+tmp_mato_gcm9 = import_cmip5_clim(u'tas', u'matopiba', u'FIO-ESM')
 
-model  = u'HadGEM2-CC'
-mdl11_clim = import_cmip5_clim(model)
+pre_amz_gcm10 = import_cmip5_clim(u'pr', u'amz', u'GISS-E2-H')
+tmp_amz_gcm10 = import_cmip5_clim(u'tas', u'amz', u'GISS-E2-H')
+pre_neb_gcm10 = import_cmip5_clim(u'pr', u'neb', u'GISS-E2-H')
+tmp_neb_gcm10 = import_cmip5_clim(u'tas', u'neb', u'GISS-E2-H')
+pre_mato_gcm10 = import_cmip5_clim(u'pr', u'matopiba', u'GISS-E2-H')
+tmp_mato_gcm10 = import_cmip5_clim(u'tas', u'matopiba', u'GISS-E2-H')
 
-model  = u'INMCM4'
-mdl12_clim = import_cmip5_clim(model)
+pre_amz_gcm11 = import_cmip5_clim(u'pr', u'amz', u'GISS-E2-H-CC')
+tmp_amz_gcm11 = import_cmip5_clim(u'tas', u'amz', u'GISS-E2-H-CC')
+pre_neb_gcm11 = import_cmip5_clim(u'pr', u'neb', u'GISS-E2-H-CC')
+tmp_neb_gcm11 = import_cmip5_clim(u'tas', u'neb', u'GISS-E2-H-CC')
+pre_mato_gcm11 = import_cmip5_clim(u'pr', u'matopiba', u'GISS-E2-H-CC')
+tmp_mato_gcm11 = import_cmip5_clim(u'tas', u'matopiba', u'GISS-E2-H-CC')
 
-model  = u'IPSL-CM5A-LR'
-mdl13_clim = import_cmip5_clim(model)
+pre_amz_gcm12 = import_cmip5_clim(u'pr', u'amz', u'HadGEM2-AO')
+tmp_amz_gcm12 = import_cmip5_clim(u'tas', u'amz', u'HadGEM2-AO')
+pre_neb_gcm12 = import_cmip5_clim(u'pr', u'neb', u'HadGEM2-AO')
+tmp_neb_gcm12 = import_cmip5_clim(u'tas', u'neb', u'HadGEM2-AO')
+pre_mato_gcm12 = import_cmip5_clim(u'pr', u'matopiba', u'HadGEM2-AO')
+tmp_mato_gcm12 = import_cmip5_clim(u'tas', u'matopiba', u'HadGEM2-AO')
 
-model  = u'IPSL-CM5B-LR'
-mdl14_clim = import_cmip5_clim(model)
+pre_amz_gcm13 = import_cmip5_clim(u'pr', u'amz', u'HadGEM2-CC')
+tmp_amz_gcm13 = import_cmip5_clim(u'tas', u'amz', u'HadGEM2-CC')
+pre_neb_gcm13 = import_cmip5_clim(u'pr', u'neb', u'HadGEM2-CC')
+tmp_neb_gcm13 = import_cmip5_clim(u'tas', u'neb', u'HadGEM2-CC')
+pre_mato_gcm13 = import_cmip5_clim(u'pr', u'matopiba', u'HadGEM2-CC')
+tmp_mato_gcm13 = import_cmip5_clim(u'tas', u'matopiba', u'HadGEM2-CC')
 
-model  = u'LASG-FGOALS-G2'
-mdl15_clim = import_cmip5_clim(model)
+pre_amz_gcm14 = import_cmip5_clim(u'pr', u'amz', u'HadGEM2-ES')
+tmp_amz_gcm14 = import_cmip5_clim(u'tas', u'amz', u'HadGEM2-ES')
+pre_neb_gcm14 = import_cmip5_clim(u'pr', u'neb', u'HadGEM2-ES')
+tmp_neb_gcm14 = import_cmip5_clim(u'tas', u'neb', u'HadGEM2-ES')
+pre_mato_gcm14 = import_cmip5_clim(u'pr', u'matopiba', u'HadGEM2-ES')
+tmp_mato_gcm14 = import_cmip5_clim(u'tas', u'matopiba', u'HadGEM2-ES')
 
-model  = u'LASG-FGOALS-S2'
-mdl16_clim = import_cmip5_clim(model)
+pre_amz_gcm15 = import_cmip5_clim(u'pr', u'amz', u'INMCM4')
+tmp_amz_gcm15 = import_cmip5_clim(u'tas', u'amz', u'INMCM4')
+pre_neb_gcm15 = import_cmip5_clim(u'pr', u'neb', u'INMCM4')
+tmp_neb_gcm15 = import_cmip5_clim(u'tas', u'neb', u'INMCM4')
+pre_mato_gcm15 = import_cmip5_clim(u'pr', u'matopiba', u'INMCM4')
+tmp_mato_gcm15 = import_cmip5_clim(u'tas', u'matopiba', u'INMCM4')
 
-model  = u'MIROC-ESM-CHEM'
-mdl17_clim = import_cmip5_clim(model)
+pre_amz_gcm16 = import_cmip5_clim(u'pr', u'amz', u'IPSL-CM5A-LR')
+tmp_amz_gcm16 = import_cmip5_clim(u'tas', u'amz', u'IPSL-CM5A-LR')
+pre_neb_gcm16 = import_cmip5_clim(u'pr', u'neb', u'IPSL-CM5A-LR')
+tmp_neb_gcm16 = import_cmip5_clim(u'tas', u'neb', u'IPSL-CM5A-LR')
+pre_mato_gcm16 = import_cmip5_clim(u'pr', u'matopiba', u'IPSL-CM5A-LR')
+tmp_mato_gcm16 = import_cmip5_clim(u'tas', u'matopiba', u'IPSL-CM5A-LR')
 
-model  = u'MIROC-ESM'
-mdl18_clim = import_cmip5_clim(model)
+pre_amz_gcm17 = import_cmip5_clim(u'pr', u'amz', u'IPSL-CM5A-MR')
+tmp_amz_gcm17 = import_cmip5_clim(u'tas', u'amz', u'IPSL-CM5A-MR')
+pre_neb_gcm17 = import_cmip5_clim(u'pr', u'neb', u'IPSL-CM5A-MR')
+tmp_neb_gcm17 = import_cmip5_clim(u'tas', u'neb', u'IPSL-CM5A-MR')
+pre_mato_gcm17 = import_cmip5_clim(u'pr', u'matopiba', u'IPSL-CM5A-MR')
+tmp_mato_gcm17 = import_cmip5_clim(u'tas', u'matopiba', u'IPSL-CM5A-MR')
 
-model  = u'MPI-ESM-LR'
-mdl19_clim = import_cmip5_clim(model)
+pre_amz_gcm18 = import_cmip5_clim(u'pr', u'amz', u'LASG-FGOALS-G2')
+tmp_amz_gcm18 = import_cmip5_clim(u'tas', u'amz', u'LASG-FGOALS-G2')
+pre_neb_gcm18 = import_cmip5_clim(u'pr', u'neb', u'LASG-FGOALS-G2')
+tmp_neb_gcm18 = import_cmip5_clim(u'tas', u'neb', u'LASG-FGOALS-G2')
+pre_mato_gcm18 = import_cmip5_clim(u'pr', u'matopiba', u'LASG-FGOALS-G2')
+tmp_mato_gcm18 = import_cmip5_clim(u'tas', u'matopiba', u'LASG-FGOALS-G2')
 
-model  = u'MRI-CGCM3'
-mdl20_clim = import_cmip5_clim(model)
+pre_amz_gcm19 = import_cmip5_clim(u'pr', u'amz', u'LASG-FGOALS-S2')
+tmp_amz_gcm19 = import_cmip5_clim(u'tas', u'amz', u'LASG-FGOALS-S2')
+pre_neb_gcm19 = import_cmip5_clim(u'pr', u'neb', u'LASG-FGOALS-S2')
+tmp_neb_gcm19 = import_cmip5_clim(u'tas', u'neb', u'LASG-FGOALS-S2')
+pre_mato_gcm19 = import_cmip5_clim(u'pr', u'matopiba', u'LASG-FGOALS-S2')
+tmp_mato_gcm19 = import_cmip5_clim(u'tas', u'matopiba', u'LASG-FGOALS-S2')
 
-model  = u'NCAR-CCSM4'
-mdl21_clim = import_cmip5_clim(model)
+pre_amz_gcm20 = import_cmip5_clim(u'pr', u'amz', u'MIROC5')
+tmp_amz_gcm20 = import_cmip5_clim(u'tas', u'amz', u'MIROC5')
+pre_neb_gcm20 = import_cmip5_clim(u'pr', u'neb', u'MIROC5')
+tmp_neb_gcm20 = import_cmip5_clim(u'tas', u'neb', u'MIROC5')
+pre_mato_gcm20 = import_cmip5_clim(u'pr', u'matopiba', u'MIROC5')
+tmp_mato_gcm20 = import_cmip5_clim(u'tas', u'matopiba', u'MIROC5')
 
-model  = u'NCAR-CESM1-BGC'
-mdl22_clim = import_cmip5_clim(model)
+pre_amz_gcm21 = import_cmip5_clim(u'pr', u'amz', u'MIROC-ESM')
+tmp_amz_gcm21 = import_cmip5_clim(u'tas', u'amz', u'MIROC-ESM')
+pre_neb_gcm21 = import_cmip5_clim(u'pr', u'neb', u'MIROC-ESM')
+tmp_neb_gcm21 = import_cmip5_clim(u'tas', u'neb', u'MIROC-ESM')
+pre_mato_gcm21 = import_cmip5_clim(u'pr', u'matopiba', u'MIROC-ESM')
+tmp_mato_gcm21 = import_cmip5_clim(u'tas', u'matopiba', u'MIROC-ESM')
 
-model  = u'NCAR-CESM1-CAM5'
-mdl23_clim = import_cmip5_clim(model)
+pre_amz_gcm22 = import_cmip5_clim(u'pr', u'amz', u'MIROC-ESM-CHEM')
+tmp_amz_gcm22 = import_cmip5_clim(u'tas', u'amz', u'MIROC-ESM-CHEM')
+pre_neb_gcm22 = import_cmip5_clim(u'pr', u'neb', u'MIROC-ESM-CHEM')
+tmp_neb_gcm22 = import_cmip5_clim(u'tas', u'neb', u'MIROC-ESM-CHEM')
+pre_mato_gcm22 = import_cmip5_clim(u'pr', u'matopiba', u'MIROC-ESM-CHEM')
+tmp_mato_gcm22 = import_cmip5_clim(u'tas', u'matopiba', u'MIROC-ESM-CHEM')
 
-model  = u'NorESM1-ME'
-mdl24_clim = import_cmip5_clim(model)
+pre_amz_gcm23 = import_cmip5_clim(u'pr', u'amz', u'MPI-ESM-LR')
+tmp_amz_gcm23 = import_cmip5_clim(u'tas', u'amz', u'MPI-ESM-LR')
+pre_neb_gcm23 = import_cmip5_clim(u'pr', u'neb', u'MPI-ESM-LR')
+tmp_neb_gcm23 = import_cmip5_clim(u'tas', u'neb', u'MPI-ESM-LR')
+pre_mato_gcm23 = import_cmip5_clim(u'pr', u'matopiba', u'MPI-ESM-LR')
+tmp_mato_gcm23 = import_cmip5_clim(u'tas', u'matopiba', u'MPI-ESM-LR')
 
-model  = u'ensmean_cmip5'
-mdl25_clim = import_cmip5_clim(model)
+pre_amz_gcm24 = import_cmip5_clim(u'pr', u'amz', u'MPI-ESM-MR')
+tmp_amz_gcm24 = import_cmip5_clim(u'tas', u'amz', u'MPI-ESM-MR')
+pre_neb_gcm24 = import_cmip5_clim(u'pr', u'neb', u'MPI-ESM-MR')
+tmp_neb_gcm24 = import_cmip5_clim(u'tas', u'neb', u'MPI-ESM-MR')
+pre_mato_gcm24 = import_cmip5_clim(u'pr', u'matopiba', u'MPI-ESM-MR')
+tmp_mato_gcm24 = import_cmip5_clim(u'tas', u'matopiba', u'MPI-ESM-MR')
 
-model  = u'BNU-ESM'
-mdl26_clim = import_cmip5_clim(model)
+pre_amz_gcm25 = import_cmip5_clim(u'pr', u'amz', u'MRI-CGCM3')
+tmp_amz_gcm25 = import_cmip5_clim(u'tas', u'amz', u'MRI-CGCM3')
+pre_neb_gcm25 = import_cmip5_clim(u'pr', u'neb', u'MRI-CGCM3')
+tmp_neb_gcm25 = import_cmip5_clim(u'tas', u'neb', u'MRI-CGCM3')
+pre_mato_gcm25 = import_cmip5_clim(u'pr', u'matopiba', u'MRI-CGCM3')
+tmp_mato_gcm25 = import_cmip5_clim(u'tas', u'matopiba', u'MRI-CGCM3')
 
-model  = u'CanESM2'
-mdl27_clim = import_cmip5_clim(model)
+pre_amz_gcm26 = import_cmip5_clim(u'pr', u'amz', u'NCAR-CCSM4')
+tmp_amz_gcm26 = import_cmip5_clim(u'tas', u'amz', u'NCAR-CCSM4')
+pre_neb_gcm26 = import_cmip5_clim(u'pr', u'neb', u'NCAR-CCSM4')
+tmp_neb_gcm26 = import_cmip5_clim(u'tas', u'neb', u'NCAR-CCSM4')
+pre_mato_gcm26 = import_cmip5_clim(u'pr', u'matopiba', u'NCAR-CCSM4')
+tmp_mato_gcm26 = import_cmip5_clim(u'tas', u'matopiba', u'NCAR-CCSM4')
 
-model  = u'CSIRO-ACCESS-1'
-mdl28_clim = import_cmip5_clim(model)
+pre_amz_gcm27 = import_cmip5_clim(u'pr', u'amz', u'NCAR-CESM1-BGC')
+tmp_amz_gcm27 = import_cmip5_clim(u'tas', u'amz', u'NCAR-CESM1-BGC')
+pre_neb_gcm27 = import_cmip5_clim(u'pr', u'neb', u'NCAR-CESM1-BGC')
+tmp_neb_gcm27 = import_cmip5_clim(u'tas', u'neb', u'NCAR-CESM1-BGC')
+pre_mato_gcm27 = import_cmip5_clim(u'pr', u'matopiba', u'NCAR-CESM1-BGC')
+tmp_mato_gcm27 = import_cmip5_clim(u'tas', u'matopiba', u'NCAR-CESM1-BGC')
 
-model  = u'HadGEM2-ES'
-mdl29_clim = import_cmip5_clim(model)
+pre_amz_gcm28 = import_cmip5_clim(u'pr', u'amz', u'NCAR-CESM1-CAM5')
+tmp_amz_gcm28 = import_cmip5_clim(u'tas', u'amz', u'NCAR-CESM1-CAM5')
+pre_neb_gcm28 = import_cmip5_clim(u'pr', u'neb', u'NCAR-CESM1-CAM5')
+tmp_neb_gcm28 = import_cmip5_clim(u'tas', u'neb', u'NCAR-CESM1-CAM5')
+pre_mato_gcm28 = import_cmip5_clim(u'pr', u'matopiba', u'NCAR-CESM1-CAM5')
+tmp_mato_gcm28 = import_cmip5_clim(u'tas', u'matopiba', u'NCAR-CESM1-CAM5')
 
-model  = u'IPSL-CM5A-MR'
-mdl30_clim = import_cmip5_clim(model)
+pre_amz_gcm29 = import_cmip5_clim(u'pr', u'amz', u'NorESM1-M')
+tmp_amz_gcm29 = import_cmip5_clim(u'tas', u'amz', u'NorESM1-M')
+pre_neb_gcm29 = import_cmip5_clim(u'pr', u'neb', u'NorESM1-M')
+tmp_neb_gcm29 = import_cmip5_clim(u'tas', u'neb', u'NorESM1-M')
+pre_mato_gcm29 = import_cmip5_clim(u'pr', u'matopiba', u'NorESM1-M')
+tmp_mato_gcm29 = import_cmip5_clim(u'tas', u'matopiba', u'NorESM1-M')
 
-model  = u'MIROC5'
-mdl31_clim = import_cmip5_clim(model)
+pre_amz_gcm30 = import_cmip5_clim(u'pr', u'amz', u'NorESM1-ME')
+tmp_amz_gcm30 = import_cmip5_clim(u'tas', u'amz', u'NorESM1-ME')
+pre_neb_gcm30 = import_cmip5_clim(u'pr', u'neb', u'NorESM1-ME')
+tmp_neb_gcm30 = import_cmip5_clim(u'tas', u'neb', u'NorESM1-ME')
+pre_mato_gcm30 = import_cmip5_clim(u'pr', u'matopiba', u'NorESM1-ME')
+tmp_mato_gcm30 = import_cmip5_clim(u'tas', u'matopiba', u'NorESM1-ME')
 
-model  = u'MPI-ESM-MR'
-mdl32_clim = import_cmip5_clim(model)
+pre_amz_gcm31 = import_cmip5_clim(u'pr', u'amz', u'ensmean_cmip5')
+tmp_amz_gcm31 = import_cmip5_clim(u'tas', u'amz', u'ensmean_cmip5')
+pre_neb_gcm31 = import_cmip5_clim(u'pr', u'neb', u'ensmean_cmip5')
+tmp_neb_gcm31 = import_cmip5_clim(u'tas', u'neb', u'ensmean_cmip5')
+pre_mato_gcm31 = import_cmip5_clim(u'pr', u'matopiba', u'ensmean_cmip5')
+tmp_mato_gcm31 = import_cmip5_clim(u'tas', u'matopiba', u'ensmean_cmip5')
 
-model  = u'NorESM1-M'
-mdl33_clim = import_cmip5_clim(model)
-
-database  = u'cru_ts4.02'
-obs1_clim, obs1_clim_p5 , obs1_clim_p95  = import_obs_clim(database)
+pre_amz_obs  = import_obs_clim(u'pre', u'amz', u'cru_ts4.02')
+tmp_amz_obs  = import_obs_clim(u'tmp', u'amz', u'cru_ts4.02')
+pre_neb_obs  = import_obs_clim(u'pre', u'neb', u'cru_ts4.02')
+tmp_neb_obs  = import_obs_clim(u'tmp', u'neb', u'cru_ts4.02')
+pre_mato_obs  = import_obs_clim(u'pre', u'matopiba', u'cru_ts4.02')
+tmp_mato_obs  = import_obs_clim(u'tmp', u'matopiba', u'cru_ts4.02')
 
 # Plot model end obs data climatology
-fig, ax = plt.subplots(figsize=(12, 6))
+fig = plt.figure(figsize=(10, 8))
 time = np.arange(0.5, 12 + 0.5)
 
-plt_clim = plt.plot(time, mdl1_clim, time, mdl2_clim, time, mdl3_clim,
-time,  mdl4_clim, time, mdl5_clim, time, mdl6_clim, time, mdl7_clim,
-time, mdl8_clim, time, mdl9_clim, time, mdl10_clim, time, mdl11_clim,
-time, mdl12_clim, time, mdl13_clim, time, mdl14_clim, time, mdl15_clim, 
-time, mdl16_clim, time, mdl17_clim, time, mdl18_clim, time, mdl19_clim, 
-time, mdl20_clim, time, mdl21_clim, time, mdl22_clim, time, mdl23_clim, 
-time, mdl24_clim, time, mdl25_clim, time, mdl26_clim, time, mdl27_clim, 
-time, mdl28_clim, time, mdl29_clim, time, mdl30_clim, time, mdl31_clim, 
-time, mdl32_clim, time, mdl33_clim, time, obs1_clim, time, obs1_clim_p5, 
-time, obs1_clim_p95)
+ax1 = fig.add_subplot(321)
+plt_clim1 = ax1.plot(time, pre_amz_gcm1, time, pre_amz_gcm2, time, pre_amz_gcm3,
+time, pre_amz_gcm4, time, pre_amz_gcm5, time, pre_amz_gcm6, time, pre_amz_gcm7,
+time, pre_amz_gcm8, time, pre_amz_gcm9, time, pre_amz_gcm10, time, pre_amz_gcm11,
+time, pre_amz_gcm12, time, pre_amz_gcm13, time, pre_amz_gcm14, time, pre_amz_gcm15, 
+time, pre_amz_gcm16, time, pre_amz_gcm17, time, pre_amz_gcm18, time, pre_amz_gcm19, 
+time, pre_amz_gcm20, time, pre_amz_gcm21, time, pre_amz_gcm22, time, pre_amz_gcm23, 
+time, pre_amz_gcm24, time, pre_amz_gcm25, time, pre_amz_gcm26, time, pre_amz_gcm27, 
+time, pre_amz_gcm28, time, pre_amz_gcm29, time, pre_amz_gcm30, time, pre_amz_gcm31, 
+time, pre_amz_obs)
+plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.yticks(np.arange(0, 21, 3))
+plt.title(u'A)', loc='left', fontweight='bold')
+ax1.xaxis.grid(True, which='major', linestyle='--')
+ax1.yaxis.grid(True, which='major', linestyle='--')
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32 = plt_clim1
+plt.setp(l1)
+plt.setp(l2)
+plt.setp(l3)
+plt.setp(l4)
+plt.setp(l5)
+plt.setp(l6)
+plt.setp(l7)
+plt.setp(l8)
+plt.setp(l9)
+plt.setp(l10)
+plt.setp(l11)
+plt.setp(l12)
+plt.setp(l13)
+plt.setp(l14)
+plt.setp(l15)
+plt.setp(l16)
+plt.setp(l17)
+plt.setp(l18)
+plt.setp(l19)
+plt.setp(l20)
+plt.setp(l21)
+plt.setp(l22)
+plt.setp(l23)
+plt.setp(l24)
+plt.setp(l25)
+plt.setp(l26)
+plt.setp(l27)
+plt.setp(l28)
+plt.setp(l29)
+plt.setp(l30)
+plt.setp(l31, linestyle='dashed', color='black')
+plt.setp(l32, color='black')
 
-l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, l33, l34, l35, l36 = plt_clim
+ax2 = fig.add_subplot(322)
+plt_clim2 = ax2.plot(time, tmp_amz_gcm1, time, tmp_amz_gcm2, time, tmp_amz_gcm3,
+time, tmp_amz_gcm4, time, tmp_amz_gcm5, time, tmp_amz_gcm6, time, tmp_amz_gcm7,
+time, tmp_amz_gcm8, time, tmp_amz_gcm9, time, tmp_amz_gcm10, time, tmp_amz_gcm11,
+time, tmp_amz_gcm12, time, tmp_amz_gcm13, time, tmp_amz_gcm14, time, tmp_amz_gcm15, 
+time, tmp_amz_gcm16, time, tmp_amz_gcm17, time, tmp_amz_gcm18, time, tmp_amz_gcm19, 
+time, tmp_amz_gcm20, time, tmp_amz_gcm21, time, tmp_amz_gcm22, time, tmp_amz_gcm23, 
+time, tmp_amz_gcm24, time, tmp_amz_gcm25, time, tmp_amz_gcm26, time, tmp_amz_gcm27, 
+time, tmp_amz_gcm28, time, tmp_amz_gcm29, time, tmp_amz_gcm30, time, tmp_amz_gcm31, 
+time, tmp_amz_obs)
+plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.yticks(np.arange(20, 38, 3))
+plt.title(u'D)', loc='left', fontweight='bold')
+ax2.xaxis.grid(True, which='major', linestyle='--')
+ax2.yaxis.grid(True, which='major', linestyle='--')
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32 = plt_clim2
+plt.setp(l1)
+plt.setp(l2)
+plt.setp(l3)
+plt.setp(l4)
+plt.setp(l5)
+plt.setp(l6)
+plt.setp(l7)
+plt.setp(l8)
+plt.setp(l9)
+plt.setp(l10)
+plt.setp(l11)
+plt.setp(l12)
+plt.setp(l13)
+plt.setp(l14)
+plt.setp(l15)
+plt.setp(l16)
+plt.setp(l17)
+plt.setp(l18)
+plt.setp(l19)
+plt.setp(l20)
+plt.setp(l21)
+plt.setp(l22)
+plt.setp(l23)
+plt.setp(l24)
+plt.setp(l25)
+plt.setp(l26)
+plt.setp(l27)
+plt.setp(l28)
+plt.setp(l29)
+plt.setp(l30)
+plt.setp(l31, linestyle='dashed', color='black')
+plt.setp(l32, color='black')
 
-plt.setp(l1,  linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l2,  linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l3,  linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l4,  linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l5,  linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l6,  linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l7,  linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l8,  linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l9,  linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l10, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l11, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l12, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l13, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l14, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l15, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l16, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l17, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l18, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l19, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l20, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l21, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l22, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l23, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l24, linewidth=2, markeredgewidth=1, color='gainsboro')
-plt.setp(l25, linewidth=3, markeredgewidth=1, color='darkgray')
-plt.setp(l26, linewidth=3, markeredgewidth=1, color='green')
-plt.setp(l27, linewidth=3, markeredgewidth=1, color='orange')
-plt.setp(l28, linewidth=3, markeredgewidth=1, color='pink')
-plt.setp(l29, linewidth=3, markeredgewidth=1, color='purple')
-plt.setp(l30, linewidth=3, markeredgewidth=1, color='brown')
-plt.setp(l31, linewidth=3, markeredgewidth=1, color='yellow')
-plt.setp(l32, linewidth=3, markeredgewidth=1, color='blue')
-plt.setp(l33, linewidth=3, markeredgewidth=1, color='red')
-plt.setp(l34, linewidth=3, markeredgewidth=1, color='black')
-plt.setp(l35, linewidth=2, markeredgewidth=3, color='slategray')
-plt.setp(l36, linewidth=2, markeredgewidth=3, color='slategray')
+ax3 = fig.add_subplot(323)
+plt_clim3 = ax3.plot(time, pre_neb_gcm1, time, pre_neb_gcm2, time, pre_neb_gcm3,
+time, pre_neb_gcm4, time, pre_neb_gcm5, time, pre_neb_gcm6, time, pre_neb_gcm7,
+time, pre_neb_gcm8, time, pre_neb_gcm9, time, pre_neb_gcm10, time, pre_neb_gcm11,
+time, pre_neb_gcm12, time, pre_neb_gcm13, time, pre_neb_gcm14, time, pre_neb_gcm15, 
+time, pre_neb_gcm16, time, pre_neb_gcm17, time, pre_neb_gcm18, time, pre_neb_gcm19, 
+time, pre_neb_gcm20, time, pre_neb_gcm21, time, pre_neb_gcm22, time, pre_neb_gcm23, 
+time, pre_neb_gcm24, time, pre_neb_gcm25, time, pre_neb_gcm26, time, pre_neb_gcm27, 
+time, pre_neb_gcm28, time, pre_neb_gcm29, time, pre_neb_gcm30, time, pre_neb_gcm31, 
+time, pre_neb_obs)
+plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.yticks(np.arange(0, 21, 3))
+plt.ylabel(u'Precipitation (mm d⁻¹)')
+plt.title(u'B)', loc='left', fontweight='bold')
+ax3.xaxis.grid(True, which='major', linestyle='--')
+ax3.yaxis.grid(True, which='major', linestyle='--')
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32 = plt_clim3
+plt.setp(l1)
+plt.setp(l2)
+plt.setp(l3)
+plt.setp(l4)
+plt.setp(l5)
+plt.setp(l6)
+plt.setp(l7)
+plt.setp(l8)
+plt.setp(l9)
+plt.setp(l10)
+plt.setp(l11)
+plt.setp(l12)
+plt.setp(l13)
+plt.setp(l14)
+plt.setp(l15)
+plt.setp(l16)
+plt.setp(l17)
+plt.setp(l18)
+plt.setp(l19)
+plt.setp(l20)
+plt.setp(l21)
+plt.setp(l22)
+plt.setp(l23)
+plt.setp(l24)
+plt.setp(l25)
+plt.setp(l26)
+plt.setp(l27)
+plt.setp(l28)
+plt.setp(l29)
+plt.setp(l30)
+plt.setp(l31, linestyle='dashed', color='black')
+plt.setp(l32, color='black')
 
-plt.fill_between(time, obs1_clim_p5, obs1_clim_p95, facecolor='slategray', alpha=0.8, interpolate=True)
+ax4 = fig.add_subplot(324)
+plt_clim4 = ax4.plot(time, tmp_neb_gcm1, time, tmp_neb_gcm2, time, tmp_neb_gcm3,
+time, tmp_neb_gcm4, time, tmp_neb_gcm5, time, tmp_neb_gcm6, time, tmp_neb_gcm7,
+time, tmp_neb_gcm8, time, tmp_neb_gcm9, time, tmp_neb_gcm10, time, tmp_neb_gcm11,
+time, tmp_neb_gcm12, time, tmp_neb_gcm13, time, tmp_neb_gcm14, time, tmp_neb_gcm15, 
+time, tmp_neb_gcm16, time, tmp_neb_gcm17, time, tmp_neb_gcm18, time, tmp_neb_gcm19, 
+time, tmp_neb_gcm20, time, tmp_neb_gcm21, time, tmp_neb_gcm22, time, tmp_neb_gcm23, 
+time, tmp_neb_gcm24, time, tmp_neb_gcm25, time, tmp_neb_gcm26, time, tmp_neb_gcm27, 
+time, tmp_neb_gcm28, time, tmp_neb_gcm29, time, tmp_neb_gcm30, time, tmp_neb_gcm31, 
+time, tmp_neb_obs)
+plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.yticks(np.arange(20, 38, 3))
+plt.ylabel(u'Temperature (°C)')
+plt.title(u'E)', loc='left', fontweight='bold')
+ax4.xaxis.grid(True, which='major', linestyle='--')
+ax4.yaxis.grid(True, which='major', linestyle='--')
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32 = plt_clim4
+plt.setp(l1)
+plt.setp(l2)
+plt.setp(l3)
+plt.setp(l4)
+plt.setp(l5)
+plt.setp(l6)
+plt.setp(l7)
+plt.setp(l8)
+plt.setp(l9)
+plt.setp(l10)
+plt.setp(l11)
+plt.setp(l12)
+plt.setp(l13)
+plt.setp(l14)
+plt.setp(l15)
+plt.setp(l16)
+plt.setp(l17)
+plt.setp(l18)
+plt.setp(l19)
+plt.setp(l20)
+plt.setp(l21)
+plt.setp(l22)
+plt.setp(l23)
+plt.setp(l24)
+plt.setp(l25)
+plt.setp(l26)
+plt.setp(l27)
+plt.setp(l28)
+plt.setp(l29)
+plt.setp(l30)
+plt.setp(l31, linestyle='dashed', color='black')
+plt.setp(l32, color='black')
 
-# choice variable: Rainfall (AMZ and AMZ) or Temperature (AMZ and AMZ) 
-out_var    = u'tmp' # pre or tmp
-out_area   = u'amz' # amz or neb
-area_name  = u'AMZ (Lat:16S 4N, Lon:74W 48W)' # AMZ (Lat:16S 4N, Lon:74W 48W) or NEB (Lat:15S 2N, Lon:46W 34W)
+ax5 = fig.add_subplot(325)
+plt_clim5 = ax5.plot(time, pre_mato_gcm1, time, pre_mato_gcm2, time, pre_mato_gcm3,
+time, pre_mato_gcm4, time, pre_mato_gcm5, time, pre_mato_gcm6, time, pre_mato_gcm7,
+time, pre_mato_gcm8, time, pre_mato_gcm9, time, pre_mato_gcm10, time, pre_mato_gcm11,
+time, pre_mato_gcm12, time, pre_mato_gcm13, time, pre_mato_gcm14, time, pre_mato_gcm15, 
+time, pre_mato_gcm16, time, pre_mato_gcm17, time, pre_mato_gcm18, time, pre_mato_gcm19, 
+time, pre_mato_gcm20, time, pre_mato_gcm21, time, pre_mato_gcm22, time, pre_mato_gcm23, 
+time, pre_mato_gcm24, time, pre_mato_gcm25, time, pre_mato_gcm26, time, pre_mato_gcm27, 
+time, pre_mato_gcm28, time, pre_mato_gcm29, time, pre_mato_gcm30, time, pre_mato_gcm31, 
+time, pre_mato_obs)
+plt.xlabel('Months')
+plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.yticks(np.arange(0, 21, 3))
+plt.title(u'C)', loc='left', fontweight='bold')
+ax5.xaxis.grid(True, which='major', linestyle='--')
+ax5.yaxis.grid(True, which='major', linestyle='--')
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32 = plt_clim5
+plt.setp(l1)
+plt.setp(l2)
+plt.setp(l3)
+plt.setp(l4)
+plt.setp(l5)
+plt.setp(l6)
+plt.setp(l7)
+plt.setp(l8)
+plt.setp(l9)
+plt.setp(l10)
+plt.setp(l11)
+plt.setp(l12)
+plt.setp(l13)
+plt.setp(l14)
+plt.setp(l15)
+plt.setp(l16)
+plt.setp(l17)
+plt.setp(l18)
+plt.setp(l19)
+plt.setp(l20)
+plt.setp(l21)
+plt.setp(l22)
+plt.setp(l23)
+plt.setp(l24)
+plt.setp(l25)
+plt.setp(l26)
+plt.setp(l27)
+plt.setp(l28)
+plt.setp(l29)
+plt.setp(l30)
+plt.setp(l31, linestyle='dashed', color='black')
+plt.setp(l32, color='black')
 
-if out_var == 'pre':
-	yaxis = np.arange(0, 14, 2)
-	var_name   = u'Precipitação'
-	label_name = u'Precipitação (mm/d)' 
-	plt.text(9.5, 10.5, u'r2 = {0}'.format(round(r2, 3)), fontsize=12, fontweight='bold')
+ax6 = fig.add_subplot(326)
+plt_clim6 = ax6.plot(time, tmp_mato_gcm1, time, tmp_mato_gcm2, time, tmp_mato_gcm3,
+time, tmp_mato_gcm4, time, tmp_mato_gcm5, time, tmp_mato_gcm6, time, tmp_mato_gcm7,
+time, tmp_mato_gcm8, time, tmp_mato_gcm9, time, tmp_mato_gcm10, time, tmp_mato_gcm11,
+time, tmp_mato_gcm12, time, tmp_mato_gcm13, time, tmp_mato_gcm14, time, tmp_mato_gcm15, 
+time, tmp_mato_gcm16, time, tmp_mato_gcm17, time, tmp_mato_gcm18, time, tmp_mato_gcm19, 
+time, tmp_mato_gcm20, time, tmp_mato_gcm21, time, tmp_mato_gcm22, time, tmp_mato_gcm23, 
+time, tmp_mato_gcm24, time, tmp_mato_gcm25, time, tmp_mato_gcm26, time, tmp_mato_gcm27, 
+time, tmp_mato_gcm28, time, tmp_mato_gcm29, time, tmp_mato_gcm30, time, tmp_mato_gcm31, 
+time, tmp_mato_obs)
+plt.xlabel('Months')
+plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.yticks(np.arange(20, 38, 3))
+plt.title(u'F)', loc='left', fontweight='bold')
+ax6.xaxis.grid(True, which='major', linestyle='--')
+ax6.yaxis.grid(True, which='major', linestyle='--')
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32 = plt_clim6
+plt.setp(l1)
+plt.setp(l2)
+plt.setp(l3)
+plt.setp(l4)
+plt.setp(l5)
+plt.setp(l6)
+plt.setp(l7)
+plt.setp(l8)
+plt.setp(l9)
+plt.setp(l10)
+plt.setp(l11)
+plt.setp(l12)
+plt.setp(l13)
+plt.setp(l14)
+plt.setp(l15)
+plt.setp(l16)
+plt.setp(l17)
+plt.setp(l18)
+plt.setp(l19)
+plt.setp(l20)
+plt.setp(l21)
+plt.setp(l22)
+plt.setp(l23)
+plt.setp(l24)
+plt.setp(l25)
+plt.setp(l26)
+plt.setp(l27)
+plt.setp(l28)
+plt.setp(l29)
+plt.setp(l30)
+plt.setp(l31, linestyle='dashed', color='black')
+plt.setp(l32, color='black')
 
-else:
-	yaxis = np.arange(18, 34, 2)
-	var_name   = u'Temperatura' 
-	label_name = u'Temperatura 2m ($^\circ$C)' 
-	plt.text(9.5, 30.5, u'r2 = {0}'.format(round(r2, 3)), fontsize=12, fontweight='bold')
+legend = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCESS1.0','CSIRO-ACCESS1.3',
+'CSIRO-MK36','FIO-ESM','GISS-E2-H','GISS-E2-H-CC','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','INMCM4',
+'IPSL-CM5A-LR','IPSL-CM5A-MR','LASG-FGOALS-G2','LASG-FGOALS-S2','MIROC5','MIROC-ESM','MIROC-ESM-CHEM',
+'MPI-ESM-LR','MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-M',
+'NorESM1-ME','ensmean_cmip5','CRU']
+plt.legend(plt_clim6, legend, loc=(1.019, -0.19))
+plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.20, hspace=0.35)
 
-fig.suptitle(u'Ciclo Anual de {0} - {1} \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Período de Referência: 1850-2005)'.format(var_name, area_name), fontsize=15, y=0.98)
-
-xaxis = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-
-plt.ylabel(u'{0}'.format(label_name), fontsize=12)
-plt.xticks(time, xaxis, fontsize=12)
-plt.yticks(yaxis, fontsize=12)
-plt.tick_params(axis='both', which='major', labelsize=12, length=5, width=2, pad=4, labelcolor='black')
-
-legend = (u'CMIP5-hist', u'ENSMEAN_CMIP5', u'BNU-ESM', u'CanESM2', u'CSIRO-ACCESS-1', u'HadGEM-ES', 
-		  u'IPSL-CM5A-MR', u'MIROC5', u'MPI-ESM-MR', u'NorESM1-M', u'CRU', u'CRU_p5%', u'CRU_p95%')    
-plt.legend(plt_clim[23:], legend, loc='upper center', bbox_to_anchor=(0.5, -0.07), shadow=True, ncol=7, prop=FontProperties(size=10))
-ax.xaxis.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
-ax.yaxis.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
-    
+# Save figure
 path_out = '/home/nice'
-name_out = 'pyplt_clim_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area)
-
+name_out = 'pyplt_clim_cmip5_cru_1975-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 	
-plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
+plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()
+
+
 
