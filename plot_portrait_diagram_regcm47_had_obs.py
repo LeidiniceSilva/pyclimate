@@ -2,8 +2,8 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
-__date__        = "03/25/2019"
-__description__ = "This script plot correlation Portrait Diagram from CMIP5 models"
+__date__        = "12/29/2020"
+__description__ = "This script plot portrait from Reg and Had models end obs database"
 
 import os
 import netCDF4
@@ -15,6 +15,83 @@ import matplotlib.colors as colors
 
 from comp_statist_indices import compute_bias
 
+
+def import_rcm(var, area, exp, dt):
+	
+	path = '/home/nice/Documents/dataset/rcm/{0}'.format(exp)	
+	arq  = '{0}/{1}_{2}_reg_had_{3}_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
+	
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[var][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	value = var[:][:,:,:]
+
+	annual_rcm = np.nanmean(np.nanmean(value, axis=1), axis=1) 
+	sea_rcm = np.nanmean(np.nanmean(value[0:240:3,:,:], axis=1), axis=1)
+	djf_rcm = sea_rcm[0:80:4]
+	mam_rcm = rcm[1:80:4]
+	jja_rcm = rcm[2:80:4]
+	son_rcm = rcm[3:80:4]
+
+	return annual_rcm, djf_rcm, mam_rcm, jja_rcm, son_rcm
+
+
+def import_gcm(var, area, exp, dt):
+	
+	path = '/home/nice/Documents/dataset/gcm/{0}'.format(exp)	
+	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
+	
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[var][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	value = var[:][:,:,:]
+
+	annual_gcm = np.nanmean(np.nanmean(value, axis=1), axis=1) 
+	sea_gcm = np.nanmean(np.nanmean(value[0:240:3,:,:], axis=1), axis=1)
+	djf_gcm = sea_gcm[0:80:4]
+	mam_gcm = sea_gcm[1:80:4]
+	jja_gcm = sea_gcm[2:80:4]
+	son_gcm = sea_gcm[3:80:4]
+
+	return annual_gcm, djf_gcm, mam_gcm, jja_gcm, son_gcm
+
+	
+def import_obs(var, area, dataset, dt):
+	
+	path = '/home/nice/Documents/dataset/obs'
+	arq  = '{0}/{1}_{2}_{3}_obs_mon_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
+			
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[var][:] 
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	value = var[:][:,:,:]
+
+	annual_obs = np.nanmean(np.nanmean(value, axis=1), axis=1) 
+	sea_obs = np.nanmean(np.nanmean(value[0:240:3,:,:], axis=1), axis=1)
+	djf_obs = sea_obs[0:80:4]
+	mam_obs = sea_obs[1:80:4]
+	jja_obs = sea_obs[2:80:4]
+	son_obs = sea_obs[3:80:4]
+
+	return annual_obs, djf_obs, mam_obs, jja_obs, son_obs
+	
+               
+# Import regcm exps model end obs database climatology
+p_reg = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
+p_had = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
+p_cru = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')
+p_udel = import_obs('pre', 'amz_neb', 'udel_v301', '1986-2005')
+p_chirps = import_obs('precip', 'amz_neb', 'chirps-v2.0', '1986-2005')
+p_era5 = import_obs('mtpr', 'amz_neb', 'era5', '1986-2005')
+
+t_reg = import_rcm('tas', 'amz_neb', 'hist', '1986-2005')
+t_had = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
+t_cru = import_obs('tmp', 'amz_neb', 'cru_ts4.04', '1986-2005')
+t_udel = import_obs('temp', 'amz_neb', 'udel_v301', '1986-2005')
+t_era5 = import_obs('t2m', 'amz_neb', 'era5', '1986-2005')
 
 def import_cmip5_pr(area, model):
 	
@@ -40,86 +117,10 @@ def import_cmip5_pr(area, model):
 
 	return annual_mdl_pr, djf_mdl_pr, mam_mdl_pr, jja_mdl_pr, son_mdl_pr
 
-
-def import_cru_pre(area, obs):
-	
-	param = 'pre' # pre or tmp
-	date  = '197512-200511'
-
-	path  = '/home/nice/Documents/ufrn/phd_project/datas/obs_data'
-	arq   = '{0}/{1}_{2}_{3}_obs_mon_{4}.nc'.format(path, param, area, obs, date)	
-	
-	data  = netCDF4.Dataset(arq)
-	var   = data.variables[param][:] 
-	lat   = data.variables['lat'][:]
-	lon   = data.variables['lon'][:]
-	value = var[:][:,:,:]
-
-	annual_obs_pre = np.nanmean(np.nanmean(value, axis=1), axis=1) 
-	sea_obs_pre = np.nanmean(np.nanmean(value[0:360:3,:,:], axis=1), axis=1)
-	djf_obs_pre = sea_obs_pre[0:120:4]
-	mam_obs_pre = sea_obs_pre[1:120:4]
-	jja_obs_pre = sea_obs_pre[2:120:4]
-	son_obs_pre = sea_obs_pre[3:120:4]
-
-	return annual_obs_pre, djf_obs_pre, mam_obs_pre, jja_obs_pre, son_obs_pre
-
-
-def import_cmip5_tas(area, model):
-	
-	param = 'tas' # pr or tas
-	exp   = 'historical_r1i1p1'
-	date  = '197512-200511'
-
-	path  = '/home/nice/Documents/ufrn/phd_project/datas/cmip5/hist'
-	arq   = '{0}/{1}_{2}_Amon_{3}_{4}_{5}.nc'.format(path, param, area,	model, exp, date)	
-	
-	data  = netCDF4.Dataset(arq)
-	var   = data.variables[param][:] 
-	lat   = data.variables['lat'][:]
-	lon   = data.variables['lon'][:]
-	value = var[:][:,:,:]
-
-	annual_mdl_tas = np.nanmean(np.nanmean(value, axis=1), axis=1) 
-	sea_mdl_tas = np.nanmean(np.nanmean(value[0:360:3,:,:], axis=1), axis=1)
-	djf_mdl_tas = sea_mdl_tas[0:120:4]
-	mam_mdl_tas = sea_mdl_tas[1:120:4]
-	jja_mdl_tas = sea_mdl_tas[2:120:4]
-	son_mdl_tas = sea_mdl_tas[3:120:4]
-
-	return annual_mdl_tas, djf_mdl_tas, mam_mdl_tas, jja_mdl_tas, son_mdl_tas
-
-
-def import_cru_tmp(area, obs):
-	
-	param = 'tmp' # pre or tmp
-	date  = '197512-200511'
-
-	path  = '/home/nice/Documents/ufrn/phd_project/datas/obs_data'
-	arq   = '{0}/{1}_{2}_{3}_obs_mon_{4}.nc'.format(path, param, area, obs, date)	
-	
-	data  = netCDF4.Dataset(arq)
-	var   = data.variables[param][:] 
-	lat   = data.variables['lat'][:]
-	lon   = data.variables['lon'][:]
-	value = var[:][:,:,:]
-
-	annual_obs_tmp = np.nanmean(np.nanmean(value, axis=1), axis=1) 
-	sea_obs_tmp = np.nanmean(np.nanmean(value[0:360:3,:,:], axis=1), axis=1)
-	djf_obs_tmp = sea_obs_tmp[0:120:4]
-	mam_obs_tmp = sea_obs_tmp[1:120:4]
-	jja_obs_tmp = sea_obs_tmp[2:120:4]
-	son_obs_tmp = sea_obs_tmp[3:120:4]
-
-	return annual_obs_tmp, djf_obs_tmp, mam_obs_tmp, jja_obs_tmp, son_obs_tmp
-	
 	
 seasons = ['DJF','MAM','JJA','SON', 'Anual']
-areas = ['amz','neb','matopiba']
-models = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCESS-1','CSIRO-ACCESS-3','CSIRO-MK36',
-'FIO-ESM','GISS-E2-H-CC','GISS-E2-H','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','INMCM4','IPSL-CM5A-LR',
-'IPSL-CM5A-MR','LASG-FGOALS-G2','LASG-FGOALS-S2','MIROC5','MIROC-ESM-CHEM','MIROC-ESM','MPI-ESM-LR',
-'MPI-ESM-MR','MRI-CGCM3','NCAR-CCSM4','NCAR-CESM1-BGC','NCAR-CESM1-CAM5','NorESM1-M','NorESM1-ME','ensmean_cmip5']
+areas = ['samz','eneb','matopiba']
+models = ['Reg','Had']
 
 djfap = []
 mamap = []
@@ -158,7 +159,7 @@ sonmt = []
 annualmt = []
 
 for model in models:
-	print('CMIP5 Model:', model)
+	print(model)
 	
 	# Import cmip5 model end obs database monthly pr
 	annual_sim_amz_pr, djf_sim_amz_pr, mam_sim_amz_pr, jja_sim_amz_pr, son_sim_amz_pr = import_cmip5_pr('amz', model)

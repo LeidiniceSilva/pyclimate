@@ -42,7 +42,7 @@ def import_rcm(var, exp, dt):
 
 def import_gcm(var, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/hist'	
+	path = '/home/nice/Documents/dataset/gcm/{0}'.format(exp)
 	arq  = '{0}/{1}_amz_neb_Amon_HadGEM2-ES_{2}_r1i1p1_mon_{3}_lonlat_seamask.nc'.format(path, var, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
