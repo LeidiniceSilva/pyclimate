@@ -156,7 +156,6 @@ print(mdl6.shape)
 print(mdl7.shape)
 print(mdl8.shape)
 print(mdl9.shape)
-exit()
 
 # Plot maps with the function
 plt_map = plot_maps_clim(mdl1, mdl2, mdl3, mdl4, mdl5, mdl6, mdl7, mdl8, mdl9)

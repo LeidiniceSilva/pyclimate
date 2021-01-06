@@ -156,7 +156,6 @@ def plot_maps_diff(diff_pre_reg_r26_hist, diff_pre_had_r26_hist, diff_pre_reg_r8
 	cbar.ax.tick_params(labelsize=6) 
 	
 	fig.tight_layout()
-
 	
 	return plot_maps_diff
 

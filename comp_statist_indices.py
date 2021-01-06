@@ -217,3 +217,15 @@ def compute_index_agreement(model, obs):
     return icw
     
 
+def compute_added_value(gcm, rcm, obs):
+
+    """
+    The input arrays must have the same dimentions
+    :Param model: Numpy array with model data
+    :Param obs: Numpy array with obs data
+    :Return: Added Value
+    """
+    
+    av = (gcm - obs)**2 - (rcm - obs)**2 / max((gcm - obs)**2 , (rcm - obs)**2)
+    
+    return av

@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "06/03/2019"
-__description__ = "This script plot Rclimdex based in HadGEM2-ES model CMIP5"
+__description__ = "This script annual anomaly from cru over neb"
 
 import os
 import netCDF4

@@ -7,9 +7,9 @@ __description__ = "This script plot portrait from Reg and Had models end obs dat
 
 import os
 import netCDF4
-import numpy as np
 import matplotlib
-import seaborn as sns 
+import numpy as np
+import seaborn as sb 
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 
@@ -30,9 +30,9 @@ def import_rcm(var, area, exp, dt):
 	annual_rcm = np.nanmean(np.nanmean(value, axis=1), axis=1) 
 	sea_rcm = np.nanmean(np.nanmean(value[0:240:3,:,:], axis=1), axis=1)
 	djf_rcm = sea_rcm[0:80:4]
-	mam_rcm = rcm[1:80:4]
-	jja_rcm = rcm[2:80:4]
-	son_rcm = rcm[3:80:4]
+	mam_rcm = sea_rcm[1:80:4]
+	jja_rcm = sea_rcm[2:80:4]
+	son_rcm = sea_rcm[3:80:4]
 
 	return annual_rcm, djf_rcm, mam_rcm, jja_rcm, son_rcm
 
@@ -80,18 +80,18 @@ def import_obs(var, area, dataset, dt):
 	
                
 # Import regcm exps model end obs database climatology
-p_reg = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
-p_had = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
-p_cru = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')
-p_udel = import_obs('pre', 'amz_neb', 'udel_v301', '1986-2005')
-p_chirps = import_obs('precip', 'amz_neb', 'chirps-v2.0', '1986-2005')
-p_era5 = import_obs('mtpr', 'amz_neb', 'era5', '1986-2005')
+annual_rcm, djf_rcm, mam_rcm, jja_rcm, son_rcm = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
+annual_gcm, djf_gcm, mam_gcm, jja_gcm, son_gcm = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
+annual_obs, djf_obs, mam_obs, jja_obs, son_obs = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')
 
-t_reg = import_rcm('tas', 'amz_neb', 'hist', '1986-2005')
-t_had = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
-t_cru = import_obs('tmp', 'amz_neb', 'cru_ts4.04', '1986-2005')
-t_udel = import_obs('temp', 'amz_neb', 'udel_v301', '1986-2005')
-t_era5 = import_obs('t2m', 'amz_neb', 'era5', '1986-2005')
+tt = [annual_rcm, djf_rcm, mam_rcm, jja_rcm, son_rcm]
+fig, ax = plt.subplots(figsize=(11, 9))
+# plot heatmap
+sb.heatmap(tt, cmap="Blues", vmin= 0.9, vmax=1.65,
+           linewidth=0.3, cbar_kws={"shrink": .8})
+plt.show()
+exit()
+
 
 def import_cmip5_pr(area, model):
 	
