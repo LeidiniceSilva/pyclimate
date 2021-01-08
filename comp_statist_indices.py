@@ -46,7 +46,7 @@ def compute_corr(model, obs):
 def compute_r2(model, obs):
 
 	"""
-	The input arrays must have the same dimentions
+	The input arrays must have the same dimensions
 	:Param model: Numpy array with model data
 	:Param obs: Numpy array with obs data
 	:Return: R-squared
@@ -63,7 +63,7 @@ def compute_r2(model, obs):
 def compute_mae(model, obs):
 
     """
-    The input arrays must have the same dimentions
+    The input arrays must have the same dimensions
     :Param model: Numpy array with model data
     :Param obs: Numpy array with obs data
     :Return: Mean Absoluty Error
@@ -79,7 +79,7 @@ def compute_mae(model, obs):
 def compute_rmse(model, obs):
 
     """
-    The input arrays must have the same dimentions
+    The input arrays must have the same dimensions
     :Param model: Numpy array with model data
     :Param obs: Numpy array with obs data
     :Return: Root Mean Square Error
@@ -95,7 +95,7 @@ def compute_rmse(model, obs):
 def compute_bias(model, obs):
 
     """
-    The input arrays must have the same dimentions
+    The input arrays must have the same dimensions
     :Param model: Numpy array with model data
     :Param obs: Numpy array with obs data
     :Return: Mean Bias Error
@@ -111,7 +111,7 @@ def compute_bias(model, obs):
 def compute_pbias(model, obs):
 
     """
-    The input arrays must have the same dimentions
+    The input arrays must have the same dimensions
     :Param model: Numpy array with model data
     :Param obs: Numpy array with obs data
     :Return: Percentage Bias
@@ -127,7 +127,7 @@ def compute_pbias(model, obs):
 def compute_apb(model, obs):
 
     """
-    The input arrays must have the same dimentions
+    The input arrays must have the same dimensions
     :Param model: Numpy array with model data
     :Param obs: Numpy array with obs data
     :Return: Absolute Percent Bias
@@ -143,7 +143,7 @@ def compute_apb(model, obs):
 def compute_anomaly(model, obs):
 
     """
-    The input arrays must have the same dimentions
+    The input arrays must have the same dimensions
     :Param model: Numpy array with model data
     :Param obs: Numpy array with obs data
     :Return: Anomaly and Standard Anomaly
@@ -162,7 +162,7 @@ def compute_anomaly(model, obs):
 def compute_fcst_correct(model, obs, fcst):
 
     """
-    The input arrays must have the same dimentions
+    The input arrays must have the same dimensions
     :Param model: Numpy array with model data
     :Param obs: Numpy array with obs data
     :Return: Forecast Data Correction
@@ -187,7 +187,7 @@ def compute_fcst_correct(model, obs, fcst):
 def compute_effic_coeffic(model, obs):
 
     """
-    The input arrays must have the same dimentions
+    The input arrays must have the same dimensions
     :Param model: Numpy array with model data
     :Param obs: Numpy array with obs data
     :Return: Nash–Sutcliffe Efficient Coefficient
@@ -203,16 +203,16 @@ def compute_effic_coeffic(model, obs):
 def compute_index_agreement(model, obs):
 
     """
-    The input arrays must have the same dimentions
+    The input arrays must have the same dimensions
     :Param model: Numpy array with model data
     :Param obs: Numpy array with obs data
     :Return: Index of Agreement
     """
     
-    parte_1 = (model - obs)**2
-    parte_2 = np.abs(model - np.mean(obs))
-    parte_3 = np.abs(obs - np.mean(obs))
-    icw = 1 - sum(parte_1) / sum((parte_2 + parte_3)**2)
+    p1 = (model - obs)**2
+    p2 = np.abs(model - np.mean(obs))
+    p3 = np.abs(obs - np.mean(obs))
+    icw = 1 - sum(parte_1) / sum((p2 + p3)**2)
     
     return icw
     
@@ -220,12 +220,19 @@ def compute_index_agreement(model, obs):
 def compute_added_value(gcm, rcm, obs):
 
     """
-    The input arrays must have the same dimentions
-    :Param model: Numpy array with model data
+    The input arrays must have the same dimensions
+    :Param rcm: Numpy array with regional model data
+    :Param gcm: Numpy array with global model data
     :Param obs: Numpy array with obs data
-    :Return: Added Value
+    :Return: Added Value Index
     """
     
-    av = (gcm - obs)**2 - (rcm - obs)**2 / max((gcm - obs)**2 , (rcm - obs)**2)
-    
+    p1 = (gcm - obs)**2
+    p2 = (rcm - obs)**2
+    p3 = p1 - p2
+    p4 = np.max([p1, p2], axis=0)  
+    av = p3 / p4
+   
     return av
+    
+    

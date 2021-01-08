@@ -20,10 +20,9 @@ conda_dir = conda_file_dir.split('lib')[0]
 proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
 os.environ["PROJ_LIB"] = proj_lib
 
-from matplotlib import colors as c
-from matplotlib.colors import BoundaryNorm
-from mpl_toolkits.basemap import Basemap
 from os.path import expanduser
+from mpl_toolkits.basemap import Basemap
+from matplotlib.colors import BoundaryNorm
 
 
 def import_rcm(var, exp, dt):
@@ -105,29 +104,29 @@ def plot_maps_bias(p_reg_cru, p_reg_udel, p_reg_chirps, p_reg_era5, p_had_cru, p
 		
 	fig = plt.figure()
 
-	levs = [-7, -5, -3, -1, 1, 3, 5, 7]
-
+	levs = [-4, -3, -2, -1, 1, 2, 3, 4]
+	
 	ax = fig.add_subplot(4, 4, 1)
-	plt.title(u'A) Reg - CRU', fontsize=6, fontweight='bold')
+	plt.title(u'A) Reg - CRU (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, p_reg_cru, levels=levs, latlon=True, cmap=cm.BrBG)
 	
 	ax = fig.add_subplot(4, 4, 2)
-	plt.title(u'B) Reg - UDEL', fontsize=6, fontweight='bold')
+	plt.title(u'B) Reg - UDEL (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, p_reg_udel, levels=levs, latlon=True, cmap=cm.BrBG)
 
 	ax = fig.add_subplot(4, 4, 3)
-	plt.title(u'C) Reg - CHIRPS', fontsize=6, fontweight='bold')
+	plt.title(u'C) Reg - CHIRPS (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, p_reg_chirps, levels=levs, latlon=True, cmap=cm.BrBG) 
 	
 	ax = fig.add_subplot(4, 4, 4)
-	plt.title(u'D) Reg - ERA5', fontsize=6, fontweight='bold')
+	plt.title(u'D) Reg - ERA5 (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, p_reg_era5, levels=levs, latlon=True, cmap=cm.BrBG)
@@ -135,26 +134,26 @@ def plot_maps_bias(p_reg_cru, p_reg_udel, p_reg_chirps, p_reg_era5, p_had_cru, p
 	cbar.ax.tick_params(labelsize=6) 
 	
 	ax = fig.add_subplot(4, 4, 5)
-	plt.title(u'E) Had - CRU', fontsize=6, fontweight='bold')
+	plt.title(u'E) Had - CRU (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, p_had_cru, levels=levs, latlon=True, cmap=cm.BrBG) 
 	
 	ax = fig.add_subplot(4, 4, 6)
-	plt.title(u'F) Had - UDEL', fontsize=6, fontweight='bold')
+	plt.title(u'F) Had - UDEL (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, p_had_udel, levels=levs, latlon=True, cmap=cm.BrBG)
 	
 	ax = fig.add_subplot(4, 4, 7)
-	plt.title(u'G) Had - CHIRPS', fontsize=6, fontweight='bold')
+	plt.title(u'G) Had - CHIRPS (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, p_had_chirps, levels=levs, latlon=True, cmap=cm.BrBG) 
 	
 	ax = fig.add_subplot(4, 4, 8)
-	plt.title(u'H) Had - ERA5', fontsize=6, fontweight='bold')
+	plt.title(u'H) Had - ERA5 (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, p_had_era5, levels=levs, latlon=True, cmap=cm.BrBG)
@@ -162,20 +161,20 @@ def plot_maps_bias(p_reg_cru, p_reg_udel, p_reg_chirps, p_reg_era5, p_had_cru, p
 	cbar.ax.tick_params(labelsize=6) 
 	
 	ax = fig.add_subplot(4, 4, 9)
-	plt.title(u'I) Reg - CRU', fontsize=6, fontweight='bold')
+	plt.title(u'I) Reg - CRU (°C)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, t_reg_cru[0,:,:], levels=levs, latlon=True, cmap=cm.bwr)
 	
 	ax = fig.add_subplot(4, 4, 10)
-	plt.title(u'J) Reg - UDEL', fontsize=6, fontweight='bold')
+	plt.title(u'J) Reg - UDEL (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, t_reg_udel[0,:,:], levels=levs, latlon=True, cmap=cm.bwr)
 	
 	ax = fig.add_subplot(4, 4, 11)
-	plt.title(u'L) Reg - ERA5', fontsize=6, fontweight='bold')
+	plt.title(u'L) Reg - ERA5 (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, t_reg_era5[0,:,:], levels=levs, latlon=True, cmap=cm.bwr) 
@@ -183,7 +182,7 @@ def plot_maps_bias(p_reg_cru, p_reg_udel, p_reg_chirps, p_reg_era5, p_had_cru, p
 	cbar.ax.tick_params(labelsize=6)
 	
 	ax = fig.add_subplot(4, 4, 13)
-	plt.title(u'M) Had - CRU', fontsize=6, fontweight='bold')
+	plt.title(u'M) Had - CRU (°C)', fontsize=6, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
@@ -191,20 +190,22 @@ def plot_maps_bias(p_reg_cru, p_reg_udel, p_reg_chirps, p_reg_era5, p_had_cru, p
 	plt_maps_bias = map.contourf(xx, yy, t_had_cru, levels=levs, latlon=True, cmap=cm.bwr) 
 	
 	ax = fig.add_subplot(4, 4, 14)
-	plt.title(u'N) Had - UDEL', fontsize=6, fontweight='bold')
+	plt.title(u'N) Had - UDEL (°C)', fontsize=6, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, t_had_udel, levels=levs, latlon=True, cmap=cm.bwr) 
 	
 	ax = fig.add_subplot(4, 4, 15)
-	plt.title(u'O) Had - ERA5', fontsize=6, fontweight='bold')
+	plt.title(u'O) Had - ERA5 (°C)', fontsize=6, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_bias = map.contourf(xx, yy, t_had_era5, levels=levs, latlon=True, cmap=cm.bwr) 
 	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
 	cbar.ax.tick_params(labelsize=6) 
+	
+	fig.tight_layout()
 	
 	return plt_maps_bias
 
@@ -245,7 +246,7 @@ plt_map = plot_maps_bias(p_reg_cru, p_reg_udel, p_reg_chirps, p_reg_era5, p_had_
 plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.25, hspace=0.10)
 
 # Path out to save bias figure
-path_out = '/home/nice/Documents'
+path_out = '/home/nice/Downloads'
 name_out = 'pyplt_maps_bias_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
