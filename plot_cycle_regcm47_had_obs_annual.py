@@ -17,10 +17,6 @@ import matplotlib as mpl
 
 from pylab import *
 from netCDF4 import Dataset
-from sklearn import metrics
-from scipy.stats import norm
-from matplotlib.font_manager import FontProperties
-
 
 def import_rcm(var, area, exp, dt):
 	

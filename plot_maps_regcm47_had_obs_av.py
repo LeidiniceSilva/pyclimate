@@ -83,8 +83,8 @@ def basemap(lat, lon):
 	new_lon = lon[::-1]
 	
 	map = Basemap(projection='cyl', llcrnrlon=-85., llcrnrlat=-20., urcrnrlon=-15.,urcrnrlat=10., resolution='c')
-	map.drawmeridians(np.arange(-85.,-5.,10.), labels=[0,0,0,1], linewidth=0.4)
-	map.drawparallels(np.arange(-20.,15.,5.), labels=[1,0,0,0], linewidth=0.4)
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,1], linewidth=0.4)
+	map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4)
 	
 	xin = np.linspace(map.xmin,map.xmax,20) 
 	yin = np.linspace(map.ymin,map.ymax,20) 
@@ -101,30 +101,69 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 	
-def plot_maps_av(av_rcm_gcm_pre, av_rcm_gcm_tas):
+def plot_maps_av(av_rcm_gcm_cru_pre, av_rcm_gcm_udel_pre, av_rcm_gcm_chirps_pre, av_rcm_gcm_era5_pre, av_rcm_gcm_cru_tas, av_rcm_gcm_udel_tas, av_rcm_gcm_era5_tas):
 		
 	fig = plt.figure()
 
 	levs = [-1, -0.8, -0.6, -0.4, -0.2, 0.2, 0.4, 0.6, 0.8, 1]
-	
-	ax = fig.add_subplot(2, 1, 1)
-	plt.title(u'A) AV (mm d⁻¹)', fontweight='bold')
-	plt.ylabel(u'Latitude', labelpad=30, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ')
+
+	ax = fig.add_subplot(4, 2, 1)
+	plt.title(u'A) AV Reg Had CRU (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.ylabel(u'Latitude', labelpad=15, fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, av_rcm_gcm_pre, levels=levs, latlon=True, cmap=cm.PiYG)
+	plt_maps_av = map.contourf(xx, yy, av_rcm_gcm_cru_pre, levels=levs, latlon=True, cmap=cm.PiYG)
+	
+	ax = fig.add_subplot(4, 2, 2)
+	plt.title(u'B) AV Reg Had UDEL (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_av = map.contourf(xx, yy, av_rcm_gcm_udel_pre, levels=levs, latlon=True, cmap=cm.PiYG)
 	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6) 
+	
+	ax = fig.add_subplot(4, 2, 3)
+	plt.title(u'C) AV Reg Had CHIRPS (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.ylabel(u'Latitude', labelpad=15, fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_av = map.contourf(xx, yy, av_rcm_gcm_chirps_pre, levels=levs, latlon=True, cmap=cm.PiYG)
+	
+	ax = fig.add_subplot(4, 2, 4)
+	plt.title(u'D) AV Reg Had ERA5 (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_av = map.contourf(xx, yy, av_rcm_gcm_era5_pre, levels=levs, latlon=True, cmap=cm.PiYG)
+	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6) 
+	
+	ax = fig.add_subplot(4, 2, 5)
+	plt.title(u'E) AV Reg Had CRU (°C)', fontsize=6, fontweight='bold')
+	plt.ylabel(u'Latitude', labelpad=15, fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_av = map.contourf(xx, yy, av_rcm_gcm_cru_tas, levels=levs, latlon=True, cmap=cm.PiYG)
+	
+	ax = fig.add_subplot(4, 2, 6)
+	plt.title(u'F) AV Reg Had UDEL (°C)', fontsize=6, fontweight='bold')
+	plt.xlabel(u'Longitude', labelpad=15, fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_av = map.contourf(xx, yy, av_rcm_gcm_udel_tas, levels=levs, latlon=True, cmap=cm.PiYG)
+	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6) 
 		
-	ax = fig.add_subplot(2, 1, 2)
-	plt.title(u'B) AV (°C)', fontweight='bold')
-	plt.xlabel(u'Longitude', labelpad=20, fontweight='bold')
-	plt.ylabel(u'Latitude', labelpad=30, fontweight='bold')	
-	plt.text(-23, -17, u'\u25B2 \nN ')
+	ax = fig.add_subplot(4, 2, 7)
+	plt.title(u'G) AV Reg Had ERA5 (°C)', fontsize=6, fontweight='bold')
+	plt.xlabel(u'Longitude', labelpad=15, fontsize=6, fontweight='bold')
+	plt.ylabel(u'Latitude', labelpad=15, fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, av_rcm_gcm_tas, levels=levs, latlon=True, cmap=cm.PiYG) 
-	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
-	
-	return plt_maps_bias
+	plt_maps_av = map.contourf(xx, yy, av_rcm_gcm_era5_tas, levels=levs, latlon=True, cmap=cm.PiYG)
+
+	fig.tight_layout()
+
+	return plt_maps_av
 
 
 # Import regcm exp and cru databases 	   
@@ -148,15 +187,17 @@ av_rcm_gcm_chirps_pre = compute_added_value(rcm_pre, gcm_pre, chirps_pre)
 av_rcm_gcm_era5_pre = compute_added_value(rcm_pre, gcm_pre, era5_pre)
 
 av_rcm_gcm_cru_tas = compute_added_value(np.nanmean(rcm_tas, axis=0), gcm_tas, cru_tas)
+av_rcm_gcm_udel_tas = compute_added_value(np.nanmean(rcm_tas, axis=0), gcm_tas, udel_tas)
+av_rcm_gcm_era5_tas = compute_added_value(np.nanmean(rcm_tas, axis=0), gcm_tas, era5_tas)
 
 # Plot maps with the function
-plt_map = plot_maps_av(av_rcm_gcm_pre, av_rcm_gcm_tas)
+plt_map = plot_maps_av(av_rcm_gcm_cru_pre, av_rcm_gcm_udel_pre, av_rcm_gcm_chirps_pre, av_rcm_gcm_era5_pre, av_rcm_gcm_cru_tas, av_rcm_gcm_udel_tas, av_rcm_gcm_era5_tas)
 
-plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.50, hspace=0.25)
+plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.35, hspace=0.35)
 
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_ad_reg_had_obs_1986-2005.png'
+name_out = 'pyplt_maps_av_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')

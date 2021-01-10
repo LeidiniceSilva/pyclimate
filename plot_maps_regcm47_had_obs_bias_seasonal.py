@@ -37,15 +37,15 @@ def import_rcm(var, area, exp, dt):
 	value  = var[:][:,:,:]
 
 	season_rcm = value[2:240:3,:,:]
-	djf_rcm = np.nanmean(season_rcm[3:80:4], axis=0)
-	mam_rcm = np.nanmean(season_rcm[0:80:4], axis=0)
-	jja_rcm = np.nanmean(season_rcm[1:80:4], axis=0)
-	son_rcm = np.nanmean(season_rcm[2:80:4], axis=0)
+	#~ djf_rcm = np.nanmean(season_rcm[3:80:4], axis=0)
+	#~ mam_rcm = np.nanmean(season_rcm[0:80:4], axis=0)
+	#~ jja_rcm = np.nanmean(season_rcm[1:80:4], axis=0)
+	#~ son_rcm = np.nanmean(season_rcm[2:80:4], axis=0)
 
-	#~ djf_rcm = np.nanmean(np.nanmean(season_rcm[3:80:4], axis=0), axis=0)
-	#~ mam_rcm = np.nanmean(np.nanmean(season_rcm[0:80:4], axis=0), axis=0)
-	#~ jja_rcm = np.nanmean(np.nanmean(season_rcm[1:80:4], axis=0), axis=0)
-	#~ son_rcm = np.nanmean(np.nanmean(season_rcm[2:80:4], axis=0), axis=0)
+	djf_rcm = np.nanmean(np.nanmean(season_rcm[3:80:4], axis=0), axis=0)
+	mam_rcm = np.nanmean(np.nanmean(season_rcm[0:80:4], axis=0), axis=0)
+	jja_rcm = np.nanmean(np.nanmean(season_rcm[1:80:4], axis=0), axis=0)
+	son_rcm = np.nanmean(np.nanmean(season_rcm[2:80:4], axis=0), axis=0)
 
 	return lat, lon, djf_rcm, mam_rcm, jja_rcm, son_rcm
 
@@ -123,123 +123,208 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 	
-def plot_maps_bias_seasonal(djf_b1,djf_b2,djf_b3,djf_b4,mam_b1,mam_b2,mam_b3,mam_b4,jja_b1,jja_b2,jja_b3,jja_b4,son_b1,son_b2,son_b3,son_b4):
+def plot_maps_bias_seasonal(djf_b1,djf_b2,djf_b3,mam_b1,mam_b2,mam_b3,jja_b1,jja_b2,jja_b3,son_b1,son_b2,son_b3):
 		
 	fig = plt.figure()
 
 	levs = [-4, -3, -2, -1, 1, 2, 3, 4]
 	
-	ax = fig.add_subplot(4, 4, 1)
-	plt.title(u'A) Had - CRU DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, djf_b1, levels=levs, latlon=True, cmap=cm.BrBG)
+	#~ ax = fig.add_subplot(4, 4, 1)
+	#~ plt.title(u'A) Had - CRU DJF (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.ylabel(u'Latitude', fontsize=5, labelpad=15, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, djf_b1, levels=levs, latlon=True, cmap=cm.BrBG)
 	
-	ax = fig.add_subplot(4, 4, 2)
-	plt.title(u'B) Had - CRU MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
-	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, mam_b1, levels=levs, latlon=True, cmap=cm.BrBG)
+	#~ ax = fig.add_subplot(4, 4, 2)
+	#~ plt.title(u'B) Had - CRU MAM (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)	
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, mam_b1, levels=levs, latlon=True, cmap=cm.BrBG)
 
-	ax = fig.add_subplot(4, 4, 3)
-	plt.title(u'C) Had - CRU JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, jja_b1, levels=levs, latlon=True, cmap=cm.BrBG) 
+	#~ ax = fig.add_subplot(4, 4, 3)
+	#~ plt.title(u'C) Had - CRU JJA (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, jja_b1, levels=levs, latlon=True, cmap=cm.BrBG) 
 	
-	ax = fig.add_subplot(4, 4, 4)
-	plt.title(u'D) Had - CRU SON (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ ax = fig.add_subplot(4, 4, 4)
+	#~ plt.title(u'D) Had - CRU SON (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, son_b1, levels=levs, latlon=True, cmap=cm.BrBG)
+	#~ cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	#~ cbar.ax.tick_params(labelsize=6) 
+	
+	#~ ax = fig.add_subplot(4, 4, 5)
+	#~ plt.title(u'E) Had - UDEL DJF (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ plt.ylabel(u'Latitude', fontsize=5, labelpad=15, fontweight='bold')
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, djf_b2, levels=levs, latlon=True, cmap=cm.BrBG) 
+	
+	#~ ax = fig.add_subplot(4, 4, 6)
+	#~ plt.title(u'F) Had - UDEL MAM (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, mam_b2, levels=levs, latlon=True, cmap=cm.BrBG)
+	
+	#~ ax = fig.add_subplot(4, 4, 7)
+	#~ plt.title(u'G) Had - UDEL JJA (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, jja_b2, levels=levs, latlon=True, cmap=cm.BrBG) 
+	
+	#~ ax = fig.add_subplot(4, 4, 8)
+	#~ plt.title(u'H) Had - UDEL SON (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)	
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, son_b2, levels=levs, latlon=True, cmap=cm.BrBG)
+	#~ cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	#~ cbar.ax.tick_params(labelsize=6) 
+	
+	#~ ax = fig.add_subplot(4, 4, 9)
+	#~ plt.title(u'I) Had - CHIRPS DJF (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.ylabel(u'Latitude', fontsize=5, labelpad=15, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, djf_b3, levels=levs, latlon=True, cmap=cm.BrBG)
+	
+	#~ ax = fig.add_subplot(4, 4, 10)
+	#~ plt.title(u'J) Had - CHIRPS MAM (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)	
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, mam_b3, levels=levs, latlon=True, cmap=cm.BrBG)
+	
+	#~ ax = fig.add_subplot(4, 4, 11)
+	#~ plt.title(u'L) Had - CHIRPS JJA (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)	
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, jja_b3, levels=levs, latlon=True, cmap=cm.BrBG)
+	
+	#~ ax = fig.add_subplot(4, 4, 12)
+	#~ plt.title(u'M) Had - CHIRPS SON (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, son_b3, levels=levs, latlon=True, cmap=cm.BrBG) 
+	#~ cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	#~ cbar.ax.tick_params(labelsize=6)
+	
+	#~ ax = fig.add_subplot(4, 4, 13)
+	#~ plt.title(u'N) Had - ERA5 DJF (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.xlabel(u'Longitude', fontsize=5, labelpad=10, fontweight='bold')	
+	#~ plt.ylabel(u'Latitude', fontsize=5, labelpad=15, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, djf_b4, levels=levs, latlon=True, cmap=cm.BrBG) 
+	
+	#~ ax = fig.add_subplot(4, 4, 14)
+	#~ plt.title(u'O) Had - ERA5 MAM (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.xlabel(u'Longitude', fontsize=5, labelpad=10, fontweight='bold')	
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, mam_b4, levels=levs, latlon=True, cmap=cm.BrBG) 
+	
+	#~ ax = fig.add_subplot(4, 4, 15)
+	#~ plt.title(u'P) Had - ERA5 JJA (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.xlabel(u'Longitude', fontsize=5, labelpad=10, fontweight='bold')	
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plt_maps_bias = map.contourf(xx, yy, jja_b4, levels=levs, latlon=True, cmap=cm.BrBG) 
+
+	#~ ax = fig.add_subplot(4, 4, 16)
+	#~ plt.title(u'Q) Had - ERA5 SON (mm d⁻¹)', fontsize=5, fontweight='bold')
+	#~ plt.xlabel(u'Longitude', fontsize=5, labelpad=10, fontweight='bold')	
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	#~ map, xx, yy = basemap(lat, lon)	
+	#~ plt_maps_bias = map.contourf(xx, yy, son_b4, levels=levs, latlon=True, cmap=cm.BrBG) 
+	#~ cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+	#~ cbar.ax.tick_params(labelsize=6) 
+
+	ax = fig.add_subplot(3, 4, 1)
+	plt.title(u'A) Had - CRU DJF (°C)', fontsize=5, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=5, labelpad=15, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, son_b1, levels=levs, latlon=True, cmap=cm.BrBG)
+	plt_maps_bias = map.contourf(xx, yy, djf_b1, levels=levs, latlon=True, cmap=cm.bwr)
+	
+	ax = fig.add_subplot(3, 4, 2)
+	plt.title(u'B) Had - CRU MAM (°C)', fontsize=5, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)	
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_bias = map.contourf(xx, yy, mam_b1, levels=levs, latlon=True, cmap=cm.bwr)
+
+	ax = fig.add_subplot(3, 4, 3)
+	plt.title(u'C) Had - CRU JJA (°C)', fontsize=5, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_bias = map.contourf(xx, yy, jja_b1, levels=levs, latlon=True, cmap=cm.bwr) 
+	
+	ax = fig.add_subplot(3, 4, 4)
+	plt.title(u'D) Had - CRU SON (°C)', fontsize=5, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	map, xx, yy = basemap(lat, lon)
+	plt_maps_bias = map.contourf(xx, yy, son_b1, levels=levs, latlon=True, cmap=cm.bwr)
 	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
 	cbar.ax.tick_params(labelsize=6) 
 	
-	ax = fig.add_subplot(4, 4, 5)
-	plt.title(u'E) Had - UDEL DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	ax = fig.add_subplot(3, 4, 5)
+	plt.title(u'E) Had - UDEL DJF (°C)', fontsize=5, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
+	plt.ylabel(u'Latitude', fontsize=5, labelpad=15, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, djf_b2, levels=levs, latlon=True, cmap=cm.BrBG) 
+	plt_maps_bias = map.contourf(xx, yy, djf_b2, levels=levs, latlon=True, cmap=cm.bwr) 
 	
-	ax = fig.add_subplot(4, 4, 6)
-	plt.title(u'F) Had - UDEL MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	ax = fig.add_subplot(3, 4, 6)
+	plt.title(u'F) Had - UDEL MAM (°C)', fontsize=5, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, mam_b2, levels=levs, latlon=True, cmap=cm.BrBG)
+	plt_maps_bias = map.contourf(xx, yy, mam_b2, levels=levs, latlon=True, cmap=cm.bwr)
 	
-	ax = fig.add_subplot(4, 4, 7)
-	plt.title(u'G) Had - UDEL JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	ax = fig.add_subplot(3, 4, 7)
+	plt.title(u'G) Had - UDEL JJA (°C)', fontsize=5, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, jja_b2, levels=levs, latlon=True, cmap=cm.BrBG) 
+	plt_maps_bias = map.contourf(xx, yy, jja_b2, levels=levs, latlon=True, cmap=cm.bwr) 
 	
-	ax = fig.add_subplot(4, 4, 8)
-	plt.title(u'H) Had - UDEL SON (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	ax = fig.add_subplot(3, 4, 8)
+	plt.title(u'H) Had - UDEL SON (°C)', fontsize=5, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)	
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, son_b2, levels=levs, latlon=True, cmap=cm.BrBG)
+	plt_maps_bias = map.contourf(xx, yy, son_b2, levels=levs, latlon=True, cmap=cm.bwr)
 	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
 	cbar.ax.tick_params(labelsize=6) 
 	
-	ax = fig.add_subplot(4, 4, 9)
-	plt.title(u'I) Had - CHIRPS DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	ax = fig.add_subplot(3, 4, 9)
+	plt.title(u'I) Had - ERA5 DJF (°C)', fontsize=5, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=5, labelpad=10, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=5, labelpad=15, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, djf_b3, levels=levs, latlon=True, cmap=cm.BrBG)
+	plt_maps_bias = map.contourf(xx, yy, djf_b3, levels=levs, latlon=True, cmap=cm.bwr)
 	
-	ax = fig.add_subplot(4, 4, 10)
-	plt.title(u'J) Had - CHIRPS MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	ax = fig.add_subplot(3, 4, 10)
+	plt.title(u'J) Had - ERA5 MAM (°C)', fontsize=5, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=5, labelpad=10, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)	
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, mam_b3, levels=levs, latlon=True, cmap=cm.BrBG)
+	plt_maps_bias = map.contourf(xx, yy, mam_b3, levels=levs, latlon=True, cmap=cm.bwr)
 	
-	ax = fig.add_subplot(4, 4, 11)
-	plt.title(u'L) Had - CHIRPS JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	ax = fig.add_subplot(3, 4, 11)
+	plt.title(u'L) Had - ERA5 JJA (°C)', fontsize=5, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=5, labelpad=10, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)	
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, jja_b3, levels=levs, latlon=True, cmap=cm.BrBG)
+	plt_maps_bias = map.contourf(xx, yy, jja_b3, levels=levs, latlon=True, cmap=cm.bwr)
 	
-	ax = fig.add_subplot(4, 4, 12)
-	plt.title(u'M) Had - CHIRPS SON (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	ax = fig.add_subplot(3, 4, 12)
+	plt.title(u'M) Had - ERA5 SON (°C)', fontsize=5, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=5, labelpad=10, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=5)
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, son_b3, levels=levs, latlon=True, cmap=cm.BrBG) 
+	plt_maps_bias = map.contourf(xx, yy, son_b3, levels=levs, latlon=True, cmap=cm.bwr) 
 	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
 	cbar.ax.tick_params(labelsize=6)
-	
-	ax = fig.add_subplot(4, 4, 13)
-	plt.title(u'N) Had - ERA5 DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, djf_b4, levels=levs, latlon=True, cmap=cm.BrBG) 
-	
-	ax = fig.add_subplot(4, 4, 14)
-	plt.title(u'O) Had - ERA5 MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, mam_b4, levels=levs, latlon=True, cmap=cm.BrBG) 
-	
-	ax = fig.add_subplot(4, 4, 15)
-	plt.title(u'P) Had - ERA5 JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plt_maps_bias = map.contourf(xx, yy, jja_b4, levels=levs, latlon=True, cmap=cm.BrBG) 
-
-	ax = fig.add_subplot(4, 4, 16)
-	plt.title(u'Q) Had - ERA5 SON (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)	
-	plt_maps_bias = map.contourf(xx, yy, son_b4, levels=levs, latlon=True, cmap=cm.BrBG) 
-	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
-	cbar.ax.tick_params(labelsize=6) 
 	
 	fig.tight_layout()
 	
@@ -247,61 +332,65 @@ def plot_maps_bias_seasonal(djf_b1,djf_b2,djf_b3,djf_b4,mam_b1,mam_b2,mam_b3,mam
 
 
 # Import regcm exp and cru databases 	   
-lat, lon, djf_rcm, mam_rcm, jja_rcm, son_rcm = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
-lat, lon, djf_gcm, mam_gcm, jja_gcm, son_gcm = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
-lat, lon, djf_cru, mam_cru, jja_cru, son_cru = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')
-lat, lon, djf_udel, mam_udel, jja_udel, son_udel = import_obs('pre', 'amz_neb', 'udel_v301', '1986-2005')
-lat, lon, djf_chirps, mam_chirps, jja_chirps, son_chirps = import_obs('precip', 'amz_neb', 'chirps-v2.0', '1986-2005')
-lat, lon, djf_era5, mam_era5, jja_era5, son_era5 = import_obs('mtpr', 'amz_neb', 'era5', '1986-2005')
+#~ lat, lon, djf_rcm, mam_rcm, jja_rcm, son_rcm = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
+#~ lat, lon, djf_gcm, mam_gcm, jja_gcm, son_gcm = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
+#~ lat, lon, djf_cru, mam_cru, jja_cru, son_cru = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')
+#~ lat, lon, djf_udel, mam_udel, jja_udel, son_udel = import_obs('pre', 'amz_neb', 'udel_v301', '1986-2005')
+#~ lat, lon, djf_chirps, mam_chirps, jja_chirps, son_chirps = import_obs('precip', 'amz_neb', 'chirps-v2.0', '1986-2005')
+#~ lat, lon, djf_era5, mam_era5, jja_era5, son_era5 = import_obs('mtpr', 'amz_neb', 'era5', '1986-2005')
+
+lat, lon, djf_rcm, mam_rcm, jja_rcm, son_rcm = import_rcm('tas', 'amz_neb', 'hist', '1986-2005')
+lat, lon, djf_gcm, mam_gcm, jja_gcm, son_gcm = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
+lat, lon, djf_cru, mam_cru, jja_cru, son_cru = import_obs('tmp', 'amz_neb', 'cru_ts4.04', '1986-2005')
+lat, lon, djf_udel, mam_udel, jja_udel, son_udel = import_obs('temp', 'amz_neb', 'udel_v301', '1986-2005')
+lat, lon, djf_era5, mam_era5, jja_era5, son_era5 = import_obs('t2m', 'amz_neb', 'era5', '1986-2005')
 
 # Compute and plot bias from regcm exp and cru database
 #~ djf_b1 = djf_rcm - djf_cru
 #~ djf_b2 = djf_rcm - djf_udel
-#~ djf_b3 = djf_rcm - djf_chirps
+#~ djf_b3 = djf_rcm - djf_era5
 #~ djf_b4 = djf_rcm - djf_era5
 
 #~ mam_b1 = mam_rcm - mam_cru
 #~ mam_b2 = mam_rcm - mam_udel
-#~ mam_b3 = mam_rcm - mam_chirps
+#~ mam_b3 = mam_rcm - mam_era5
 #~ mam_b4 = mam_rcm - mam_era5
 
 #~ jja_b1 = jja_rcm - jja_cru
 #~ jja_b2 = jja_rcm - jja_udel
-#~ jja_b3 = jja_rcm - jja_chirps
+#~ jja_b3 = jja_rcm - jja_era5
 #~ jja_b4 = jja_rcm - jja_era5
 
 #~ son_b1 = son_rcm - son_cru
 #~ son_b2 = son_rcm - son_udel
-#~ son_b3 = son_rcm - son_chirps
+#~ son_b3 = son_rcm - son_era5
 #~ son_b4 = son_rcm - son_era5
 
-djf_b1 = djf_rcm - djf_cru
-djf_b2 = djf_rcm - djf_udel
-djf_b3 = djf_rcm - djf_chirps
-djf_b4 = djf_rcm - djf_era5
+djf_b1 = djf_gcm - djf_cru
+djf_b2 = djf_gcm - djf_udel
+djf_b3 = djf_gcm - djf_era5
 
-mam_b1 = mam_rcm - mam_cru
-mam_b2 = mam_rcm - mam_udel
-mam_b3 = mam_rcm - mam_chirps
-mam_b4 = mam_rcm - mam_era5
+mam_b1 = mam_gcm - mam_cru
+mam_b2 = mam_gcm - mam_udel
+mam_b3 = mam_gcm - mam_era5
 
-jja_b1 = jja_rcm - jja_cru
-jja_b2 = jja_rcm - jja_udel
-jja_b3 = jja_rcm - jja_chirps
-jja_b4 = jja_rcm - jja_era5
+jja_b1 = jja_gcm - jja_cru
+jja_b2 = jja_gcm - jja_udel
+jja_b3 = jja_gcm - jja_era5
 
-son_b1 = son_rcm - son_cru
-son_b2 = son_rcm - son_udel
-son_b3 = son_rcm - son_chirps
-son_b4 = son_rcm - son_era5
+son_b1 = son_gcm - son_cru
+son_b2 = son_gcm - son_udel
+son_b3 = son_gcm - son_era5
 
 # Plot maps with the function
-plt_map = plot_maps_bias_seasonal(djf_b1,djf_b2,djf_b3,djf_b4,mam_b1,mam_b2,mam_b3,mam_b4,jja_b1,jja_b2,jja_b3,jja_b4,son_b1,son_b2,son_b3,son_b4)
-plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.35, hspace=0.50)
+#~ plt_map = plot_maps_bias_seasonal(djf_b1,djf_b2,djf_b3,djf_b4,mam_b1,mam_b2,mam_b3,mam_b4,jja_b1,jja_b2,jja_b3,jja_b4,son_b1,son_b2,son_b3,son_b4)
+plt_map = plot_maps_bias_seasonal(djf_b1,djf_b2,djf_b3,mam_b1,mam_b2,mam_b3,jja_b1,jja_b2,jja_b3,son_b1,son_b2,son_b3)
+
+plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.35, hspace=0.20)
 
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_bias_seasonal_pre_gcm_obs_1986-2005.png'
+name_out = 'pyplt_maps_bias_seasonal_tas_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
