@@ -12,22 +12,6 @@ import numpy as np
 import scipy.stats as st
 
 
-def check_dims(model, obs):
-    
-    if not model.ndim == obs.ndim:
-        print('Dims are not equals!')
-        exit(1)
-
-
-def filter_nan(model, obs):
-    
-    data = np.array([model.flatten(), obs.flatten()])
-    data = np.transpose(data)
-    data = data[~np.isnan(data).any(1)]
-    
-    return data[:, 0], data[:, 1]
-
-
 def compute_corr(model, obs):
 
     """
@@ -36,9 +20,8 @@ def compute_corr(model, obs):
     :Param obs: Numpy array with obs data
     :Return: Pearson Linear Correlation
     """
-    
-    # check_dims(model, obs)
-    # model, obs = filter_nan(model, obs)
+   
+    check_dims(model, obs)
     corr = np.corrcoef(model, obs)[0][1]
     
     return corr
@@ -52,8 +35,6 @@ def compute_r2(model, obs):
 	:Return: R-squared
 	"""
 
-	# check_dims(model, obs)
-	# model, obs = filter_nan(model, obs)
 	corr = np.corrcoef(model, obs)[0][1]
 	r2 = corr ** 2
 
@@ -69,8 +50,6 @@ def compute_mae(model, obs):
     :Return: Mean Absoluty Error
     """
 
-    check_dims(model, obs)
-    model, obs = filter_nan(model, obs)
     mae = np.mean(np.abs(model - obs))
     
     return mae
@@ -85,8 +64,6 @@ def compute_rmse(model, obs):
     :Return: Root Mean Square Error
     """
 
-    # check_dims(model, obs)
-    # model, obs = filter_nan(model, obs)
     rmse = np.sqrt(((np.array(model) - np.array(obs)) ** 2).mean()) 
     
     return rmse
@@ -101,8 +78,6 @@ def compute_bias(model, obs):
     :Return: Mean Bias Error
     """
 
-    check_dims(model, obs)
-    model, obs = filter_nan(model, obs)
     bias = np.nanmean(np.array(model) - np.array(obs))
     
     return bias
@@ -117,8 +92,6 @@ def compute_pbias(model, obs):
     :Return: Percentage Bias
     """
 
-    # check_dims(model, obs)
-    # model, obs = filter_nan(model, obs)
     pbias = 100.0 * sum(np.array(model) - np.array(obs)) / sum(np.array(obs))
     
     return pbias
@@ -133,8 +106,6 @@ def compute_apb(model, obs):
     :Return: Absolute Percent Bias
     """
 
-    check_dims(model, obs)
-    model, obs = filter_nan(model, obs)
     apb = 100.0 * sum(np.abs(model, obs)) / sum(obs)
     
     return apb
@@ -149,8 +120,6 @@ def compute_anomaly(model, obs):
     :Return: Anomaly and Standard Anomaly
     """
 
-    check_dims(model, obs)
-    model, obs = filter_nan(model, obs)
     clim_mean = np.nanmean(obs, axis=0)
     clim_std = np.nanstd(obs, axis=0)
     anomaly = model - clim_mean
@@ -167,9 +136,6 @@ def compute_fcst_correct(model, obs, fcst):
     :Param obs: Numpy array with obs data
     :Return: Forecast Data Correction
     """
-
-    check_dims(model, obs)
-    model, obs = filter_nan(model, obs)
 
     sim = np.sort(model)
     alpha_mod, loc_mod, beta_mod = ss.gamma.fit(sim, loc=0)
@@ -193,8 +159,6 @@ def compute_effic_coeffic(model, obs):
     :Return: Nash–Sutcliffe Efficient Coefficient
     """
 
-    check_dims(model, obs)
-    model, obs = filter_nan(model, obs)
     nash = 1 - sum((model - obs) ** 2) / sum((obs - np.mean(obs)) ** 2)
     
     return nash
@@ -208,7 +172,7 @@ def compute_index_agreement(model, obs):
     :Param obs: Numpy array with obs data
     :Return: Index of Agreement
     """
-    
+
     p1 = (model - obs)**2
     p2 = np.abs(model - np.mean(obs))
     p3 = np.abs(obs - np.mean(obs))
@@ -226,7 +190,7 @@ def compute_added_value(gcm, rcm, obs):
     :Param obs: Numpy array with obs data
     :Return: Added Value Index
     """
-    
+
     p1 = (gcm - obs)**2
     p2 = (rcm - obs)**2
     p3 = p1 - p2
@@ -236,3 +200,6 @@ def compute_added_value(gcm, rcm, obs):
     return av
     
     
+
+	
+	

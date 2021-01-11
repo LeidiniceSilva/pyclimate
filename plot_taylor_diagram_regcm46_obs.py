@@ -25,10 +25,10 @@ class TaylorDiagram(object):
     theta=arccos(correlation).
     """
 
-    def __init__(self, refstd, fig=None, rect=111, label='_', srange=(0, 1.5), extend=False):
+    def __init__(self, refstd, fig=None, rect=336, label='_', srange=(0., 6.5), extend=False):
         """
         Set up Taylor diagram axes, i.e. single quadrant polar
-        plot, using 'mpl_toolkits.axisartist.floating_axes'.
+        plot, using `mpl_toolkits.axisartist.floating_axes`.
         Parameters:
         * refstd: reference standard deviation to be compared to
         * fig: input Figure or None
@@ -60,11 +60,13 @@ class TaylorDiagram(object):
         self.smin = srange[0] * self.refstd
         self.smax = srange[1] * self.refstd
 
-
-        ghelper = FA.GridHelperCurveLinear(
-            tr, extremes=(0, self.tmax, self.smin, self.smax),
-            grid_locator1=gl1, tick_formatter1=tf1)
-
+        ghelper = FA.GridHelperCurveLinear(tr,
+                                           extremes=(0,self.tmax, # 1st quadrant
+                                                     self.smin,self.smax),
+                                           grid_locator1=gl1,
+                                           tick_formatter1=tf1,
+                                           )
+		
         if fig is None:
             fig = plt.figure()
 
@@ -76,14 +78,15 @@ class TaylorDiagram(object):
         ax.axis["top"].toggle(ticklabels=True, label=True)
         ax.axis["top"].major_ticklabels.set_axis_direction("top")
         ax.axis["top"].label.set_axis_direction("top")
-        ax.axis["top"].label.set_text(u'')
+        ax.axis["top"].label.set_text(u'Correlação')
 
         ax.axis["left"].set_axis_direction("bottom")  # "X axis"
-        ax.axis["left"].label.set_text(u'')
+        ax.axis["left"].label.set_text(u'Desvio padrão')
         
         ax.axis["right"].set_axis_direction("top")    # "Y-axis"
         ax.axis["right"].toggle(ticklabels=True)
-        ax.axis["right"].major_ticklabels.set_axis_direction("bottom" if extend else "left")
+        ax.axis["right"].major_ticklabels.set_axis_direction(
+			"bottom" if extend else "left")
 
         if self.smin:
             ax.axis["bottom"].toggle(ticklabels=False, label=False)
@@ -111,7 +114,7 @@ class TaylorDiagram(object):
 
         l, = self.ax.plot(np.arccos(corrcoef), stddev, *args, **kwargs)  # (theta, radius)
         self.samplePoints.append(l)
-        
+   
         return l
         
 
@@ -127,8 +130,6 @@ class TaylorDiagram(object):
         """
         
         rs, ts = np.meshgrid(np.linspace(self.smin, self.smax), np.linspace(0, self.tmax))
-        
-        # Compute centered RMS difference
         rms = np.sqrt(self.refstd**2 + rs**2 - 2*self.refstd*rs*np.cos(ts))
         contours = self.ax.contour(ts, rs, rms, levels, **kwargs)
         
@@ -203,21 +204,23 @@ if __name__=='__main__':
 
 
 	# Reference database standard desviation		   
-	stdrefs = nam_obs_djf.std(ddof=1)        
+	stdrefs = nam_obs_djf.std(ddof=1) 
+	text1 = dict(DJF='A) DJF (mm d⁻¹)',
+				 JJA='B) JJA (mm d⁻¹)')       
 	
 	# Sample std, rho: Be sure to check order and that correct numbers are placed!
-	samples = dict(DJF=[[nam_exp1_djf.std(ddof=1), np.corrcoef(nam_exp1_djf, nam_obs_djf)[0,1], 'Exp1_NAMZ'],
-						[sam_exp1_djf.std(ddof=1), np.corrcoef(sam_exp1_djf, sam_obs_djf)[0,1], 'Exp1_SAMZ'],
-						[neb_exp1_djf.std(ddof=1), np.corrcoef(neb_exp1_djf, neb_obs_djf)[0,1], 'Exp1_NEB'],
-						[nam_exp2_djf.std(ddof=1), np.corrcoefr(nam_exp2_djf, nam_obs_djf)[0,1], 'Exp2_NAMZ'],
-						[sam_exp2_djf.std(ddof=1), np.corrcoef(sam_exp2_djf, sam_obs_djf)[0,1], 'Exp2_SAMZ'],
-						[neb_exp2_djf.std(ddof=1), np.corrcoef(neb_exp2_djf, neb_obs_djf)[0,1], 'Exp2_NEB']],
-					JJA=[[nam_exp1_jja.std(ddof=1), np.corrcoef(nam_exp1_jja, nam_obs_jja)[0,1], 'Exp1_NAMZ'],
-						[sam_exp1_jja.std(ddof=1), np.corrcoef(sam_exp1_jja, sam_obs_jja)[0,1], 'Exp1_SAMZ'],
-						[neb_exp1_jja.std(ddof=1), np.corrcoef(neb_exp1_jja, neb_obs_jja)[0,1], 'Exp1_NEB'],
-						[nam_exp2_jja.std(ddof=1), np.corrcoef(nam_exp2_jja, nam_obs_jja)[0,1], 'Exp2_NAMZ'],
-						[sam_exp2_jja.std(ddof=1), np.corrcoef(sam_exp2_jja, sam_obs_jja)[0,1], 'Exp2_SAMZ'],
-						[neb_exp2_jja.std(ddof=1), np.corrcoef(neb_exp2_jja, neb_obs_jja)[0,1], 'Exp2_NEB']])	
+	samples = dict(DJF=[[nam_exp1_djf.std(ddof=1), np.corrcoef(nam_exp1_djf, nam_obs_djf)[0,1], 'Reg_Exp1_NAMZ'],
+						[sam_exp1_djf.std(ddof=1), np.corrcoef(sam_exp1_djf, sam_obs_djf)[0,1], 'Reg_Exp1_SAMZ'],
+						[neb_exp1_djf.std(ddof=1), np.corrcoef(neb_exp1_djf, neb_obs_djf)[0,1], 'Reg_Exp1_NEB'],
+						[nam_exp2_djf.std(ddof=1), np.corrcoef(nam_exp2_djf, nam_obs_djf)[0,1], 'Reg_Exp2_NAMZ'],
+						[sam_exp2_djf.std(ddof=1), np.corrcoef(sam_exp2_djf, sam_obs_djf)[0,1], 'Reg_Exp2_SAMZ'],
+						[neb_exp2_djf.std(ddof=1), np.corrcoef(neb_exp2_djf, neb_obs_djf)[0,1], 'Reg_Exp2_NEB']],
+					JJA=[[nam_exp1_jja.std(ddof=1), np.corrcoef(nam_exp1_jja, nam_obs_jja)[0,1], 'Reg_Exp1_NAMZ'],
+						[sam_exp1_jja.std(ddof=1), np.corrcoef(sam_exp1_jja, sam_obs_jja)[0,1], 'Reg_Exp1_SAMZ'],
+						[neb_exp1_jja.std(ddof=1), np.corrcoef(neb_exp1_jja, neb_obs_jja)[0,1], 'Reg_Exp1_NEB'],
+						[nam_exp2_jja.std(ddof=1), np.corrcoef(nam_exp2_jja, nam_obs_jja)[0,1], 'Reg_Exp2_NAMZ'],
+						[sam_exp2_jja.std(ddof=1), np.corrcoef(sam_exp2_jja, sam_obs_jja)[0,1], 'Reg_Exp2_SAMZ'],
+						[neb_exp2_jja.std(ddof=1), np.corrcoef(neb_exp2_jja, neb_obs_jja)[0,1], 'Reg_Exp2_NEB']])	
 				 			   
 	# Colormap (see http://www.scipy.org/Cookbook/Matplotlib/Show_colormaps)
 
@@ -227,53 +230,43 @@ if __name__=='__main__':
 	# significance levels respectively. Set these by eyeball using the
 	# standard deviation x and y axis.
 
-	#~ x95 = [0.01, 0.68] # For Tair, this is for 95th level (r = 0.195)
-	#~ y95 = [0.0, 3.45]
-	#~ x99 = [0.01, 0.95] # For Tair, this is for 99th level (r = 0.254)
-	#~ y99 = [0.0, 3.45]
+	x95 = [0.01, 0.55] 
+	y95 = [0.0, 3.1]
+	x99 = [0.01, 0.95] 
+	y99 = [0.0, 3.1]
 
-	x95 = [0.05, 10.9] # For Prcp, this is for 95th level (r = 0.195)
-	y95 = [0.0, 80.0]
-	x99 = [0.05, 10.0] # For Prcp, this is for 99th level (r = 0.254)
-	y99 = [0.0, 80.0]
-
-	rects = dict(DJF=211,
-				 JJA=212)
+	rects = dict(DJF=121,
+				 JJA=122)
 
 	# Plot model end obs data taylor diagram 
 	fig = plt.figure()
-	fig.suptitle(u'Diagrama de Taylor - Precipitação (mm/d)', fontsize=12, fontweight='bold')
 
 	for season in ['DJF','JJA']:
 
-		dia = TaylorDiagram(stdrefs, fig=fig, rect=rects[season], label=u'Referência', extend=True)
+		dia = TaylorDiagram(stdrefs, fig=fig, rect=rects[season], label=u'Referência', srange=(0., 3.), extend=False)
 		dia.samplePoints[0].set_color('r')
-		dia.ax.plot(x95,y95,color='b')
-		dia.ax.plot(x99,y99,color='b')
+		dia.ax.plot(x95,y95,color='black')
+		dia.ax.plot(x99,y99,color='black')
 
 		# Add samples to Taylor diagram
 		for i,(stddev,corrcoef,name) in enumerate(samples[season]):
 			dia.add_sample(stddev, corrcoef,
 						   marker='$%d$' % (i+1), ms=9, ls='',
-						   mfc='k', mec='k', # Colors
-						   label=name)
+						   mfc='k', mec='k', label=name)
+			plt.text(0.2, 2., 'RSM', fontweight='bold', color='0.6')
+			plt.text(0., 3.4, text1[season], fontweight='bold')
 
 		# Add RMS contours, and label them
 		contours = dia.add_contours(levels=5, colors='0.5') 
 		dia.ax.clabel(contours, inline=1, fontsize=8, fmt='%.1f')
+	
 		
-		# Tricky: ax is the polar ax (used for plots), _ax is the container (used for layout)
-		#~ dia.add_grid()                                  # Add grid
-		#~ dia._ax.axis[:].major_ticks.set_tick_out(True) 
-		
-	# Add a figure legend and title. For loc option, place x,y tuple inside [ ].
-	# Can also use special options here: http://matplotlib.sourceforge.net/users/legend_guide.html
-
 	# Add a figure legend
 	fig.legend(dia.samplePoints,
 			   [ p.get_label() for p in dia.samplePoints ],
-			   numpoints=1, prop=dict(size=7.75), ncol=4, loc='lower center')
-			   
+			   numpoints=1, ncol=3, loc='lower center')
+	fig.tight_layout()
+   
 	# Path out to save figure
 	path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
 	name_out = 'pyplt_taylor_diagram_pr_regcm_pbl_obs_2001-2010.png'
