@@ -59,16 +59,16 @@ def import_obs(area, obs):
 	
 	
 # Import regcm exps model end obs database climatology
-nam_exp1 = import_sim(u'nam', u'regcm_exp1')
-sam_exp1 = import_sim(u'sam', u'regcm_exp1')
+nam_exp1 = import_sim(u'namz', u'regcm_exp1')
+sam_exp1 = import_sim(u'samz', u'regcm_exp1')
 neb_exp1 = import_sim(u'neb', u'regcm_exp1')
 
-nam_exp2 = import_sim(u'nam', u'regcm_exp2')
-sam_exp2 = import_sim(u'sam', u'regcm_exp2')
+nam_exp2 = import_sim(u'namz', u'regcm_exp2')
+sam_exp2 = import_sim(u'samz', u'regcm_exp2')
 neb_exp2 = import_sim(u'neb', u'regcm_exp2')
 
-nam_obs = import_obs(u'nam', u'gpcp_v2.2_obs')
-sam_obs = import_obs(u'sam', u'gpcp_v2.2_obs')
+nam_obs = import_obs(u'namz', u'gpcp_v2.2_obs')
+sam_obs = import_obs(u'samz', u'gpcp_v2.2_obs')
 neb_obs = import_obs(u'neb', u'gpcp_v2.2_obs')
 
 # Import cdf function
