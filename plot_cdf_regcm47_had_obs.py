@@ -8,7 +8,6 @@ __description__ = "This script compute CDF functions from Reg and Had models"
 import os
 import netCDF4
 import numpy as np
-import numpy as np
 import matplotlib.pyplot as plt
 
 
