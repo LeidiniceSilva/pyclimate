@@ -17,6 +17,9 @@ import matplotlib as mpl
 
 from pylab import *
 from netCDF4 import Dataset
+from scipy.stats import norm
+from scipy.stats import t
+
 
 def import_obs(var, area, dataset, dt):
 	
@@ -28,11 +31,14 @@ def import_obs(var, area, dataset, dt):
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
 	value = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
-
-	obs = []	
+	
+	obs = []
+	conf_int = []		
 	for mon in range(1, 12 + 1):
 		obs.append(np.nanmean(value[mon::12], axis=0))
-			
+		conf_int.append(np.percentile(value[mon::12], [2.5, 97.5]))
+	print(conf_int)
+
 	return obs
 	
 	
@@ -93,89 +99,133 @@ tas_cru_eneb = import_obs('tmp', 'eneb', 'cru_ts4.04', '1986-2005')
 tas_reg_eneb = import_rcm('tas', 'eneb', 'hist', '1986-2005')
 tas_had_eneb = import_gcm('tas', 'eneb', 'hist', '1986-2005')
 
-tas_cru_matopiba  = import_obs('tmp', 'matopiba', 'cru_ts4.04', '1986-2005')
+tas_cru_matopiba = import_obs('tmp', 'matopiba', 'cru_ts4.04', '1986-2005')
 tas_reg_matopiba = import_rcm('tas', 'matopiba', 'hist', '1986-2005')
 tas_had_matopiba = import_gcm('tas', 'matopiba', 'hist', '1986-2005')
+
+pre_samz_ci1=[8.66463728, 9.4697933, 6.85738347, 3.80205981, 1.48250971, 0.92583204, 1.22552552, 2.63836498, 4.51578057, 5.77292271, 7.07533377, 8.21227317]
+pre_samz_ci2=[10.75263259, 11.66272891, 8.50332589, 5.47224972, 2.52379874, 1.68387562, 2.02090873, 3.62090154, 5.93973876, 7.98845394, 10.45760779, 11.00553899]
+pre_eneb_ci1=[1.00524572, 1.1608404, 1.77165509, 1.30258448, 1.71733001, 1.79458527, 0.79820421, 0.28923712, 0.29726263, 0.5088564 , 0.39716837, 0.84027369]
+pre_eneb_ci2=[4.5356897, 7.152737, 7.64559294, 5.35725617, 5.83513105, 4.48715296, 2.64040059, 2.33545691, 1.56852434, 1.90245899, 3.78144468, 5.38589151]
+pre_matopiba_ci1=[5.23713094, 5.05914688, 3.40499815, 1.34858458, 0.50445026, 0.22964761, 0.18256121, 0.42671296, 1.65213115, 2.92743726, 4.84032965, 4.16228163]
+pre_matopiba_ci2=[10.35689692, 11.49636469, 7.45052783, 4.22976214, 1.72208759, 1.12680329, 0.80865735, 1.84274545, 4.14807294, 6.75314355, 10.0606626, 11.274613]
+
+tas_samz_ci1=[25.69711699, 25.71469378, 25.97765923, 25.39793468, 24.91330719, 24.70398798, 25.73415108, 26.23648839, 26.75862598,26.37253828, 26.01073117, 25.61359653]
+tas_samz_ci2=[26.92223835, 26.85330153, 27.19564362, 26.84376068 , 26.48522525, 26.68297215, 27.20409451, 27.39006267, 28.20131063, 27.48015785, 27.10853429, 27.11589193]
+tas_eneb_ci1=[25.99318895, 25.83138466, 25.38425841, 24.71016569, 23.53299055, 23.11000266, 23.37063761, 24.47628813, 25.65004044, 26.16076336, 26.20762401, 26.22430735]
+tas_eneb_ci2=[27.63031745, 27.23039775, 27.07775173, 25.82194371, 24.92942662, 24.34608192, 24.69219999, 25.40287352, 26.57566276, 27.12908754, 27.51666064, 27.58264961]
+tas_matopiba_ci1=[25.55731535, 25.70387478, 25.79148459, 25.5457233 , 24.99058108, 24.97589211, 25.75307593, 26.66938272, 26.64489403, 26.10251489, 25.4382093 , 25.45791321]
+tas_matopiba_ci2=[27.15601463, 26.68446865, 27.67121773, 27.08947453, 26.64261518, 26.57647147, 27.74292717, 28.66518302, 28.50709934, 27.67222061, 27.13844676, 26.91656485]
 
 # Plot model end obs data climatology
 fig = plt.figure()
 time = np.arange(0.5, 12 + 0.5)
 
 ax1 = fig.add_subplot(3, 2, 1)
-annual_cycle1 = ax1.plot(time, pre_cru_samz, time, pre_reg_samz, time, pre_had_samz)
+annual_cycle1 = ax1.plot(time, pre_cru_samz, time, pre_reg_samz, time, pre_had_samz, time, pre_samz_ci1, time, pre_samz_ci2)
 plt.title(u'A) SAMZ', fontweight='bold')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.ylim(0, 12)
 plt.yticks(np.arange(0, 14, 2))
 plt.setp(ax1.get_xticklabels(), visible=False)
 plt.grid(True, which='major', linestyle='--')
-l1, l2, l3 = annual_cycle1
+l1, l2, l3, l4, l5 = annual_cycle1
 plt.setp(l1, linewidth=1.5, color='black', linestyle='--')
 plt.setp(l2, linewidth=1.5, color='green', linestyle='--')
 plt.setp(l3, linewidth=1.5, color='magenta', linestyle='--')
-legend = ['CRU','Reg','Had']
+plt.setp(l4, linewidth=1.5, color='slategray', linestyle='--')
+plt.setp(l5, linewidth=1.5, color='slategray', linestyle='--')
+plt.fill_between(time, pre_samz_ci1, pre_samz_ci2, facecolor='slategray',
+		 alpha=0.4, interpolate=True)		     
+legend = ['CRU', 'Reg', 'Had', '95% CI']
 plt.legend(annual_cycle1, legend, fontsize=6, loc=9, shadow=True, ncol=1)
 
 ax2 = fig.add_subplot(3, 2, 2)
-annual_cycle1 = ax2.plot(time, tas_cru_samz, time, np.nanmean(tas_reg_samz, axis=1), time, tas_had_samz)
+annual_cycle2 = ax2.plot(time, tas_cru_samz, time, np.nanmean(tas_reg_samz, axis=1), time, tas_had_samz, time, tas_samz_ci1, time, tas_samz_ci2)
 plt.title(u'D) SAMZ', fontweight='bold')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.ylim(22, 32)
 plt.yticks(np.arange(22, 34, 2))
 plt.setp(ax2.get_xticklabels(), visible=False)
 plt.grid(True, which='major', linestyle='--')
-l1, l2, l3 = annual_cycle1
+l1, l2, l3, l4, l5 = annual_cycle2
 plt.setp(l1, linewidth=1.5, color='black', linestyle='--')
 plt.setp(l2, linewidth=1.5, color='green', linestyle='--')
 plt.setp(l3, linewidth=1.5, color='magenta', linestyle='--')
-
+plt.setp(l4, linewidth=1.5, color='slategray', linestyle='--')
+plt.setp(l5, linewidth=1.5, color='slategray', linestyle='--')
+plt.fill_between(time, tas_samz_ci1, tas_samz_ci2, facecolor='slategray',
+		 alpha=0.4, interpolate=True)	
+		 
 ax3 = fig.add_subplot(3, 2, 3)
-annual_cycle1 = ax3.plot(time, pre_cru_eneb, time, pre_reg_eneb, time, pre_had_eneb)
+annual_cycle3 = ax3.plot(time, pre_cru_eneb, time, pre_reg_eneb, time, pre_had_eneb, time, pre_eneb_ci1, time, pre_eneb_ci2)
 plt.title(u'B) ENEB', fontweight='bold')
 plt.ylabel(u'Precipitation (mm d⁻¹)', fontweight='bold')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.ylim(0, 12)
 plt.yticks(np.arange(0, 14, 2))
 plt.setp(ax3.get_xticklabels(), visible=False)
 plt.grid(True, which='major', linestyle='--')
-l1, l2, l3 = annual_cycle1
+l1, l2, l3, l4, l5 = annual_cycle3
 plt.setp(l1, linewidth=1.5, color='black', linestyle='--')
 plt.setp(l2, linewidth=1.5, color='green', linestyle='--')
 plt.setp(l3, linewidth=1.5, color='magenta', linestyle='--')
-
+plt.setp(l4, linewidth=1.5, color='slategray', linestyle='--')
+plt.setp(l5, linewidth=1.5, color='slategray', linestyle='--')
+plt.fill_between(time, pre_eneb_ci1, pre_eneb_ci2, facecolor='slategray',
+		 alpha=0.4, interpolate=True)
+		 
 ax4 = fig.add_subplot(3, 2, 4)
-annual_cycle1 = ax4.plot(time, tas_cru_eneb, time, np.nanmean(tas_reg_eneb, axis=1), time, tas_had_eneb)
+annual_cycle4 = ax4.plot(time, tas_cru_eneb, time, np.nanmean(tas_reg_eneb, axis=1), time, tas_had_eneb, time, tas_eneb_ci1, time, tas_eneb_ci2)
 plt.title(u'E) ENEB', fontweight='bold')
 plt.ylabel(u'Temperature (°C)', fontweight='bold')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.ylim(22, 32)
 plt.yticks(np.arange(22, 34, 2))
 plt.setp(ax4.get_xticklabels(), visible=False)
 plt.grid(True, which='major', linestyle='--')
-l1, l2, l3 = annual_cycle1
+l1, l2, l3, l4, l5 = annual_cycle4
 plt.setp(l1, linewidth=1.5, color='black', linestyle='--')
 plt.setp(l2, linewidth=1.5, color='green', linestyle='--')
 plt.setp(l3, linewidth=1.5, color='magenta', linestyle='--')
-
+plt.setp(l4, linewidth=1.5, color='slategray', linestyle='--')
+plt.setp(l5, linewidth=1.5, color='slategray', linestyle='--')
+plt.fill_between(time, tas_eneb_ci1, tas_eneb_ci2, facecolor='slategray',
+		 alpha=0.4, interpolate=True)
+		 
 ax5 = fig.add_subplot(3, 2, 5)
-annual_cycle1 = ax5.plot(time, pre_cru_matopiba, time, pre_reg_matopiba, time, pre_had_matopiba)
+annual_cycle5 = ax5.plot(time, pre_cru_matopiba, time, pre_reg_matopiba, time, pre_had_matopiba, time, pre_matopiba_ci1, time, pre_matopiba_ci2)
 plt.title(u'C) MATOPIBA', fontweight='bold')
 plt.xlabel(u'Months', fontweight='bold')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.ylim(0, 12)
 plt.yticks(np.arange(0, 14, 2))
 plt.grid(True, which='major', linestyle='--')
-l1, l2, l3 = annual_cycle1
+l1, l2, l3, l4, l5 = annual_cycle5
 plt.setp(l1, linewidth=1.5, color='black', linestyle='--')
 plt.setp(l2, linewidth=1.5, color='green', linestyle='--')
 plt.setp(l3, linewidth=1.5, color='magenta', linestyle='--')
+plt.setp(l4, linewidth=1.5, color='slategray', linestyle='--')
+plt.setp(l5, linewidth=1.5, color='slategray', linestyle='--')
+plt.fill_between(time, pre_matopiba_ci1, pre_matopiba_ci2, facecolor='slategray',
+		 alpha=0.4, interpolate=True)
 
 ax6 = fig.add_subplot(3, 2, 6)
-annual_cycle1 = ax6.plot(time, tas_cru_matopiba, time, np.nanmean(tas_reg_matopiba, axis=1), time, tas_had_matopiba)
+annual_cycle6 = ax6.plot(time, tas_cru_matopiba, time, np.nanmean(tas_reg_matopiba, axis=1), time, tas_had_matopiba, time, tas_matopiba_ci1, time, tas_matopiba_ci2)
 plt.title(u'F) MATOPIBA', fontweight='bold')
 plt.xlabel(u'Months', fontweight='bold')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'))
+plt.ylim(22, 32)
 plt.yticks(np.arange(22, 34, 2))
 plt.grid(True, which='major', linestyle='--')
-l1, l2, l3 = annual_cycle1
+l1, l2, l3, l4, l5 = annual_cycle6
 plt.setp(l1, linewidth=1.5, color='black', linestyle='--')
 plt.setp(l2, linewidth=1.5, color='green', linestyle='--')
 plt.setp(l3, linewidth=1.5, color='magenta', linestyle='--')
+plt.setp(l4, linewidth=1.5, color='slategray', linestyle='--')
+plt.setp(l5, linewidth=1.5, color='slategray', linestyle='--')
+plt.fill_between(time, tas_matopiba_ci1, tas_matopiba_ci2, facecolor='slategray',
+		 alpha=0.4, interpolate=True)
 
 fig.tight_layout()
 plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.35, hspace=0.35)

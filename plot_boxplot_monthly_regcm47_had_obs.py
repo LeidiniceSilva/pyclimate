@@ -22,6 +22,20 @@ from scipy.stats import norm
 from matplotlib.font_manager import FontProperties
 
 
+def import_obs(var, area, dataset, dt):
+	
+	path = '/home/nice/Documents/dataset/obs/rcm'
+	arq  = '{0}/{1}_{2}_{3}_obs_mon_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
+			
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[var][:] 
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	obs = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
+	
+	return obs
+	
+	
 def import_rcm(var, area, exp, dt):
 	
 	path = '/home/nice/Documents/dataset/rcm/{0}'.format(exp)	
@@ -38,7 +52,7 @@ def import_rcm(var, area, exp, dt):
 
 def import_gcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/hist'	
+	path = '/home/nice/Documents/dataset/gcm/{0}'.format(exp)	
 	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
@@ -49,238 +63,180 @@ def import_gcm(var, area, exp, dt):
 	
 	return gcm
 
-	
-def import_obs(var, area, dataset, dt):
-	
-	path = '/home/nice/Documents/dataset/obs'
-	arq  = '{0}/{1}_{2}_{3}_obs_mon_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
-			
-	data = netCDF4.Dataset(arq)
-	var  = data.variables[var][:] 
-	lat  = data.variables['lat'][:]
-	lon  = data.variables['lon'][:]
-	obs = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
-	
-	return obs
-	
-               
+	              
 # Import regcm exps model end obs database climatology
-p_reg = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
-p_had = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
-p_cru = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')
-p_udel = import_obs('pre', 'amz_neb', 'udel_v301', '1986-2005')
-p_chirps = import_obs('precip', 'amz_neb', 'chirps-v2.0', '1986-2005')
-p_era5 = import_obs('mtpr', 'amz_neb', 'era5', '1986-2005')
+pre_cru_samz_hist = import_obs('pre', 'samz', 'cru_ts4.04', '1986-2005')
+pre_reg_samz_rcp26 = import_rcm('pr', 'samz', 'rcp26', '2080-2099')
+pre_reg_samz_rcp85 = import_rcm('pr', 'samz', 'rcp85', '2080-2099')
+pre_had_samz_rcp26 = import_gcm('pr', 'samz', 'rcp26', '2080-2099')
+pre_had_samz_rcp85 = import_gcm('pr', 'samz', 'rcp85', '2080-2099')
+pre_samz = [pre_cru_samz_hist, pre_reg_samz_rcp26, pre_had_samz_rcp26, pre_reg_samz_rcp85, pre_had_samz_rcp85]
 
-t_reg = import_rcm('tas', 'amz_neb', 'hist', '1986-2005')
-t_had = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
-t_cru = import_obs('tmp', 'amz_neb', 'cru_ts4.04', '1986-2005')
-t_udel = import_obs('temp', 'amz_neb', 'udel_v301', '1986-2005')
-t_era5 = import_obs('t2m', 'amz_neb', 'era5', '1986-2005')
+pre_cru_eneb_hist = import_obs('pre', 'eneb', 'cru_ts4.04', '1986-2005')
+pre_reg_eneb_rcp26 = import_rcm('pr', 'eneb', 'rcp26', '2080-2099')
+pre_reg_eneb_rcp85 = import_rcm('pr', 'eneb', 'rcp85', '2080-2099')
+pre_had_eneb_rcp26 = import_gcm('pr', 'eneb', 'rcp26', '2080-2099')
+pre_had_eneb_rcp85 = import_gcm('pr', 'eneb', 'rcp85', '2080-2099')
+pre_eneb = [pre_cru_eneb_hist, pre_reg_eneb_rcp26, pre_had_eneb_rcp26, pre_reg_eneb_rcp85, pre_had_eneb_rcp85]
+
+pre_cru_matopiba_hist = import_obs('pre', 'matopiba', 'cru_ts4.04', '1986-2005')
+pre_reg_matopiba_rcp26 = import_rcm('pr', 'matopiba', 'rcp26', '2080-2099')
+pre_reg_matopiba_rcp85 = import_rcm('pr', 'matopiba', 'rcp85', '2080-2099')
+pre_had_matopiba_rcp26 = import_gcm('pr', 'matopiba', 'rcp26', '2080-2099')
+pre_had_matopiba_rcp85 = import_gcm('pr', 'matopiba', 'rcp85', '2080-2099')
+pre_matopiba = [pre_cru_matopiba_hist, pre_reg_matopiba_rcp26, pre_had_matopiba_rcp26, pre_reg_matopiba_rcp85, pre_had_matopiba_rcp85]
+
+tmp_cru_samz_hist = import_obs('tmp', 'samz', 'cru_ts4.04', '1986-2005')
+tas_reg_samz_rcp26 = import_rcm('tas', 'samz', 'rcp26', '2080-2099')
+tas_reg_samz_rcp85 = import_rcm('tas', 'samz', 'rcp85', '2080-2099')
+tas_had_samz_rcp26 = import_gcm('tas', 'samz', 'rcp26', '2080-2099')
+tas_had_samz_rcp85 = import_gcm('tas', 'samz', 'rcp85', '2080-2099')
+tas_samz = [tmp_cru_samz_hist, np.nanmean(tas_reg_samz_rcp26, axis=1), tas_had_samz_rcp26, np.nanmean(tas_reg_samz_rcp85, axis=1), tas_had_samz_rcp85]
+
+tmp_cru_eneb_hist = import_obs('tmp', 'eneb', 'cru_ts4.04', '1986-2005')
+tas_reg_eneb_rcp26 = import_rcm('tas', 'eneb', 'rcp26', '2080-2099')
+tas_reg_eneb_rcp85 = import_rcm('tas', 'eneb', 'rcp85', '2080-2099')
+tas_had_eneb_rcp26 = import_gcm('tas', 'eneb', 'rcp26', '2080-2099')
+tas_had_eneb_rcp85 = import_gcm('tas', 'eneb', 'rcp85', '2080-2099')
+tas_eneb = [tmp_cru_eneb_hist, np.nanmean(tas_reg_eneb_rcp26, axis=1), tas_had_eneb_rcp26, np.nanmean(tas_reg_eneb_rcp85, axis=1), tas_had_eneb_rcp85]
+
+tmp_cru_matopiba_hist = import_obs('tmp', 'matopiba', 'cru_ts4.04', '1986-2005')
+tas_reg_matopiba_rcp26 = import_rcm('tas', 'matopiba', 'rcp26', '2080-2099')
+tas_reg_matopiba_rcp85 = import_rcm('tas', 'matopiba', 'rcp85', '2080-2099')
+tas_had_matopiba_rcp26 = import_gcm('tas', 'matopiba', 'rcp26', '2080-2099')
+tas_had_matopiba_rcp85 = import_gcm('tas', 'matopiba', 'rcp85', '2080-2099')
+tas_matopiba = [tmp_cru_matopiba_hist, np.nanmean(tas_reg_matopiba_rcp26, axis=1), tas_had_matopiba_rcp26, np.nanmean(tas_reg_matopiba_rcp85, axis=1), tas_had_matopiba_rcp85]
 
 # Plot model end obs data boxplot
 fig = plt.figure()
-time1 = np.arange(1,7)
-time2 = np.arange(1,6)
+time = np.arange(1, 6)
 
 ax1 = fig.add_subplot(3, 2, 1)
-data = [p_reg, p_had, p_cru, p_udel, p_chirps, p_era5]
-a1 = ax1.boxplot(data, patch_artist=True, notch=True, bootstrap=10000, vert=1)
-
-# Change outline and fill color
-for box in a1['boxes']:
-    box.set( color='black', linewidth=1)
-    box.set( facecolor = 'blue' )
-
-# Change color and linewidth of the whiskers
-for whisker in a1['whiskers']:
-    whisker.set(color='black', linewidth=1)
-
-# Change color and linewidth of the caps
-for cap in a1['caps']:
-    cap.set(color='black', linewidth=1)
-
-# Change color and linewidth of the medians
-for median in a1['medians']:
+box = plt.boxplot(pre_samz, notch=True, patch_artist=True)
+colors = ['gray', 'blue', 'blue', 'red', 'red']
+for patch, color in zip(box['boxes'], colors):
+    patch.set_facecolor(color)
+for median in box['medians']:
     median.set(color='black', linewidth=1)
-
-# Change the style of fliers and their fill
-for flier in a1['fliers']:
-    flier.set(marker='o', color='black', alpha=1)
-    
-plt.title(u'A) SAMZ', fontweight='bold')
-plt.xticks(time1, (u'Reg', u'Had', u'CRU', u'UDEL', 'CHIRPS', 'ERA5'))
-plt.yticks(np.arange(0, 12, 2), fontsize=7)
+for flier in box['fliers']:
+    flier.set(marker='+', color='black', alpha=1)
+plt.title(u'A) SAMZ', fontweight='bold') 
+plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.ylim(0, 20)
+plt.yticks(np.arange(0, 24, 4), fontsize=7)
 plt.setp(ax1.get_xticklabels(), visible=False)
-ax1.xaxis.grid(True, which='major', linestyle='--')
-ax1.yaxis.grid(True, which='major', linestyle='--')
-
+plt.axvline(1.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.text(0.57, 17., ' Hist    RCP2.6      RCP8.5  ', fontweight='bold', zorder=6, color='k',
+                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
+plt.grid(True, which='major', linestyle='--')
+                  
 ax2 = fig.add_subplot(3, 2, 2)
-data = [t_had, t_had, t_cru, t_udel, t_era5]
-a2 = ax2.boxplot(data, patch_artist=True, notch=True, bootstrap=10000, vert=1)
-
-# Change outline and fill color
-for box in a2['boxes']:
-    box.set( color='black', linewidth=1)
-    box.set( facecolor = 'red' )
-
-# Change color and linewidth of the whiskers
-for whisker in a2['whiskers']:
-    whisker.set(color='black', linewidth=1)
-
-# Change color and linewidth of the caps
-for cap in a2['caps']:
-    cap.set(color='black', linewidth=1)
-
-# Change color and linewidth of the medians
-for median in a2['medians']:
+box = plt.boxplot(tas_samz, notch=True, patch_artist=True)
+colors = ['gray', 'blue', 'blue', 'red', 'red']
+for patch, color in zip(box['boxes'], colors):
+    patch.set_facecolor(color)
+for median in box['medians']:
     median.set(color='black', linewidth=1)
-
-# Change the style of fliers and their fill
-for flier in a2['fliers']:
-    flier.set(marker='o', color='black', alpha=1)
-
-plt.title(u'B) SAMZ', fontweight='bold')
-plt.xticks(time2, (u'Reg', u'Had', u'CRU', u'UDEL', 'CHIRPS', 'ERA5'))
-plt.yticks(np.arange(20, 30, 2), fontsize=7)
+for flier in box['fliers']:
+    flier.set(marker='+', color='black', alpha=1)
+plt.title(u'D) SAMZ', fontweight='bold')
+plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.ylim(22, 42)
+plt.yticks(np.arange(22, 46, 4), fontsize=7)
 plt.setp(ax2.get_xticklabels(), visible=False)
-ax2.xaxis.grid(True, which='major', linestyle='--')
-ax2.yaxis.grid(True, which='major', linestyle='--')
-
+plt.axvline(1.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.text(0.57, 39., ' Hist    RCP2.6      RCP8.5  ', fontweight='bold', zorder=6, color='k',
+                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
+plt.grid(True, which='major', linestyle='--')
+                      
 ax3 = fig.add_subplot(3, 2, 3)
-data = [p_reg, p_had, p_cru, p_udel, p_chirps, p_era5]
-a3 = ax3.boxplot(data, patch_artist=True, notch=True, bootstrap=10000, vert=1)
-
-# Change outline and fill color
-for box in a3['boxes']:
-    box.set( color='black', linewidth=1)
-    box.set( facecolor = 'blue' )
-
-# Change color and linewidth of the whiskers
-for whisker in a3['whiskers']:
-    whisker.set(color='black', linewidth=1)
-
-# Change color and linewidth of the caps
-for cap in a3['caps']:
-    cap.set(color='black', linewidth=1)
-
-# Change color and linewidth of the medians
-for median in a3['medians']:
+box = plt.boxplot(pre_eneb, notch=True, patch_artist=True)
+colors = ['gray', 'blue', 'blue', 'red', 'red']
+for patch, color in zip(box['boxes'], colors):
+    patch.set_facecolor(color)
+for median in box['medians']:
     median.set(color='black', linewidth=1)
-
-# Change the style of fliers and their fill
-for flier in a3['fliers']:
-    flier.set(marker='o', color='black', alpha=1)
-    
-plt.title(u'C) ENEB', fontweight='bold')
+for flier in box['fliers']:
+    flier.set(marker='+', color='black', alpha=1)
+plt.title(u'B) ENEB', fontweight='bold')
 plt.ylabel(u'Precipitation (mm d⁻¹)', fontweight='bold')
-plt.xticks(time1, (u'Reg', u'Had', u'CRU', u'UDEL', 'CHIRPS', 'ERA5'))
-plt.yticks(np.arange(0, 12, 2), fontsize=7)
+plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.ylim(0, 20)
+plt.yticks(np.arange(0, 24, 4), fontsize=7)
 plt.setp(ax3.get_xticklabels(), visible=False)
-ax3.xaxis.grid(True, which='major', linestyle='--')
-ax3.yaxis.grid(True, which='major', linestyle='--')
-
+plt.axvline(1.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.text(0.57, 17., ' Hist    RCP2.6      RCP8.5  ', fontweight='bold', zorder=6, color='k',
+                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2.1})
+plt.grid(True, which='major', linestyle='--')
+                               
 ax4 = fig.add_subplot(3, 2, 4)
-data = [t_had, t_had, t_cru, t_udel, t_era5]
-a4 = ax4.boxplot(data, patch_artist=True, notch=True, bootstrap=10000, vert=1)
-
-# Change outline and fill color
-for box in a4['boxes']:
-    box.set( color='black', linewidth=1)
-    box.set( facecolor = 'red' )
-
-# Change color and linewidth of the whiskers
-for whisker in a4['whiskers']:
-    whisker.set(color='black', linewidth=1)
-
-# Change color and linewidth of the caps
-for cap in a4['caps']:
-    cap.set(color='black', linewidth=1)
-
-# Change color and linewidth of the medians
-for median in a4['medians']:
+box = plt.boxplot(tas_eneb, notch=True, patch_artist=True)
+colors = ['gray', 'blue', 'blue', 'red', 'red']
+for patch, color in zip(box['boxes'], colors):
+    patch.set_facecolor(color)
+for median in box['medians']:
     median.set(color='black', linewidth=1)
-
-# Change the style of fliers and their fill
-for flier in a4['fliers']:
-    flier.set(marker='o', color='black', alpha=1)
-    
-plt.title(u'D) ENEB', fontweight='bold')
+for flier in box['fliers']:
+    flier.set(marker='+', color='black', alpha=1)
+plt.title(u'E) ENEB', fontweight='bold')
 plt.ylabel(u'Temperature (°C)', fontweight='bold')
-plt.xticks(time2, (u'Reg', u'Had', u'CRU', u'UDEL', 'CHIRPS', 'ERA5'))
-plt.yticks(np.arange(20, 30, 2), fontsize=7)
+plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.ylim(22, 42)
+plt.yticks(np.arange(22, 44, 4), fontsize=7)
 plt.setp(ax4.get_xticklabels(), visible=False)
-ax4.xaxis.grid(True, which='major', linestyle='--')
-ax4.yaxis.grid(True, which='major', linestyle='--')
-
+plt.axvline(1.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.text(0.57, 39., ' Hist    RCP2.6      RCP8.5  ', fontweight='bold', zorder=6, color='k',
+                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2.1})
+plt.grid(True, which='major', linestyle='--')
+              
 ax5 = fig.add_subplot(3, 2, 5)
-data = [p_reg, p_had, p_cru, p_udel, p_chirps, p_era5]
-a5 = ax5.boxplot(data, patch_artist=True, notch=True, bootstrap=10000, vert=1)
-
-# Change outline and fill color
-for box in a5['boxes']:
-    box.set( color='black', linewidth=1)
-    box.set( facecolor = 'blue' )
-
-# Change color and linewidth of the whiskers
-for whisker in a5['whiskers']:
-    whisker.set(color='black', linewidth=1)
-
-# Change color and linewidth of the caps
-for cap in a5['caps']:
-    cap.set(color='black', linewidth=1)
-
-# Change color and linewidth of the medians
-for median in a5['medians']:
+box = plt.boxplot(pre_matopiba, notch=True, patch_artist=True)
+colors = ['gray', 'blue', 'blue', 'red', 'red']
+for patch, color in zip(box['boxes'], colors):
+    patch.set_facecolor(color)
+for median in box['medians']:
     median.set(color='black', linewidth=1)
-
-# Change the style of fliers and their fill
-for flier in a5['fliers']:
-    flier.set(marker='o', color='black', alpha=1)
-
-plt.title(u'E) MATOPIBA', fontweight='bold')
+for flier in box['fliers']:
+    flier.set(marker='+', color='black', alpha=1)
+plt.title(u'C) MATOPIBA', fontweight='bold')
 plt.xlabel('Dataset', fontweight='bold')
-plt.xticks(time1, (u'Reg', u'Had', u'CRU', u'UDEL', 'CHIRPS', 'ERA5'), fontsize=7)
-plt.yticks(np.arange(0, 12, 2), fontsize=7)
-ax5.xaxis.grid(True, which='major', linestyle='--')
-ax5.yaxis.grid(True, which='major', linestyle='--')
-
+plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.ylim(0, 20)
+plt.yticks(np.arange(0, 24, 4), fontsize=7)
+plt.axvline(1.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.text(0.57, 17., ' Hist    RCP2.6      RCP8.5  ', fontweight='bold', zorder=6, color='k',
+                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
+plt.grid(True, which='major', linestyle='--')
+                              
 ax6 = fig.add_subplot(3, 2, 6)
-data = [t_had, t_had, t_cru, t_udel, t_era5]
-a6 = ax6.boxplot(data, patch_artist=True, notch=True, bootstrap=10000, vert=1)
-
-# Change outline and fill color
-for box in a6['boxes']:
-    box.set( color='black', linewidth=1)
-    box.set( facecolor = 'red' )
-
-# Change color and linewidth of the whiskers
-for whisker in a6['whiskers']:
-    whisker.set(color='black', linewidth=1)
-
-# Change color and linewidth of the caps
-for cap in a6['caps']:
-    cap.set(color='black', linewidth=1)
-
-# Change color and linewidth of the medians
-for median in a6['medians']:
+box = plt.boxplot(tas_matopiba, notch=True, patch_artist=True)
+colors = ['gray', 'blue', 'blue', 'red', 'red']
+for patch, color in zip(box['boxes'], colors):
+    patch.set_facecolor(color)
+for median in box['medians']:
     median.set(color='black', linewidth=1)
-
-# Change the style of fliers and their fill
-for flier in a6['fliers']:
-    flier.set(marker='o', color='black', alpha=1)
-    
+for flier in box['fliers']:
+    flier.set(marker='+', color='black', alpha=1)
 plt.title(u'F) MATOPIBA', fontweight='bold')
 plt.xlabel('Dataset', fontweight='bold')
-plt.xticks(time2, (u'Reg', u'Had', u'CRU', u'UDEL', 'ERA5'), fontsize=7)
-plt.yticks(np.arange(20, 30, 2), fontsize=7)
-ax6.xaxis.grid(True, which='major', linestyle='--')
-ax6.yaxis.grid(True, which='major', linestyle='--')
-
+plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.ylim(22, 42)
+plt.yticks(np.arange(22, 44, 4), fontsize=7)
+plt.axvline(1.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
+plt.text(0.57, 39., ' Hist    RCP2.6      RCP8.5  ', fontweight='bold', zorder=6, color='k',
+                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
+plt.grid(True, which='major', linestyle='--')
+                
 plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.35, hspace=0.35)
 
 # Path out to save bias figure
-path_out = '/home/nice/Documents'
+path_out = '/home/nice/Downloads'
 name_out = 'pyplt_boxplot_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
