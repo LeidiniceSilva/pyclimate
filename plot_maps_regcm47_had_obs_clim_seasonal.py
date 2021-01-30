@@ -25,6 +25,26 @@ from mpl_toolkits.basemap import Basemap
 from matplotlib.colors import BoundaryNorm
 
 
+def import_obs(var, area, dataset, dt):
+	
+	path = '/home/nice/Documents/dataset/obs/rcm'
+	arq  = '{0}/{1}_{2}_{3}_obs_mon_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
+			
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[var][:] 
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	value  = var[:][:,:,:]
+
+	season_obs = value[2:240:3,:,:]
+	djf_obs = np.nanmean(season_obs[3:80:4], axis=0)
+	mam_obs = np.nanmean(season_obs[0:80:4], axis=0)
+	jja_obs = np.nanmean(season_obs[1:80:4], axis=0)
+	son_obs = np.nanmean(season_obs[2:80:4], axis=0)
+
+	return lat, lon, djf_obs, mam_obs, jja_obs, son_obs
+	
+
 def import_rcm(var, area, exp, dt):
 	
 	path = '/home/nice/Documents/dataset/rcm/{0}'.format(exp)	
@@ -37,15 +57,10 @@ def import_rcm(var, area, exp, dt):
 	value  = var[:][:,:,:]
 
 	season_rcm = value[2:240:3,:,:]
-	#~ djf_rcm = np.nanmean(season_rcm[3:80:4], axis=0)
-	#~ mam_rcm = np.nanmean(season_rcm[0:80:4], axis=0)
-	#~ jja_rcm = np.nanmean(season_rcm[1:80:4], axis=0)
-	#~ son_rcm = np.nanmean(season_rcm[2:80:4], axis=0)
-
-	djf_rcm = np.nanmean(np.nanmean(season_rcm[3:80:4], axis=0), axis=0)
-	mam_rcm = np.nanmean(np.nanmean(season_rcm[0:80:4], axis=0), axis=0)
-	jja_rcm = np.nanmean(np.nanmean(season_rcm[1:80:4], axis=0), axis=0)
-	son_rcm = np.nanmean(np.nanmean(season_rcm[2:80:4], axis=0), axis=0)
+	djf_rcm = np.nanmean(season_rcm[3:80:4], axis=0)
+	mam_rcm = np.nanmean(season_rcm[0:80:4], axis=0)
+	jja_rcm = np.nanmean(season_rcm[1:80:4], axis=0)
+	son_rcm = np.nanmean(season_rcm[2:80:4], axis=0)
 
 	return lat, lon, djf_rcm, mam_rcm, jja_rcm, son_rcm
 
@@ -70,26 +85,6 @@ def import_gcm(var, area, exp, dt):
 	return lat, lon, djf_gcm, mam_gcm, jja_gcm, son_gcm
 
 	
-def import_obs(var, area, dataset, dt):
-	
-	path = '/home/nice/Documents/dataset/obs'
-	arq  = '{0}/{1}_{2}_{3}_obs_mon_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
-			
-	data = netCDF4.Dataset(arq)
-	var  = data.variables[var][:] 
-	lat  = data.variables['lat'][:]
-	lon  = data.variables['lon'][:]
-	value  = var[:][:,:,:]
-
-	season_obs = value[2:240:3,:,:]
-	djf_obs = np.nanmean(season_obs[3:80:4], axis=0)
-	mam_obs = np.nanmean(season_obs[0:80:4], axis=0)
-	jja_obs = np.nanmean(season_obs[1:80:4], axis=0)
-	son_obs = np.nanmean(season_obs[2:80:4], axis=0)
-
-	return lat, lon, djf_obs, mam_obs, jja_obs, son_obs
-	
-
 def basemap(lat, lon):
 	
 	aux_lon1 = []
@@ -123,353 +118,205 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 	
-#~ def plot_maps_seasonal(djf_rcm,mam_rcm,jja_rcm,son_rcm,djf_gcm,mam_gcm,jja_gcm,son_gcm,djf_cru,mam_cru,jja_cru,son_cru,djf_udel,mam_udel,jja_udel,son_udel,djf_chirps,mam_chirps,jja_chirps,son_chirps,djf_era5,mam_era5,jja_era5,son_era5):
-def plot_maps_seasonal(djf_rcm,mam_rcm,jja_rcm,son_rcm,djf_gcm,mam_gcm,jja_gcm,son_gcm,djf_cru,mam_cru,jja_cru,son_cru,djf_udel,mam_udel,jja_udel,son_udel,djf_era5,mam_era5,jja_era5,son_era5):
+def plot_maps_seasonal(pre_djf_cru, pre_mam_cru, pre_jja_cru, pre_son_cru, pre_djf_rcm, pre_mam_rcm, pre_jja_rcm, pre_son_rcm, pre_djf_gcm, pre_mam_gcm, pre_jja_gcm, pre_son_gcm, tas_djf_cru, tas_mam_cru, tas_jja_cru, tas_son_cru, tas_djf_rcm, tas_mam_rcm, tas_jja_rcm, tas_son_rcm, tas_djf_gcm, tas_mam_gcm, tas_jja_gcm, tas_son_gcm):
 
 	fig = plt.figure()
 	
-	#~ levs1 = [1, 2, 4, 6, 8, 10, 15]
-	#~ ax = fig.add_subplot(6, 4, 1)
-	#~ plt.title(u'A) Reg DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, djf_rcm, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 2)
-	#~ plt.title(u'B) Reg MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, mam_rcm, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 3)
-	#~ plt.title(u'C) Reg JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, jja_rcm, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-
-	#~ ax = fig.add_subplot(6, 4, 4)
-	#~ plt.title(u'D) Reg SON (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, son_rcm, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-	#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-	#~ cbar.ax.tick_params(labelsize=6) 
-
-	#~ ax = fig.add_subplot(6, 4, 5)
-	#~ plt.title(u'E) Had DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, djf_gcm, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 6)
-	#~ plt.title(u'F) Had MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, mam_gcm, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 7)
-	#~ plt.title(u'G) Had JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, jja_gcm, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-
-	#~ ax = fig.add_subplot(6, 4, 8)
-	#~ plt.title(u'H) Had SON (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, son_gcm, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-	#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-	#~ cbar.ax.tick_params(labelsize=6) 
-
-	#~ ax = fig.add_subplot(6, 4, 9)
-	#~ plt.title(u'I) CRU DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, djf_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 10)
-	#~ plt.title(u'J) CRU MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, mam_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 11)
-	#~ plt.title(u'K) CRU JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, jja_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-
-	#~ ax = fig.add_subplot(6, 4, 12)
-	#~ plt.title(u'L) CRU SON (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, son_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-	#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-	#~ cbar.ax.tick_params(labelsize=6)
-
-	#~ ax = fig.add_subplot(6, 4, 13)
-	#~ plt.title(u'M) UDEL DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, djf_udel, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 14)
-	#~ plt.title(u'N) UDEL MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, mam_udel, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 15)
-	#~ plt.title(u'O) UDEL JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, jja_udel, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-
-	#~ ax = fig.add_subplot(6, 4, 16)
-	#~ plt.title(u'P) UDEL SON (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, son_udel, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-	#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-	#~ cbar.ax.tick_params(labelsize=6)	
-
-	#~ ax = fig.add_subplot(6, 4, 17)
-	#~ plt.title(u'Q) CHIRPS DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, djf_chirps, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 18)
-	#~ plt.title(u'R) CHIRPS MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, mam_chirps, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 19)
-	#~ plt.title(u'S) CHIRPS JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, jja_chirps, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-
-	#~ ax = fig.add_subplot(6, 4, 20)
-	#~ plt.title(u'T) CHIRPS SON (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, son_chirps, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-	#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-	#~ cbar.ax.tick_params(labelsize=6)	
-
-	#~ ax = fig.add_subplot(6, 4, 21)
-	#~ plt.title(u'U) ERA5 DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
-	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, djf_era5, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 22)
-	#~ plt.title(u'V) ERA5 MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, mam_era5, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	#~ ax = fig.add_subplot(6, 4, 23)
-	#~ plt.title(u'W) ERA5 JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, jja_era5, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-
-	#~ ax = fig.add_subplot(6, 4, 24)
-	#~ plt.title(u'X) ERA5 SON (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
-	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	#~ map, xx, yy = basemap(lat, lon)
-	#~ plot_maps_mean = map.contourf(xx, yy, son_era5, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-	#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-	#~ cbar.ax.tick_params(labelsize=6)	
+	levs1 = [1, 2, 4, 6, 8, 10, 15]
+	levs2 = [22, 24, 26, 28, 30, 32]
 	
-	levs1 = [22, 24, 26, 28, 30, 32]
-	ax = fig.add_subplot(5, 4, 1)
-	plt.title(u'A) Reg DJF (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 1)
+	plt.title(u'A) CRU DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, djf_rcm, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	plot_maps_mean = map.contourf(xx, yy, pre_djf_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu)
 
-	ax = fig.add_subplot(5, 4, 2)
-	plt.title(u'B) Reg MAM (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 2)
+	plt.title(u'B) CRU MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, mam_rcm, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	plot_maps_mean = map.contourf(xx, yy, pre_mam_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu)
 
-	ax = fig.add_subplot(5, 4, 3)
-	plt.title(u'C) Reg JJA (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 3)
+	plt.title(u'C) CRU JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, jja_rcm, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+	plot_maps_mean = map.contourf(xx, yy, pre_jja_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
 
-	ax = fig.add_subplot(5, 4, 4)
-	plt.title(u'D) Reg SON (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 4)
+	plt.title(u'D) CRU SON (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, son_rcm, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
-	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-	cbar.ax.tick_params(labelsize=6) 
-
-	ax = fig.add_subplot(5, 4, 5)
-	plt.title(u'E) Had DJF (°C)', fontsize=6, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, djf_gcm, levels=levs1, latlon=True, cmap=cm.YlOrRd)
-
-	ax = fig.add_subplot(5, 4, 6)
-	plt.title(u'F) Had MAM (°C)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, mam_gcm, levels=levs1, latlon=True, cmap=cm.YlOrRd)
-
-	ax = fig.add_subplot(5, 4, 7)
-	plt.title(u'G) Had JJA (°C)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, jja_gcm, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
-
-	ax = fig.add_subplot(5, 4, 8)
-	plt.title(u'H) Had SON (°C)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, son_gcm, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
-	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-	cbar.ax.tick_params(labelsize=6) 
-
-	ax = fig.add_subplot(5, 4, 9)
-	plt.title(u'I) CRU DJF (°C)', fontsize=6, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, djf_cru, levels=levs1, latlon=True, cmap=cm.YlOrRd)
-
-	ax = fig.add_subplot(5, 4, 10)
-	plt.title(u'J) CRU MAM (°C)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, mam_cru, levels=levs1, latlon=True, cmap=cm.YlOrRd)
-
-	ax = fig.add_subplot(5, 4, 11)
-	plt.title(u'K) CRU JJA (°C)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, jja_cru, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
-
-	ax = fig.add_subplot(5, 4, 12)
-	plt.title(u'L) CRU SON (°C)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, son_cru, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+	plot_maps_mean = map.contourf(xx, yy, pre_son_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
 	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
 	cbar.ax.tick_params(labelsize=6)
 
-	ax = fig.add_subplot(5, 4, 13)
-	plt.title(u'M) UDEL DJF (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 5)
+	plt.title(u'E) Reg DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, djf_udel, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	plot_maps_mean = map.contourf(xx, yy, pre_djf_rcm, levels=levs1, latlon=True, cmap=cm.YlGnBu)
 
-	ax = fig.add_subplot(5, 4, 14)
-	plt.title(u'N) UDEL MAM (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 6)
+	plt.title(u'F) Reg MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, mam_udel, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	plot_maps_mean = map.contourf(xx, yy, pre_mam_rcm, levels=levs1, latlon=True, cmap=cm.YlGnBu)
 
-	ax = fig.add_subplot(5, 4, 15)
-	plt.title(u'O) UDEL JJA (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 7)
+	plt.title(u'G) Reg JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, jja_udel, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+	plot_maps_mean = map.contourf(xx, yy, pre_jja_rcm, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
 
-	ax = fig.add_subplot(5, 4, 16)
-	plt.title(u'P) UDEL SON (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 8)
+	plt.title(u'H) Reg SON (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, son_udel, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+	plot_maps_mean = map.contourf(xx, yy, pre_son_rcm, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
 	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-	cbar.ax.tick_params(labelsize=6)	
+	cbar.ax.tick_params(labelsize=6) 
 
-	ax = fig.add_subplot(5, 4, 17)
-	plt.title(u'Q) ERA5 DJF (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 9)
+	plt.title(u'I) Had DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, pre_djf_gcm, levels=levs1, latlon=True, cmap=cm.YlGnBu)
+
+	ax = fig.add_subplot(6, 4, 10)
+	plt.title(u'J) Had MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, pre_mam_gcm, levels=levs1, latlon=True, cmap=cm.YlGnBu)
+
+	ax = fig.add_subplot(6, 4, 11)
+	plt.title(u'K) Had JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, pre_jja_gcm, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
+
+	ax = fig.add_subplot(6, 4, 12)
+	plt.title(u'L) Had SON (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, pre_son_gcm, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
+	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6) 
+
+	ax = fig.add_subplot(6, 4, 13)
+	plt.title(u'M) CRU DJF (°C)', fontsize=6, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, tas_djf_cru, levels=levs2, latlon=True, cmap=cm.YlOrRd)
+
+	ax = fig.add_subplot(6, 4, 14)
+	plt.title(u'N) CRU MAM (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, tas_mam_cru, levels=levs2, latlon=True, cmap=cm.YlOrRd)
+
+	ax = fig.add_subplot(6, 4, 15)
+	plt.title(u'O) CRU JJA (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, tas_jja_cru, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
+
+	ax = fig.add_subplot(6, 4, 16)
+	plt.title(u'P) CRU SON (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, tas_son_cru, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
+	cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6)
+	
+	ax = fig.add_subplot(6, 4, 17)
+	plt.title(u'Q) Reg DJF (°C)', fontsize=6, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, tas_djf_rcm[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd)
+
+	ax = fig.add_subplot(6, 4, 18)
+	plt.title(u'R) Reg MAM (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, tas_mam_rcm[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd)
+
+	ax = fig.add_subplot(6, 4, 19)
+	plt.title(u'S) Reg JJA (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, tas_jja_rcm[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd) 
+
+	ax = fig.add_subplot(6, 4, 20)
+	plt.title(u'T) Reg SON (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, tas_son_rcm[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd) 
+	cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6) 
+
+	ax = fig.add_subplot(6, 4, 21)
+	plt.title(u'U) Had DJF (°C)', fontsize=6, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, djf_era5, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	plot_maps_mean = map.contourf(xx, yy, tas_djf_gcm, levels=levs2, latlon=True, cmap=cm.YlOrRd)
 
-	ax = fig.add_subplot(5, 4, 18)
-	plt.title(u'R) ERA5 MAM (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 22)
+	plt.title(u'V) Had MAM (°C)', fontsize=6, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, mam_era5, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	plot_maps_mean = map.contourf(xx, yy, tas_mam_gcm, levels=levs2, latlon=True, cmap=cm.YlOrRd)
 
-	ax = fig.add_subplot(5, 4, 19)
-	plt.title(u'S) ERA5 JJA (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 23)
+	plt.title(u'W) Had JJA (°C)', fontsize=6, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, jja_era5, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+	plot_maps_mean = map.contourf(xx, yy, tas_jja_gcm, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
 
-	ax = fig.add_subplot(5, 4, 20)
-	plt.title(u'T) ERA5 SON (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(6, 4, 24)
+	plt.title(u'X) Had SON (°C)', fontsize=6, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, son_era5, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
-	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-	cbar.ax.tick_params(labelsize=6)	
+	plot_maps_mean = map.contourf(xx, yy, tas_son_gcm, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
+	cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
+	cbar.ax.tick_params(labelsize=6) 
 
 	fig.tight_layout()
 	
 	return plot_maps_mean
 
 
-# Import regcm exp and cru databases 	   
-#~ lat, lon, djf_rcm, mam_rcm, jja_rcm, son_rcm = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
-#~ lat, lon, djf_gcm, mam_gcm, jja_gcm, son_gcm = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
-#~ lat, lon, djf_cru, mam_cru, jja_cru, son_cru = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')
-#~ lat, lon, djf_udel, mam_udel, jja_udel, son_udel = import_obs('pre', 'amz_neb', 'udel_v301', '1986-2005')
-#~ lat, lon, djf_chirps, mam_chirps, jja_chirps, son_chirps = import_obs('precip', 'amz_neb', 'chirps-v2.0', '1986-2005')
-#~ lat, lon, djf_era5, mam_era5, jja_era5, son_era5 = import_obs('mtpr', 'amz_neb', 'era5', '1986-2005')
+# Import regcm exp and cru databases 
+lat, lon, pre_djf_cru, pre_mam_cru, pre_jja_cru, pre_son_cru = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')	   
+lat, lon, pre_djf_rcm, pre_mam_rcm, pre_jja_rcm, pre_son_rcm = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
+lat, lon, pre_djf_gcm, pre_mam_gcm, pre_jja_gcm, pre_son_gcm = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
 
-lat, lon, djf_rcm, mam_rcm, jja_rcm, son_rcm = import_rcm('tas', 'amz_neb', 'hist', '1986-2005')
-lat, lon, djf_gcm, mam_gcm, jja_gcm, son_gcm = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
-lat, lon, djf_cru, mam_cru, jja_cru, son_cru = import_obs('tmp', 'amz_neb', 'cru_ts4.04', '1986-2005')
-lat, lon, djf_udel, mam_udel, jja_udel, son_udel = import_obs('temp', 'amz_neb', 'udel_v301', '1986-2005')
-lat, lon, djf_era5, mam_era5, jja_era5, son_era5 = import_obs('t2m', 'amz_neb', 'era5', '1986-2005')
+lat, lon, tas_djf_cru, tas_mam_cru, tas_jja_cru, tas_son_cru = import_obs('tmp', 'amz_neb', 'cru_ts4.04', '1986-2005')
+lat, lon, tas_djf_rcm, tas_mam_rcm, tas_jja_rcm, tas_son_rcm = import_rcm('tas', 'amz_neb', 'hist', '1986-2005')
+lat, lon, tas_djf_gcm, tas_mam_gcm, tas_jja_gcm, tas_son_gcm = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
 
 # Plot maps with the function
-#~ plt_map = plot_maps_seasonal(djf_rcm,mam_rcm,jja_rcm,son_rcm,djf_gcm,mam_gcm,jja_gcm,son_gcm,djf_cru,mam_cru,jja_cru,son_cru,djf_udel,mam_udel,jja_udel,son_udel,djf_chirps,mam_chirps,jja_chirps,son_chirps,djf_era5,mam_era5,jja_era5,son_era5)
-plt_map = plot_maps_seasonal(djf_rcm,mam_rcm,jja_rcm,son_rcm,djf_gcm,mam_gcm,jja_gcm,son_gcm,djf_cru,mam_cru,jja_cru,son_cru,djf_udel,mam_udel,jja_udel,son_udel,djf_era5,mam_era5,jja_era5,son_era5)
-
-plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.35, hspace=0.35)
+plt_map = plot_maps_seasonal(pre_djf_cru, pre_mam_cru, pre_jja_cru, pre_son_cru, pre_djf_rcm, pre_mam_rcm, pre_jja_rcm, pre_son_rcm, pre_djf_gcm, pre_mam_gcm, pre_jja_gcm, pre_son_gcm, tas_djf_cru, tas_mam_cru, tas_jja_cru, tas_son_cru, tas_djf_rcm, tas_mam_rcm, tas_jja_rcm, tas_son_rcm, tas_djf_gcm, tas_mam_gcm, tas_jja_gcm, tas_son_gcm)
 
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_clim_seasonal_tas_reg_had_obs_1986-2005.png'
+name_out = 'pyplt_maps_clim_seasonal_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
 
 plt.show()
 exit()
-
 
 
 

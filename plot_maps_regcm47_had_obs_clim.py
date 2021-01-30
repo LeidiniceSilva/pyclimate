@@ -25,6 +25,21 @@ from mpl_toolkits.basemap import Basemap
 from matplotlib.colors import BoundaryNorm
 from comp_statist_indices import compute_added_value
 
+
+def import_obs(var, area, dataset, dt):
+	
+	path = '/home/nice/Documents/dataset/obs/rcm'
+	arq  = '{0}/{1}_{2}_{3}_obs_mon_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
+			
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[var][:] 
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	obs  = np.nanmean(var[:][:,:,:], axis=0)
+	
+	return lat, lon, obs
+	
+	
 def import_rcm(var, area, exp, dt):
 	
 	path = '/home/nice/Documents/dataset/rcm/{0}'.format(exp)	
@@ -51,20 +66,6 @@ def import_gcm(var, area, exp, dt):
 	gcm  = np.nanmean(var[:][:,:,:], axis=0)
 
 	return lat, lon, gcm
-
-	
-def import_obs(var, area, dataset, dt):
-	
-	path = '/home/nice/Documents/dataset/obs'
-	arq  = '{0}/{1}_{2}_{3}_obs_mon_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
-			
-	data = netCDF4.Dataset(arq)
-	var  = data.variables[var][:] 
-	lat  = data.variables['lat'][:]
-	lon  = data.variables['lon'][:]
-	obs  = np.nanmean(var[:][:,:,:], axis=0)
-	
-	return lat, lon, obs
 	
 
 def basemap(lat, lon):
@@ -100,134 +101,150 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 	
-def plot_maps_mean(rcm_pre, gcm_pre, diff_rcm_gcm_pre, cru_pre, udel_pre, chirps_pre, era5_pre, rcm_tas, gcm_tas, diff_rcm_gcm_tas, cru_tas, udel_tas, era5_tas):
+def plot_maps_mean(obs_pre, rcm_pre, gcm_pre, diff_pre_rcm_gcm, pre_rcm_obs, pre_gcm_obs, av_pre_rcm_gcm_obs, obs_tas, rcm_tas, gcm_tas, diff_tas_rcm_gcm, tas_rcm_obs, tas_gcm_obs, av_tas_rcm_gcm_obs):
 		
-	fig = plt.figure()
+	fig = plt.figure(figsize=(6,3))
 
 	levs1 = [1, 2, 4, 6, 8, 10, 15]
 	levs2 = [20, 22, 24, 26, 28, 30]
-	levs3 = [-4, -3, -2, -1, 1, 2, 3, 4]
+	levs3 = [-4, -2, -1, -.5, 0.5, 1, 2, 4]
+	levs4 = [-1, -0.7, -0.4, 0, 0.4, 0.7, 1]
 
 	ax = fig.add_subplot(4, 4, 1)
-	plt.title(u'A) Reg (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.title(u'A) CRU (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, obs_pre, levels=levs1, latlon=True, cmap=cm.YlGnBu)
+
+	ax = fig.add_subplot(4, 4, 2)
+	plt.title(u'B) Reg (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_mean = map.contourf(xx, yy, rcm_pre, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-	
-	ax = fig.add_subplot(4, 4, 2)
-	plt.title(u'B) Had (mm d⁻¹)', fontsize=6, fontweight='bold')
+
+	ax = fig.add_subplot(4, 4, 3)
+	plt.title(u'C) Had (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_mean = map.contourf(xx, yy, gcm_pre, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-
-	ax = fig.add_subplot(4, 4, 3)
-	plt.title(u'C) Reg - Had (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, diff_rcm_gcm_pre, levels=levs3, latlon=True, cmap=cm.BrBG) 
-	cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax)
+	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
 	cbar.ax.tick_params(labelsize=6) 
-	
+		
 	ax = fig.add_subplot(4, 4, 5)
-	plt.title(u'E) CRU (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.title(u'D) Reg - Had (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, cru_pre, levels=levs1, latlon=True, cmap=cm.YlGnBu)
+	plot_maps_mean = map.contourf(xx, yy, diff_pre_rcm_gcm, levels=levs3, latlon=True, cmap=cm.BrBG)  
 	
 	ax = fig.add_subplot(4, 4, 6)
-	plt.title(u'F) UDEL (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.title(u'E) Reg - CRU (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, udel_pre, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-	
+	plot_maps_mean = map.contourf(xx, yy, pre_rcm_obs, levels=levs3, latlon=True, cmap=cm.BrBG)
+
 	ax = fig.add_subplot(4, 4, 7)
-	plt.title(u'G) CHIRPS (mm d⁻¹)', fontsize=6, fontweight='bold')
+	plt.title(u'F) Had - CRU (mm d⁻¹)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, chirps_pre, levels=levs1, latlon=True, cmap=cm.YlGnBu)
-	
-	ax = fig.add_subplot(4, 4, 8)
-	plt.title(u'H) ERA5 (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, era5_pre, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+	plot_maps_mean = map.contourf(xx, yy, pre_gcm_obs, levels=levs3, latlon=True, cmap=cm.BrBG)
+	cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax, extend='both', shrink=0.8)
 	cbar.ax.tick_params(labelsize=6) 
 	
+	ax = fig.add_subplot(4, 4, 8)
+	plt.title(u'G) AV', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, av_pre_rcm_gcm_obs, levels=levs4, latlon=True, cmap=cm.PiYG)
+	cbar = map.colorbar(ticks=levs4, drawedges=True, ax=ax, extend='both', shrink=0.8)
+	cbar.ax.tick_params(labelsize=6) 
+
 	ax = fig.add_subplot(4, 4, 9)
-	plt.title(u'I) Reg (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'H) CRU (°C)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, obs_tas, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
+	
+	ax = fig.add_subplot(4, 4, 10)
+	plt.title(u'I) Reg (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_mean = map.contourf(xx, yy, rcm_tas[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd)
 	
-	ax = fig.add_subplot(4, 4, 10)
+	ax = fig.add_subplot(4, 4, 11)
 	plt.title(u'J) Had (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_mean = map.contourf(xx, yy, gcm_tas, levels=levs2, latlon=True, cmap=cm.YlOrRd)
-	
-	ax = fig.add_subplot(4, 4, 11)
-	plt.title(u'L) Reg - Had (°C)', fontsize=6, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, diff_rcm_gcm_tas[0,:,:], levels=levs3, latlon=True, cmap=cm.bwr)
-	cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax)
+	cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax, extend='both', shrink=0.8)
 	cbar.ax.tick_params(labelsize=6)
 	
 	ax = fig.add_subplot(4, 4, 13)
-	plt.title(u'N) CRU (°C)', fontsize=6, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	plt.title(u'K) Reg - Had (°C)', fontsize=6, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')	
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, cru_tas, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
+	plot_maps_mean = map.contourf(xx, yy, diff_tas_rcm_gcm, levels=levs3, latlon=True, cmap=cm.bwr)
 	
 	ax = fig.add_subplot(4, 4, 14)
-	plt.title(u'O) UDEL (°C)', fontsize=6, fontweight='bold')
-	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
+	plt.title(u'L) Reg - CRU (°C)', fontsize=6, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, udel_tas, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
-	
-	ax = fig.add_subplot(4, 4, 15)
-	plt.title(u'P) ERA5 (°C)', fontsize=6, fontweight='bold')
-	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_mean = map.contourf(xx, yy, era5_tas, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
-	cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
-	cbar.ax.tick_params(labelsize=6) 
+	plot_maps_mean = map.contourf(xx, yy, tas_rcm_obs, levels=levs3, latlon=True, cmap=cm.bwr) 
 
-	fig.tight_layout()
+	ax = fig.add_subplot(4, 4, 15)
+	plt.title(u'M) Had - CRU (°C)', fontsize=6, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, tas_gcm_obs, levels=levs3, latlon=True, cmap=cm.bwr) 
+	cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax, extend='both', shrink=0.8)
+	cbar.ax.tick_params(labelsize=6)  
+		
+	ax = fig.add_subplot(4, 4, 16)
+	plt.title(u'N) AV', fontsize=6, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')	
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_mean = map.contourf(xx, yy, av_tas_rcm_gcm_obs, levels=levs4, latlon=True, cmap=cm.PiYG) 
+	cbar = map.colorbar(ticks=levs4, drawedges=True, ax=ax, extend='both', shrink=0.8)
+	cbar.ax.tick_params(labelsize=6)  
+
+	fig.tight_layout(pad=0.5, w_pad=0.5, h_pad=0.5)
 	
 	return plot_maps_mean
 
 
-# Import regcm exp and cru databases 	   
+# Import regcm exp and cru databases 	
+lat, lon, obs_pre = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')   
 lat, lon, rcm_pre = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
 lat, lon, gcm_pre = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
-lat, lon, cru_pre = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')
-lat, lon, udel_pre = import_obs('pre', 'amz_neb', 'udel_v301', '1986-2005')
-lat, lon, chirps_pre = import_obs('precip', 'amz_neb', 'chirps-v2.0', '1986-2005')
-lat, lon, era5_pre = import_obs('mtpr', 'amz_neb', 'era5', '1986-2005')
 
+lat, lon, obs_tas = import_obs('tmp', 'amz_neb', 'cru_ts4.04', '1986-2005')
 lat, lon, rcm_tas = import_rcm('tas', 'amz_neb', 'hist', '1986-2005')
 lat, lon, gcm_tas = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
-lat, lon, cru_tas = import_obs('tmp', 'amz_neb', 'cru_ts4.04', '1986-2005')
-lat, lon, udel_tas = import_obs('temp', 'amz_neb', 'udel_v301', '1986-2005')
-lat, lon, era5_tas = import_obs('t2m', 'amz_neb', 'era5', '1986-2005')
 
 # Compute regcm - hagdem outut
-diff_rcm_gcm_pre = rcm_pre - gcm_pre
-diff_rcm_gcm_tas = rcm_tas - gcm_tas
+diff_pre_rcm_gcm = rcm_pre - gcm_pre
+diff_tas_rcm_gcm = np.nanmean(rcm_tas, axis=0) - gcm_tas
+
+# Compute and plot bias from regcm exp and cru database
+pre_rcm_obs = rcm_pre - obs_pre
+pre_gcm_obs = gcm_pre - obs_pre
+tas_rcm_obs = np.nanmean(rcm_tas, axis=0) - obs_tas
+tas_gcm_obs = gcm_tas - obs_tas
+
+# Compute added value from regcm output
+av_pre_rcm_gcm_obs = compute_added_value(gcm_pre, rcm_pre, obs_pre)
+av_tas_rcm_gcm_obs = compute_added_value(gcm_tas, np.nanmean(rcm_tas, axis=0), obs_tas)
 
 # Plot maps with the function
-plt_map = plot_maps_mean(rcm_pre, gcm_pre, diff_rcm_gcm_pre, cru_pre, udel_pre, chirps_pre, era5_pre, rcm_tas, gcm_tas, diff_rcm_gcm_tas, cru_tas, udel_tas, era5_tas)
-
-plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.25, hspace=0.10)
+plt_map = plot_maps_mean(obs_pre, rcm_pre, gcm_pre, diff_pre_rcm_gcm, pre_rcm_obs, pre_gcm_obs, av_pre_rcm_gcm_obs, obs_tas, rcm_tas, gcm_tas, diff_tas_rcm_gcm, tas_rcm_obs, tas_gcm_obs, av_tas_rcm_gcm_obs)
+#~ plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.50, hspace=0.5)
 
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'
