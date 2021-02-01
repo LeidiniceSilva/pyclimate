@@ -244,7 +244,6 @@ av_tas_rcm_gcm_obs = compute_added_value(gcm_tas, np.nanmean(rcm_tas, axis=0), o
 
 # Plot maps with the function
 plt_map = plot_maps_mean(obs_pre, rcm_pre, gcm_pre, diff_pre_rcm_gcm, pre_rcm_obs, pre_gcm_obs, av_pre_rcm_gcm_obs, obs_tas, rcm_tas, gcm_tas, diff_tas_rcm_gcm, tas_rcm_obs, tas_gcm_obs, av_tas_rcm_gcm_obs)
-#~ plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.50, hspace=0.5)
 
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'

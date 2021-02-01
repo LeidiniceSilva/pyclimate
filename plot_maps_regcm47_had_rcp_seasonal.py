@@ -26,32 +26,44 @@ from mpl_toolkits.basemap import Basemap
 from os.path import expanduser
 
 
-def import_rcm(var, exp, dt):
+def import_rcm(var, area, exp, dt):
 	
 	path = '/home/nice/Documents/dataset/rcm/{0}'.format(exp)	
-	arq  = '{0}/{1}_amz_neb_reg_had_{2}_mon_{3}_lonlat_seamask.nc'.format(path, var, exp, dt)	
-		
-	data = netCDF4.Dataset(arq)
-	var  = data.variables[var][:]
-	lat  = data.variables['lat'][:]
-	lon  = data.variables['lon'][:]
-	rcm  = np.nanmean(var[:][:,:,:], axis=0)
-
-	return lat, lon, rcm
-
-
-def import_gcm(var, exp, dt):
+	arq  = '{0}/{1}_{2}_reg_had_{3}_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
 	
-	path = '/home/nice/Documents/dataset/gcm/{0}'.format(exp)	
-	arq  = '{0}/{1}_amz_neb_Amon_HadGEM2-ES_{2}_r1i1p1_mon_{3}_lonlat_seamask.nc'.format(path, var, exp, dt)	
-		
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[var][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	gcm  = np.nanmean(var[:][:,:,:], axis=0)
+	value  = var[:][:,:,:]
 
-	return lat, lon, gcm
+	season_rcm = value[2:240:3,:,:]
+	djf_rcm = np.nanmean(season_rcm[3:80:4], axis=0)
+	mam_rcm = np.nanmean(season_rcm[0:80:4], axis=0)
+	jja_rcm = np.nanmean(season_rcm[1:80:4], axis=0)
+	son_rcm = np.nanmean(season_rcm[2:80:4], axis=0)
+
+	return lat, lon, djf_rcm, mam_rcm, jja_rcm, son_rcm
+
+
+def import_gcm(var, area, exp, dt):
+	
+	path = '/home/nice/Documents/dataset/gcm/{0}'.format(exp)
+	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
+	
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[var][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	value  = var[:][:,:,:]
+
+	season_gcm = value[2:240:3,:,:]
+	djf_gcm = np.nanmean(season_gcm[3:80:4], axis=0)
+	mam_gcm = np.nanmean(season_gcm[0:80:4], axis=0)
+	jja_gcm = np.nanmean(season_gcm[1:80:4], axis=0)
+	son_gcm = np.nanmean(season_gcm[2:80:4], axis=0)
+
+	return lat, lon, djf_gcm, mam_gcm, jja_gcm, son_gcm
 	
 
 def basemap(lat, lon):
@@ -87,85 +99,238 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 	
-def plot_maps_diff(diff_pre_reg_r26_hist, diff_pre_had_r26_hist, diff_pre_reg_r85_hist, diff_pre_had_r85_hist, diff_tas_reg_r26_hist, diff_tas_had_r26_hist, diff_tas_reg_r85_hist, diff_tas_had_r85_hist):
+def plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp26_hist,pre_son_rcm_rcp26_hist,pre_djf_gcm_rcp26_hist,pre_mam_gcm_rcp26_hist,pre_jja_gcm_rcp26_hist,pre_son_gcm_rcp26_hist,pre_djf_rcm_rcp85_hist,pre_mam_rcm_rcp85_hist,pre_jja_rcm_rcp85_hist,pre_son_rcm_rcp85_hist,pre_djf_gcm_rcp85_hist,pre_mam_gcm_rcp85_hist,pre_jja_gcm_rcp85_hist,pre_son_gcm_rcp85_hist,tas_djf_rcm_rcp26_hist,tas_mam_rcm_rcp26_hist,tas_jja_rcm_rcp26_hist,tas_son_rcm_rcp26_hist,tas_djf_gcm_rcp26_hist,tas_mam_gcm_rcp26_hist,tas_jja_gcm_rcp26_hist,tas_son_gcm_rcp26_hist,tas_djf_rcm_rcp85_hist,tas_mam_rcm_rcp85_hist,tas_jja_rcm_rcp85_hist,tas_son_rcm_rcp85_hist,tas_djf_gcm_rcp85_hist,tas_mam_gcm_rcp85_hist,tas_jja_gcm_rcp85_hist,tas_son_gcm_rcp85_hist):
 		
-	fig = plt.figure()
+	fig = plt.figure(figsize=(6,3))
 
-	levs1 = [-3, -2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2, 3]
-	levs2 = [0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+	#~ levs1 = [-4, -2, -1, -0.5, 0.5, 1, 2, 4]
 
-	ax = fig.add_subplot(4, 2, 1)
-	plt.title(u'A) Reg RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ ax = fig.add_subplot(4, 4, 1)
+	#~ plt.title(u'A) Reg RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_djf_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
+	
+	#~ ax = fig.add_subplot(4, 4, 2)
+	#~ plt.title(u'B) Reg RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_mam_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
+	
+	#~ ax = fig.add_subplot(4, 4, 3)
+	#~ plt.title(u'C) Reg RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_jja_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
+	
+	#~ ax = fig.add_subplot(4, 4, 4)
+	#~ plt.title(u'D) Reg RCP26-Hist  (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_son_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
+	#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
+	#~ cbar.ax.tick_params(labelsize=6) 
+	
+	#~ ax = fig.add_subplot(4, 4, 5)
+	#~ plt.title(u'E) Had RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_djf_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
+	
+	#~ ax = fig.add_subplot(4, 4, 6)
+	#~ plt.title(u'F) Had RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_mam_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
+	
+	#~ ax = fig.add_subplot(4, 4, 7)
+	#~ plt.title(u'G) Had RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_jja_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
+	
+	#~ ax = fig.add_subplot(4, 4, 8)
+	#~ plt.title(u'H) Had RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_son_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
+	#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
+	#~ cbar.ax.tick_params(labelsize=6) 
+
+	#~ ax = fig.add_subplot(4, 4, 9)
+	#~ plt.title(u'I) Reg RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_djf_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
+	
+	#~ ax = fig.add_subplot(4, 4, 10)
+	#~ plt.title(u'J) Reg RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_mam_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
+	
+	#~ ax = fig.add_subplot(4, 4, 11)
+	#~ plt.title(u'L) Reg RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_jja_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
+	
+	#~ ax = fig.add_subplot(4, 4, 12)
+	#~ plt.title(u'M) Reg RCP85-Hist  (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_son_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
+	#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
+	#~ cbar.ax.tick_params(labelsize=6) 
+	
+	#~ ax = fig.add_subplot(4, 4, 13)
+	#~ plt.title(u'N) Had RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_djf_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
+	
+	#~ ax = fig.add_subplot(4, 4, 14)
+	#~ plt.title(u'O) Had RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_mam_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
+	
+	#~ ax = fig.add_subplot(4, 4, 15)
+	#~ plt.title(u'P) Had RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_jja_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
+	
+	#~ ax = fig.add_subplot(4, 4, 16)
+	#~ plt.title(u'Q) Had RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
+	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	#~ map, xx, yy = basemap(lat, lon)
+	#~ plot_maps_diff = map.contourf(xx, yy, pre_son_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
+	#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
+	#~ cbar.ax.tick_params(labelsize=6) 
+
+	levs1 = [0.5, 1, 1.5, 2, 3, 4, 5, 7, 9]
+
+	ax = fig.add_subplot(4, 4, 1)
+	plt.title(u'A) Reg RCP26-Hist (°C)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_diff = map.contourf(xx, yy, diff_pre_reg_r26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
-	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
-	cbar.ax.tick_params(labelsize=6) 
+	plot_maps_diff = map.contourf(xx, yy, tas_djf_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
 	
-	ax = fig.add_subplot(4, 2, 2)
-	plt.title(u'B) Had RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	ax = fig.add_subplot(4, 4, 2)
+	plt.title(u'B) Reg RCP26-Hist (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_diff = map.contourf(xx, yy, diff_pre_had_r26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
+	plot_maps_diff = map.contourf(xx, yy, tas_mam_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	
+	ax = fig.add_subplot(4, 4, 3)
+	plt.title(u'C) Reg RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_diff = map.contourf(xx, yy, tas_jja_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+	
+	ax = fig.add_subplot(4, 4, 4)
+	plt.title(u'D) Reg RCP26-Hist  (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_diff = map.contourf(xx, yy, tas_son_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
 	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
 	cbar.ax.tick_params(labelsize=6) 
 	
-	ax = fig.add_subplot(4, 2, 3)
-	plt.title(u'C) Reg RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_diff = map.contourf(xx, yy, diff_pre_reg_r85_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
-	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
-	cbar.ax.tick_params(labelsize=6) 
-	
-	ax = fig.add_subplot(4, 2, 4)
-	plt.title(u'D) Had RCP85-Hist  (mm d⁻¹)', fontsize=6, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_diff = map.contourf(xx, yy, diff_pre_had_r85_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
-	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
-	cbar.ax.tick_params(labelsize=6) 
-	
-	ax = fig.add_subplot(4, 2, 5)
-	plt.title(u'E) Reg RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	ax = fig.add_subplot(4, 4, 5)
+	plt.title(u'E) Had RCP26-Hist (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_diff = map.contourf(xx, yy, diff_tas_reg_r26_hist, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
-	cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax, extend='both', shrink=0.8)
-	cbar.ax.tick_params(labelsize=6) 
+	plot_maps_diff = map.contourf(xx, yy, tas_djf_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
 	
-	ax = fig.add_subplot(4, 2, 6)
+	ax = fig.add_subplot(4, 4, 6)
 	plt.title(u'F) Had RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_diff = map.contourf(xx, yy, pre_mam_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	
+	ax = fig.add_subplot(4, 4, 7)
+	plt.title(u'G) Had RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_diff = map.contourf(xx, yy, tas_jja_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+	
+	ax = fig.add_subplot(4, 4, 8)
+	plt.title(u'H) Had RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_diff = map.contourf(xx, yy, tas_son_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
+	cbar.ax.tick_params(labelsize=6) 
+
+	ax = fig.add_subplot(4, 4, 9)
+	plt.title(u'I) Reg RCP26-Hist (°C)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_diff = map.contourf(xx, yy, diff_tas_had_r26_hist, levels=levs2, latlon=True, cmap=cm.YlOrRd)
-	cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax, extend='both', shrink=0.8)
-	cbar.ax.tick_params(labelsize=6) 
+	plot_maps_diff = map.contourf(xx, yy, tas_djf_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
 	
-	ax = fig.add_subplot(4, 2, 7)
-	plt.title(u'G) Reg RCP85-Hist (°C)', fontsize=6, fontweight='bold')
-	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
-	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
-	map, xx, yy = basemap(lat, lon)
-	plot_maps_diff = map.contourf(xx, yy, diff_tas_reg_r85_hist, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
-	cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax, extend='both', shrink=0.8)
-	cbar.ax.tick_params(labelsize=6) 
-	
-	ax = fig.add_subplot(4, 2, 8)
-	plt.title(u'H) Had RCP85-Hist (°C)', fontsize=6, fontweight='bold')
-	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
+	ax = fig.add_subplot(4, 4, 10)
+	plt.title(u'J) Reg RCP85-Hist (°C)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_diff = map.contourf(xx, yy, diff_tas_had_r85_hist, levels=levs2, latlon=True, cmap=cm.YlOrRd)
-	cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax, extend='both', shrink=0.8)
+	plot_maps_diff = map.contourf(xx, yy, tas_mam_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	
+	ax = fig.add_subplot(4, 4, 11)
+	plt.title(u'L) Reg RCP85-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_diff = map.contourf(xx, yy, tas_jja_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+	
+	ax = fig.add_subplot(4, 4, 12)
+	plt.title(u'M) Reg RCP85-Hist  (°C)', fontsize=6, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_diff = map.contourf(xx, yy, tas_son_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
+	cbar.ax.tick_params(labelsize=6) 
+	
+	ax = fig.add_subplot(4, 4, 13)
+	plt.title(u'N) Had RCP85-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_diff = map.contourf(xx, yy, tas_djf_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+	
+	ax = fig.add_subplot(4, 4, 14)
+	plt.title(u'O) Had RCP85-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_diff = map.contourf(xx, yy, tas_mam_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	
+	ax = fig.add_subplot(4, 4, 15)
+	plt.title(u'P) Had RCP85-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_diff = map.contourf(xx, yy, tas_jja_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+	
+	ax = fig.add_subplot(4, 4, 16)
+	plt.title(u'Q) Had RCP85-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
+	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
+	map, xx, yy = basemap(lat, lon)
+	plot_maps_diff = map.contourf(xx, yy, tas_son_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
 	cbar.ax.tick_params(labelsize=6) 
 	
 	fig.tight_layout()
@@ -174,44 +339,80 @@ def plot_maps_diff(diff_pre_reg_r26_hist, diff_pre_had_r26_hist, diff_pre_reg_r8
 
 
 # Import regcm and hadgem exp
-lat, lon, pre_reg_hist = import_rcm('pr', 'hist', '1986-2005')
-lat, lon, pre_had_hist = import_gcm('pr', 'hist', '1986-2005')
-lat, lon, pre_reg_rcp26 = import_rcm('pr', 'rcp26', '2080-2099')
-lat, lon, pre_had_rcp26 = import_gcm('pr', 'rcp26', '2080-2099')
-lat, lon, pre_reg_rcp85 = import_rcm('pr', 'rcp85', '2080-2099')
-lat, lon, pre_had_rcp85 = import_gcm('pr', 'rcp85', '2080-2099')
+lat, lon, pre_djf_rcm_hist, pre_mam_rcm_hist, pre_jja_rcm_hist, pre_son_rcm_hist = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
+lat, lon, pre_djf_gcm_hist, pre_mam_gcm_hist, pre_jja_gcm_hist, pre_son_gcm_hist = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
+lat, lon, pre_djf_rcm_rcp26, pre_mam_rcm_rcp26, pre_jja_rcm_rcp26, pre_son_rcm_rcp26 = import_rcm('pr', 'amz_neb', 'rcp26', '2080-2099')
+lat, lon, pre_djf_gcm_rcp26, pre_mam_gcm_rcp26, pre_jja_gcm_rcp26, pre_son_gcm_rcp26 = import_gcm('pr', 'amz_neb', 'rcp26', '2080-2099')
+lat, lon, pre_djf_rcm_rcp85, pre_mam_rcm_rcp85, pre_jja_rcm_rcp85, pre_son_rcm_rcp85 = import_rcm('pr', 'amz_neb', 'rcp85', '2080-2099')
+lat, lon, pre_djf_gcm_rcp85, pre_mam_gcm_rcp85, pre_jja_gcm_rcp85, pre_son_gcm_rcp85 = import_gcm('pr', 'amz_neb', 'rcp85', '2080-2099')
 
-lat, lon, tas_reg_hist = import_rcm('tas', 'hist', '1986-2005')
-lat, lon, tas_had_hist = import_gcm('tas', 'hist', '1986-2005')
-lat, lon, tas_reg_rcp26 = import_rcm('tas', 'rcp26', '2080-2099')
-lat, lon, tas_had_rcp26 = import_gcm('tas', 'rcp26', '2080-2099')
-lat, lon, tas_reg_rcp85 = import_rcm('tas', 'rcp85', '2080-2099')
-lat, lon, tas_had_rcp85 = import_gcm('tas', 'rcp85', '2080-2099')
+lat, lon, tas_djf_rcm_hist, tas_mam_rcm_hist, tas_jja_rcm_hist, tas_son_rcm_hist = import_rcm('tas', 'amz_neb', 'hist', '1986-2005')
+lat, lon, tas_djf_gcm_hist, tas_mam_gcm_hist, tas_jja_gcm_hist, tas_son_gcm_hist = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
+lat, lon, tas_djf_rcm_rcp26, tas_mam_rcm_rcp26, tas_jja_rcm_rcp26, tas_son_rcm_rcp26 = import_rcm('tas', 'amz_neb', 'rcp26', '2080-2099')
+lat, lon, tas_djf_gcm_rcp26, tas_mam_gcm_rcp26, tas_jja_gcm_rcp26, tas_son_gcm_rcp26 = import_gcm('tas', 'amz_neb', 'rcp26', '2080-2099')
+lat, lon, tas_djf_rcm_rcp85, tas_mam_rcm_rcp85, tas_jja_rcm_rcp85, tas_son_rcm_rcp85 = import_rcm('tas', 'amz_neb', 'rcp85', '2080-2099')
+lat, lon, tas_djf_gcm_rcp85, tas_mam_gcm_rcp85, tas_jja_gcm_rcp85, tas_son_gcm_rcp85 = import_gcm('tas', 'amz_neb', 'rcp85', '2080-2099')
 
 # Compute change from rcp and historical period
-diff_pre_reg_rcp26_hist = pre_reg_rcp26 - pre_reg_hist
-diff_pre_had_rcp26_hist = pre_had_rcp26 - pre_had_hist
-diff_pre_reg_rcp85_hist = pre_reg_rcp85 - pre_reg_hist
-diff_pre_had_rcp85_hist = pre_had_rcp85 - pre_had_hist
+pre_djf_rcm_rcp26_hist = pre_djf_rcm_rcp26 - pre_djf_rcm_hist
+pre_mam_rcm_rcp26_hist = pre_mam_rcm_rcp26 - pre_mam_rcm_hist
+pre_jja_rcm_rcp26_hist = pre_jja_rcm_rcp26 - pre_jja_rcm_hist
+pre_son_rcm_rcp26_hist = pre_son_rcm_rcp26 - pre_son_rcm_hist
+pre_djf_rcm_rcp85_hist = pre_djf_rcm_rcp85 - pre_djf_rcm_hist
+pre_mam_rcm_rcp85_hist = pre_mam_rcm_rcp85 - pre_mam_rcm_hist
+pre_jja_rcm_rcp85_hist = pre_jja_rcm_rcp85 - pre_jja_rcm_hist
+pre_son_rcm_rcp85_hist = pre_son_rcm_rcp85 - pre_son_rcm_hist
+pre_djf_gcm_rcp26_hist = pre_djf_gcm_rcp26 - pre_djf_gcm_hist
+pre_mam_gcm_rcp26_hist = pre_mam_gcm_rcp26 - pre_mam_gcm_hist
+pre_jja_gcm_rcp26_hist = pre_jja_gcm_rcp26 - pre_jja_gcm_hist
+pre_son_gcm_rcp26_hist = pre_son_gcm_rcp26 - pre_son_gcm_hist
+pre_djf_gcm_rcp85_hist = pre_djf_gcm_rcp85 - pre_djf_gcm_hist
+pre_mam_gcm_rcp85_hist = pre_mam_gcm_rcp85 - pre_mam_gcm_hist
+pre_jja_gcm_rcp85_hist = pre_jja_gcm_rcp85 - pre_jja_gcm_hist
+pre_son_gcm_rcp85_hist = pre_son_gcm_rcp85 - pre_son_gcm_hist
 
-diff_tas_reg_rcp26_hist = np.nanmean(tas_reg_rcp26, axis=0) - np.nanmean(tas_reg_hist, axis=0)
-diff_tas_had_rcp26_hist = tas_had_rcp26 - tas_had_hist
-diff_tas_reg_rcp85_hist = np.nanmean(tas_reg_rcp85, axis=0) - np.nanmean(tas_reg_hist, axis=0)
-diff_tas_had_rcp85_hist = tas_had_rcp85 - tas_had_hist
+tas_djf_rcm_rcp26_hist = np.nanmean(tas_djf_rcm_rcp26, axis=0) - np.nanmean(tas_djf_rcm_hist, axis=0)
+tas_mam_rcm_rcp26_hist = np.nanmean(tas_mam_rcm_rcp26, axis=0) - np.nanmean(tas_mam_rcm_hist, axis=0)
+tas_jja_rcm_rcp26_hist = np.nanmean(tas_jja_rcm_rcp26, axis=0) - np.nanmean(tas_jja_rcm_hist, axis=0)
+tas_son_rcm_rcp26_hist = np.nanmean(tas_son_rcm_rcp26, axis=0) - np.nanmean(tas_son_rcm_hist, axis=0)
+tas_djf_rcm_rcp85_hist = np.nanmean(tas_djf_rcm_rcp85, axis=0) - np.nanmean(tas_djf_rcm_hist, axis=0)
+tas_mam_rcm_rcp85_hist = np.nanmean(tas_mam_rcm_rcp85, axis=0) - np.nanmean(tas_mam_rcm_hist, axis=0)
+tas_jja_rcm_rcp85_hist = np.nanmean(tas_jja_rcm_rcp85, axis=0) - np.nanmean(tas_jja_rcm_hist, axis=0)
+tas_son_rcm_rcp85_hist = np.nanmean(tas_son_rcm_rcp85, axis=0) - np.nanmean(tas_son_rcm_hist, axis=0)
+tas_djf_gcm_rcp26_hist = tas_djf_gcm_rcp26 - tas_djf_gcm_hist
+tas_mam_gcm_rcp26_hist = tas_mam_gcm_rcp26 - tas_mam_gcm_hist
+tas_jja_gcm_rcp26_hist = tas_jja_gcm_rcp26 - tas_jja_gcm_hist
+tas_son_gcm_rcp26_hist = tas_son_gcm_rcp26 - tas_son_gcm_hist
+tas_djf_gcm_rcp85_hist = tas_djf_gcm_rcp85 - tas_djf_gcm_hist
+tas_mam_gcm_rcp85_hist = tas_mam_gcm_rcp85 - tas_mam_gcm_hist
+tas_jja_gcm_rcp85_hist = tas_jja_gcm_rcp85 - tas_jja_gcm_hist
+tas_son_gcm_rcp85_hist = tas_son_gcm_rcp85 - tas_son_gcm_hist
 
 # Plot bias maps 
-plt_map = plot_maps_diff(diff_pre_reg_rcp26_hist, diff_pre_had_rcp26_hist, diff_pre_reg_rcp85_hist, diff_pre_had_rcp85_hist, diff_tas_reg_rcp26_hist, diff_tas_had_rcp26_hist, diff_tas_reg_rcp85_hist, diff_tas_had_rcp85_hist)
-plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.35, hspace=0.35)
+plt_map = plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp26_hist,pre_son_rcm_rcp26_hist,
+pre_djf_gcm_rcp26_hist,pre_mam_gcm_rcp26_hist,pre_jja_gcm_rcp26_hist,pre_son_gcm_rcp26_hist,
+pre_djf_rcm_rcp85_hist,pre_mam_rcm_rcp85_hist,pre_jja_rcm_rcp85_hist,pre_son_rcm_rcp85_hist,
+pre_djf_gcm_rcp85_hist,pre_mam_gcm_rcp85_hist,pre_jja_gcm_rcp85_hist,pre_son_gcm_rcp85_hist,
+tas_djf_rcm_rcp26_hist,tas_mam_rcm_rcp26_hist,tas_jja_rcm_rcp26_hist,tas_son_rcm_rcp26_hist,
+tas_djf_gcm_rcp26_hist,tas_mam_gcm_rcp26_hist,tas_jja_gcm_rcp26_hist,tas_son_gcm_rcp26_hist,
+tas_djf_rcm_rcp85_hist,tas_mam_rcm_rcp85_hist,tas_jja_rcm_rcp85_hist,tas_son_rcm_rcp85_hist,
+tas_djf_gcm_rcp85_hist,tas_mam_gcm_rcp85_hist,tas_jja_gcm_rcp85_hist,tas_son_gcm_rcp85_hist)
 
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_diff_reg_had_rcp-hist.png'
+name_out = 'pyplt_maps_diff_reg_had_rcp-hist_tas.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
 
 plt.show()
 exit()
+
+
+
+
+
+
 
 
 
