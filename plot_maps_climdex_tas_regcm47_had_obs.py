@@ -43,46 +43,44 @@ def import_obs(var, area, dataset, freq, dt):
 	return lat, lon, obs
 	
 	
-#~ def import_rcm(var, area, model, exp, freq, dt):
+def import_rcm(var, area, model, exp, freq, dt):
 	
-	#~ path = '/home/nice/Documents/dataset/rcm/eca'	
-	#~ arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
+	path = '/home/nice/Documents/dataset/rcm/eca'	
+	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
 
-	#~ dict_var = {u'eca_prectot': u'pr', 
-	#~ u'eca_r95p': u'pr',
-	#~ u'eca_r99p': u'pr', 
-	#~ u'eca_rx1day': u'highest_one_day_precipitation_amount_per_time_period',
-	#~ u'eca_rx5day': u'highest_five_day_precipitation_amount_per_time_period',
-	#~ u'eca_sdii': u'simple_daily_intensitiy_index_per_time_period'}
+	dict_var = {u'eca_txx': u'tasmax', 
+	u'eca_txn': u'tasmax',
+	u'eca_tnx': u'tasmin', 
+	u'eca_tnn': u'tasmin',
+	u'eca_dtr': u'tasmax'}
 	
-	#~ data = netCDF4.Dataset(arq)
-	#~ var  = data.variables[dict_var[var]][:]
-	#~ lat  = data.variables['lat'][:]
-	#~ lon  = data.variables['lon'][:]
-	#~ rcm  = np.nanmean(var[:][:,:,:], axis=0)
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[dict_var[var]][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	rcm  = np.nanmean(var[:][:,:,:], axis=0)
 
-	#~ return lat, lon, rcm
+	return lat, lon, rcm
 
 
-#~ def import_gcm(var, area, model, exp, freq, dt):
+def import_gcm(var, area, model, exp, freq, dt):
 	
-	#~ path = '/home/nice/Documents/dataset/gcm/eca'
-	#~ arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
+	path = '/home/nice/Documents/dataset/gcm/eca'
+	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
 
-	#~ dict_var = {u'eca_prectot': u'pr', 
-	#~ u'eca_r95p': u'pr',
-	#~ u'eca_r99p': u'pr', 
-	#~ u'eca_rx1day': u'highest_one_day_precipitation_amount_per_time_period',
-	#~ u'eca_rx5day': u'highest_five_day_precipitation_amount_per_time_period',
-	#~ u'eca_sdii': u'simple_daily_intensitiy_index_per_time_period'}
-	
-	#~ data = netCDF4.Dataset(arq)
-	#~ var  = data.variables[dict_var[var]][:]
-	#~ lat  = data.variables['lat'][:]
-	#~ lon  = data.variables['lon'][:]
-	#~ gcm  = np.nanmean(var[:][:,:,:], axis=0)
+	dict_var = {u'eca_txx': u'tasmax', 
+	u'eca_txn': u'tasmax',
+	u'eca_tnx': u'tasmin', 
+	u'eca_tnn': u'tasmin',
+	u'eca_dtr': u'tasmax'}
 
-	#~ return lat, lon, gcm
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[dict_var[var]][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	gcm  = np.nanmean(var[:][:,:,:], axis=0)
+
+	return lat, lon, gcm
 
 
 def basemap(lat, lon):
@@ -128,31 +126,32 @@ def basemap(lat, lon):
 	
 # Import regcm exp and cru databases 	
 lat, lon, obs_txx = import_obs('eca_txx', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
-#~ lat, lon, rcm_prcptot = import_rcm('eca_txx', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-#~ lat, lon, gcm_prcptot = import_gcm('eca_txx', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_txx = import_rcm('eca_txx', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_txx = import_gcm('eca_txx', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+
 
 lat, lon, obs_txn = import_obs('eca_txn', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
-#~ lat, lon, rcm_r95p = import_rcm('eca_txx', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-#~ lat, lon, gcm_r95p = import_gcm('eca_txx', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_txn = import_rcm('eca_txn', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_txn = import_gcm('eca_txn', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
 lat, lon, obs_tnx = import_obs('eca_tnx', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
-#~ lat, lon, rcm_r99p = import_rcm('eca_txx', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-#~ lat, lon, gcm_r99p = import_gcm('eca_txx', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_tnx = import_rcm('eca_tnx', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tnx = import_gcm('eca_tnx', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
 lat, lon, obs_tnn = import_obs('eca_tnn', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
-#~ lat, lon, rcm_rx1day = import_rcm('eca_txx', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-#~ lat, lon, gcm_rx1day = import_gcm('eca_txx', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_tnn = import_rcm('eca_tnn', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tnn = import_gcm('eca_tnn', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
 lat, lon, obs_dtr = import_obs('eca_dtr', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
-#~ lat, lon, rcm_rx1day = import_rcm('eca_txx', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-#~ lat, lon, gcm_rx1day = import_gcm('eca_txx', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_dtr = import_rcm('eca_dtr', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_dtr = import_gcm('eca_dtr', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
 # Plot maps with the function
 fig = plt.figure(figsize=(4, 8))
-levs1 = [22, 24, 26, 28, 30, 32, 34, 36, 38, 40]
-levs2 = [12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
-levs3 = [10, 12, 14, 16, 18, 20, 22, 24, 26, 28]
-levs4 = [10, 12, 14, 16, 18, 20, 22, 24, 26, 28]
+levs1 = [26, 28, 30, 32, 34, 36, 38, 40, 42, 44]
+levs2 = [14, 16, 18, 20, 22, 24, 26, 28, 30, 32]
+levs3 = [16, 18, 20, 22, 24, 26, 28, 30, 32, 34]
+levs4 = [8, 10, 12, 14, 16, 18, 20, 22, 24, 26]
 levs5 = [2, 4, 6, 8, 10, 12, 13, 14, 15, 16]
 
 ax = fig.add_subplot(5, 3, 1)
@@ -167,13 +166,13 @@ ax = fig.add_subplot(5, 3, 2)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'B) txx Reg (°C)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_txx, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+map.contourf(xx, yy, rcm_txx[0,:,:], levels=levs1, latlon=True, cmap=cm.YlOrRd)
 
 ax = fig.add_subplot(5, 3, 3)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'C) txx Had (°C)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_txx, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+map.contourf(xx, yy, gcm_txx, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
 cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
@@ -187,13 +186,13 @@ ax = fig.add_subplot(5, 3, 5)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'E) txn Reg (°C)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_txn, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
+map.contourf(xx, yy, rcm_txn[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd) 
 
 ax = fig.add_subplot(5, 3, 6)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'F) txn Had (°C)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_txn, levels=levs2, latlon=True, cmap=cm.YlOrRd)
+map.contourf(xx, yy, gcm_txn, levels=levs2, latlon=True, cmap=cm.YlOrRd)
 cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
@@ -207,13 +206,13 @@ ax = fig.add_subplot(5, 3, 8)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'H) tnx Reg (°C)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_tnx, levels=levs3, latlon=True, cmap=cm.YlOrRd)
+map.contourf(xx, yy, rcm_tnx[0,:,:], levels=levs3, latlon=True, cmap=cm.YlOrRd)
 
 ax = fig.add_subplot(5, 3, 9)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'I) tnx Had (°C)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_tnx, levels=levs3, latlon=True, cmap=cm.YlOrRd)
+map.contourf(xx, yy, gcm_tnx, levels=levs3, latlon=True, cmap=cm.YlOrRd)
 cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
@@ -227,13 +226,13 @@ ax = fig.add_subplot(5, 3, 11)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'K) tnn Reg (°C)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_tnn, levels=levs4, latlon=True, cmap=cm.YlOrRd) 
+map.contourf(xx, yy, rcm_tnn[0,:,:], levels=levs4, latlon=True, cmap=cm.YlOrRd) 
 
 ax = fig.add_subplot(5, 3, 12)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'L) tnn Had (°C)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_tnn, levels=levs4, latlon=True, cmap=cm.YlOrRd) 
+map.contourf(xx, yy, gcm_tnn, levels=levs4, latlon=True, cmap=cm.YlOrRd) 
 cbar = map.colorbar(ticks=levs4, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
@@ -247,13 +246,13 @@ ax = fig.add_subplot(5, 3, 14)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'K) dtr Reg (°C)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_dtr, levels=levs5, latlon=True, cmap=cm.YlOrRd) 
+map.contourf(xx, yy, rcm_dtr[0,:,:], levels=levs5, latlon=True, cmap=cm.YlOrRd) 
 
 ax = fig.add_subplot(5, 3, 15)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'L) dtr Had (°C)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_dtr, levels=levs5, latlon=True, cmap=cm.YlOrRd) 
+map.contourf(xx, yy, gcm_dtr, levels=levs5, latlon=True, cmap=cm.YlOrRd) 
 cbar = map.colorbar(ticks=levs5, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
@@ -262,7 +261,7 @@ plt.subplots_adjust(left=0.10, bottom=0.10, right=0.99, top=0.99, wspace=0.30, h
 
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_climdex_tas_reg_had_obs_1986-2005.png'
+name_out = 'pyplt_maps_etccdi_tas_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')

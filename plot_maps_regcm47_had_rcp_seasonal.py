@@ -87,7 +87,7 @@ def basemap(lat, lon):
 	xin = np.linspace(map.xmin,map.xmax,20) 
 	yin = np.linspace(map.ymin,map.ymax,20) 
 	lons = np.arange(-85.,-5.,0.25) 
-	lats = np.arange(-20.,15.,-0.25) 
+	lats = np.arange(-20.,15.,0.25) 
 	lons, lats = np.meshgrid(new_lon, new_lat)
 
 	xx, yy = map(lons,lats)
@@ -106,26 +106,26 @@ def plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp
 	#~ levs1 = [-4, -2, -1, -0.5, 0.5, 1, 2, 4]
 
 	#~ ax = fig.add_subplot(4, 4, 1)
-	#~ plt.title(u'A) Reg RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'A) Reg RCP26-Hist \n DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_djf_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
 	
 	#~ ax = fig.add_subplot(4, 4, 2)
-	#~ plt.title(u'B) Reg RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'B) Reg RCP26-Hist \n MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_mam_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
 	
 	#~ ax = fig.add_subplot(4, 4, 3)
-	#~ plt.title(u'C) Reg RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'C) Reg RCP26-Hist \n JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_jja_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
 	
 	#~ ax = fig.add_subplot(4, 4, 4)
-	#~ plt.title(u'D) Reg RCP26-Hist  (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'D) Reg RCP26-Hist  \n SON (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_son_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
@@ -133,26 +133,26 @@ def plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp
 	#~ cbar.ax.tick_params(labelsize=6) 
 	
 	#~ ax = fig.add_subplot(4, 4, 5)
-	#~ plt.title(u'E) Had RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'E) Had RCP26-Hist \n DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_djf_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
 	
 	#~ ax = fig.add_subplot(4, 4, 6)
-	#~ plt.title(u'F) Had RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'F) Had RCP26-Hist \n MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_mam_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
 	
 	#~ ax = fig.add_subplot(4, 4, 7)
-	#~ plt.title(u'G) Had RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'G) Had RCP26-Hist \n JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_jja_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
 	
 	#~ ax = fig.add_subplot(4, 4, 8)
-	#~ plt.title(u'H) Had RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'H) Had RCP26-Hist \n SON (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_son_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
@@ -160,27 +160,26 @@ def plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp
 	#~ cbar.ax.tick_params(labelsize=6) 
 
 	#~ ax = fig.add_subplot(4, 4, 9)
-	#~ plt.title(u'I) Reg RCP26-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'I) Reg RCP26-Hist \n DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_djf_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
 	
 	#~ ax = fig.add_subplot(4, 4, 10)
-	#~ plt.title(u'J) Reg RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
-	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	#~ plt.title(u'J) Reg RCP85-Hist \n MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_mam_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
 	
 	#~ ax = fig.add_subplot(4, 4, 11)
-	#~ plt.title(u'L) Reg RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'K) Reg RCP85-Hist \n JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_jja_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
 	
 	#~ ax = fig.add_subplot(4, 4, 12)
-	#~ plt.title(u'M) Reg RCP85-Hist  (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'L) Reg RCP85-Hist  \n SON (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_son_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
@@ -188,7 +187,7 @@ def plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp
 	#~ cbar.ax.tick_params(labelsize=6) 
 	
 	#~ ax = fig.add_subplot(4, 4, 13)
-	#~ plt.title(u'N) Had RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'M) Had RCP85-Hist \n DJF (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
@@ -196,21 +195,21 @@ def plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_djf_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
 	
 	#~ ax = fig.add_subplot(4, 4, 14)
-	#~ plt.title(u'O) Had RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'N) Had RCP85-Hist \n MAM (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_mam_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
 	
 	#~ ax = fig.add_subplot(4, 4, 15)
-	#~ plt.title(u'P) Had RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'O) Had RCP85-Hist \n JJA (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	#~ map, xx, yy = basemap(lat, lon)
 	#~ plot_maps_diff = map.contourf(xx, yy, pre_jja_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG) 
 	
 	#~ ax = fig.add_subplot(4, 4, 16)
-	#~ plt.title(u'Q) Had RCP85-Hist (mm d⁻¹)', fontsize=6, fontweight='bold')
+	#~ plt.title(u'P) Had RCP85-Hist \n SON (mm d⁻¹)', fontsize=6, fontweight='bold')
 	#~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	#~ plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	#~ map, xx, yy = basemap(lat, lon)
@@ -221,26 +220,26 @@ def plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp
 	levs1 = [0.5, 1, 1.5, 2, 3, 4, 5, 7, 9]
 
 	ax = fig.add_subplot(4, 4, 1)
-	plt.title(u'A) Reg RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'A) Reg RCP26-Hist \n DJF (°C)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_djf_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
 	
 	ax = fig.add_subplot(4, 4, 2)
-	plt.title(u'B) Reg RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'B) Reg RCP26-Hist \n MAM (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_mam_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
 	
 	ax = fig.add_subplot(4, 4, 3)
-	plt.title(u'C) Reg RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'C) Reg RCP26-Hist \n JJA (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_jja_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
 	
 	ax = fig.add_subplot(4, 4, 4)
-	plt.title(u'D) Reg RCP26-Hist  (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'D) Reg RCP26-Hist \n SON (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_son_rcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
@@ -248,26 +247,26 @@ def plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp
 	cbar.ax.tick_params(labelsize=6) 
 	
 	ax = fig.add_subplot(4, 4, 5)
-	plt.title(u'E) Had RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'E) Had RCP26-Hist \n DJF (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_djf_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
 	
 	ax = fig.add_subplot(4, 4, 6)
-	plt.title(u'F) Had RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'F) Had RCP26-Hist \n MAM (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, pre_mam_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
 	
 	ax = fig.add_subplot(4, 4, 7)
-	plt.title(u'G) Had RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'G) Had RCP26-Hist \n JJA (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_jja_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
 	
 	ax = fig.add_subplot(4, 4, 8)
-	plt.title(u'H) Had RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'H) Had RCP26-Hist \n SON (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_son_gcm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
@@ -275,27 +274,26 @@ def plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp
 	cbar.ax.tick_params(labelsize=6) 
 
 	ax = fig.add_subplot(4, 4, 9)
-	plt.title(u'I) Reg RCP26-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'I) Reg RCP26-Hist \n DJF (°C)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_djf_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
 	
 	ax = fig.add_subplot(4, 4, 10)
-	plt.title(u'J) Reg RCP85-Hist (°C)', fontsize=6, fontweight='bold')
-	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
+	plt.title(u'J) Reg RCP85-Hist \n MAM (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_mam_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
 	
 	ax = fig.add_subplot(4, 4, 11)
-	plt.title(u'L) Reg RCP85-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'K) Reg RCP85-Hist \n JJA (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_jja_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
 	
 	ax = fig.add_subplot(4, 4, 12)
-	plt.title(u'M) Reg RCP85-Hist  (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'L) Reg RCP85-Hist  \n SON (°C)', fontsize=6, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_son_rcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
@@ -303,7 +301,7 @@ def plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp
 	cbar.ax.tick_params(labelsize=6) 
 	
 	ax = fig.add_subplot(4, 4, 13)
-	plt.title(u'N) Had RCP85-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'M) Had RCP85-Hist \n DJF (°C)', fontsize=6, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
@@ -311,30 +309,30 @@ def plot_maps_diff(pre_djf_rcm_rcp26_hist,pre_mam_rcm_rcp26_hist,pre_jja_rcm_rcp
 	plot_maps_diff = map.contourf(xx, yy, tas_djf_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
 	
 	ax = fig.add_subplot(4, 4, 14)
-	plt.title(u'O) Had RCP85-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'N) Had RCP85-Hist \n MAM (°C)', fontsize=6, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_mam_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
 	
 	ax = fig.add_subplot(4, 4, 15)
-	plt.title(u'P) Had RCP85-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'O) Had RCP85-Hist \n JJA (°C)', fontsize=6, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_jja_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
 	
 	ax = fig.add_subplot(4, 4, 16)
-	plt.title(u'Q) Had RCP85-Hist (°C)', fontsize=6, fontweight='bold')
+	plt.title(u'P) Had RCP85-Hist \n SON (°C)', fontsize=6, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 	plt.text(-23, -17, u'\u25B2 \nN ', fontsize=6)	
 	map, xx, yy = basemap(lat, lon)
 	plot_maps_diff = map.contourf(xx, yy, tas_son_gcm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.YlOrRd)
 	cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax, extend='both', shrink=0.8)
 	cbar.ax.tick_params(labelsize=6) 
-	
+
 	fig.tight_layout()
-	
+		
 	return plot_maps_diff
 
 
@@ -397,6 +395,8 @@ tas_djf_rcm_rcp26_hist,tas_mam_rcm_rcp26_hist,tas_jja_rcm_rcp26_hist,tas_son_rcm
 tas_djf_gcm_rcp26_hist,tas_mam_gcm_rcp26_hist,tas_jja_gcm_rcp26_hist,tas_son_gcm_rcp26_hist,
 tas_djf_rcm_rcp85_hist,tas_mam_rcm_rcp85_hist,tas_jja_rcm_rcp85_hist,tas_son_rcm_rcp85_hist,
 tas_djf_gcm_rcp85_hist,tas_mam_gcm_rcp85_hist,tas_jja_gcm_rcp85_hist,tas_son_gcm_rcp85_hist)
+
+plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.35, hspace=0.95)
 
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'

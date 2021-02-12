@@ -162,7 +162,7 @@ levs5 = [1, 2, 4, 5, 6, 8, 10, 12, 14, 16]
 
 ax = fig.add_subplot(6, 3, 1)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'A) prcptot CRU (mm)', fontsize=6, fontweight='bold')
+plt.title(u'A) prcptot Obs (mm)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
 map.contourf(xx, yy, obs_prcptot, levels=levs1, latlon=True, cmap=cm.YlGnBu)
 	
@@ -182,7 +182,7 @@ cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(6, 3, 4)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'D) r95p CRU (mm)', fontsize=6, fontweight='bold')
+plt.title(u'D) r95p Obs (mm)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
 map.contourf(xx, yy, obs_r95p, levels=levs2, latlon=True, cmap=cm.YlGnBu)
 
@@ -202,7 +202,7 @@ cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(6, 3, 7)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'G) r99p CRU (mm)', fontsize=6, fontweight='bold')
+plt.title(u'G) r99p Obs (mm)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
 map.contourf(xx, yy, obs_r99p, levels=levs3, latlon=True, cmap=cm.YlGnBu) 
 
@@ -222,7 +222,7 @@ cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(6, 3, 10) 
 map, xx, yy = basemap(lat, lon)
-plt.title(u'J) rx1day CRU (mm d⁻¹)', fontsize=6, fontweight='bold')
+plt.title(u'J) rx1day Obs (mm d⁻¹)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
 map.contourf(xx, yy, obs_rx1day, levels=levs3, latlon=True, cmap=cm.YlGnBu)
 
@@ -242,7 +242,7 @@ cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(6, 3, 13) 
 map, xx, yy = basemap(lat, lon)
-plt.title(u'J) rx5day CRU (mm d⁻¹)', fontsize=6, fontweight='bold')
+plt.title(u'J) rx5day Obs (mm d⁻¹)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
 map.contourf(xx, yy, obs_rx5day, levels=levs4, latlon=True, cmap=cm.YlGnBu)
 
@@ -262,7 +262,7 @@ cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(6, 3, 16) 
 map, xx, yy = basemap(lat, lon)
-plt.title(u'M) sdii CRU (mm d⁻¹)', fontsize=6, fontweight='bold')
+plt.title(u'M) sdii Obs (mm d⁻¹)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
 map.contourf(xx, yy, obs_sdii, levels=levs5, latlon=True, cmap=cm.YlGnBu)
 
@@ -285,7 +285,7 @@ plt.subplots_adjust(left=0.10, bottom=0.10, right=0.99, top=0.99, wspace=0.30, h
 
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_climdex_pre_reg_had_obs_1986-2005.png'
+name_out = 'pyplt_maps_etccdi_pre_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')

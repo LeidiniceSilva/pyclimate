@@ -139,7 +139,7 @@ plt.yticks(np.arange(0, 24, 4), fontsize=7)
 plt.setp(ax1.get_xticklabels(), visible=False)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.57, 17., '      Hist      RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
+plt.text(0.54, 17., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
                 bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
                   
@@ -158,7 +158,7 @@ plt.yticks(np.arange(22, 46, 4), fontsize=7)
 plt.setp(ax2.get_xticklabels(), visible=False)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.57, 39., '      Hist      RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
+plt.text(0.54, 39., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
                 bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
                       
@@ -178,8 +178,8 @@ plt.yticks(np.arange(0, 24, 4), fontsize=7)
 plt.setp(ax3.get_xticklabels(), visible=False)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.57, 17., '      Hist      RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
-                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2.1})
+plt.text(0.54, 17., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
+                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
                                
 ax4 = fig.add_subplot(3, 2, 4)
@@ -198,8 +198,8 @@ plt.yticks(np.arange(22, 44, 4), fontsize=7)
 plt.setp(ax4.get_xticklabels(), visible=False)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.57, 39., '     Hist      RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
-                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2.1})
+plt.text(0.54, 39., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
+                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
               
 ax5 = fig.add_subplot(3, 2, 5)
@@ -217,7 +217,7 @@ plt.ylim(0, 20)
 plt.yticks(np.arange(0, 24, 4), fontsize=7)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.57, 17., '      Hist      RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
+plt.text(0.54, 17., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
                 bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
                               
@@ -236,7 +236,7 @@ plt.ylim(22, 42)
 plt.yticks(np.arange(22, 44, 4), fontsize=7)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.57, 39., '      Hist      RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
+plt.text(0.54, 39., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
                 bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
              
