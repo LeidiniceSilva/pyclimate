@@ -28,11 +28,12 @@ def import_obs(var, area, dataset, freq, dt):
 	path = '/home/nice/Documents/dataset/obs/eca'
 	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_lonlat.nc'.format(path, var, area, dataset, freq, dt)	
 
-	dict_var = {u'eca_txx': u'Tmax', 
-	u'eca_txn': u'Tmax',
-	u'eca_tnx': u'Tmin', 
-	u'eca_tnn': u'Tmin',
-	u'eca_dtr': u'Tmax'}
+	dict_var = {u'eca_su': u'summer_days_index_per_time_period', 
+	u'eca_tr': u'tropical_nights_index_per_time_period',
+	u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
+	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
 
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[dict_var[var]][:]
@@ -47,12 +48,13 @@ def import_rcm(var, area, model, exp, freq, dt):
 	
 	path = '/home/nice/Documents/dataset/rcm/eca'	
 	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
-
-	dict_var = {u'eca_txx': u'tasmax', 
-	u'eca_txn': u'tasmax',
-	u'eca_tnx': u'tasmin', 
-	u'eca_tnn': u'tasmin',
-	u'eca_dtr': u'tasmax'}
+	
+	dict_var = {u'eca_su': u'summer_days_index_per_time_period', 
+	u'eca_tr': u'tropical_nights_index_per_time_period',
+	u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
+	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
 	
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[dict_var[var]][:]
@@ -68,12 +70,13 @@ def import_gcm(var, area, model, exp, freq, dt):
 	path = '/home/nice/Documents/dataset/gcm/eca'
 	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
 
-	dict_var = {u'eca_txx': u'tasmax', 
-	u'eca_txn': u'tasmax',
-	u'eca_tnx': u'tasmin', 
-	u'eca_tnn': u'tasmin',
-	u'eca_dtr': u'tasmax'}
-
+	dict_var = {u'eca_su': u'summer_days_index_per_time_period', 
+	u'eca_tr': u'tropical_nights_index_per_time_period',
+	u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
+	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
+	
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
@@ -125,143 +128,170 @@ def basemap(lat, lon):
 	
 	
 # Import regcm exp and cru databases 	
-lat, lon, obs_txx = import_obs('eca_txx', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
-lat, lon, rcm_txx = import_rcm('eca_txx', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_txx = import_gcm('eca_txx', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_su = import_obs('eca_su', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
+lat, lon, rcm_su = import_rcm('eca_su', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_su = import_gcm('eca_su', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
+lat, lon, obs_tr = import_obs('eca_tr', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tr = import_rcm('eca_tr', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tr = import_gcm('eca_tr', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_txn = import_obs('eca_txn', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
-lat, lon, rcm_txn = import_rcm('eca_txn', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_txn = import_gcm('eca_txn', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tx10p = import_obs('eca_tx10p', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tx10p = import_rcm('eca_tx10p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tx10p = import_gcm('eca_tx10p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_tnx = import_obs('eca_tnx', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
-lat, lon, rcm_tnx = import_rcm('eca_tnx', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_tnx = import_gcm('eca_tnx', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tx90p = import_obs('eca_tx90p', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tx90p = import_rcm('eca_tx90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tx90p = import_gcm('eca_tx90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_tnn = import_obs('eca_tnn', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
-lat, lon, rcm_tnn = import_rcm('eca_tnn', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_tnn = import_gcm('eca_tnn', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tn10p = import_obs('eca_tn10p', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tn10p = import_rcm('eca_tn10p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tn10p = import_gcm('eca_tn10p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_dtr = import_obs('eca_dtr', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
-lat, lon, rcm_dtr = import_rcm('eca_dtr', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_dtr = import_gcm('eca_dtr', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tn90p = import_obs('eca_tn90p', 'amz_neb', 'xavier_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tn90p = import_rcm('eca_tn90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tn90p = import_gcm('eca_tn90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
 # Plot maps with the function
 fig = plt.figure(figsize=(4, 8))
-levs1 = [26, 28, 30, 32, 34, 36, 38, 40, 42, 44]
-levs2 = [14, 16, 18, 20, 22, 24, 26, 28, 30, 32]
-levs3 = [16, 18, 20, 22, 24, 26, 28, 30, 32, 34]
-levs4 = [8, 10, 12, 14, 16, 18, 20, 22, 24, 26]
-levs5 = [2, 4, 6, 8, 10, 12, 13, 14, 15, 16]
+levs1 = [338, 341, 344, 347, 350, 353, 356, 359, 362, 365]
+levs2 = [65, 95, 125, 155, 185, 215, 245, 275, 305, 335]
+levs3 = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 
-ax = fig.add_subplot(5, 3, 1)
+ax = fig.add_subplot(6, 3, 1)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'A) txx Obs (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'A) SU Obs (days)', loc='left', fontsize=6, fontweight='bold')
+plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_txx, levels=levs1, latlon=True, cmap=cm.YlOrRd)
-#~ zm = np.ma.masked_less(obs_txx, 22)
-#~ plt.pcolor(xx, yy, zm, hatch='.', alpha=0.)
+map.contourf(xx, yy, obs_su, levels=levs1, latlon=True, cmap=cm.YlOrRd)
+	
+ax = fig.add_subplot(6, 3, 2)
+map, xx, yy = basemap(lat, lon)
+plt.title(u'B) SU Reg (days)', loc='left', fontsize=6, fontweight='bold')
+plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
+map.contourf(xx, yy, rcm_su[0,:,:], levels=levs1, latlon=True, cmap=cm.YlOrRd)
 
-ax = fig.add_subplot(5, 3, 2)
+ax = fig.add_subplot(6, 3, 3)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'B) txx Reg (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'C) SU Had (days)', loc='left', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, rcm_txx[0,:,:], levels=levs1, latlon=True, cmap=cm.YlOrRd)
-
-ax = fig.add_subplot(5, 3, 3)
-map, xx, yy = basemap(lat, lon)
-plt.title(u'C) txx Had (°C)', loc='left', fontsize=6, fontweight='bold')
-plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, gcm_txx, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
+map.contourf(xx, yy, gcm_su, levels=levs1, latlon=True, cmap=cm.YlOrRd) 
 cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
-ax = fig.add_subplot(5, 3, 4)
+ax = fig.add_subplot(6, 3, 4)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'D) txn Obs (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'D) TR Obs (days)', loc='left', fontsize=6, fontweight='bold')
+plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_txn, levels=levs2, latlon=True, cmap=cm.YlOrRd)
+map.contourf(xx, yy, obs_tr, levels=levs2, latlon=True, cmap=cm.YlOrRd)
 
-ax = fig.add_subplot(5, 3, 5)
+ax = fig.add_subplot(6, 3, 5)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'E) txn Reg (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'E) TR Reg (days)', loc='left', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, rcm_txn[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd) 
+map.contourf(xx, yy, rcm_tr[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd) 
 
-ax = fig.add_subplot(5, 3, 6)
+ax = fig.add_subplot(6, 3, 6)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'F) txn Had (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'F) TR Had (mm)', loc='left', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, gcm_txn, levels=levs2, latlon=True, cmap=cm.YlOrRd)
+map.contourf(xx, yy, gcm_tr, levels=levs2, latlon=True, cmap=cm.YlOrRd)
 cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
-ax = fig.add_subplot(5, 3, 7)
+ax = fig.add_subplot(6, 3, 7)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'G) tnx Obs (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'G) TX10p Obs (%)', loc='left', fontsize=6, fontweight='bold')
+plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_tnx, levels=levs3, latlon=True, cmap=cm.YlOrRd) 
+map.contourf(xx, yy, obs_tx10p, levels=levs3, latlon=True, cmap=cm.YlOrRd) 
 
-ax = fig.add_subplot(5, 3, 8)
+ax = fig.add_subplot(6, 3, 8)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'H) tnx Reg (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'H) TX10p Reg (%)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, rcm_tnx[0,:,:], levels=levs3, latlon=True, cmap=cm.YlOrRd)
+map.contourf(xx, yy, rcm_tx10p[0,:,:], levels=levs3, latlon=True, cmap=cm.YlOrRd)
 
-ax = fig.add_subplot(5, 3, 9)
+ax = fig.add_subplot(6, 3, 9)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'I) tnx Had (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'I) TX10p Had (%)', loc='left', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, gcm_tnx, levels=levs3, latlon=True, cmap=cm.YlOrRd)
+map.contourf(xx, yy, gcm_tx10p, levels=levs3, latlon=True, cmap=cm.YlOrRd)
 cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
-ax = fig.add_subplot(5, 3, 10) 
+ax = fig.add_subplot(6, 3, 10) 
 map, xx, yy = basemap(lat, lon)
-plt.title(u'J) tnn Obs (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'J) TX90p Obs (%)', loc='left', fontsize=6, fontweight='bold')
+plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_tnn, levels=levs4, latlon=True, cmap=cm.YlOrRd)
+map.contourf(xx, yy, obs_tx90p, levels=levs3, latlon=True, cmap=cm.YlOrRd)
 
-ax = fig.add_subplot(5, 3, 11)
+ax = fig.add_subplot(6, 3, 11)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'K) tnn Reg (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'K) TX90p Reg (%)', loc='left', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, rcm_tnn[0,:,:], levels=levs4, latlon=True, cmap=cm.YlOrRd) 
+map.contourf(xx, yy, rcm_tx90p[0,:,:], levels=levs3, latlon=True, cmap=cm.YlOrRd) 
 
-ax = fig.add_subplot(5, 3, 12)
+ax = fig.add_subplot(6, 3, 12)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'L) tnn Had (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'L) TX90p Had (%)', loc='left', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, gcm_tnn, levels=levs4, latlon=True, cmap=cm.YlOrRd) 
-cbar = map.colorbar(ticks=levs4, drawedges=True, ax=ax)
+map.contourf(xx, yy, gcm_tx90p, levels=levs3, latlon=True, cmap=cm.YlOrRd) 
+cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
-ax = fig.add_subplot(5, 3, 13) 
+ax = fig.add_subplot(6, 3, 13)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'J) dtr Obs (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'M) TN10p Obs (%)', loc='left', fontsize=6, fontweight='bold')
+plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, obs_dtr, levels=levs5, latlon=True, cmap=cm.YlOrRd)
+map.contourf(xx, yy, obs_tn10p, levels=levs3, latlon=True, cmap=cm.YlOrRd) 
 
-ax = fig.add_subplot(5, 3, 14)
+ax = fig.add_subplot(6, 3, 14)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'K) dtr Reg (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'N) TN10p Reg (%)', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, rcm_dtr[0,:,:], levels=levs5, latlon=True, cmap=cm.YlOrRd) 
+map.contourf(xx, yy, rcm_tn10p[0,:,:], levels=levs3, latlon=True, cmap=cm.YlOrRd)
 
-ax = fig.add_subplot(5, 3, 15)
+ax = fig.add_subplot(6, 3, 15)
 map, xx, yy = basemap(lat, lon)
-plt.title(u'L) dtr Had (°C)', loc='left', fontsize=6, fontweight='bold')
+plt.title(u'O) TN10p Had (%)', loc='left', fontsize=6, fontweight='bold')
 plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
-map.contourf(xx, yy, gcm_dtr, levels=levs5, latlon=True, cmap=cm.YlOrRd) 
-cbar = map.colorbar(ticks=levs5, drawedges=True, ax=ax)
+map.contourf(xx, yy, gcm_tn10p, levels=levs3, latlon=True, cmap=cm.YlOrRd)
+cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
-#~ fig.tight_layout()
+ax = fig.add_subplot(6, 3, 16) 
+map, xx, yy = basemap(lat, lon)
+plt.title(u'P) TN90p Obs (%)', loc='left', fontsize=6, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=6, fontweight='bold', labelpad=10)
+plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
+plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
+map.contourf(xx, yy, obs_tn90p, levels=levs3, latlon=True, cmap=cm.YlOrRd)
+
+ax = fig.add_subplot(6, 3, 17)
+map, xx, yy = basemap(lat, lon)
+plt.title(u'Q) TN90p Reg (%)', loc='left', fontsize=6, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=6, fontweight='bold', labelpad=10)
+plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
+map.contourf(xx, yy, rcm_tn90p[0,:,:], levels=levs3, latlon=True, cmap=cm.YlOrRd) 
+
+ax = fig.add_subplot(6, 3, 18)
+map, xx, yy = basemap(lat, lon)
+plt.title(u'R) TN90p Had (%)', loc='left', fontsize=6, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=6, fontweight='bold', labelpad=10)
+plt.text(-51, -5, u'\u25B2 \nN ', fontsize=6)
+map.contourf(xx, yy, gcm_tn90p, levels=levs3, latlon=True, cmap=cm.YlOrRd) 
+cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax)
+cbar.ax.tick_params(labelsize=6) 
+
 plt.subplots_adjust(left=0.10, bottom=0.10, right=0.99, top=0.99, wspace=0.30, hspace=0.30)
 
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_etccdi_tas_reg_had_obs_1986-2005.png'
+name_out = 'pyplt_maps_etccdi_tas_count_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
