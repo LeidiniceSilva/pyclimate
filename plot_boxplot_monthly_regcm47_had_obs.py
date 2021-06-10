@@ -122,7 +122,7 @@ tas_matopiba = [tmp_cru_matopiba_hist, np.nanmean(tas_reg_matopiba_hist, axis=1)
 # Plot model end obs data boxplot
 fig = plt.figure()
 time = np.arange(1, 8)
-colors = ['gray', 'green', 'magenta', 'blue', 'blue', 'red', 'red']
+colors = ['black', 'gray', 'dimgray', 'blue', 'blue', 'red', 'red']
 
 ax1 = fig.add_subplot(3, 2, 1)
 box = plt.boxplot(pre_samz, notch=True, patch_artist=True)
@@ -132,14 +132,14 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'A) SAMZ', fontweight='bold') 
+plt.title(u'A)', loc='left', fontweight='bold') 
 plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
 plt.ylim(0, 20)
 plt.yticks(np.arange(0, 24, 4), fontsize=7)
 plt.setp(ax1.get_xticklabels(), visible=False)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 17., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
+plt.text(0.54, 17., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
                 bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
                   
@@ -151,14 +151,14 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'D) SAMZ', fontweight='bold')
+plt.title(u'D)', loc='left', fontweight='bold')
 plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
 plt.ylim(22, 42)
 plt.yticks(np.arange(22, 46, 4), fontsize=7)
 plt.setp(ax2.get_xticklabels(), visible=False)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 39., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
+plt.text(0.54, 39., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
                 bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
                       
@@ -170,15 +170,15 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'B) ENEB', fontweight='bold')
-plt.ylabel(u'Precipitation (mm d⁻¹)', fontweight='bold')
+plt.title(u'B)', loc='left', fontweight='bold')
+plt.ylabel(u'Precipitation (mm d⁻¹)')
 plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
 plt.ylim(0, 20)
 plt.yticks(np.arange(0, 24, 4), fontsize=7)
 plt.setp(ax3.get_xticklabels(), visible=False)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 17., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
+plt.text(0.54, 17., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
                 bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
                                
@@ -190,15 +190,15 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'E) ENEB', fontweight='bold')
-plt.ylabel(u'Temperature (°C)', fontweight='bold')
+plt.title(u'E)', loc='left', fontweight='bold')
+plt.ylabel(u'Temperature (°C)')
 plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
 plt.ylim(22, 42)
 plt.yticks(np.arange(22, 44, 4), fontsize=7)
 plt.setp(ax4.get_xticklabels(), visible=False)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 39., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
+plt.text(0.54, 39., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
                 bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
               
@@ -210,14 +210,14 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'C) MATOPIBA', fontweight='bold')
-plt.xlabel('Dataset', fontweight='bold')
+plt.title(u'C)', loc='left', fontweight='bold')
+plt.xlabel('Dataset')
 plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
 plt.ylim(0, 20)
 plt.yticks(np.arange(0, 24, 4), fontsize=7)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 17., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
+plt.text(0.54, 17., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
                 bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
                               
@@ -229,14 +229,14 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'F) MATOPIBA', fontweight='bold')
-plt.xlabel('Dataset', fontweight='bold')
+plt.title(u'F)', loc='left', fontweight='bold')
+plt.xlabel('Dataset')
 plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
 plt.ylim(22, 42)
 plt.yticks(np.arange(22, 44, 4), fontsize=7)
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 39., '      Hist       RCP26  RCP85 ', fontweight='bold', zorder=6, color='k',
+plt.text(0.54, 39., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
                 bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
 plt.grid(True, which='major', linestyle='--')
              

@@ -23,7 +23,7 @@ from comp_statist_indices import compute_corr, compute_rmse, compute_pbias
 
 def import_cmip5_clim(param, area, model):
 
-	path  = '/home/nice/Documents/ufrn/phd_project/datas/cmip5/hist'
+	path  = '/home/nice/Documents/dataset/gcm/cmip5'
 	arq   = '{0}/{1}_{2}_Amon_{3}_historical_r1i1p1_197512-200511.nc'.format(path, param, area,	model)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -42,7 +42,7 @@ def import_cmip5_clim(param, area, model):
 
 def import_obs_clim(param, area, database):
 
-	path  = '/home/nice/Documents/ufrn/phd_project/datas/obs_data'
+	path  = '/home/nice/Documents/dataset/obs/gcm'
 	arq   = '{0}/{1}_{2}_{3}_obs_mon_197512-200511.nc'.format(path, param, area, database)	
 	
 	data  = netCDF4.Dataset(arq)
