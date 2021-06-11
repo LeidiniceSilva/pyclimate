@@ -24,8 +24,8 @@ from matplotlib import colors as c
 from matplotlib.colors import BoundaryNorm
 from mpl_toolkits.basemap import Basemap
 from os.path import expanduser
-
-
+    
+    
 def import_rcm(var, area, exp, dt):
 	
 	path = '/home/nice/Documents/dataset/rcm/{0}'.format(exp)	
