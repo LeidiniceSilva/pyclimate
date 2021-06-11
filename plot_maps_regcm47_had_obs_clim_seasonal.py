@@ -39,14 +39,15 @@ def import_obs(var, area, dataset, dt):
 	lon  = data.variables['lon'][:]
 	value  = var[:][:,:,:]
 
+	std = np.std(value, axis=0)
 	season_obs = value[2:240:3,:,:]
-	djf_obs = season_obs[3:80:4]
-	mam_obs = season_obs[0:80:4]
-	jja_obs = season_obs[1:80:4]
-	son_obs = season_obs[2:80:4]	
-	annual_obs = value
+	djf_obs = np.nanmean(season_obs[3:80:4], axis=0)
+	mam_obs = np.nanmean(season_obs[0:80:4], axis=0)
+	jja_obs = np.nanmean(season_obs[1:80:4], axis=0)
+	son_obs = np.nanmean(season_obs[2:80:4], axis=0)
+	annual_obs = np.nanmean(value, axis=0)
 
-	return lat, lon, value, djf_obs, mam_obs, jja_obs, son_obs, annual_obs
+	return lat, lon, std, djf_obs, mam_obs, jja_obs, son_obs, annual_obs
 	
 
 def import_rcm(var, area, exp, dt):
@@ -60,6 +61,7 @@ def import_rcm(var, area, exp, dt):
 	lon  = data.variables['lon'][:]
 	value  = var[:][:,:,:]
 
+	std = np.std(value, axis=0)
 	season_rcm = value[2:240:3,:,:]
 	djf_rcm = np.nanmean(season_rcm[3:80:4], axis=0)
 	mam_rcm = np.nanmean(season_rcm[0:80:4], axis=0)
@@ -67,7 +69,7 @@ def import_rcm(var, area, exp, dt):
 	son_rcm = np.nanmean(season_rcm[2:80:4], axis=0)
 	annual_rcm = np.nanmean(value, axis=0)
 
-	return lat, lon, value, djf_rcm, mam_rcm, jja_rcm, son_rcm, annual_rcm
+	return lat, lon, std, djf_rcm, mam_rcm, jja_rcm, son_rcm, annual_rcm
 
 
 def import_gcm(var, area, exp, dt):
@@ -81,6 +83,7 @@ def import_gcm(var, area, exp, dt):
 	lon  = data.variables['lon'][:]
 	value  = var[:][:,:,:]
 
+	std = np.std(value, axis=0)
 	season_gcm = value[2:240:3,:,:]
 	djf_gcm = np.nanmean(season_gcm[3:80:4], axis=0)
 	mam_gcm = np.nanmean(season_gcm[0:80:4], axis=0)
@@ -88,14 +91,10 @@ def import_gcm(var, area, exp, dt):
 	son_gcm = np.nanmean(season_gcm[2:80:4], axis=0)
 	annual_gcm = np.nanmean(value[0:240:12,:,:], axis=0)
 	
-	return lat, lon, value, djf_gcm, mam_gcm, jja_gcm, son_gcm, annual_gcm
+	return lat, lon, std, djf_gcm, mam_gcm, jja_gcm, son_gcm, annual_gcm
 
 
-def ttest(tot, season):
-
-	# Standard error
-	std = np.std(tot[:,:,:], axis=0)
-	mean = np.mean(season[:,:,:], axis=0)
+def ttest(std, mean):
 
 	# Calculate t statistics
 	t = (mean * np.sqrt(20))/std
@@ -144,24 +143,43 @@ lat, lon, tas_cru, tas_djf_cru, tas_mam_cru, tas_jja_cru, tas_son_cru, tas_annua
 lat, lon, tas_rcm, tas_djf_rcm, tas_mam_rcm, tas_jja_rcm, tas_son_rcm, tas_annual_rcm = import_rcm('tas', 'amz_neb', 'hist', '1986-2005')
 lat, lon, tas_gcm, tas_djf_gcm, tas_mam_gcm, tas_jja_gcm, tas_son_gcm, tas_annual_gcm = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
 
+# Precipitation
 p_value_pre_djf_cru = ttest(pre_cru, pre_djf_cru)
 p_value_pre_mam_cru = ttest(pre_cru, pre_mam_cru)
 p_value_pre_jja_cru = ttest(pre_cru, pre_jja_cru)
 p_value_pre_son_cru = ttest(pre_cru, pre_son_cru)
 p_value_pre_annual_cru = ttest(pre_cru, pre_annual_cru)
 
-#~ p_value_pre_djf_rcm = ttest(pre_djf_rcm)
-#~ p_value_pre_mam_rcm = ttest(pre_mam_rcm)
-#~ p_value_pre_jja_rcm = ttest(pre_jja_rcm)
-#~ p_value_pre_son_rcm = ttest(pre_son_rcm)
-#~ p_value_pre_annual_rcm = ttest(pre_annual_rcm)
+p_value_pre_djf_rcm = ttest(pre_rcm, pre_djf_rcm)
+p_value_pre_mam_rcm = ttest(pre_rcm, pre_mam_rcm)
+p_value_pre_jja_rcm = ttest(pre_rcm, pre_jja_rcm)
+p_value_pre_son_rcm = ttest(pre_rcm, pre_son_rcm)
+p_value_pre_annual_rcm = ttest(pre_rcm, pre_annual_rcm)
 
-#~ p_value_pre_djf_gcm = ttest(pre_djf_gcm)
-#~ p_value_pre_mam_gcm = ttest(pre_mam_gcm)
-#~ p_value_pre_jja_gcm = ttest(pre_jja_gcm)
-#~ p_value_pre_son_gcm = ttest(pre_son_gcm)
-#~ p_value_pre_annual_gcm = ttest(pre_annual_gcm)
+p_value_pre_djf_gcm = ttest(pre_gcm, pre_djf_gcm)
+p_value_pre_mam_gcm = ttest(pre_gcm, pre_mam_gcm)
+p_value_pre_jja_gcm = ttest(pre_gcm, pre_jja_gcm)
+p_value_pre_son_gcm = ttest(pre_gcm, pre_son_gcm)
+p_value_pre_annual_gcm = ttest(pre_gcm, pre_annual_gcm)
 
+# Temperature
+p_value_tas_djf_cru = ttest(tas_cru, tas_djf_cru)
+p_value_tas_mam_cru = ttest(tas_cru, tas_mam_cru)
+p_value_tas_jja_cru = ttest(tas_cru, tas_jja_cru)
+p_value_tas_son_cru = ttest(tas_cru, tas_son_cru)
+p_value_tas_annual_cru = ttest(tas_cru, tas_annual_cru)
+
+p_value_tas_djf_rcm = ttest(tas_rcm, tas_djf_rcm)
+p_value_tas_mam_rcm = ttest(tas_rcm, tas_mam_rcm)
+p_value_tas_jja_rcm = ttest(tas_rcm, tas_jja_rcm)
+p_value_tas_son_rcm = ttest(tas_rcm, tas_son_rcm)
+p_value_tas_annual_rcm = ttest(tas_rcm, tas_annual_rcm)
+
+p_value_tas_djf_gcm = ttest(tas_gcm, tas_djf_gcm)
+p_value_tas_mam_gcm = ttest(tas_gcm, tas_mam_gcm)
+p_value_tas_jja_gcm = ttest(tas_gcm, tas_jja_gcm)
+p_value_tas_son_gcm = ttest(tas_gcm, tas_son_gcm)
+p_value_tas_annual_gcm = ttest(tas_gcm, tas_annual_gcm)
 
 # Plot bias maps 
 fig = plt.figure()
@@ -172,49 +190,49 @@ ax = fig.add_subplot(6, 5, 1)
 plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, pre_djf_cru[0,:,:], levels=levs1, latlon=True, cmap=cm.YlGnBu)
+plot_maps_mean = map.contourf(xx, yy, pre_djf_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-p_value_pre_djf_cru = ma.masked_where(p_value_pre_djf_cru >= 0.05, p_value_pre_djf_cru) 
-map.contourf(xx, yy, p_value_pre_djf_cru, colors='none', hatches=["."])
+p_value_pre_djf_cru = ma.masked_where(p_value_pre_djf_cru >= 0.01, p_value_pre_djf_cru) 
+map.contourf(xx, yy, p_value_pre_djf_cru, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(6, 5, 2)
 plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, pre_mam_cru[0,:,:], levels=levs1, latlon=True, cmap=cm.YlGnBu)
+plot_maps_mean = map.contourf(xx, yy, pre_mam_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-p_value_pre_mam_cru = ma.masked_where(p_value_pre_mam_cru >= 0.5, p_value_pre_mam_cru) 
-map.contourf(xx, yy, p_value_pre_mam_cru, colors='none', hatches=["."])
+p_value_pre_mam_cru = ma.masked_where(p_value_pre_mam_cru >= 0.01, p_value_pre_mam_cru) 
+map.contourf(xx, yy, p_value_pre_mam_cru, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(6, 5, 3)
 plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, pre_jja_cru[0,:,:], levels=levs1, latlon=True, cmap=cm.YlGnBu) 
+plot_maps_mean = map.contourf(xx, yy, pre_jja_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-p_value_pre_jja_cru = ma.masked_where(p_value_pre_jja_cru >= 0.1, p_value_pre_jja_cru) 
-map.contourf(xx, yy, p_value_pre_jja_cru, colors='none', hatches=["...."])
+p_value_pre_jja_cru = ma.masked_where(p_value_pre_jja_cru >= 0.01, p_value_pre_jja_cru) 
+map.contourf(xx, yy, p_value_pre_jja_cru, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(6, 5, 4)
 plt.title(u'D)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, pre_son_cru[0,:,:], levels=levs1, latlon=True, cmap=cm.YlGnBu) 
+plot_maps_mean = map.contourf(xx, yy, pre_son_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-p_value_pre_jja_cru = ma.masked_where(p_value_pre_jja_cru >= 0.1, p_value_pre_jja_cru) 
-map.contourf(xx, yy, p_value_pre_jja_cru, colors='none', hatches=["////"])
+p_value_pre_jja_cru = ma.masked_where(p_value_pre_jja_cru >= 0.01, p_value_pre_jja_cru) 
+map.contourf(xx, yy, p_value_pre_jja_cru, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(6, 5, 5)
 plt.title(u'E)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, pre_annual_cru[0,:,:], levels=levs1, latlon=True, cmap=cm.YlGnBu) 
+plot_maps_mean = map.contourf(xx, yy, pre_annual_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
 cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-p_value_pre_annual_cru = ma.masked_where(p_value_pre_annual_cru >= 0.5, p_value_pre_annual_cru) 
-map.contourf(xx, yy, p_value_pre_annual_cru, colors='none', hatches=["...."])
+p_value_pre_annual_cru = ma.masked_where(p_value_pre_annual_cru >= 0.01, p_value_pre_annual_cru) 
+map.contourf(xx, yy, p_value_pre_annual_cru, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(6, 5, 6)
 plt.title(u'F)', loc='left', fontsize=8, fontweight='bold')
@@ -296,35 +314,35 @@ ax = fig.add_subplot(6, 5, 16)
 plt.title(u'P)', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, tas_djf_cru[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd)
+plot_maps_mean = map.contourf(xx, yy, tas_djf_cru, levels=levs2, latlon=True, cmap=cm.YlOrRd)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
 
 ax = fig.add_subplot(6, 5, 17)
 plt.title(u'Q)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, tas_mam_cru[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd)
+plot_maps_mean = map.contourf(xx, yy, tas_mam_cru, levels=levs2, latlon=True, cmap=cm.YlOrRd)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 ax = fig.add_subplot(6, 5, 18)
 plt.title(u'R)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, tas_jja_cru[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd) 
+plot_maps_mean = map.contourf(xx, yy, tas_jja_cru, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 ax = fig.add_subplot(6, 5, 19)
 plt.title(u'S)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, tas_son_cru[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd)
+plot_maps_mean = map.contourf(xx, yy, tas_son_cru, levels=levs2, latlon=True, cmap=cm.YlOrRd)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 	
 ax = fig.add_subplot(6, 5, 20)
 plt.title(u'T)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, tas_annual_cru[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd) 
+plot_maps_mean = map.contourf(xx, yy, tas_annual_cru, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
 cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
