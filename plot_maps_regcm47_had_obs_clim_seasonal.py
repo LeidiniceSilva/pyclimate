@@ -40,12 +40,12 @@ def import_obs(var, area, dataset, dt):
 	value  = var[:][:,:,:]
 
 	std = np.std(value, axis=0)
-	season_obs = np.nanmean(value[2:240:3,:,:], axis=0)
+	season_obs = value[2:240:3,:,:]
 	djf_obs = np.nanmean(season_obs[3:80:4], axis=0)
 	mam_obs = np.nanmean(season_obs[0:80:4], axis=0)
 	jja_obs = np.nanmean(season_obs[1:80:4], axis=0)
 	son_obs = np.nanmean(season_obs[2:80:4], axis=0)
-	annual_obs = np.nanmean(value, axis=0)
+	annual_obs = np.nanmean(value[0:240:12,:,:], axis=0)
 
 	return lat, lon, std, djf_obs, mam_obs, jja_obs, son_obs, annual_obs
 	
@@ -67,7 +67,7 @@ def import_rcm(var, area, exp, dt):
 	mam_rcm = np.nanmean(season_rcm[0:80:4], axis=0)
 	jja_rcm = np.nanmean(season_rcm[1:80:4], axis=0)
 	son_rcm = np.nanmean(season_rcm[2:80:4], axis=0)
-	annual_rcm = np.nanmean(value, axis=0)
+	annual_rcm = np.nanmean(value[0:240:12,:,:], axis=0)
 
 	return lat, lon, std, djf_rcm, mam_rcm, jja_rcm, son_rcm, annual_rcm
 
@@ -181,7 +181,7 @@ lat, lon, tas_gcm, tas_djf_gcm, tas_mam_gcm, tas_jja_gcm, tas_son_gcm, tas_annua
 #~ p_value_tas_annual_gcm = ttest(tas_gcm, tas_annual_gcm)
 
 # Plot bias maps 
-fig = plt.figure()
+fig = plt.figure(figsize=(8, 6))
 levs1 = [1, 2, 4, 6, 8, 10, 15]
 levs2 = [22, 24, 26, 28, 30, 32]
 	
@@ -225,9 +225,9 @@ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0
 ax = fig.add_subplot(6, 5, 5)
 plt.title(u'E)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, pre_annual_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-cbar.ax.tick_params(labelsize=6)
+plot_maps_mean = map.contourf(xx, yy, pre_annual_cru, levels=levs1, latlon=True, cmap=cm.YlGnBu, extend='both')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6)   
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 #~ p_value_pre_annual_cru = ma.masked_where(p_value_pre_annual_cru >= 0.01, p_value_pre_annual_cru) 
@@ -273,9 +273,9 @@ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0
 ax = fig.add_subplot(6, 5, 10)
 plt.title(u'J)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, pre_annual_rcm, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-cbar.ax.tick_params(labelsize=6) 
+plot_maps_mean = map.contourf(xx, yy, pre_annual_rcm, levels=levs1, latlon=True, cmap=cm.YlGnBu, extend='both')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6)   
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 #~ p_value_pre_annual_rcm = ma.masked_where(p_value_pre_annual_rcm >= 0.01, p_value_pre_annual_rcm) 
@@ -321,9 +321,9 @@ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0
 ax = fig.add_subplot(6, 5, 15)
 plt.title(u'O)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, pre_annual_gcm, levels=levs1, latlon=True, cmap=cm.YlGnBu) 
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-cbar.ax.tick_params(labelsize=6) 
+plot_maps_mean = map.contourf(xx, yy, pre_annual_gcm, levels=levs1, latlon=True, cmap=cm.YlGnBu, extend='both')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6)   
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 #~ p_value_pre_annual_gcm = ma.masked_where(p_value_pre_annual_gcm >= 0.01, p_value_pre_annual_gcm) 
@@ -369,9 +369,9 @@ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0
 ax = fig.add_subplot(6, 5, 20)
 plt.title(u'T)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, tas_annual_cru, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
-cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
-cbar.ax.tick_params(labelsize=6)
+plot_maps_mean = map.contourf(xx, yy, tas_annual_cru, levels=levs2, latlon=True, cmap=cm.YlOrRd, extend='both')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6)   
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 #~ p_value_tas_annual_cru = ma.masked_where(p_value_tas_annual_cru >= 0.01, p_value_tas_annual_cru) 
@@ -417,9 +417,9 @@ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0
 ax = fig.add_subplot(6, 5, 25)
 plt.title(u'Y)', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, tas_annual_rcm[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd) 
-cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
-cbar.ax.tick_params(labelsize=6) 
+plot_maps_mean = map.contourf(xx, yy, tas_annual_rcm[0,:,:], levels=levs2, latlon=True, cmap=cm.YlOrRd, extend='both')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6)   
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 #~ p_value_tas_annual_rcm = ma.masked_where(p_value_tas_annual_rcm >= 0.01, p_value_tas_annual_rcm) 
@@ -470,9 +470,9 @@ ax = fig.add_subplot(6, 5, 30)
 plt.title(u'D.1)', loc='left', fontsize=8, fontweight='bold')
 plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
-plot_maps_mean = map.contourf(xx, yy, tas_annual_gcm, levels=levs2, latlon=True, cmap=cm.YlOrRd) 
-cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
-cbar.ax.tick_params(labelsize=6) 
+plot_maps_mean = map.contourf(xx, yy, tas_annual_gcm, levels=levs2, latlon=True, cmap=cm.YlOrRd, extend='both')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6)   
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,1], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 #~ p_value_tas_annual_gcm = ma.masked_where(p_value_tas_annual_gcm >= 0.01, p_value_tas_annual_gcm) 
