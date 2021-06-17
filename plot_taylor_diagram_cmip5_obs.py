@@ -80,6 +80,7 @@ class TaylorDiagram(object):
 
         ax.axis["left"].set_axis_direction("bottom")  # "X axis"
         ax.axis["left"].label.set_text(u'SD')
+        ax.axis["bottom"].set_tick_params(labelsize=4)
         
         ax.axis["right"].set_axis_direction("top")    # "Y-axis"
         ax.axis["right"].toggle(ticklabels=True)

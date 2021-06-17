@@ -284,6 +284,7 @@ plt.setp(l5, linewidth=1.5, color='slategray', alpha=0.3, linestyle='-')
 plt.fill_between(time, pre_eneb_ci1, pre_eneb_ci2, facecolor='slategray',
 		 alpha=0.3, interpolate=True)
 plt.grid(True, which='major', linestyle='--')
+plt.legend(annual_cycle2[:-1], ['CRU', 'Reg', 'Had'], fontsize=6, loc=1, shadow=True, ncol=1)
 		 
 ax3_inset = inset_axes(ax30, width='30%', height='30%', loc=9)
 line3, = ax3_inset.plot(xcdf_pre_cru_eneb, cdf_pre_cru_eneb, color='black', linestyle='-', linewidth=1.5)
@@ -405,7 +406,6 @@ plt.setp(l5, linewidth=1.5, color='slategray', alpha=0.3, linestyle='-')
 plt.fill_between(time, tas_matopiba_ci1, tas_matopiba_ci2, facecolor='slategray',
 		 alpha=0.3, interpolate=True)
 plt.grid(True, which='major', linestyle='--')
-plt.legend(annual_cycle3, ['CRU', 'Reg', 'Had', '95% CI'], fontsize=5, loc=4, shadow=True, ncol=2)
 
 ax6_inset = inset_axes(ax60, width='30%', height='30%', loc=9)
 line6, = ax6_inset.plot(xcdf_tas_cru_matopiba, cdf_tas_cru_matopiba, color='black', linestyle='-', linewidth=1.5)
