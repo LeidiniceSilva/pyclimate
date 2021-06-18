@@ -176,7 +176,7 @@ def compute_index_agreement(model, obs):
     p1 = (model - obs)**2
     p2 = np.abs(model - np.mean(obs))
     p3 = np.abs(obs - np.mean(obs))
-    icw = 1 - sum(parte_1) / sum((p2 + p3)**2)
+    icw = 1 - sum(p1) / sum((p2 + p3)**2)
     
     return icw
     
