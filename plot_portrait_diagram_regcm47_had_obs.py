@@ -201,7 +201,7 @@ nse_gcm_tas = np.array([[nse_djf_gcm_tas_samz, nse_mam_gcm_tas_samz, nse_jja_gcm
 fig, axes = plt.subplots(nrows=2, ncols=2, constrained_layout=True)
 norm = colors.BoundaryNorm(boundaries=np.arange(0, 1, 0.1), ncolors=256)
 
-xlabels = [u'DJF', u'MAM', u'JJA', u'SON', u'Annual']
+xlabels = [u'DJF', u'MAM', u'JJA', u'SON', u'ANN']
 ylabels = [u'MATOPIBA', u'ENEB', u'SAMZ']
 
 # First column heatmaps with same colormap

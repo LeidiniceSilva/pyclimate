@@ -25,7 +25,7 @@ class TaylorDiagram(object):
     theta=arccos(correlation).
     """
 
-    def __init__(self, refstd, fig=None, rect=336, label='_', marker='', color='', srange=(0., 4), extend=False):
+    def __init__(self, refstd, fig=None, rect=336, label='_', marker='', color='', srange=(0., 3.), extend=False):
         """
         Set up Taylor diagram axes, i.e. single quadrant polar
         plot, using `mpl_toolkits.axisartist.floating_axes`.
@@ -68,10 +68,10 @@ class TaylorDiagram(object):
                                            grid_locator1=gl1,
                                            tick_formatter1=tf1,
                                            )
-		
+        
         if fig is None:
             fig = plt.figure()
-
+        
         ax = FA.FloatingSubplot(fig, rect, grid_helper=ghelper)
         fig.add_subplot(ax)
 
@@ -83,19 +83,22 @@ class TaylorDiagram(object):
         ax.axis["top"].label.set_text(u'Correlation')
 
         ax.axis["left"].set_axis_direction("bottom")  # "X axis"
-        ax.axis["left"].label.set_text(u'Standard Deviation')
-        
+        ax.axis["left"].toggle(ticklabels=True, label=True)
+        ax.axis["left"].major_ticklabels.set_rotation(-90)
+        ax.axis["left"].label.set_pad(10) 
+        ax.axis["left"].label.set_text(u'  Standard Deviation')
+        		
         ax.axis["right"].set_axis_direction("top")    # "Y-axis"
         ax.axis["right"].toggle(ticklabels=True, label=True)
-        ax.axis["right"].major_ticklabels.set_axis_direction(
-			"bottom" if extend else "left")
-		
+        ax.axis["right"].major_ticklabels.set_rotation(90)
+        ax.axis["right"].major_ticklabels.set_pad(12)
+        ax.axis["bottom"].set_visible(False)      # Unused
+
         ax.grid(color='k', axis='x', linestyle='--', linewidth=1)
         
-        if self.smin:
-            ax.axis["bottom"].toggle(ticklabels=True, label=True)
-        else:
-            ax.axis["bottom"].set_visible(True)      # Unused
+        #~ if self.smin:
+            #~ ax.axis["bottom"].toggle(ticklabels=True, label=True)
+        #~ else:
 
         self._ax = ax                   # Graphical axes
         self.ax = ax.get_aux_axes(tr)   # Polar coordinates
@@ -252,62 +255,62 @@ if __name__=='__main__':
                           [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_rcm_samz)[0,1], 'Reg-MAM', 'o', 'b'],
                           [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_rcm_samz)[0,1], 'Reg-JJA', 'o', 'y'],
                           [pre_son_cru_samz.std(ddof=1), np.corrcoef(pre_son_cru_samz, pre_son_rcm_samz)[0,1], 'Reg-SON', 'o', 'c'],
-                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_rcm_samz)[0,1], 'Reg-Annual', 'o', 'k'],
+                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_rcm_samz)[0,1], 'Reg-ANN', 'o', 'k'],
                           [pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_gcm_samz)[0,1], 'Had-DJF', '^', 'g'],
                           [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_gcm_samz)[0,1], 'Had-MAM', '^', 'b'],
                           [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_gcm_samz)[0,1], 'Had-JJA', '^', 'y'],
                           [pre_son_cru_samz.std(ddof=1), np.corrcoef(pre_son_cru_samz, pre_son_gcm_samz)[0,1], 'Had-SON', '^', 'c'],
-                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_gcm_samz)[0,1], 'Had-Annual', '^', 'k']],
+                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_gcm_samz)[0,1], 'Had-ANN', '^', 'k']],
                    ENEB1=[[pre_djf_cru_eneb.std(ddof=1), np.corrcoef(pre_djf_cru_eneb, pre_djf_rcm_eneb)[0,1], 'Reg-DJF', 'o', 'g'],
                           [pre_mam_cru_eneb.std(ddof=1), np.corrcoef(pre_mam_cru_eneb, pre_mam_rcm_eneb)[0,1], 'Reg-MAM', 'o', 'b'],
                           [pre_jja_cru_eneb.std(ddof=1), np.corrcoef(pre_jja_cru_eneb, pre_jja_rcm_eneb)[0,1], 'Reg-JJA', 'o', 'y'],
                           [pre_son_cru_eneb.std(ddof=1), np.corrcoef(pre_son_cru_eneb, pre_son_rcm_eneb)[0,1], 'Reg-SON', 'o', 'c'],
-                          [pre_annual_cru_eneb.std(ddof=1), np.corrcoef(pre_annual_cru_eneb, pre_annual_rcm_eneb)[0,1], 'Reg-Annual', 'o', 'k'],
+                          [pre_annual_cru_eneb.std(ddof=1), np.corrcoef(pre_annual_cru_eneb, pre_annual_rcm_eneb)[0,1], 'Reg-ANN', 'o', 'k'],
                           [pre_djf_cru_eneb.std(ddof=1), np.corrcoef(pre_djf_cru_eneb, pre_djf_gcm_eneb)[0,1], 'Had-DJF', '^', 'g'],
                           [pre_mam_cru_eneb.std(ddof=1), np.corrcoef(pre_mam_cru_eneb, pre_mam_gcm_eneb)[0,1], 'Had-MAM', '^', 'b'],
                           [pre_jja_cru_eneb.std(ddof=1), np.corrcoef(pre_jja_cru_eneb, pre_jja_gcm_eneb)[0,1], 'Had-JJA', '^', 'y'],
                           [pre_son_cru_eneb.std(ddof=1), np.corrcoef(pre_son_cru_eneb, pre_son_gcm_eneb)[0,1], 'Had-SON', '^', 'c'],
-                          [pre_annual_cru_eneb.std(ddof=1), np.corrcoef(pre_annual_cru_eneb, pre_annual_gcm_eneb)[0,1], 'Had-Annual', '^', 'k']],                  
+                          [pre_annual_cru_eneb.std(ddof=1), np.corrcoef(pre_annual_cru_eneb, pre_annual_gcm_eneb)[0,1], 'Had-ANN', '^', 'k']],                  
                MATOPIBA1=[[pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_rcm_samz)[0,1], 'Reg-DJF', 'o', 'g'],
                           [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_rcm_samz)[0,1], 'Reg-MAM', 'o', 'b'],
                           [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_rcm_samz)[0,1], 'Reg-JJA', 'o', 'y'],
                           [pre_son_cru_samz.std(ddof=1), np.corrcoef(pre_son_cru_samz, pre_son_rcm_samz)[0,1], 'Reg-SON', 'o', 'c'],
-                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_rcm_samz)[0,1], 'Reg-Annual', 'o', 'k'],
+                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_rcm_samz)[0,1], 'Reg-ANN', 'o', 'k'],
                           [pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_gcm_samz)[0,1], 'Had-DJF', '^', 'g'],
                           [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_gcm_samz)[0,1], 'Had-MAM', '^', 'b'],
                           [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_gcm_samz)[0,1], 'Had-JJA', '^', 'y'],
                           [pre_son_cru_samz.std(ddof=1), np.corrcoef(pre_son_cru_samz, pre_son_gcm_samz)[0,1], 'Had-SON', '^', 'c'],
-                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_gcm_samz)[0,1], 'Had-Annual', '^', 'k']],
-                   SAMZ2=[[pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_rcm_samz)[0,1], 'Reg-DJF', 'o', 'g'],
-                          [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_rcm_samz)[0,1], 'Reg-MAM', 'o', 'b'],
-                          [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_rcm_samz)[0,1], 'Reg-JJA', 'o', 'y'],
-                          [pre_son_cru_samz.std(ddof=1), np.corrcoef(pre_son_cru_samz, pre_son_rcm_samz)[0,1], 'Reg-SON', 'o', 'c'],
-                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_rcm_samz)[0,1], 'Reg-Annual', 'o', 'k'],
+                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_gcm_samz)[0,1], 'Had-ANN', '^', 'k']],
+                   SAMZ2=[[tas_djf_cru_samz.std(ddof=1), np.corrcoef(tas_djf_cru_samz, np.nanmean(tas_djf_rcm_samz, axis=1))[0,1], 'Reg-DJF', 'o', 'g'],
+                          [tas_mam_cru_samz.std(ddof=1), np.corrcoef(tas_mam_cru_samz, np.nanmean(tas_mam_rcm_samz, axis=1))[0,1], 'Reg-MAM', 'o', 'b'],
+                          [tas_jja_cru_samz.std(ddof=1), np.corrcoef(tas_jja_cru_samz, np.nanmean(tas_jja_rcm_samz, axis=1))[0,1], 'Reg-JJA', 'o', 'y'],
+                          [tas_son_cru_samz.std(ddof=1), np.corrcoef(tas_son_cru_samz, np.nanmean(tas_son_rcm_samz, axis=1))[0,1], 'Reg-SON', 'o', 'c'],
+                          [tas_annual_cru_samz.std(ddof=1), np.corrcoef(tas_annual_cru_samz, np.nanmean(tas_annual_rcm_samz, axis=1))[0,1], 'Reg-ANN', 'o', 'k'],
                           [tas_djf_cru_samz.std(ddof=1), np.corrcoef(tas_djf_cru_samz, tas_djf_gcm_samz)[0,1], 'Had-DJF', '^', 'g'],
                           [tas_mam_cru_samz.std(ddof=1), np.corrcoef(tas_mam_cru_samz, tas_mam_gcm_samz)[0,1], 'Had-MAM', '^', 'b'],
                           [tas_jja_cru_samz.std(ddof=1), np.corrcoef(tas_jja_cru_samz, tas_jja_gcm_samz)[0,1], 'Had-JJA', '^', 'y'],
                           [tas_son_cru_samz.std(ddof=1), np.corrcoef(tas_son_cru_samz, tas_son_gcm_samz)[0,1], 'Had-SON', '^', 'c'],
-                          [tas_annual_cru_samz.std(ddof=1), np.corrcoef(tas_annual_cru_samz, tas_annual_gcm_samz)[0,1], 'Had-Annual', '^', 'k']],
-                   ENEB2=[[pre_djf_cru_eneb.std(ddof=1), np.corrcoef(pre_djf_cru_eneb, pre_djf_rcm_eneb)[0,1], 'Reg-DJF', 'o', 'g'],
-                          [pre_mam_cru_eneb.std(ddof=1), np.corrcoef(pre_mam_cru_eneb, pre_mam_rcm_eneb)[0,1], 'Reg-MAM', 'o', 'b'],
-                          [pre_jja_cru_eneb.std(ddof=1), np.corrcoef(pre_jja_cru_eneb, pre_jja_rcm_eneb)[0,1], 'Reg-JJA', 'o', 'y'],
-                          [pre_son_cru_eneb.std(ddof=1), np.corrcoef(pre_son_cru_eneb, pre_son_rcm_eneb)[0,1], 'Reg-SON', 'o', 'c'],
-                          [pre_annual_cru_eneb.std(ddof=1), np.corrcoef(pre_annual_cru_eneb, pre_annual_rcm_eneb)[0,1], 'Reg-Annual', 'o', 'k'],
+                          [tas_annual_cru_samz.std(ddof=1), np.corrcoef(tas_annual_cru_samz, tas_annual_gcm_samz)[0,1], 'Had-ANN', '^', 'k']],
+                   ENEB2=[[tas_djf_cru_eneb.std(ddof=1), np.corrcoef(tas_djf_cru_eneb, np.nanmean(tas_djf_rcm_eneb, axis=1))[0,1], 'Reg-DJF', 'o', 'g'],
+                          [tas_mam_cru_eneb.std(ddof=1), np.corrcoef(tas_mam_cru_eneb, np.nanmean(tas_mam_rcm_eneb, axis=1))[0,1], 'Reg-MAM', 'o', 'b'],
+                          [tas_jja_cru_eneb.std(ddof=1), np.corrcoef(tas_jja_cru_eneb, np.nanmean(tas_jja_rcm_eneb, axis=1))[0,1], 'Reg-JJA', 'o', 'y'],
+                          [tas_son_cru_eneb.std(ddof=1), np.corrcoef(tas_son_cru_eneb, np.nanmean(tas_son_rcm_eneb, axis=1))[0,1], 'Reg-SON', 'o', 'c'],
+                          [tas_annual_cru_eneb.std(ddof=1), np.corrcoef(tas_annual_cru_eneb, np.nanmean(tas_annual_rcm_eneb, axis=1))[0,1], 'Reg-ANN', 'o', 'k'],
                           [tas_djf_cru_eneb.std(ddof=1), np.corrcoef(tas_djf_cru_eneb, tas_djf_gcm_eneb)[0,1], 'Had-DJF', '^', 'g'],
                           [tas_mam_cru_eneb.std(ddof=1), np.corrcoef(tas_mam_cru_eneb, tas_mam_gcm_eneb)[0,1], 'Had-MAM', '^', 'b'],
                           [tas_jja_cru_eneb.std(ddof=1), np.corrcoef(tas_jja_cru_eneb, tas_jja_gcm_eneb)[0,1], 'Had-JJA', '^', 'y'],
                           [tas_son_cru_eneb.std(ddof=1), np.corrcoef(tas_son_cru_eneb, tas_son_gcm_eneb)[0,1], 'Had-SON', '^', 'c'],
-                          [tas_annual_cru_eneb.std(ddof=1), np.corrcoef(tas_annual_cru_eneb, tas_annual_gcm_eneb)[0,1], 'Had-Annual', '^', 'k']],                  
-               MATOPIBA2=[[pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_rcm_samz)[0,1], 'Reg-DJF', 'o', 'g'],
-                          [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_rcm_samz)[0,1], 'Reg-MAM', 'o', 'b'],
-                          [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_rcm_samz)[0,1], 'Reg-JJA', 'o', 'y'],
-                          [pre_son_cru_samz.std(ddof=1), np.corrcoef(pre_son_cru_samz, pre_son_rcm_samz)[0,1], 'Reg-SON', 'o', 'c'],
-                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_rcm_samz)[0,1], 'Reg-Annual', 'o', 'k'],
+                          [tas_annual_cru_eneb.std(ddof=1), np.corrcoef(tas_annual_cru_eneb, tas_annual_gcm_eneb)[0,1], 'Had-ANN', '^', 'k']],                  
+               MATOPIBA2=[[tas_djf_cru_samz.std(ddof=1), np.corrcoef(tas_djf_cru_samz, np.nanmean(tas_djf_rcm_samz, axis=1))[0,1], 'Reg-DJF', 'o', 'g'],
+                          [tas_mam_cru_samz.std(ddof=1), np.corrcoef(tas_mam_cru_samz, np.nanmean(tas_mam_rcm_samz, axis=1))[0,1], 'Reg-MAM', 'o', 'b'],
+                          [tas_jja_cru_samz.std(ddof=1), np.corrcoef(tas_jja_cru_samz, np.nanmean(tas_jja_rcm_samz, axis=1))[0,1], 'Reg-JJA', 'o', 'y'],
+                          [tas_son_cru_samz.std(ddof=1), np.corrcoef(tas_son_cru_samz, np.nanmean(tas_son_rcm_samz, axis=1))[0,1], 'Reg-SON', 'o', 'c'],
+                          [tas_annual_cru_samz.std(ddof=1), np.corrcoef(tas_annual_cru_samz, np.nanmean(tas_annual_rcm_samz, axis=1))[0,1], 'Reg-ANN', 'o', 'k'],
                           [tas_djf_cru_samz.std(ddof=1), np.corrcoef(tas_djf_cru_samz, tas_djf_gcm_samz)[0,1], 'Had-DJF', '^', 'g'],
                           [tas_mam_cru_samz.std(ddof=1), np.corrcoef(tas_mam_cru_samz, tas_mam_gcm_samz)[0,1], 'Had-MAM', '^', 'b'],
                           [tas_jja_cru_samz.std(ddof=1), np.corrcoef(tas_jja_cru_samz, tas_jja_gcm_samz)[0,1], 'Had-JJA', '^', 'y'],
                           [tas_son_cru_samz.std(ddof=1), np.corrcoef(tas_son_cru_samz, tas_son_gcm_samz)[0,1], 'Had-SON', '^', 'c'],
-                          [tas_annual_cru_samz.std(ddof=1), np.corrcoef(tas_annual_cru_samz, tas_annual_gcm_samz)[0,1], 'Had-Annual', '^', 'k']])
+                          [tas_annual_cru_samz.std(ddof=1), np.corrcoef(tas_annual_cru_samz, tas_annual_gcm_samz)[0,1], 'Had-ANN', '^', 'k']])
 
 	# Plot Taylor Diagram
 	rects = dict(SAMZ1=321,
@@ -318,11 +321,11 @@ if __name__=='__main__':
 				 MATOPIBA2=326)
 
 	# Plot model end obs data taylor diagram 			 
-	fig = plt.figure(figsize=(8, 8))
-		
+	fig = plt.figure(figsize=(8, 8.5))
+	
 	for var in ['SAMZ1', 'ENEB1', 'MATOPIBA1', 'SAMZ2', 'ENEB2', 'MATOPIBA2']:
 
-		dia = TaylorDiagram(stdrefs[var], fig=fig, rect=rects[var], label='Reference', srange=(0., 3), extend=True)
+		dia = TaylorDiagram(stdrefs[var], fig=fig, rect=rects[var], label='Reference', srange=(0., 3.), extend=True)
 		dia.samplePoints[0].set_color('r')
 		
 		# Add samples to Taylor diagram
@@ -334,7 +337,7 @@ if __name__=='__main__':
 
 		# Add RMS contours, and label them
 		contours = dia.add_contours(levels=5, colors='0.5')
-		plt.clabel(contours, inline=1, fontsize=8, fmt='%.2f')
+		plt.clabel(contours, inline=1, fontsize=8, fmt='%.1f')
 
 	# Add a figure legend
 	fig.legend(dia.samplePoints, 
