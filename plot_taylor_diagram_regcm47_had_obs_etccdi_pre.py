@@ -165,7 +165,6 @@ def import_obs(var, area, dataset, freq, dt):
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
 	annual_obs = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
-	print(len(annual_obs))
 	
 	return annual_obs
 	
@@ -191,7 +190,6 @@ def import_rcm(var, area, model, exp, freq, dt):
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
 	annual_rcm = np.nanmean(np.nanmean(var[:][0:20,:,:], axis=1), axis=1)
-	print(len(annual_rcm))
 	
 	return annual_rcm
 
@@ -217,7 +215,6 @@ def import_gcm(var, area, model, exp, freq, dt):
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
 	annual_gcm = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
-	print(len(annual_gcm))
 
 	return annual_gcm
 
@@ -270,91 +267,91 @@ if __name__=='__main__':
 				 ENEB = 1,
 				 MATOPIBA = 1)       
 
-	text1 = dict(SAMZ = 'A)',
-				 ENEB = 'B)',
-				 MATOPIBA = 'C)')
+	text1 = dict(SAMZ='A)',
+				 ENEB='B)',
+				 MATOPIBA='C)')
 				 
 	# Compute stddev and correlation coefficient of models
 	# Sample std, rho: Be sure to check order and that correct numbers are placed!
-	samples = dict(SAMZ = [[obs_prcptot.std(ddof=1), np.corrcoef(obs_prcptot, rcm_prcptot)[0,1], 'PRCPTOT-Reg', 'o', 'b'],
-                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, rcm_r95p)[0,1], 'R95p-Reg', 'o', 'b'],
-                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, rcm_r99p)[0,1], 'R99p-Reg', 'o', 'b'],
-                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, rcm_rx1day)[0,1], 'Rx1day-Reg', 'o', 'b'],
-                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, rcm_rx5day)[0,1], 'Rx5day-Reg', 'o', 'b'],
-                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, rcm_sdii)[0,1], 'SDII-Reg', 'o', 'b'],
-                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, rcm_cdd)[0,1], 'CDD-Reg', 'o', 'b'],
-                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, rcm_cwd)[0,1], 'CWD-Reg', 'o', 'b'],
-                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, rcm_r10mm)[0,1], 'R10mm-Reg', 'o', 'b'],
-                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, rcm_r20mm)[0,1], 'R20mm-Reg', 'o', 'b'],
+	samples = dict(SAMZ=[[obs_prcptot.std(ddof=1), np.corrcoef(obs_prcptot, rcm_prcptot)[0,1], 'PRCPTOT-Reg', 'o', 'b'],
+                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, rcm_r95p)[0,1], 'R95p-Reg', 's', 'b'],
+                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, rcm_r99p)[0,1], 'R99p-Reg', 'v', 'b'],
+                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, rcm_rx1day)[0,1], 'Rx1day-Reg', '^', 'b'],
+                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, rcm_rx5day)[0,1], 'Rx5day-Reg', 'd', 'b'],
+                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, rcm_sdii)[0,1], 'SDII-Reg', 'h', 'b'],
+                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, rcm_cdd)[0,1], 'CDD-Reg', '*', 'b'],
+                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, rcm_cwd)[0,1], 'CWD-Reg', 'p', 'b'],
+                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, rcm_r10mm)[0,1], 'R10mm-Reg', '>', 'b'],
+                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, rcm_r20mm)[0,1], 'R20mm-Reg', '<', 'b'],
                           [obs_prcptot.std(ddof=1), np.corrcoef(obs_prcptot, gcm_prcptot)[0,1], 'PRCPTOT-Had', 'o', 'r'],
-                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, gcm_r95p)[0,1], 'R95p-Had', 'o', 'r'],
-                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, gcm_r99p)[0,1], 'R99p-Had', 'o', 'r'],
-                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, gcm_rx1day)[0,1], 'Rx1day-Had', 'o', 'r'],
-                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, gcm_rx5day)[0,1], 'Rx5day-Had', 'o', 'r'],
-                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, gcm_sdii)[0,1], 'SDII-Had', 'o', 'r'],
-                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, gcm_cdd)[0,1], 'CDD-Had', 'o', 'r'],
-                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, gcm_cwd)[0,1], 'CWD-Had', 'o', 'r'],
-                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, gcm_r10mm)[0,1], 'R10mm-Had', 'o', 'r'],
-                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, gcm_r20mm)[0,1], 'R20mm-Had', 'o', 'r']],
-                   ENEB = [[obs_prcptot.std(ddof=1), np.corrcoef(obs_prcptot, rcm_prcptot)[0,1], 'PRCPTOT-Reg', 'o', 'b'],
-                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, rcm_r95p)[0,1], 'R95p-Reg', 'o', 'b'],
-                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, rcm_r99p)[0,1], 'R99p-Reg', 'o', 'b'],
-                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, rcm_rx1day)[0,1], 'Rx1day-Reg', 'o', 'b'],
-                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, rcm_rx5day)[0,1], 'Rx5day-Reg', 'o', 'b'],
-                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, rcm_sdii)[0,1], 'SDII-Reg', 'o', 'b'],
-                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, rcm_cdd)[0,1], 'CDD-Reg', 'o', 'b'],
-                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, rcm_cwd)[0,1], 'CWD-Reg', 'o', 'b'],
-                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, rcm_r10mm)[0,1], 'R10mm-Reg', 'o', 'b'],
-                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, rcm_r20mm)[0,1], 'R20mm-Reg', 'o', 'b'],
+                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, gcm_r95p)[0,1], 'R95p-Had', 's', 'r'],
+                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, gcm_r99p)[0,1], 'R99p-Had', 'v', 'r'],
+                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, gcm_rx1day)[0,1], 'Rx1day-Had', '^', 'r'],
+                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, gcm_rx5day)[0,1], 'Rx5day-Had', 'd', 'r'],
+                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, gcm_sdii)[0,1], 'SDII-Had', 'h', 'r'],
+                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, gcm_cdd)[0,1], 'CDD-Had', '*', 'r'],
+                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, gcm_cwd)[0,1], 'CWD-Had', 'p', 'r'],
+                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, gcm_r10mm)[0,1], 'R10mm-Had', '>', 'r'],
+                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, gcm_r20mm)[0,1], 'R20mm-Had', '<', 'r']],
+                   ENEB=[[obs_prcptot.std(ddof=1), np.corrcoef(obs_prcptot, rcm_prcptot)[0,1], 'PRCPTOT-Reg', 'o', 'b'],
+                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, rcm_r95p)[0,1], 'R95p-Reg', 's', 'b'],
+                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, rcm_r99p)[0,1], 'R99p-Reg', 'v', 'b'],
+                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, rcm_rx1day)[0,1], 'Rx1day-Reg', '^', 'b'],
+                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, rcm_rx5day)[0,1], 'Rx5day-Reg', 'd', 'b'],
+                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, rcm_sdii)[0,1], 'SDII-Reg', 'h', 'b'],
+                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, rcm_cdd)[0,1], 'CDD-Reg', '*', 'b'],
+                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, rcm_cwd)[0,1], 'CWD-Reg', 'p', 'b'],
+                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, rcm_r10mm)[0,1], 'R10mm-Reg', '>', 'b'],
+                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, rcm_r20mm)[0,1], 'R20mm-Reg', '<', 'b'],
                           [obs_prcptot.std(ddof=1), np.corrcoef(obs_prcptot, gcm_prcptot)[0,1], 'PRCPTOT-Had', 'o', 'r'],
-                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, gcm_r95p)[0,1], 'R95p-Had', 'o', 'r'],
-                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, gcm_r99p)[0,1], 'R99p-Had', 'o', 'r'],
-                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, gcm_rx1day)[0,1], 'Rx1day-Had', 'o', 'r'],
-                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, gcm_rx5day)[0,1], 'Rx5day-Had', 'o', 'r'],
-                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, gcm_sdii)[0,1], 'SDII-Had', 'o', 'r'],
-                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, gcm_cdd)[0,1], 'CDD-Had', 'o', 'r'],
-                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, gcm_cwd)[0,1], 'CWD-Had', 'o', 'r'],
-                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, gcm_r10mm)[0,1], 'R10mm-Had', 'o', 'r'],
-                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, gcm_r20mm)[0,1], 'R20mm-Had', 'o', 'r']],           
-               MATOPIBA = [[obs_prcptot.std(ddof=1), np.corrcoef(obs_prcptot, rcm_prcptot)[0,1], 'PRCPTOT-Reg', 'o', 'b'],
-                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, rcm_r95p)[0,1], 'R95p-Reg', 'o', 'b'],
-                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, rcm_r99p)[0,1], 'R99p-Reg', 'o', 'b'],
-                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, rcm_rx1day)[0,1], 'Rx1day-Reg', 'o', 'b'],
-                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, rcm_rx5day)[0,1], 'Rx5day-Reg', 'o', 'b'],
-                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, rcm_sdii)[0,1], 'SDII-Reg', 'o', 'b'],
-                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, rcm_cdd)[0,1], 'CDD-Reg', 'o', 'b'],
-                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, rcm_cwd)[0,1], 'CWD-Reg', 'o', 'b'],
-                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, rcm_r10mm)[0,1], 'R10mm-Reg', 'o', 'b'],
-                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, rcm_r20mm)[0,1], 'R20mm-Reg', 'o', 'b'],
+                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, gcm_r95p)[0,1], 'R95p-Had', 's', 'r'],
+                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, gcm_r99p)[0,1], 'R99p-Had', 'v', 'r'],
+                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, gcm_rx1day)[0,1], 'Rx1day-Had', '^', 'r'],
+                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, gcm_rx5day)[0,1], 'Rx5day-Had', 'd', 'r'],
+                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, gcm_sdii)[0,1], 'SDII-Had', 'h', 'r'],
+                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, gcm_cdd)[0,1], 'CDD-Had', '*', 'r'],
+                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, gcm_cwd)[0,1], 'CWD-Had', 'p', 'r'],
+                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, gcm_r10mm)[0,1], 'R10mm-Had', '>', 'r'],
+                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, gcm_r20mm)[0,1], 'R20mm-Had', '<', 'r']], 
+               MATOPIBA=[[obs_prcptot.std(ddof=1), np.corrcoef(obs_prcptot, rcm_prcptot)[0,1], 'PRCPTOT-Reg', 'o', 'b'],
+                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, rcm_r95p)[0,1], 'R95p-Reg', 's', 'b'],
+                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, rcm_r99p)[0,1], 'R99p-Reg', 'v', 'b'],
+                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, rcm_rx1day)[0,1], 'Rx1day-Reg', '^', 'b'],
+                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, rcm_rx5day)[0,1], 'Rx5day-Reg', 'd', 'b'],
+                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, rcm_sdii)[0,1], 'SDII-Reg', 'h', 'b'],
+                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, rcm_cdd)[0,1], 'CDD-Reg', '*', 'b'],
+                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, rcm_cwd)[0,1], 'CWD-Reg', 'p', 'b'],
+                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, rcm_r10mm)[0,1], 'R10mm-Reg', '>', 'b'],
+                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, rcm_r20mm)[0,1], 'R20mm-Reg', '<', 'b'],
                           [obs_prcptot.std(ddof=1), np.corrcoef(obs_prcptot, gcm_prcptot)[0,1], 'PRCPTOT-Had', 'o', 'r'],
-                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, gcm_r95p)[0,1], 'R95p-Had', 'o', 'r'],
-                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, gcm_r99p)[0,1], 'R99p-Had', 'o', 'r'],
-                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, gcm_rx1day)[0,1], 'Rx1day-Had', 'o', 'r'],
-                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, gcm_rx5day)[0,1], 'Rx5day-Had', 'o', 'r'],
-                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, gcm_sdii)[0,1], 'SDII-Had', 'o', 'r'],
-                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, gcm_cdd)[0,1], 'CDD-Had', 'o', 'r'],
-                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, gcm_cwd)[0,1], 'CWD-Had', 'o', 'r'],
-                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, gcm_r10mm)[0,1], 'R10mm-Had', 'o', 'r'],
-                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, gcm_r20mm)[0,1], 'R20mm-Had', 'o', 'r']])
+                          [obs_r95p.std(ddof=1), np.corrcoef(obs_r95p, gcm_r95p)[0,1], 'R95p-Had', 's', 'r'],
+                          [obs_r99p.std(ddof=1), np.corrcoef(obs_r99p, gcm_r99p)[0,1], 'R99p-Had', 'v', 'r'],
+                          [obs_rx1day.std(ddof=1), np.corrcoef(obs_rx1day, gcm_rx1day)[0,1], 'Rx1day-Had', '^', 'r'],
+                          [obs_rx5day.std(ddof=1), np.corrcoef(obs_rx5day, gcm_rx5day)[0,1], 'Rx5day-Had', 'd', 'r'],
+                          [obs_sdii.std(ddof=1), np.corrcoef(obs_sdii, gcm_sdii)[0,1], 'SDII-Had', 'h', 'r'],
+                          [obs_cdd.std(ddof=1), np.corrcoef(obs_cdd, gcm_cdd)[0,1], 'CDD-Had', '*', 'r'],
+                          [obs_cwd.std(ddof=1), np.corrcoef(obs_cwd, gcm_cwd)[0,1], 'CWD-Had', 'p', 'r'],
+                          [obs_r10mm.std(ddof=1), np.corrcoef(obs_r10mm, gcm_r10mm)[0,1], 'R10mm-Had', '>', 'r'],
+                          [obs_r20mm.std(ddof=1), np.corrcoef(obs_r20mm, gcm_r20mm)[0,1], 'R20mm-Had', '<', 'r']])
 
 	# Plot Taylor Diagram
-	rects = dict(SAMZ = 311,
-				 ENEB = 312,
-				 MATOPIBA = 313)
+	rects = dict(SAMZ=311,
+				 ENEB=312,
+				 MATOPIBA=313)
 
 	# Plot model end obs data taylor diagram 			 
-	fig = plt.figure(figsize=(8, 8.5))
+	fig = plt.figure(figsize=(6, 6.5))
 	
 	for var in ['SAMZ', 'ENEB', 'MATOPIBA']:
 
 		dia = TaylorDiagram(stdrefs[var], fig=fig, rect=rects[var], label='Reference', srange=(0., 3.), extend=True)
-		dia.samplePoints[0].set_color('r')
+		dia.samplePoints[0].set_color('black')
 		
 		# Add samples to Taylor diagram
 
 		for i, (stddev,corrcoef,name,mark,cor) in enumerate(samples[var]):
 			dia.add_sample(stddev, corrcoef,
-						   label=name, marker=mark, color=cor, ms=6, ls='')			   
+						   label=name, marker=mark, color='black', mfc=cor, ms=8, ls='')		
 			plt.text(-3., 2.8, text1[var], fontweight='bold')
 
 		# Add RMS contours, and label them
@@ -364,9 +361,9 @@ if __name__=='__main__':
 	# Add a figure legend
 	fig.legend(dia.samplePoints, 
 			   [ p.get_label() for p in dia.samplePoints ], 
-			   prop=dict(size=8), ncol=1, numpoints=1, loc=7)
-
-	plt.subplots_adjust(left=0.10, bottom=0.10, right=0.99, top=0.99, wspace=0.60, hspace=0.30)
+			   prop=dict(size=10), ncol=1, numpoints=1, loc=7)
+	
+	plt.subplots_adjust(left=0.10, bottom=0.10, right=0.90, top=0.90, wspace=0.65, hspace=0.65)
 
 	# Path out to save figure
 	path_out = '/home/nice/Downloads'
