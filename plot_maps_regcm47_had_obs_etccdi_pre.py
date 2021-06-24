@@ -169,7 +169,8 @@ lat, lon, rcm_r20mm = import_rcm('eca_r20mm', 'amz_neb', 'RegCM47_had', 'histori
 lat, lon, gcm_r20mm = import_gcm('eca_r20mm', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
 # Plot maps with the function
-fig = plt.figure(figsize=(6, 12))
+fig = plt.figure(figsize=(6, 10))
+
 levs1 = [100, 300, 500, 1000, 1500, 2000, 2500, 3000]
 levs2 = [5, 10, 20, 30, 40, 50, 60, 70]
 levs3 = [1, 5, 10, 15, 20, 25, 30, 35]
@@ -424,6 +425,8 @@ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0
 cbar = map.colorbar(ticks=levs10, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
+plt.subplots_adjust(left=0.10, bottom=0.10, right=0.90, top=0.90, wspace=0.30, hspace=0.30)
+
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'
 name_out = 'pyplt_maps_etccdi_pre_reg_had_obs_1986-2005.png'
@@ -431,7 +434,8 @@ if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
 
-plt.show()
+plt.close('all')
+plt.cla()
 exit()	
 	
 	
