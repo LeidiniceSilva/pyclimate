@@ -10,6 +10,7 @@ from netCDF4 import Dataset
 
 import numpy as np
 import scipy.stats as st
+from scipy.stats import norm
 
 
 def compute_corr(model, obs):
@@ -69,7 +70,7 @@ def compute_rmse(model, obs):
     return rmse
     
      
-def compute_bias(model, obs):
+def compute_mbe(model, obs):
 
     """
     The input arrays must have the same dimensions
@@ -78,9 +79,9 @@ def compute_bias(model, obs):
     :Return: Mean Bias Error
     """
 
-    bias = np.nanmean(np.array(model) - np.array(obs))
+    mbe = np.nanmean(np.array(model) - np.array(obs))
     
-    return bias
+    return mbe
 
 
 def compute_pbias(model, obs):
@@ -150,7 +151,7 @@ def compute_fcst_correct(model, obs, fcst):
     return fcst_correct
 
 
-def compute_effic_coeffic(model, obs):
+def compute_nse(model, obs):
 
     """
     The input arrays must have the same dimensions
@@ -159,12 +160,12 @@ def compute_effic_coeffic(model, obs):
     :Return: Nash–Sutcliffe Efficient Coefficient
     """
 
-    nash = 1 - sum((model - obs) ** 2) / sum((obs - np.mean(obs)) ** 2)
+    nse = 1 - sum((model - obs) ** 2) / sum((obs - np.mean(obs)) ** 2)
     
-    return nash
+    return nse
     
     
-def compute_index_agreement(model, obs):
+def compute_icw(model, obs):
 
     """
     The input arrays must have the same dimensions
@@ -181,7 +182,7 @@ def compute_index_agreement(model, obs):
     return icw
     
 
-def compute_added_value(gcm, rcm, obs):
+def compute_av(gcm, rcm, obs):
 
     """
     The input arrays must have the same dimensions
@@ -200,6 +201,55 @@ def compute_added_value(gcm, rcm, obs):
     return av
     
     
+def compute_ivs(obs, model):
+
+    """
+    The input arrays must have the same dimensions
+    :Param rcm: Numpy array with regional model data
+    :Param gcm: Numpy array with global model data
+    :Param obs: Numpy array with obs data
+    :Return: Interannual Variability Skill Score
+    """
+
+    p1 = np.std(obs)
+    p2 = np.std(model)
+    p3 = p2 / p1
+    p4 = p1 / p2
+    ivs = (p3 - p4)**2  
+    
+    return ivs    
+    
+    
+def compute_cdf(data):
+
+	"""
+	The input arrays must have the same dimensions
+	:Param data: Numpy array with model or obs data
+	:Return: Cumulative Density Function
+	"""
+
+	x = np.linspace(np.min(data), np.max(data))
+	y = np.nanmean(x)
+	z = np.nanstd(x)
+	cdf = norm.cdf(x,y,z)
+
+	return x, cdf
+
+
+def compute_pdf(data):
+
+	"""
+	The input arrays must have the same dimensions
+	:Param data: Numpy array with model or obs data
+	:Return: Cumulative Density Function
+	"""
+
+	x = np.linspace(np.min(data), np.max(data))
+	y = np.nanmean(x)
+	z = np.nanstd(x)
+	pdf = norm.pdf(x,y,z)
+
+	return x, pdf
 
 	
 	

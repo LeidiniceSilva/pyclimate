@@ -17,30 +17,9 @@ import matplotlib as mpl
 
 from pylab import *
 from netCDF4 import Dataset
-from scipy.stats import norm
-from scipy.stats import t
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+from comp_statist_indices import compute_cdf, compute_pdf
 
-
-def cdf_function(data):
-	
-	x = np.linspace(np.min(data), np.max(data))
-	y = np.nanmean(x)
-	z = np.nanstd(x)
-	cdf = norm.cdf(x,y,z)
-	
-	return x, cdf
-
-
-def pdf_function(data):
-
-	x = np.linspace(np.min(data), np.max(data))
-	y = np.nanmean(x)
-	z = np.nanstd(x)
-	pdf = norm.pdf(x,y,z)
-	
-	return x, pdf
-	
 
 def import_obs(var, area, dataset, dt):
 	
@@ -435,7 +414,7 @@ path_out = '/home/nice/Downloads'
 name_out = 'pyplt_annual_cycle_cdf_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
+plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 
 plt.show()
 exit()
