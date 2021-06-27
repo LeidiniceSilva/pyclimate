@@ -185,16 +185,16 @@ diff_rcm_cwd_rcp26_hist = rcm_cwd_rcp26 - rcm_cwd_hist
 diff_rcm_r10mm_rcp26_hist = rcm_r10mm_rcp26 - rcm_r10mm_hist
 diff_rcm_r20mm_rcp26_hist = rcm_r20mm_rcp26 - rcm_r20mm_hist
 
-diff_gcm_prcptot_rcp26_hist = gcm_prcptot_rcp26 - rcm_prcptot_hist
-diff_gcm_r95p_rcp26_hist = gcm_r95p_rcp26 - rcm_r95p_hist
-diff_gcm_r99p_rcp26_hist = gcm_r99p_rcp26 - rcm_r99p_hist
-diff_gcm_rx1day_rcp26_hist = gcm_rx1day_rcp26 - rcm_rx1day_hist
-diff_gcm_rx5day_rcp26_hist = gcm_rx5day_rcp26 - rcm_rx5day_hist
-diff_gcm_sdii_rcp26_hist = gcm_sdii_rcp26 - rcm_sdii_hist
-diff_gcm_cdd_rcp26_hist = gcm_cdd_rcp26 - rcm_cdd_hist
-diff_gcm_cwd_rcp26_hist = gcm_cwd_rcp26 - rcm_cwd_hist
-diff_gcm_r10mm_rcp26_hist = gcm_r10mm_rcp26 - rcm_r10mm_hist
-diff_gcm_r20mm_rcp26_hist = gcm_r20mm_rcp26 - rcm_r20mm_hist
+diff_gcm_prcptot_rcp26_hist = gcm_prcptot_rcp26 - gcm_prcptot_hist
+diff_gcm_r95p_rcp26_hist = gcm_r95p_rcp26 - gcm_r95p_hist
+diff_gcm_r99p_rcp26_hist = gcm_r99p_rcp26 - gcm_r99p_hist
+diff_gcm_rx1day_rcp26_hist = gcm_rx1day_rcp26 - gcm_rx1day_hist
+diff_gcm_rx5day_rcp26_hist = gcm_rx5day_rcp26 - gcm_rx5day_hist
+diff_gcm_sdii_rcp26_hist = gcm_sdii_rcp26 - gcm_sdii_hist
+diff_gcm_cdd_rcp26_hist = gcm_cdd_rcp26 - gcm_cdd_hist
+diff_gcm_cwd_rcp26_hist = gcm_cwd_rcp26 - gcm_cwd_hist
+diff_gcm_r10mm_rcp26_hist = gcm_r10mm_rcp26 - gcm_r10mm_hist
+diff_gcm_r20mm_rcp26_hist = gcm_r20mm_rcp26 - gcm_r20mm_hist
 
 # RCP85
 diff_rcm_prcptot_rcp85_hist = rcm_prcptot_rcp85 - rcm_prcptot_hist
@@ -208,40 +208,41 @@ diff_rcm_cwd_rcp85_hist = rcm_cwd_rcp85 - rcm_cwd_hist
 diff_rcm_r10mm_rcp85_hist = rcm_r10mm_rcp85 - rcm_r10mm_hist
 diff_rcm_r20mm_rcp85_hist = rcm_r20mm_rcp85 - rcm_r20mm_hist
 
-diff_gcm_prcptot_rcp85_hist = gcm_prcptot_rcp85 - rcm_prcptot_hist
-diff_gcm_r95p_rcp85_hist = gcm_r95p_rcp85- rcm_r95p_hist
-diff_gcm_r99p_rcp85_hist = gcm_r99p_rcp85 - rcm_r99p_hist
-diff_gcm_rx1day_rcp85_hist = gcm_rx1day_rcp85 - rcm_rx1day_hist
-diff_gcm_rx5day_rcp85_hist = gcm_rx5day_rcp85 - rcm_rx5day_hist
-diff_gcm_sdii_rcp85_hist = gcm_sdii_rcp85 - rcm_sdii_hist
-diff_gcm_cdd_rcp85_hist = gcm_cdd_rcp85 - rcm_cdd_hist
-diff_gcm_cwd_rcp85_hist = gcm_cwd_rcp85 - rcm_cwd_hist
-diff_gcm_r10mm_rcp85_hist = gcm_r10mm_rcp85 - rcm_r10mm_hist
-diff_gcm_r20mm_rcp85_hist = gcm_r20mm_rcp85 - rcm_r20mm_hist
+diff_gcm_prcptot_rcp85_hist = gcm_prcptot_rcp85 - gcm_prcptot_hist
+diff_gcm_r95p_rcp85_hist = gcm_r95p_rcp85- gcm_r95p_hist
+diff_gcm_r99p_rcp85_hist = gcm_r99p_rcp85 - gcm_r99p_hist
+diff_gcm_rx1day_rcp85_hist = gcm_rx1day_rcp85 - gcm_rx1day_hist
+diff_gcm_rx5day_rcp85_hist = gcm_rx5day_rcp85 - gcm_rx5day_hist
+diff_gcm_sdii_rcp85_hist = gcm_sdii_rcp85 - gcm_sdii_hist
+diff_gcm_cdd_rcp85_hist = gcm_cdd_rcp85 - gcm_cdd_hist
+diff_gcm_cwd_rcp85_hist = gcm_cwd_rcp85 - gcm_cwd_hist
+diff_gcm_r10mm_rcp85_hist = gcm_r10mm_rcp85 - gcm_r10mm_hist
+diff_gcm_r20mm_rcp85_hist = gcm_r20mm_rcp85 - gcm_r20mm_hist
 
 # Plot maps with the function
 fig = plt.figure(figsize=(8, 10))
-levs1 = [-150, -100, -50, 50, 100, 150]
-levs2 = [-11, -7, -3, 3, 7, 11]
-levs3 = [-11, -7, -3, 3, 7, 11]
-levs4 = [-11, -7, -3, 3, 7, 11]
-levs5 = [-75, -50, -25, 25, 50, 75]
-levs6 = [-5, -3, -1., 1, 3, 5]
-levs7 = [-15, -10, -5, 5, 10, 15]
-levs8 = [-10, -7, -4, 4, 7, 10]
-levs9 = [-15, -10, -5, 5, 10, 15]
-levs10 = [-10, -7, -4, 4, 7, 10]
 
-levs11 = [-150, -100, -50, 50, 100, 150]
-levs21 = [-90, -60, -30, 30, 60, 90]
-levs31 = [-90, -60, -30, 30, 60, 90]
-levs41 = [-90, -60, -30, 30, 60, 90]
-levs51 = [-90, -60, -30, 30, 60, 90]
-levs61 = [-9, -6, -3., 3, 6, 9]
-levs71 = [-20, -15, -10, 10, 15, 20]
-levs81 = [-15, -10, -5, 5, 10, 15]
-levs91 = [-20, -15, -10, 10, 15, 20]
-levs101 = [-15, -10, -5, 5, 10, 15]
+levs1 = [-300, -200, -100, 100, 200, 300]
+levs2 = [-12, -8, -4, 4, 8, 12]
+levs3 = [-12, -8, -4, 4, 8, 12]
+levs4 = [-20, -15, -10, 10, 15, 20]
+levs5 = [-35, -25, -15, 15, 25, 35]
+levs6 = [-5, -3, -1, 1, 3, 5]
+levs7 = [-25, -15, -5, 5, 15, 25]
+levs8 = [-10, -5, -1, 1, 5, 10]
+levs9 = [-15, -10, -5, 5, 10, 15]
+levs10 = [-9, -6, -3, 3, 6, 9]
+
+levs11 = [-1000, -700, -400, 400, 700, 1000]
+levs21 = [-12, -8, -4, 4, 8, 12]
+levs31 = [-12, -8, -4, 4, 8, 12]
+levs41 = [-20, -15, -10, 10, 15, 20]
+levs51 = [-35, -25, -15, 15, 25, 35]
+levs61 = [-5, -3, -1, 1, 3, 5]
+levs71 = [-200, -150, -100, 100, 150, 200]
+levs81 = [-140, -80, -20, 20, 80, 140]
+levs91 = [-45, -30, -15, 15, 30, 45]
+levs101 = [-30, -20, -10, 10, 20, 30]
 
 ax = fig.add_subplot(10, 4, 1)
 map, xx, yy = basemap(lat, lon)
@@ -257,7 +258,7 @@ plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_rcm_prcptot_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs0, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
 ax = fig.add_subplot(10, 4, 3)
@@ -273,7 +274,7 @@ plt.title(u'D)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_prcptot_rcp85_hist, levels=levs11, latlon=True, cmap=cm.BrBG, extend='both') 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs0, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs11, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
 ax = fig.add_subplot(10, 4, 5)
@@ -290,7 +291,7 @@ plt.title(u'F)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_rcm_r95p_rcp85_hist, levels=levs2, latlon=True, cmap=cm.BrBG, extend='both')
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
 ax = fig.add_subplot(10, 4, 7)
@@ -306,7 +307,7 @@ plt.title(u'H)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_r95p_rcp85_hist, levels=levs21, latlon=True, cmap=cm.BrBG, extend='both') 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs21, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(10, 4, 9)
@@ -323,7 +324,7 @@ plt.title(u'J)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_rcm_r99p_rcp85_hist, levels=levs3, latlon=True, cmap=cm.BrBG, extend='both')
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
 ax = fig.add_subplot(10, 4, 11)
@@ -339,7 +340,7 @@ plt.title(u'L)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_r99p_rcp85_hist, levels=levs31, latlon=True, cmap=cm.BrBG, extend='both') 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs31, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(10, 4, 13)
@@ -356,7 +357,7 @@ plt.title(u'N)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_rcm_rx1day_rcp85_hist, levels=levs4, latlon=True, cmap=cm.BrBG, extend='both')
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs4, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
 ax = fig.add_subplot(10, 4, 15)
@@ -372,7 +373,7 @@ plt.title(u'P)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_rx1day_rcp85_hist, levels=levs41, latlon=True, cmap=cm.BrBG, extend='both') 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs41, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(10, 4, 17)
@@ -389,7 +390,7 @@ plt.title(u'R)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_rcm_rx5day_rcp85_hist, levels=levs5, latlon=True, cmap=cm.BrBG, extend='both')
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs5, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
 ax = fig.add_subplot(10, 4, 19)
@@ -405,7 +406,7 @@ plt.title(u'T)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_rx5day_rcp85_hist, levels=levs51, latlon=True, cmap=cm.BrBG, extend='both') 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs51, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(10, 4, 21)
@@ -422,7 +423,7 @@ plt.title(u'V)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_rcm_sdii_rcp85_hist, levels=levs6, latlon=True, cmap=cm.BrBG, extend='both')
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs6, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
 ax = fig.add_subplot(10, 4, 23)
@@ -438,7 +439,7 @@ plt.title(u'X)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_sdii_rcp85_hist, levels=levs61, latlon=True, cmap=cm.BrBG, extend='both') 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs61, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(10, 4, 25)
@@ -455,7 +456,7 @@ plt.title(u'Z)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_rcm_cdd_rcp85_hist, levels=levs7, latlon=True, cmap=cm.BrBG, extend='both')
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs7, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
 ax = fig.add_subplot(10, 4, 27)
@@ -471,7 +472,7 @@ plt.title(u'B.1)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_cdd_rcp85_hist, levels=levs71, latlon=True, cmap=cm.BrBG, extend='both') 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs71, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(10, 4, 29)
@@ -488,7 +489,7 @@ plt.title(u'D.1)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_rcm_cwd_rcp85_hist, levels=levs8, latlon=True, cmap=cm.BrBG, extend='both')
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs8, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
 ax = fig.add_subplot(10, 4, 31)
@@ -504,7 +505,7 @@ plt.title(u'F.1)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_cwd_rcp85_hist, levels=levs81, latlon=True, cmap=cm.BrBG, extend='both') 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs81, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(10, 4, 33)
@@ -521,7 +522,7 @@ plt.title(u'H.1)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_rcm_r10mm_rcp85_hist, levels=levs9, latlon=True, cmap=cm.BrBG, extend='both')
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs9, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
 ax = fig.add_subplot(10, 4, 35)
@@ -537,7 +538,7 @@ plt.title(u'J.1)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_r10mm_rcp85_hist, levels=levs91, latlon=True, cmap=cm.BrBG, extend='both') 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs91, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
 
 ax = fig.add_subplot(10, 4, 37)
@@ -556,7 +557,7 @@ plt.xlabel(u'Longitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_rcm_r20mm_rcp85_hist, levels=levs10, latlon=True, cmap=cm.BrBG, extend='both')
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,1], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs10, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
 
 ax = fig.add_subplot(10, 4, 39)
@@ -574,7 +575,7 @@ plt.xlabel(u'Longitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_gcm_r20mm_rcp85_hist, levels=levs101, latlon=True, cmap=cm.BrBG, extend='both') 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,1], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
+cbar = map.colorbar(ticks=levs101, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
 
 plt.subplots_adjust(left=0.10, bottom=0.10, right=0.90, top=0.90, wspace=0.30, hspace=0.30)
@@ -589,342 +590,4 @@ plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
 plt.close('all')
 plt.cla()
 exit()	
-	
-	
-	
 
-#~ ax = fig.add_subplot(10, 4, 1)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_rcm_prcptot_rcp26_hist, levels=levs0, latlon=True, cmap=cm.BrBG)
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
-#~ ax = fig.add_subplot(10, 4, 2)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_rcm_prcptot_rcp85_hist, levels=levs0, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs0, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6) 
-
-#~ ax = fig.add_subplot(10, 4, 3)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_rcm_prcptot_rcp85_hist, levels=levs0, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
-#~ ax = fig.add_subplot(10, 4, 4)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'D)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_prcptot_rcp85_hist, levels=levs0, latlon=True, cmap=cm.BrBG, extend='both') 
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs0, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6) 
-
-#~ ax = fig.add_subplot(10, 4, 5)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'E)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_rcm_r95p_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
-#~ ax = fig.add_subplot(10, 4, 6)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'F)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_r95p_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6) 
-
-#~ ax = fig.add_subplot(10, 4, 7)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'G)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_rcm_r95p_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
-#~ ax = fig.add_subplot(10, 4, 8)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'H)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_r95p_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both') 
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6)
-
-#~ ax = fig.add_subplot(10, 4, 9)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'I)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_rcm_r99p_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
-#~ ax = fig.add_subplot(10, 4, 10)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'J)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_r99p_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6) 
-
-#~ ax = fig.add_subplot(10, 4, 11)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'K)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_rcm_r99p_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
-#~ ax = fig.add_subplot(10, 4, 12)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'L)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_r99p_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both') 
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6)
-
-#~ ax = fig.add_subplot(10, 4, 13)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'M)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_rcm_rx1day_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
-#~ ax = fig.add_subplot(10, 4, 14)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'N)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_rx1day_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6) 
-
-#~ ax = fig.add_subplot(10, 4, 15)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'O)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_rcm_rx1day_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
-#~ ax = fig.add_subplot(10, 4, 16)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'P)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_rx1day_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both') 
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6)
-
-#~ ax = fig.add_subplot(10, 4, 17)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'Q)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_rcm_rx5day_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
-#~ ax = fig.add_subplot(10, 4, 18)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'R)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_rx5day_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6) 
-
-#~ ax = fig.add_subplot(10, 4, 19)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'S)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_rcm_rx5day_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
-#~ ax = fig.add_subplot(10, 4, 20)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'T)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_rx5day_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both') 
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6)
-
-#~ ax = fig.add_subplot(10, 4, 21)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'U)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_rcm_sdii_rcp26_hist, levels=levs2, latlon=True, cmap=cm.BrBG)
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
-#~ ax = fig.add_subplot(10, 4, 22)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'V)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_sdii_rcp26_hist, levels=levs2, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6) 
-
-#~ ax = fig.add_subplot(10, 4, 23)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'W)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_rcm_sdii_rcp85_hist, levels=levs2, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
-#~ ax = fig.add_subplot(10, 4, 24)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'X)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_sdii_rcp85_hist, levels=levs2, latlon=True, cmap=cm.BrBG, extend='both') 
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6)
-
-#~ ax = fig.add_subplot(10, 4, 25)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'Y)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_rcm_cdd_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
-#~ ax = fig.add_subplot(10, 4, 26)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'Z)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_cdd_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6) 
-
-#~ ax = fig.add_subplot(10, 4, 27)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'A.1)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_rcm_cdd_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
-#~ ax = fig.add_subplot(10, 4, 28)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'B.1)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_cdd_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both') 
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6)
-
-#~ ax = fig.add_subplot(10, 4, 29)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'C.1)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_rcm_cwd_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-
-#~ ax = fig.add_subplot(10, 4, 30)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'D.1)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_cwd_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6) 
-
-#~ ax = fig.add_subplot(10, 4, 31)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'E.1)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_rcm_cwd_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
-#~ ax = fig.add_subplot(10, 4, 32)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'F.1)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_cwd_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both') 
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6)
-
-#~ ax = fig.add_subplot(10, 4, 33)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'G.1)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_rcm_r10mm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
-#~ ax = fig.add_subplot(10, 4, 34)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'H.1)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_r10mm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6) 
-
-#~ ax = fig.add_subplot(10, 4, 35)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'I.1)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_rcm_r10mm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
-#~ ax = fig.add_subplot(10, 4, 36)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'J.1)', loc='left', fontsize=8, fontweight='bold')
-#~ map.contourf(xx, yy, diff_gcm_r10mm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both') 
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6)
-
-#~ ax = fig.add_subplot(10, 4, 37)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'K.1)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.xlabel(u'Longitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_rcm_r20mm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
-#~ ax = fig.add_subplot(10, 4, 38)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'L.1)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.xlabel(u'Longitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_gcm_r20mm_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,1], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6) 
-
-#~ ax = fig.add_subplot(10, 4, 39)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'M.1)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.xlabel(u'Longitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_rcm_r20mm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,1], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
-#~ ax = fig.add_subplot(10, 4, 40)
-#~ map, xx, yy = basemap(lat, lon)
-#~ plt.title(u'N.1)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.xlabel(u'Longitude', fontsize=6, fontweight='bold', labelpad=15)
-#~ map.contourf(xx, yy, diff_gcm_r20mm_rcp85_hist, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both') 
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,1], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=6)
-	
-	
