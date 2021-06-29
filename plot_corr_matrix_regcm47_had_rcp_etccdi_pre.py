@@ -8,15 +8,16 @@ __description__ = "This script plot correlation matrix from ETCCDI indices"
 import os
 import netCDF4
 import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib as mpl
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 
 # mpl.use('agg')
 
 from pylab import *
 from netCDF4 import Dataset
-from comp_statist_indices import compute_ivs
 from matplotlib.font_manager import FontProperties
 
 
@@ -40,7 +41,7 @@ def import_rcm(var, area, model, exp, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	annual_rcm = np.nanmean(np.nanmean(var[:][0:20,:,:], axis=1), axis=1)
+	annual_rcm = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
 	
 	return annual_rcm
 
@@ -65,37 +66,13 @@ def import_gcm(var, area, model, exp, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	annual_gcm = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
+	annual_gcm = np.nanmean(np.nanmean(var[:][20:,:,:], axis=1), axis=1)
 
 	return annual_gcm
 	
 
-# Import regcm exp and cru databases 
+# Import regcm and hadgem models
 # SAMZ
-# Historical period
-rcm_prcptot_hist_samz = import_rcm('eca_prcptot', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r95p_hist_samz = import_rcm('eca_r95p', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r99p_hist_samz = import_rcm('eca_r99p', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_rx1day_hist_samz = import_rcm('eca_rx1day', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_rx5day_hist_samz = import_rcm('eca_rx5day', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_sdii_hist_samz = import_rcm('eca_sdii', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_cdd_hist_samz = import_rcm('eca_cdd', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_cwd_hist_samz = import_rcm('eca_cwd', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r10mm_hist_samz = import_rcm('eca_r10mm', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r20mm_hist_samz = import_rcm('eca_r20mm', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-
-gcm_prcptot_hist_samz = import_gcm('eca_prcptot', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r95p_hist_samz = import_gcm('eca_r95p', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r99p_hist_samz = import_gcm('eca_r99p', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_rx1day_hist_samz = import_gcm('eca_rx1day', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_rx5day_hist_samz = import_gcm('eca_rx5day', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_sdii_hist_samz = import_gcm('eca_sdii', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_cdd_hist_samz = import_gcm('eca_cdd', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_cwd_hist_samz = import_gcm('eca_cwd', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r10mm_hist_samz = import_gcm('eca_r10mm', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r20mm_hist_samz = import_gcm('eca_r20mm', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-
-# RCP2.6
 rcm_prcptot_rcp26_samz = import_rcm('eca_prcptot', 'samz', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r95p_rcp26_samz = import_rcm('eca_r95p', 'samz', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r99p_rcp26_samz = import_rcm('eca_r99p', 'samz', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
@@ -106,6 +83,17 @@ rcm_cdd_rcp26_samz = import_rcm('eca_cdd', 'samz', 'RegCM47_had', 'rcp26', 'yr',
 rcm_cwd_rcp26_samz = import_rcm('eca_cwd', 'samz', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r10mm_rcp26_samz = import_rcm('eca_r10mm', 'samz', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r20mm_rcp26_samz = import_rcm('eca_r20mm', 'samz', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+
+rcm_prcptot_rcp85_samz = import_rcm('eca_prcptot', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_r95p_rcp85_samz = import_rcm('eca_r95p', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_r99p_rcp85_samz = import_rcm('eca_r99p', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_rx1day_rcp85_samz = import_rcm('eca_rx1day', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_rx5day_rcp85_samz = import_rcm('eca_rx5day', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_sdii_rcp85_samz = import_rcm('eca_sdii', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_cdd_rcp85_samz = import_rcm('eca_cdd', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_cwd_rcp85_samz = import_rcm('eca_cwd', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_r10mm_rcp85_samz = import_rcm('eca_r10mm', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_r20mm_rcp85_samz = import_rcm('eca_r20mm', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
 
 gcm_prcptot_rcp26_samz = import_gcm('eca_prcptot', 'samz', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
 gcm_r95p_rcp26_samz = import_gcm('eca_r95p', 'samz', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
@@ -118,18 +106,6 @@ gcm_cwd_rcp26_samz = import_gcm('eca_cwd', 'samz', 'HadGEM2-ES', 'rcp26', 'yr', 
 gcm_r10mm_rcp26_samz = import_gcm('eca_r10mm', 'samz', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
 gcm_r20mm_rcp26_samz = import_gcm('eca_r20mm', 'samz', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
 
-# RCP8.5
-rcm_prcptot_rcp85_samz = import_rcm('eca_prcptot', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_r95p_rcp85_samz = import_rcm('eca_r95p', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_r99p_rcp85_samz = import_rcm('eca_r99p', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_rx1day_rcp85_samz = import_rcm('eca_rx1day', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_rx5day_rcp85_samz = import_rcm('eca_rx5day', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_sdii_rcp85_samz = import_rcm('eca_sdii', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_cdd_rcp85_samz = import_rcm('eca_cdd', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_cwd_rcp85_samz = import_rcm('eca_cwd', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_r10mm_rcp85_samz = import_rcm('eca_r10mm', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_r20mm_rcp85_samz = import_rcm('eca_r20mm', 'samz', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-
 gcm_prcptot_rcp85_samz = import_gcm('eca_prcptot', 'samz', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 gcm_r95p_rcp85_samz = import_gcm('eca_r95p', 'samz', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 gcm_r99p_rcp85_samz = import_gcm('eca_r99p', 'samz', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
@@ -139,33 +115,9 @@ gcm_sdii_rcp85_samz = import_gcm('eca_sdii', 'samz', 'HadGEM2-ES', 'rcp85', 'yr'
 gcm_cdd_rcp85_samz = import_gcm('eca_cdd', 'samz', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 gcm_cwd_rcp85_samz = import_gcm('eca_cwd', 'samz', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 gcm_r10mm_rcp85_samz = import_gcm('eca_r10mm', 'samz', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
-gcm_r20mm_rcp85 _samz= import_gcm('eca_r20mm', 'samz', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
+gcm_r20mm_rcp85_samz= import_gcm('eca_r20mm', 'samz', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 
 # ENEB
-# Historical Period
-rcm_prcptot_hist_eneb = import_rcm('eca_prcptot', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r95p_hist_eneb = import_rcm('eca_r95p', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r99p_hist_eneb = import_rcm('eca_r99p', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_rx1day_hist_eneb = import_rcm('eca_rx1day', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_rx5day_hist_eneb = import_rcm('eca_rx5day', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_sdii_hist_eneb = import_rcm('eca_sdii', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_cdd_hist_eneb = import_rcm('eca_cdd', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_cwd_hist_eneb = import_rcm('eca_cwd', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r10mm_hist_eneb = import_rcm('eca_r10mm', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r20mm_hist_eneb = import_rcm('eca_r20mm', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-
-gcm_prcptot_hist_eneb = import_gcm('eca_prcptot', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r95p_hist_eneb = import_gcm('eca_r95p', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r99p_hist_eneb = import_gcm('eca_r99p', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_rx1day_hist_eneb = import_gcm('eca_rx1day', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_rx5day_hist_eneb = import_gcm('eca_rx5day', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_sdii_hist_eneb = import_gcm('eca_sdii', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_cdd_hist_eneb = import_gcm('eca_cdd', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_cwd_hist_eneb = import_gcm('eca_cwd', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r10mm_hist_eneb = import_gcm('eca_r10mm', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r20mm_hist_eneb = import_gcm('eca_r20mm', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-
-# RCP2.6
 rcm_prcptot_rcp26_eneb = import_rcm('eca_prcptot', 'eneb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r95p_rcp26_eneb = import_rcm('eca_r95p', 'eneb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r99p_rcp26_eneb = import_rcm('eca_r99p', 'eneb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
@@ -177,18 +129,6 @@ rcm_cwd_rcp26_eneb = import_rcm('eca_cwd', 'eneb', 'RegCM47_had', 'rcp26', 'yr',
 rcm_r10mm_rcp26_eneb = import_rcm('eca_r10mm', 'eneb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r20mm_rcp26_eneb = import_rcm('eca_r20mm', 'eneb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 
-gcm_prcptot_rcp26_eneb = import_gcm('eca_prcptot', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-gcm_r95p_rcp26_eneb = import_gcm('eca_r95p', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-gcm_r99p_rcp26_eneb = import_gcm('eca_r99p', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-gcm_rx1day_rcp26_eneb = import_gcm('eca_rx1day', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-gcm_rx5day_rcp26_eneb = import_gcm('eca_rx5day', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-gcm_sdii_rcp26_eneb = import_gcm('eca_sdii', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-gcm_cdd_rcp26_eneb = import_gcm('eca_cdd', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-gcm_cwd_rcp26_eneb = import_gcm('eca_cwd', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-gcm_r10mm_rcp26_eneb = import_gcm('eca_r10mm', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-gcm_r20mm_rcp26_eneb = import_gcm('eca_r20mm', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-
-# RCP8.5
 rcm_prcptot_rcp85_eneb = import_rcm('eca_prcptot', 'eneb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
 rcm_r95p_rcp85_eneb = import_rcm('eca_r95p', 'eneb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
 rcm_r99p_rcp85_eneb = import_rcm('eca_r99p', 'eneb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
@@ -199,6 +139,17 @@ rcm_cdd_rcp85_eneb = import_rcm('eca_cdd', 'eneb', 'RegCM47_had', 'rcp85', 'yr',
 rcm_cwd_rcp85_eneb = import_rcm('eca_cwd', 'eneb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
 rcm_r10mm_rcp85_eneb = import_rcm('eca_r10mm', 'eneb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
 rcm_r20mm_rcp85_eneb = import_rcm('eca_r20mm', 'eneb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+
+gcm_prcptot_rcp26_eneb = import_gcm('eca_prcptot', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+gcm_r95p_rcp26_eneb = import_gcm('eca_r95p', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+gcm_r99p_rcp26_eneb = import_gcm('eca_r99p', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+gcm_rx1day_rcp26_eneb = import_gcm('eca_rx1day', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+gcm_rx5day_rcp26_eneb = import_gcm('eca_rx5day', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+gcm_sdii_rcp26_eneb = import_gcm('eca_sdii', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+gcm_cdd_rcp26_eneb = import_gcm('eca_cdd', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+gcm_cwd_rcp26_eneb = import_gcm('eca_cwd', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+gcm_r10mm_rcp26_eneb = import_gcm('eca_r10mm', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+gcm_r20mm_rcp26_eneb = import_gcm('eca_r20mm', 'eneb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
 
 gcm_prcptot_rcp85_eneb = import_gcm('eca_prcptot', 'eneb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 gcm_r95p_rcp85_eneb = import_gcm('eca_r95p', 'eneb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
@@ -212,30 +163,6 @@ gcm_r10mm_rcp85_eneb = import_gcm('eca_r10mm', 'eneb', 'HadGEM2-ES', 'rcp85', 'y
 gcm_r20mm_rcp85_eneb = import_gcm('eca_r20mm', 'eneb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 
 # MATOPIBA
-# Historical Period
-rcm_prcptot_hist_matopiba = import_rcm('eca_prcptot', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r95p_hist_matopiba = import_rcm('eca_r95p', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r99p_hist_matopiba = import_rcm('eca_r99p', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_rx1day_hist_matopiba = import_rcm('eca_rx1day', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_rx5day_hist_matopiba = import_rcm('eca_rx5day', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_sdii_hist_matopiba = import_rcm('eca_sdii', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_cdd_hist_matopiba = import_rcm('eca_cdd', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_cwd_hist_matopiba = import_rcm('eca_cwd', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r10mm_hist_matopiba = import_rcm('eca_r10mm', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-rcm_r20mm_hist_matopiba = import_rcm('eca_r20mm', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-
-gcm_prcptot_hist_matopiba = import_gcm('eca_prcptot', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r95p_hist_matopiba= import_gcm('eca_r95p', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r99p_hist_matopiba = import_gcm('eca_r99p', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_rx1day_hist_matopiba = import_gcm('eca_rx1day', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_rx5day_hist_matopiba = import_gcm('eca_rx5day', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_sdii_hist_matopiba = import_gcm('eca_sdii', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_cdd_hist_matopiba = import_gcm('eca_cdd', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_cwd_hist_matopiba = import_gcm('eca_cwd', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r10mm_hist_matopiba = import_gcm('eca_r10mm', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-gcm_r20mm_hist_matopiba = import_gcm('eca_r20mm', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-
-# RCP2.6
 rcm_prcptot_rcp26_matopiba = import_rcm('eca_prcptot', 'matopiba', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r95p_rcp26_matopiba = import_rcm('eca_r95p', 'matopiba', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r99p_rcp26_matopiba = import_rcm('eca_r99p', 'matopiba', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
@@ -246,6 +173,17 @@ rcm_cdd_rcp26_matopiba = import_rcm('eca_cdd', 'matopiba', 'RegCM47_had', 'rcp26
 rcm_cwd_rcp26_matopiba = import_rcm('eca_cwd', 'matopiba', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r10mm_rcp26_matopiba = import_rcm('eca_r10mm', 'matopiba', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r20mm_rcp26_matopiba = import_rcm('eca_r20mm', 'matopiba', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+
+rcm_prcptot_rcp85_matopiba = import_rcm('eca_prcptot', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_r95p_rcp85_matopiba = import_rcm('eca_r95p', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_r99p_rcp85_matopiba = import_rcm('eca_r99p', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_rx1day_rcp85_matopiba = import_rcm('eca_rx1day', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_rx5day_rcp85_matopiba = import_rcm('eca_rx5day', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_sdii_rcp85_matopiba = import_rcm('eca_sdii', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_cdd_rcp85_matopiba = import_rcm('eca_cdd', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_cwd_rcp85_matopiba = import_rcm('eca_cwd', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_r10mm_rcp85_matopiba = import_rcm('eca_r10mm', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+rcm_r20mm_rcp85_matopiba = import_rcm('eca_r20mm', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
 
 gcm_prcptot_rcp26_matopiba = import_gcm('eca_prcptot', 'matopiba', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
 gcm_r95p_rcp26_matopiba = import_gcm('eca_r95p', 'matopiba', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
@@ -258,18 +196,6 @@ gcm_cwd_rcp26_matopiba = import_gcm('eca_cwd', 'matopiba', 'HadGEM2-ES', 'rcp26'
 gcm_r10mm_rcp26_matopiba = import_gcm('eca_r10mm', 'matopiba', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
 gcm_r20mm_rcp26_matopiba = import_gcm('eca_r20mm', 'matopiba', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
 
-# RCP8.5
-rcm_prcptot_rcp85_matopiba = import_rcm('eca_prcptot', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_r95p_rcp85_matopiba = import_rcm('eca_r95p', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_r99p_rcp85_matopiba = import_rcm('eca_r99p', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_rx1day_rcp85_matopiba = import_rcm('eca_rx1day', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_rx5day_rcp85_matopiba = import_rcm('eca_rx5day', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_sdii_rcp85_matopiba = import_rcm('eca_sdii', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_cdd_rcp85_matopiba = import_rcm('eca_cdd', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_cwd_rcp85_matopiba = import_rcm('eca_cwd', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_r10mm_rcp85_matopiba = import_rcm('eca_r10mm', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-rcm_r20mm_rcp85_matopiba = import_rcm('eca_r20mm', 'matopiba', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-
 gcm_prcptot_rcp85_matopiba = import_gcm('eca_prcptot', 'matopiba', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 gcm_r95p_rcp85_matopiba = import_gcm('eca_r95p', 'matopiba', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 gcm_r99p_rcp85_matopiba = import_gcm('eca_r99p', 'matopiba', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
@@ -281,99 +207,266 @@ gcm_cwd_rcp85_matopiba = import_gcm('eca_cwd', 'matopiba', 'HadGEM2-ES', 'rcp85'
 gcm_r10mm_rcp85_matopiba = import_gcm('eca_r10mm', 'matopiba', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 gcm_r20mm_rcp85_matopiba = import_gcm('eca_r20mm', 'matopiba', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 
-# Plot correlation matrix 
-fig = plt.figure()
-time1 = np.arange(1, 11)
-time2 = np.arange(1, 12)
-bar_width = .25
+rcm_rcp26_samz = {'PRCPTOT': rcm_prcptot_rcp26_samz,
+'R95p': rcm_r95p_rcp26_samz,
+'R99p': rcm_r99p_rcp26_samz,
+'Rx1day': rcm_rx1day_rcp26_samz,
+'Rx5day': rcm_rx5day_rcp26_samz,
+'SDII': rcm_sdii_rcp26_samz,
+'CDD': rcm_cdd_rcp26_samz,
+'CWD': rcm_cwd_rcp26_samz, 
+'R10mm': rcm_r10mm_rcp26_samz,
+'R20mm': rcm_r20mm_rcp26_samz}
 
-ax1 = fig.add_subplot(3, 2, 1)
-ax1.spines['right'].set_visible(False)
-ax1.spines['top'].set_visible(False)
-ax1.spines['bottom'].set_visible(False)
-plt_clim1 = plt.bar(time1, ivs_rcm_samz_pre, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time1 + .25, ivs_gcm_samz_pre,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'A)', loc='left', fontweight='bold', fontsize=8)
-plt.ylim(0, 8)
-plt.xticks(time1 + .12, ('PRCPTOT', 'R95p', 'R99p', 'Rx1day', 'Rx5day', 'SDII', 'CDD', 'CWD', 'R10mm', 'R20mm'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
+rcm_rcp85_samz = {'PRCPTOT': rcm_prcptot_rcp85_samz,
+'R95p': rcm_r95p_rcp85_samz,
+'R99p': rcm_r99p_rcp85_samz,
+'Rx1day': rcm_rx1day_rcp85_samz,
+'Rx5day': rcm_rx5day_rcp85_samz,
+'SDII': rcm_sdii_rcp85_samz,
+'CDD': rcm_cdd_rcp85_samz,
+'CWD': rcm_cwd_rcp85_samz, 
+'R10mm': rcm_r10mm_rcp85_samz,
+'R20mm': rcm_r20mm_rcp85_samz}
+
+gcm_rcp26_samz = {'PRCPTOT': gcm_prcptot_rcp26_samz,
+'R95p': gcm_r95p_rcp26_samz,
+'R99p': gcm_r99p_rcp26_samz,
+'Rx1day': gcm_rx1day_rcp26_samz,
+'Rx5day': gcm_rx5day_rcp26_samz,
+'SDII': gcm_sdii_rcp26_samz,
+'CDD': gcm_cdd_rcp26_samz,
+'CWD': gcm_cwd_rcp26_samz, 
+'R10mm': gcm_r10mm_rcp26_samz,
+'R20mm': gcm_r20mm_rcp26_samz}
+
+gcm_rcp85_samz = {'PRCPTOT': gcm_prcptot_rcp85_samz,
+'R95p': gcm_r95p_rcp85_samz,
+'R99p': gcm_r99p_rcp85_samz,
+'Rx1day': gcm_rx1day_rcp85_samz,
+'Rx5day': gcm_rx5day_rcp85_samz,
+'SDII': gcm_sdii_rcp85_samz,
+'CDD': gcm_cdd_rcp85_samz,
+'CWD': gcm_cwd_rcp85_samz, 
+'R10mm': gcm_r10mm_rcp85_samz,
+'R20mm': gcm_r20mm_rcp85_samz}
+
+rcm_rcp26_eneb = {'PRCPTOT': rcm_prcptot_rcp26_eneb,
+'R95p': rcm_r95p_rcp26_eneb,
+'R99p': rcm_r99p_rcp26_eneb,
+'Rx1day': rcm_rx1day_rcp26_eneb,
+'Rx5day': rcm_rx5day_rcp26_eneb,
+'SDII': rcm_sdii_rcp26_eneb,
+'CDD': rcm_cdd_rcp26_eneb,
+'CWD': rcm_cwd_rcp26_eneb, 
+'R10mm': rcm_r10mm_rcp26_eneb,
+'R20mm': rcm_r20mm_rcp26_eneb}
+
+rcm_rcp85_eneb = {'PRCPTOT': rcm_prcptot_rcp85_eneb,
+'R95p': rcm_r95p_rcp85_eneb,
+'R99p': rcm_r99p_rcp85_eneb,
+'Rx1day': rcm_rx1day_rcp85_eneb,
+'Rx5day': rcm_rx5day_rcp85_eneb,
+'SDII': rcm_sdii_rcp85_eneb,
+'CDD': rcm_cdd_rcp85_eneb,
+'CWD': rcm_cwd_rcp85_eneb, 
+'R10mm': rcm_r10mm_rcp85_eneb,
+'R20mm': rcm_r20mm_rcp85_eneb}
+
+gcm_rcp26_eneb = {'PRCPTOT': gcm_prcptot_rcp26_eneb,
+'R95p': gcm_r95p_rcp26_eneb,
+'R99p': gcm_r99p_rcp26_eneb,
+'Rx1day': gcm_rx1day_rcp26_eneb,
+'Rx5day': gcm_rx5day_rcp26_eneb,
+'SDII': gcm_sdii_rcp26_eneb,
+'CDD': gcm_cdd_rcp26_eneb,
+'CWD': gcm_cwd_rcp26_eneb, 
+'R10mm': gcm_r10mm_rcp26_eneb,
+'R20mm': gcm_r20mm_rcp26_eneb}
+
+gcm_rcp85_eneb = {'PRCPTOT': gcm_prcptot_rcp85_eneb,
+'R95p': gcm_r95p_rcp85_eneb,
+'R99p': gcm_r99p_rcp85_eneb,
+'Rx1day': gcm_rx1day_rcp85_eneb,
+'Rx5day': gcm_rx5day_rcp85_eneb,
+'SDII': gcm_sdii_rcp85_eneb,
+'CDD': gcm_cdd_rcp85_eneb,
+'CWD': gcm_cwd_rcp85_eneb, 
+'R10mm': gcm_r10mm_rcp85_eneb,
+'R20mm': gcm_r20mm_rcp85_eneb}
+
+rcm_rcp26_matopiba = {'PRCPTOT': rcm_prcptot_rcp26_matopiba,
+'R95p': rcm_r95p_rcp26_matopiba,
+'R99p': rcm_r99p_rcp26_matopiba,
+'Rx1day': rcm_rx1day_rcp26_matopiba,
+'Rx5day': rcm_rx5day_rcp26_matopiba,
+'SDII': rcm_sdii_rcp26_matopiba,
+'CDD': rcm_cdd_rcp26_matopiba,
+'CWD': rcm_cwd_rcp26_matopiba, 
+'R10mm': rcm_r10mm_rcp26_matopiba,
+'R20mm': rcm_r20mm_rcp26_matopiba}
+
+rcm_rcp85_matopiba = {'PRCPTOT': rcm_prcptot_rcp85_matopiba,
+'R95p': rcm_r95p_rcp85_matopiba,
+'R99p': rcm_r99p_rcp85_matopiba,
+'Rx1day': rcm_rx1day_rcp85_matopiba,
+'Rx5day': rcm_rx5day_rcp85_matopiba,
+'SDII': rcm_sdii_rcp85_matopiba,
+'CDD': rcm_cdd_rcp85_matopiba,
+'CWD': rcm_cwd_rcp85_matopiba, 
+'R10mm': rcm_r10mm_rcp85_matopiba,
+'R20mm': rcm_r20mm_rcp85_matopiba}
+
+gcm_rcp26_matopiba = {'PRCPTOT': gcm_prcptot_rcp26_matopiba,
+'R95p': gcm_r95p_rcp26_matopiba,
+'R99p': gcm_r99p_rcp26_matopiba,
+'Rx1day': gcm_rx1day_rcp26_matopiba,
+'Rx5day': gcm_rx5day_rcp26_matopiba,
+'SDII': gcm_sdii_rcp26_matopiba,
+'CDD': gcm_cdd_rcp26_matopiba,
+'CWD': gcm_cwd_rcp26_matopiba, 
+'R10mm': gcm_r10mm_rcp26_matopiba,
+'R20mm': gcm_r20mm_rcp26_matopiba}
+
+gcm_rcp85_matopiba = {'PRCPTOT': gcm_prcptot_rcp85_matopiba,
+'R95p': gcm_r95p_rcp85_matopiba,
+'R99p': gcm_r99p_rcp85_matopiba,
+'Rx1day': gcm_rx1day_rcp85_matopiba,
+'Rx5day': gcm_rx5day_rcp85_matopiba,
+'SDII': gcm_sdii_rcp85_matopiba,
+'CDD': gcm_cdd_rcp85_matopiba,
+'CWD': gcm_cwd_rcp85_matopiba, 
+'R10mm': gcm_r10mm_rcp85_matopiba,
+'R20mm': gcm_r20mm_rcp85_matopiba}
+
+rcm_rcp26_samz = pd.DataFrame(rcm_rcp26_samz,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+rcm_rcp85_samz = pd.DataFrame(rcm_rcp85_samz,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+#~ gcm_rcp26_samz = pd.DataFrame(gcm_rcp26_samz,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+gcm_rcp85_samz = pd.DataFrame(gcm_rcp85_samz,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+
+rcm_rcp26_eneb = pd.DataFrame(rcm_rcp26_eneb,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+rcm_rcp85_eneb = pd.DataFrame(rcm_rcp85_eneb,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+#~ gcm_rcp26_eneb = pd.DataFrame(gcm_rcp26_eneb,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+gcm_rcp85_eneb = pd.DataFrame(gcm_rcp85_eneb,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+
+rcm_rcp26_matopiba = pd.DataFrame(rcm_rcp26_matopiba,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+rcm_rcp85_matopiba = pd.DataFrame(rcm_rcp85_matopiba,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+#~ gcm_rcp26_matopiba = pd.DataFrame(gcm_rcp26_matopiba,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+gcm_rcp85_matopiba = pd.DataFrame(gcm_rcp85_matopiba,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+
+rcm_rcp26_samz_corr = rcm_rcp26_samz.corr()
+rcm_rcp85_samz_corr = rcm_rcp85_samz.corr()
+#~ gcm_rcp26_samz_corr = gcm_rcp26_samz.corr()
+gcm_rcp85_samz_corr = gcm_rcp85_samz.corr()
+
+rcm_rcp26_eneb_corr = rcm_rcp26_eneb.corr()
+rcm_rcp85_eneb_corr = rcm_rcp85_eneb.corr()
+#~ gcm_rcp26_eneb_corr = gcm_rcp26_eneb.corr()
+gcm_rcp85_eneb_corr = gcm_rcp85_eneb.corr()
+
+rcm_rcp26_matopiba_corr = rcm_rcp26_matopiba.corr()
+rcm_rcp85_matopiba_corr = rcm_rcp85_matopiba.corr()
+#~ gcm_rcp26_matopiba_corr = gcm_rcp26_matopiba.corr()
+gcm_rcp85_matopiba_corr = gcm_rcp85_matopiba.corr()
+
+# Plot correlation matrix 
+fig = plt.figure(figsize=(9, 10))
+
+ax1 = fig.add_subplot(4, 3, 1)
+mask = np.zeros_like(rcm_rcp26_samz_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(rcm_rcp26_samz_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax1)
+heatmap.set_title('A)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
 plt.setp(ax1.get_xticklabels(), visible=False)
 
-ax2 = fig.add_subplot(3, 2, 2)
-ax2.spines['right'].set_visible(False)
-ax2.spines['top'].set_visible(False)
-ax2.spines['bottom'].set_visible(False)
-plt_clim1 = plt.bar(time2, ivs_rcm_samz_tas, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time2 + .25, ivs_gcm_samz_tas,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'D)', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Value of IVS', fontsize=8)
-plt.ylim(0, 8)
-plt.xticks(time2 + .12, ('TXX', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'Tx10p', 'Tx90p', 'Tn10p', 'Tn90p'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
+ax2 = fig.add_subplot(4, 3, 2)
+mask = np.zeros_like(rcm_rcp26_eneb_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(rcm_rcp26_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax2)
+heatmap.set_title('B)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
 plt.setp(ax2.get_xticklabels(), visible=False)
-plt.legend(fontsize=8, shadow=True, ncol=1, handlelength=0.75, handleheight=0.75)
+plt.setp(ax2.get_yticklabels(), visible=False)
 
-ax3 = fig.add_subplot(3, 2, 3)
-ax3.spines['right'].set_visible(False)
-ax3.spines['top'].set_visible(False)
-ax3.spines['bottom'].set_visible(False)
-plt_clim1 = plt.bar(time1, ivs_rcm_eneb_pre, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time1 + .25, ivs_gcm_eneb_pre,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'B)', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Value of IVS', fontsize=8)
-plt.ylim(0, 8)
-plt.xticks(time1 + .12, ('PRCPTOT', 'R95p', 'R99p', 'Rx1day', 'Rx5day', 'SDII', 'CDD', 'CWD', 'R10mm', 'R20mm'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
+ax3 = fig.add_subplot(4, 3, 3)
+mask = np.zeros_like(rcm_rcp26_matopiba_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(rcm_rcp26_matopiba_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax3)
+heatmap.set_title('C)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
 plt.setp(ax3.get_xticklabels(), visible=False)
+plt.setp(ax3.get_yticklabels(), visible=False)
 
-ax4 = fig.add_subplot(3, 2, 4)
-ax4.spines['right'].set_visible(False)
-ax4.spines['top'].set_visible(False)
-ax4.spines['bottom'].set_visible(False)
-plt_clim1 = plt.bar(time2, ivs_rcm_eneb_tas, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time2 + .25, ivs_gcm_eneb_tas,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'E)', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Value of IVS', fontsize=8)
-plt.ylim(0, 8)
-plt.xticks(time2 + .12, ('TXX', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'Tx10p', 'Tx90p', 'Tn10p', 'Tn90p'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
+ax4 = fig.add_subplot(4, 3, 4)
+mask = np.zeros_like(rcm_rcp85_samz_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(rcm_rcp85_samz_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax4)
+heatmap.set_title('D)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
 plt.setp(ax4.get_xticklabels(), visible=False)
 
-ax5 = fig.add_subplot(3, 2, 5)
-ax5.spines['right'].set_visible(False)
-ax5.spines['top'].set_visible(False)
-ax5.spines['bottom'].set_visible(False)
-plt_clim1 = plt.bar(time1, ivs_rcm_matopiba_pre, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time1 + .25, ivs_gcm_matopiba_pre,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'C)', loc='left', fontweight='bold', fontsize=8)
-plt.ylim(0, 8)
-plt.xticks(time1 + .12, ('PRCPTOT', 'R95p', 'R99p', 'Rx1day', 'Rx5day', 'SDII', 'CDD', 'CWD', 'R10mm', 'R20mm'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
-labels = ax5.get_xticklabels()
-plt.setp(labels, rotation=90)
+ax5 = fig.add_subplot(4, 3, 5)
+mask = np.zeros_like(rcm_rcp85_eneb_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(rcm_rcp85_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax5)
+heatmap.set_title('E)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+plt.setp(ax5.get_xticklabels(), visible=False)
+plt.setp(ax5.get_yticklabels(), visible=False)
 
-ax6 = fig.add_subplot(3, 2, 6)
-ax6.spines['right'].set_visible(False)
-ax6.spines['top'].set_visible(False)
-ax6.spines['bottom'].set_visible(False)
-plt_clim1 = plt.bar(time2, ivs_rcm_matopiba_tas, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time2 + .25, ivs_gcm_matopiba_tas,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'F)', loc='left', fontweight='bold', fontsize=8)
-plt.ylim(0, 8)
-plt.xticks(time2 + .12, ('TXX', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'Tx10p', 'Tx90p', 'Tn10p', 'Tn90p'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
-labels = ax6.get_xticklabels()
-plt.setp(labels, rotation=90)
+ax6 = fig.add_subplot(4, 3, 6)
+mask = np.zeros_like(rcm_rcp85_matopiba_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(rcm_rcp85_matopiba_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax6)
+heatmap.set_title('F)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+plt.setp(ax6.get_xticklabels(), visible=False)
+plt.setp(ax6.get_yticklabels(), visible=False)
+
+ax7 = fig.add_subplot(4, 3, 7)
+mask = np.zeros_like(rcm_rcp26_eneb_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(rcm_rcp26_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax7)
+heatmap.set_title('G)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+plt.setp(ax7.get_xticklabels(), visible=False)
+
+ax8 = fig.add_subplot(4, 3, 8)
+mask = np.zeros_like(rcm_rcp26_eneb_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(rcm_rcp26_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax8)
+heatmap.set_title('H)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+plt.setp(ax8.get_xticklabels(), visible=False)
+plt.setp(ax8.get_yticklabels(), visible=False)
+
+ax9 = fig.add_subplot(4, 3, 9)
+mask = np.zeros_like(rcm_rcp26_matopiba_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(rcm_rcp26_matopiba_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax9)
+heatmap.set_title('I)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+plt.setp(ax9.get_xticklabels(), visible=False)
+plt.setp(ax9.get_yticklabels(), visible=False)
+
+ax10 = fig.add_subplot(4, 3, 10)
+mask = np.zeros_like(gcm_rcp85_samz_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(gcm_rcp85_samz_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax10)
+heatmap.set_title('J)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+
+ax11 = fig.add_subplot(4, 3, 11)
+mask = np.zeros_like(gcm_rcp85_eneb_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(gcm_rcp85_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax11)
+heatmap.set_title('K)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+plt.setp(ax11.get_yticklabels(), visible=False)
+
+ax12 = fig.add_subplot(4, 3, 12)
+mask = np.zeros_like(gcm_rcp85_matopiba_corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+heatmap = sns.heatmap(gcm_rcp85_matopiba_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax12)
+heatmap.set_title('L)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+plt.setp(ax12.get_yticklabels(), visible=False)
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_ivs_etccdi_reg_had_obs_1986-2005.png'
+name_out = 'pyplt_matrix_corr_etccdi_pre_reg_had_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-
-plt.show()
-exit()	
 
 plt.close('all')
 plt.cla()
