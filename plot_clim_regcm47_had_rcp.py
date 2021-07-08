@@ -7,7 +7,6 @@ __description__ = "This script plot annual cycle graphics from Reg and Had model
 
 import os
 import netCDF4
-import statistics
 import numpy as np
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
@@ -18,8 +17,9 @@ import scipy.stats
 
 from pylab import *
 from netCDF4 import Dataset
-from scipy.stats import norm
 from scipy.stats import t
+from scipy.stats import norm
+from comp_statist_indices import compute_relative_change
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 	
 
@@ -76,8 +76,19 @@ def import_gcm(var, area, exp, dt):
 	
 	return gcm, ci_p5, ci_p95
 	
- 
-def comp_diff_rcp_hist(rcp, hist):
+
+def comp_diff_rcp_hist_pre(rcp, hist):
+	
+	rc_rcp_hist = []
+	for mon in range(0, 12):
+		p1 = (rcp[mon] - hist[mon]) / hist[mon]
+		p2 = p1 * 100
+		rc_rcp_hist.append(p2)
+	
+	return rc_rcp_hist
+
+    
+def comp_diff_rcp_hist_tas(rcp, hist):
 	
 	diff_rcp_hist = []
 	for mon in range(0, 12):
@@ -133,84 +144,84 @@ tas_reg_matopiba_rcp85, tas_reg_matopiba_rcp85_p5, tas_reg_matopiba_rcp85_p95 = 
 tas_had_matopiba_rcp85, tas_had_matopiba_rcp85_p5, tas_had_matopiba_rcp85_p95 = import_gcm('tas', 'matopiba', 'rcp85', '2080-2099')
 
 # Compute difference rcp - hist
-diff_pre_reg_samz_rcp26_hist = comp_diff_rcp_hist(pre_reg_samz_rcp26, pre_reg_samz_hist)
-diff_pre_reg_samz_rcp85_hist = comp_diff_rcp_hist(pre_reg_samz_rcp85, pre_reg_samz_hist)
-diff_pre_had_samz_rcp26_hist = comp_diff_rcp_hist(pre_had_samz_rcp26, pre_had_samz_hist)
-diff_pre_had_samz_rcp85_hist = comp_diff_rcp_hist(pre_had_samz_rcp85, pre_had_samz_hist)
-diff_pre_reg_samz_rcp26_hist_p5 = comp_diff_rcp_hist(pre_reg_samz_rcp26_p5, pre_reg_samz_hist_p5)
-diff_pre_reg_samz_rcp85_hist_p5 = comp_diff_rcp_hist(pre_reg_samz_rcp85_p5, pre_reg_samz_hist_p5)
-diff_pre_had_samz_rcp26_hist_p5 = comp_diff_rcp_hist(pre_had_samz_rcp26_p5, pre_had_samz_hist_p5)
-diff_pre_had_samz_rcp85_hist_p5 = comp_diff_rcp_hist(pre_had_samz_rcp85_p5, pre_had_samz_hist_p5)
-diff_pre_reg_samz_rcp26_hist_p95 = comp_diff_rcp_hist(pre_reg_samz_rcp26_p95, pre_reg_samz_hist_p95)
-diff_pre_reg_samz_rcp85_hist_p95 = comp_diff_rcp_hist(pre_reg_samz_rcp85_p95, pre_reg_samz_hist_p95)
-diff_pre_had_samz_rcp26_hist_p95 = comp_diff_rcp_hist(pre_had_samz_rcp26_p95, pre_had_samz_hist_p95)
-diff_pre_had_samz_rcp85_hist_p95 = comp_diff_rcp_hist(pre_had_samz_rcp85_p95, pre_had_samz_hist_p95)
+diff_pre_reg_samz_rcp26_hist = comp_diff_rcp_hist_pre(pre_reg_samz_rcp26, pre_reg_samz_hist)
+diff_pre_reg_samz_rcp85_hist = comp_diff_rcp_hist_pre(pre_reg_samz_rcp85, pre_reg_samz_hist)
+diff_pre_had_samz_rcp26_hist = comp_diff_rcp_hist_pre(pre_had_samz_rcp26, pre_had_samz_hist)
+diff_pre_had_samz_rcp85_hist = comp_diff_rcp_hist_pre(pre_had_samz_rcp85, pre_had_samz_hist)
+diff_pre_reg_samz_rcp26_hist_p5 = comp_diff_rcp_hist_pre(pre_reg_samz_rcp26_p5, pre_reg_samz_hist_p5)
+diff_pre_reg_samz_rcp85_hist_p5 = comp_diff_rcp_hist_pre(pre_reg_samz_rcp85_p5, pre_reg_samz_hist_p5)
+diff_pre_had_samz_rcp26_hist_p5 = comp_diff_rcp_hist_pre(pre_had_samz_rcp26_p5, pre_had_samz_hist_p5)
+diff_pre_had_samz_rcp85_hist_p5 = comp_diff_rcp_hist_pre(pre_had_samz_rcp85_p5, pre_had_samz_hist_p5)
+diff_pre_reg_samz_rcp26_hist_p95 = comp_diff_rcp_hist_pre(pre_reg_samz_rcp26_p95, pre_reg_samz_hist_p95)
+diff_pre_reg_samz_rcp85_hist_p95 = comp_diff_rcp_hist_pre(pre_reg_samz_rcp85_p95, pre_reg_samz_hist_p95)
+diff_pre_had_samz_rcp26_hist_p95 = comp_diff_rcp_hist_pre(pre_had_samz_rcp26_p95, pre_had_samz_hist_p95)
+diff_pre_had_samz_rcp85_hist_p95 = comp_diff_rcp_hist_pre(pre_had_samz_rcp85_p95, pre_had_samz_hist_p95)
 
-diff_pre_reg_eneb_rcp26_hist = comp_diff_rcp_hist(pre_reg_eneb_rcp26, pre_reg_eneb_hist)
-diff_pre_reg_eneb_rcp85_hist = comp_diff_rcp_hist(pre_reg_eneb_rcp85, pre_reg_eneb_hist)
-diff_pre_had_eneb_rcp26_hist = comp_diff_rcp_hist(pre_had_eneb_rcp26, pre_had_eneb_hist)
-diff_pre_had_eneb_rcp85_hist = comp_diff_rcp_hist(pre_had_eneb_rcp85, pre_had_eneb_hist)
-diff_pre_reg_eneb_rcp26_hist_p5 = comp_diff_rcp_hist(pre_reg_eneb_rcp26_p5, pre_reg_eneb_hist_p5)
-diff_pre_reg_eneb_rcp85_hist_p5 = comp_diff_rcp_hist(pre_reg_eneb_rcp85_p5, pre_reg_eneb_hist_p5)
-diff_pre_had_eneb_rcp26_hist_p5 = comp_diff_rcp_hist(pre_had_eneb_rcp26_p5, pre_had_eneb_hist_p5)
-diff_pre_had_eneb_rcp85_hist_p5 = comp_diff_rcp_hist(pre_had_eneb_rcp85_p5, pre_had_eneb_hist_p5)
-diff_pre_reg_eneb_rcp26_hist_p95 = comp_diff_rcp_hist(pre_reg_eneb_rcp26_p95, pre_reg_eneb_hist_p95)
-diff_pre_reg_eneb_rcp85_hist_p95 = comp_diff_rcp_hist(pre_reg_eneb_rcp85_p95, pre_reg_eneb_hist_p95)
-diff_pre_had_eneb_rcp26_hist_p95 = comp_diff_rcp_hist(pre_had_eneb_rcp26_p95, pre_had_eneb_hist_p95)
-diff_pre_had_eneb_rcp85_hist_p95 = comp_diff_rcp_hist(pre_had_eneb_rcp85_p95, pre_had_eneb_hist_p95)
+diff_pre_reg_eneb_rcp26_hist = comp_diff_rcp_hist_pre(pre_reg_eneb_rcp26, pre_reg_eneb_hist)
+diff_pre_reg_eneb_rcp85_hist = comp_diff_rcp_hist_pre(pre_reg_eneb_rcp85, pre_reg_eneb_hist)
+diff_pre_had_eneb_rcp26_hist = comp_diff_rcp_hist_pre(pre_had_eneb_rcp26, pre_had_eneb_hist)
+diff_pre_had_eneb_rcp85_hist = comp_diff_rcp_hist_pre(pre_had_eneb_rcp85, pre_had_eneb_hist)
+diff_pre_reg_eneb_rcp26_hist_p5 = comp_diff_rcp_hist_pre(pre_reg_eneb_rcp26_p5, pre_reg_eneb_hist_p5)
+diff_pre_reg_eneb_rcp85_hist_p5 = comp_diff_rcp_hist_pre(pre_reg_eneb_rcp85_p5, pre_reg_eneb_hist_p5)
+diff_pre_had_eneb_rcp26_hist_p5 = comp_diff_rcp_hist_pre(pre_had_eneb_rcp26_p5, pre_had_eneb_hist_p5)
+diff_pre_had_eneb_rcp85_hist_p5 = comp_diff_rcp_hist_pre(pre_had_eneb_rcp85_p5, pre_had_eneb_hist_p5)
+diff_pre_reg_eneb_rcp26_hist_p95 = comp_diff_rcp_hist_pre(pre_reg_eneb_rcp26_p95, pre_reg_eneb_hist_p95)
+diff_pre_reg_eneb_rcp85_hist_p95 = comp_diff_rcp_hist_pre(pre_reg_eneb_rcp85_p95, pre_reg_eneb_hist_p95)
+diff_pre_had_eneb_rcp26_hist_p95 = comp_diff_rcp_hist_pre(pre_had_eneb_rcp26_p95, pre_had_eneb_hist_p95)
+diff_pre_had_eneb_rcp85_hist_p95 = comp_diff_rcp_hist_pre(pre_had_eneb_rcp85_p95, pre_had_eneb_hist_p95)
 
-diff_pre_reg_matopiba_rcp26_hist = comp_diff_rcp_hist(pre_reg_matopiba_rcp26, pre_reg_matopiba_hist)
-diff_pre_reg_matopiba_rcp85_hist = comp_diff_rcp_hist(pre_reg_matopiba_rcp85, pre_reg_matopiba_hist)
-diff_pre_had_matopiba_rcp26_hist = comp_diff_rcp_hist(pre_had_matopiba_rcp26, pre_had_matopiba_hist)
-diff_pre_had_matopiba_rcp85_hist = comp_diff_rcp_hist(pre_had_matopiba_rcp85, pre_had_matopiba_hist)
-diff_pre_reg_matopiba_rcp26_hist_p5 = comp_diff_rcp_hist(pre_reg_matopiba_rcp26_p5, pre_reg_matopiba_hist_p5)
-diff_pre_reg_matopiba_rcp85_hist_p5 = comp_diff_rcp_hist(pre_reg_matopiba_rcp85_p5, pre_reg_matopiba_hist_p5)
-diff_pre_had_matopiba_rcp26_hist_p5 = comp_diff_rcp_hist(pre_had_matopiba_rcp26_p5, pre_had_matopiba_hist_p5)
-diff_pre_had_matopiba_rcp85_hist_p5 = comp_diff_rcp_hist(pre_had_matopiba_rcp85_p5, pre_had_matopiba_hist_p5)
-diff_pre_reg_matopiba_rcp26_hist_p95 = comp_diff_rcp_hist(pre_reg_matopiba_rcp26_p95, pre_reg_matopiba_hist_p95)
-diff_pre_reg_matopiba_rcp85_hist_p95 = comp_diff_rcp_hist(pre_reg_matopiba_rcp85_p95, pre_reg_matopiba_hist_p95)
-diff_pre_had_matopiba_rcp26_hist_p95 = comp_diff_rcp_hist(pre_had_matopiba_rcp26_p95, pre_had_matopiba_hist_p95)
-diff_pre_had_matopiba_rcp85_hist_p95 = comp_diff_rcp_hist(pre_had_matopiba_rcp85_p95, pre_had_matopiba_hist_p95)
+diff_pre_reg_matopiba_rcp26_hist = comp_diff_rcp_hist_pre(pre_reg_matopiba_rcp26, pre_reg_matopiba_hist)
+diff_pre_reg_matopiba_rcp85_hist = comp_diff_rcp_hist_pre(pre_reg_matopiba_rcp85, pre_reg_matopiba_hist)
+diff_pre_had_matopiba_rcp26_hist = comp_diff_rcp_hist_pre(pre_had_matopiba_rcp26, pre_had_matopiba_hist)
+diff_pre_had_matopiba_rcp85_hist = comp_diff_rcp_hist_pre(pre_had_matopiba_rcp85, pre_had_matopiba_hist)
+diff_pre_reg_matopiba_rcp26_hist_p5 = comp_diff_rcp_hist_pre(pre_reg_matopiba_rcp26_p5, pre_reg_matopiba_hist_p5)
+diff_pre_reg_matopiba_rcp85_hist_p5 = comp_diff_rcp_hist_pre(pre_reg_matopiba_rcp85_p5, pre_reg_matopiba_hist_p5)
+diff_pre_had_matopiba_rcp26_hist_p5 = comp_diff_rcp_hist_pre(pre_had_matopiba_rcp26_p5, pre_had_matopiba_hist_p5)
+diff_pre_had_matopiba_rcp85_hist_p5 = comp_diff_rcp_hist_pre(pre_had_matopiba_rcp85_p5, pre_had_matopiba_hist_p5)
+diff_pre_reg_matopiba_rcp26_hist_p95 = comp_diff_rcp_hist_pre(pre_reg_matopiba_rcp26_p95, pre_reg_matopiba_hist_p95)
+diff_pre_reg_matopiba_rcp85_hist_p95 = comp_diff_rcp_hist_pre(pre_reg_matopiba_rcp85_p95, pre_reg_matopiba_hist_p95)
+diff_pre_had_matopiba_rcp26_hist_p95 = comp_diff_rcp_hist_pre(pre_had_matopiba_rcp26_p95, pre_had_matopiba_hist_p95)
+diff_pre_had_matopiba_rcp85_hist_p95 = comp_diff_rcp_hist_pre(pre_had_matopiba_rcp85_p95, pre_had_matopiba_hist_p95)
 
 # Temperature
-diff_tas_reg_samz_rcp26_hist = comp_diff_rcp_hist(np.nanmean(tas_reg_samz_rcp26, axis=1), np.nanmean(tas_reg_samz_hist, axis=1))
-diff_tas_reg_samz_rcp85_hist = comp_diff_rcp_hist(np.nanmean(tas_reg_samz_rcp85, axis=1), np.nanmean(tas_reg_samz_hist, axis=1))
-diff_tas_had_samz_rcp26_hist = comp_diff_rcp_hist(tas_had_samz_rcp26, tas_had_samz_hist)
-diff_tas_had_samz_rcp85_hist = comp_diff_rcp_hist(tas_had_samz_rcp85, tas_had_samz_hist)
-diff_tas_reg_samz_rcp26_hist_p5 = comp_diff_rcp_hist(np.nanmean(tas_reg_samz_rcp26_p5, axis=1), np.nanmean(tas_reg_samz_hist_p5, axis=1))
-diff_tas_reg_samz_rcp85_hist_p5 = comp_diff_rcp_hist(np.nanmean(tas_reg_samz_rcp85_p5, axis=1), np.nanmean(tas_reg_samz_hist_p5, axis=1))
-diff_tas_had_samz_rcp26_hist_p5 = comp_diff_rcp_hist(tas_had_samz_rcp26_p5, tas_had_samz_hist_p5)
-diff_tas_had_samz_rcp85_hist_p5 = comp_diff_rcp_hist(tas_had_samz_rcp85_p5, tas_had_samz_hist_p5)
-diff_tas_reg_samz_rcp26_hist_p95 = comp_diff_rcp_hist(np.nanmean(tas_reg_samz_rcp26_p95, axis=1), np.nanmean(tas_reg_samz_hist_p95, axis=1))
-diff_tas_reg_samz_rcp85_hist_p95 = comp_diff_rcp_hist(np.nanmean(tas_reg_samz_rcp85_p95, axis=1), np.nanmean(tas_reg_samz_hist_p95, axis=1))
-diff_tas_had_samz_rcp26_hist_p95 = comp_diff_rcp_hist(tas_had_samz_rcp26_p95, tas_had_samz_hist_p95)
-diff_tas_had_samz_rcp85_hist_p95 = comp_diff_rcp_hist(tas_had_samz_rcp85_p95, tas_had_samz_hist_p95)
+diff_tas_reg_samz_rcp26_hist = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_samz_rcp26, axis=1), np.nanmean(tas_reg_samz_hist, axis=1))
+diff_tas_reg_samz_rcp85_hist = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_samz_rcp85, axis=1), np.nanmean(tas_reg_samz_hist, axis=1))
+diff_tas_had_samz_rcp26_hist = comp_diff_rcp_hist_tas(tas_had_samz_rcp26, tas_had_samz_hist)
+diff_tas_had_samz_rcp85_hist = comp_diff_rcp_hist_tas(tas_had_samz_rcp85, tas_had_samz_hist)
+diff_tas_reg_samz_rcp26_hist_p5 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_samz_rcp26_p5, axis=1), np.nanmean(tas_reg_samz_hist_p5, axis=1))
+diff_tas_reg_samz_rcp85_hist_p5 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_samz_rcp85_p5, axis=1), np.nanmean(tas_reg_samz_hist_p5, axis=1))
+diff_tas_had_samz_rcp26_hist_p5 = comp_diff_rcp_hist_tas(tas_had_samz_rcp26_p5, tas_had_samz_hist_p5)
+diff_tas_had_samz_rcp85_hist_p5 = comp_diff_rcp_hist_tas(tas_had_samz_rcp85_p5, tas_had_samz_hist_p5)
+diff_tas_reg_samz_rcp26_hist_p95 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_samz_rcp26_p95, axis=1), np.nanmean(tas_reg_samz_hist_p95, axis=1))
+diff_tas_reg_samz_rcp85_hist_p95 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_samz_rcp85_p95, axis=1), np.nanmean(tas_reg_samz_hist_p95, axis=1))
+diff_tas_had_samz_rcp26_hist_p95 = comp_diff_rcp_hist_tas(tas_had_samz_rcp26_p95, tas_had_samz_hist_p95)
+diff_tas_had_samz_rcp85_hist_p95 = comp_diff_rcp_hist_tas(tas_had_samz_rcp85_p95, tas_had_samz_hist_p95)
 
-diff_tas_reg_eneb_rcp26_hist = comp_diff_rcp_hist(np.nanmean(tas_reg_eneb_rcp26, axis=1), np.nanmean(tas_reg_eneb_hist, axis=1))
-diff_tas_reg_eneb_rcp85_hist = comp_diff_rcp_hist(np.nanmean(tas_reg_eneb_rcp85, axis=1), np.nanmean(tas_reg_eneb_hist, axis=1))
-diff_tas_had_eneb_rcp26_hist = comp_diff_rcp_hist(tas_had_eneb_rcp26, tas_had_eneb_hist)
-diff_tas_had_eneb_rcp85_hist = comp_diff_rcp_hist(tas_had_eneb_rcp85, tas_had_eneb_hist)
-diff_tas_reg_eneb_rcp26_hist_p5 = comp_diff_rcp_hist(np.nanmean(tas_reg_eneb_rcp26_p5, axis=1), np.nanmean(tas_reg_eneb_hist_p5, axis=1))
-diff_tas_reg_eneb_rcp85_hist_p5 = comp_diff_rcp_hist(np.nanmean(tas_reg_eneb_rcp85_p5, axis=1), np.nanmean(tas_reg_eneb_hist_p5, axis=1))
-diff_tas_had_eneb_rcp26_hist_p5 = comp_diff_rcp_hist(tas_had_eneb_rcp26_p5, tas_had_eneb_hist_p5)
-diff_tas_had_eneb_rcp85_hist_p5 = comp_diff_rcp_hist(tas_had_eneb_rcp85_p5, tas_had_eneb_hist_p5)
-diff_tas_reg_eneb_rcp26_hist_p95 = comp_diff_rcp_hist(np.nanmean(tas_reg_eneb_rcp26_p95, axis=1), np.nanmean(tas_reg_eneb_hist_p95, axis=1))
-diff_tas_reg_eneb_rcp85_hist_p95 = comp_diff_rcp_hist(np.nanmean(tas_reg_eneb_rcp85_p95, axis=1), np.nanmean(tas_reg_eneb_hist_p95, axis=1))
-diff_tas_had_eneb_rcp26_hist_p95 = comp_diff_rcp_hist(tas_had_eneb_rcp26_p95, tas_had_eneb_hist_p95)
-diff_tas_had_eneb_rcp85_hist_p95 = comp_diff_rcp_hist(tas_had_eneb_rcp85_p95, tas_had_eneb_hist_p95)
+diff_tas_reg_eneb_rcp26_hist = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_eneb_rcp26, axis=1), np.nanmean(tas_reg_eneb_hist, axis=1))
+diff_tas_reg_eneb_rcp85_hist = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_eneb_rcp85, axis=1), np.nanmean(tas_reg_eneb_hist, axis=1))
+diff_tas_had_eneb_rcp26_hist = comp_diff_rcp_hist_tas(tas_had_eneb_rcp26, tas_had_eneb_hist)
+diff_tas_had_eneb_rcp85_hist = comp_diff_rcp_hist_tas(tas_had_eneb_rcp85, tas_had_eneb_hist)
+diff_tas_reg_eneb_rcp26_hist_p5 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_eneb_rcp26_p5, axis=1), np.nanmean(tas_reg_eneb_hist_p5, axis=1))
+diff_tas_reg_eneb_rcp85_hist_p5 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_eneb_rcp85_p5, axis=1), np.nanmean(tas_reg_eneb_hist_p5, axis=1))
+diff_tas_had_eneb_rcp26_hist_p5 = comp_diff_rcp_hist_tas(tas_had_eneb_rcp26_p5, tas_had_eneb_hist_p5)
+diff_tas_had_eneb_rcp85_hist_p5 = comp_diff_rcp_hist_tas(tas_had_eneb_rcp85_p5, tas_had_eneb_hist_p5)
+diff_tas_reg_eneb_rcp26_hist_p95 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_eneb_rcp26_p95, axis=1), np.nanmean(tas_reg_eneb_hist_p95, axis=1))
+diff_tas_reg_eneb_rcp85_hist_p95 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_eneb_rcp85_p95, axis=1), np.nanmean(tas_reg_eneb_hist_p95, axis=1))
+diff_tas_had_eneb_rcp26_hist_p95 = comp_diff_rcp_hist_tas(tas_had_eneb_rcp26_p95, tas_had_eneb_hist_p95)
+diff_tas_had_eneb_rcp85_hist_p95 = comp_diff_rcp_hist_tas(tas_had_eneb_rcp85_p95, tas_had_eneb_hist_p95)
 
-diff_tas_reg_matopiba_rcp26_hist = comp_diff_rcp_hist(np.nanmean(tas_reg_matopiba_rcp26, axis=1), np.nanmean(tas_reg_matopiba_hist, axis=1))
-diff_tas_reg_matopiba_rcp85_hist = comp_diff_rcp_hist(np.nanmean(tas_reg_matopiba_rcp85, axis=1), np.nanmean(tas_reg_matopiba_hist, axis=1))
-diff_tas_had_matopiba_rcp26_hist = comp_diff_rcp_hist(tas_had_matopiba_rcp26, tas_had_matopiba_hist)
-diff_tas_had_matopiba_rcp85_hist = comp_diff_rcp_hist(tas_had_matopiba_rcp85, tas_had_matopiba_hist)
-diff_tas_reg_matopiba_rcp26_hist_p5 = comp_diff_rcp_hist(np.nanmean(tas_reg_matopiba_rcp26_p5, axis=1), np.nanmean(tas_reg_matopiba_hist_p5, axis=1))
-diff_tas_reg_matopiba_rcp85_hist_p5 = comp_diff_rcp_hist(np.nanmean(tas_reg_matopiba_rcp85_p5, axis=1), np.nanmean(tas_reg_matopiba_hist_p5, axis=1))
-diff_tas_had_matopiba_rcp26_hist_p5 = comp_diff_rcp_hist(tas_had_matopiba_rcp26_p5, tas_had_matopiba_hist_p5)
-diff_tas_had_matopiba_rcp85_hist_p5 = comp_diff_rcp_hist(tas_had_matopiba_rcp85_p5, tas_had_matopiba_hist_p5)
-diff_tas_reg_matopiba_rcp26_hist_p95 = comp_diff_rcp_hist(np.nanmean(tas_reg_matopiba_rcp26_p95, axis=1), np.nanmean(tas_reg_matopiba_hist_p95, axis=1))
-diff_tas_reg_matopiba_rcp85_hist_p95 = comp_diff_rcp_hist(np.nanmean(tas_reg_matopiba_rcp85_p95, axis=1), np.nanmean(tas_reg_matopiba_hist_p95, axis=1))
-diff_tas_had_matopiba_rcp26_hist_p95 = comp_diff_rcp_hist(tas_had_matopiba_rcp26_p95, tas_had_matopiba_hist_p95)
-diff_tas_had_matopiba_rcp85_hist_p95 = comp_diff_rcp_hist(tas_had_matopiba_rcp85_p95, tas_had_matopiba_hist_p95)
+diff_tas_reg_matopiba_rcp26_hist = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_matopiba_rcp26, axis=1), np.nanmean(tas_reg_matopiba_hist, axis=1))
+diff_tas_reg_matopiba_rcp85_hist = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_matopiba_rcp85, axis=1), np.nanmean(tas_reg_matopiba_hist, axis=1))
+diff_tas_had_matopiba_rcp26_hist = comp_diff_rcp_hist_tas(tas_had_matopiba_rcp26, tas_had_matopiba_hist)
+diff_tas_had_matopiba_rcp85_hist = comp_diff_rcp_hist_tas(tas_had_matopiba_rcp85, tas_had_matopiba_hist)
+diff_tas_reg_matopiba_rcp26_hist_p5 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_matopiba_rcp26_p5, axis=1), np.nanmean(tas_reg_matopiba_hist_p5, axis=1))
+diff_tas_reg_matopiba_rcp85_hist_p5 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_matopiba_rcp85_p5, axis=1), np.nanmean(tas_reg_matopiba_hist_p5, axis=1))
+diff_tas_had_matopiba_rcp26_hist_p5 = comp_diff_rcp_hist_tas(tas_had_matopiba_rcp26_p5, tas_had_matopiba_hist_p5)
+diff_tas_had_matopiba_rcp85_hist_p5 = comp_diff_rcp_hist_tas(tas_had_matopiba_rcp85_p5, tas_had_matopiba_hist_p5)
+diff_tas_reg_matopiba_rcp26_hist_p95 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_matopiba_rcp26_p95, axis=1), np.nanmean(tas_reg_matopiba_hist_p95, axis=1))
+diff_tas_reg_matopiba_rcp85_hist_p95 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg_matopiba_rcp85_p95, axis=1), np.nanmean(tas_reg_matopiba_hist_p95, axis=1))
+diff_tas_had_matopiba_rcp26_hist_p95 = comp_diff_rcp_hist_tas(tas_had_matopiba_rcp26_p95, tas_had_matopiba_hist_p95)
+diff_tas_had_matopiba_rcp85_hist_p95 = comp_diff_rcp_hist_tas(tas_had_matopiba_rcp85_p95, tas_had_matopiba_hist_p95)
 
 # Plot model end obs data climatology
 fig = plt.figure()
@@ -221,8 +232,8 @@ annual_cycle1 = ax1.plot(time, diff_pre_reg_samz_rcp26_hist, time, diff_pre_reg_
 time, diff_pre_had_samz_rcp26_hist, time, diff_pre_had_samz_rcp85_hist)
 plt.title(u'A)', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-ax1.set_ylim(-4, 4)
-plt.yticks(np.arange(-4, 6, 2), fontsize=8)
+ax1.set_ylim(-80, 80)
+plt.yticks(np.arange(-80, 100, 20), fontsize=8)
 plt.setp(ax1.get_xticklabels(), visible=False)
 l1, l2, l3, l4 = annual_cycle1
 plt.setp(l1, linewidth=1.5, color='blue', linestyle='-')
@@ -245,7 +256,7 @@ time, diff_tas_had_samz_rcp26_hist, time, diff_tas_had_samz_rcp85_hist)
 plt.title(u'D)', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 ax2.set_ylim(0, 9)
-plt.yticks(np.arange(0, 10, 3), fontsize=8)
+plt.yticks(np.arange(0, 10, 1), fontsize=8)
 plt.setp(ax2.get_xticklabels(), visible=False)
 l1, l2, l3, l4 = annual_cycle2
 plt.setp(l1, linewidth=1.5, color='blue', linestyle='-')
@@ -264,10 +275,10 @@ ax3 = fig.add_subplot(3, 2, 3)
 annual_cycle3 = ax3.plot(time, diff_pre_reg_eneb_rcp26_hist, time, diff_pre_reg_eneb_rcp85_hist, 
 time, diff_pre_had_eneb_rcp26_hist, time, diff_pre_had_eneb_rcp85_hist)
 plt.title(u'B)', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Precipitation change (mm d⁻¹)', fontsize=8)
+plt.ylabel(u'Precipitation change (%)', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-ax3.set_ylim(-4, 4)
-plt.yticks(np.arange(-4, 6, 2), fontsize=8)
+ax3.set_ylim(-80, 80)
+plt.yticks(np.arange(-80, 100, 20), fontsize=8)
 plt.setp(ax3.get_xticklabels(), visible=False)
 l1, l2, l3, l4 = annual_cycle3
 plt.setp(l1, linewidth=1.5, color='blue', linestyle='-')
@@ -290,7 +301,7 @@ plt.title(u'E)', loc='left', fontweight='bold', fontsize=8)
 plt.ylabel(u'Temperature change (°C)', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 ax4.set_ylim(0, 9)
-plt.yticks(np.arange(0, 10, 3), fontsize=8)
+plt.yticks(np.arange(0, 10, 1), fontsize=8)
 plt.setp(ax4.get_xticklabels(), visible=False)
 l1, l2, l3, l4 = annual_cycle4
 plt.setp(l1, linewidth=1.5, color='blue', linestyle='-')
@@ -311,8 +322,8 @@ time, diff_pre_had_matopiba_rcp26_hist, time, diff_pre_had_matopiba_rcp85_hist)
 plt.title(u'C)', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.xlabel('Months', fontsize=8)
-ax5.set_ylim(-4, 4)
-plt.yticks(np.arange(-4, 6, 2), fontsize=8)
+ax5.set_ylim(-80, 80)
+plt.yticks(np.arange(-80, 100, 20), fontsize=8)
 plt.setp(ax2.get_xticklabels(), visible=False)
 l1, l2, l3, l4 = annual_cycle5
 plt.setp(l1, linewidth=1.5, color='blue', linestyle='-')
@@ -335,7 +346,7 @@ plt.title(u'F)', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.xlabel('Months', fontsize=8)
 ax6.set_ylim(0, 9)
-plt.yticks(np.arange(0, 10, 3), fontsize=8)
+plt.yticks(np.arange(0, 10, 1), fontsize=8)
 l1, l2, l3, l4 = annual_cycle6
 plt.setp(l1, linewidth=1.5, color='blue', linestyle='-')
 plt.setp(l2, linewidth=1.5, color='red', linestyle='-')
@@ -354,7 +365,7 @@ path_out = '/home/nice/Downloads'
 name_out = 'pyplt_annual_cycle_reg_had_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
+plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 
 plt.show()
 exit()

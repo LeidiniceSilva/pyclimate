@@ -110,8 +110,54 @@ def compute_apb(model, obs):
     apb = 100.0 * sum(np.abs(model, obs)) / sum(obs)
     
     return apb
+
+
+def compute_nse(model, obs):
+
+    """
+    The input arrays must have the same dimensions
+    :Param model: Numpy array with model data
+    :Param obs: Numpy array with obs data
+    :Return: Nash–Sutcliffe Efficient Coefficient
+    """
+
+    nse = 1 - sum((model - obs) ** 2) / sum((obs - np.mean(obs)) ** 2)
     
+    return nse
+      
     
+def compute_cdf(data):
+
+	"""
+	The input arrays must have the same dimensions
+	:Param data: Numpy array with model or obs data
+	:Return: Cumulative Density Function
+	"""
+
+	x = np.linspace(np.min(data), np.max(data))
+	y = np.nanmean(x)
+	z = np.nanstd(x)
+	cdf = norm.cdf(x,y,z)
+
+	return x, cdf
+
+
+def compute_pdf(data):
+
+	"""
+	The input arrays must have the same dimensions
+	:Param data: Numpy array with model or obs data
+	:Return: Cumulative Density Function
+	"""
+
+	x = np.linspace(np.min(data), np.max(data))
+	y = np.nanmean(x)
+	z = np.nanstd(x)
+	pdf = norm.pdf(x,y,z)
+
+	return x, pdf
+
+
 def compute_anomaly(model, obs):
 
     """
@@ -149,22 +195,8 @@ def compute_fcst_correct(model, obs, fcst):
         fcst_correc.append(ss.gamma.ppf(prob, alpha_obs, scale=beta_obs))
         
     return fcst_correct
+	
 
-
-def compute_nse(model, obs):
-
-    """
-    The input arrays must have the same dimensions
-    :Param model: Numpy array with model data
-    :Param obs: Numpy array with obs data
-    :Return: Nash–Sutcliffe Efficient Coefficient
-    """
-
-    nse = 1 - sum((model - obs) ** 2) / sum((obs - np.mean(obs)) ** 2)
-    
-    return nse
-    
-    
 def compute_icw(model, obs):
 
     """
@@ -220,36 +252,19 @@ def compute_ivs(obs, model):
     return ivs    
     
     
-def compute_cdf(data):
+def compute_relative_change(rcp, hist):
 
-	"""
-	The input arrays must have the same dimensions
-	:Param data: Numpy array with model or obs data
-	:Return: Cumulative Density Function
-	"""
+    """
+    The input arrays must have the same dimensions
+    :Param rcp: Numpy array with rcp period model
+    :Param hist: Numpy array with hist period model
+    :Return: Relative change
+    """
 
-	x = np.linspace(np.min(data), np.max(data))
-	y = np.nanmean(x)
-	z = np.nanstd(x)
-	cdf = norm.cdf(x,y,z)
-
-	return x, cdf
-
-
-def compute_pdf(data):
-
-	"""
-	The input arrays must have the same dimensions
-	:Param data: Numpy array with model or obs data
-	:Return: Cumulative Density Function
-	"""
-
-	x = np.linspace(np.min(data), np.max(data))
-	y = np.nanmean(x)
-	z = np.nanstd(x)
-	pdf = norm.pdf(x,y,z)
-
-	return x, pdf
-
-	
-	
+    p1 = rcp 
+    p2 = hist
+    p3 = p1 - p2
+    p4 = p3 / p2
+    rc = p4 * 100
+   
+    return rc

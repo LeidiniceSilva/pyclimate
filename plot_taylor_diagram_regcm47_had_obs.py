@@ -154,7 +154,7 @@ def import_obs(var, area, dataset, dt):
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
 	value  = var[:][:,:,:]
-
+	
 	season_obs = value[2:239:3,:,:]
 	djf_obs = np.nanmean(np.nanmean(season_obs[3:80:4], axis=1), axis=1)
 	mam_obs = np.nanmean(np.nanmean(season_obs[0:80:4], axis=1), axis=1)
@@ -175,7 +175,7 @@ def import_rcm(var, area, mod, dt):
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
 	value  = var[:][:,:,:]
-
+	
 	season_rcm = value[2:239:3,:,:]
 	djf_rcm = np.nanmean(np.nanmean(season_rcm[3:80:4], axis=1), axis=1)
 	mam_rcm = np.nanmean(np.nanmean(season_rcm[0:80:4], axis=1), axis=1)
@@ -236,42 +236,22 @@ if __name__=='__main__':
 		
 	# Reference database standard desviation
 	stdrefs = dict(SAMZ1=1,
-				 ENEB1=1,
-				 MATOPIBA1=1,
 				 SAMZ2=1,
+				 ENEB1=1,
 				 ENEB2=1,
+				 MATOPIBA1=1,
 				 MATOPIBA2=1)       
 
 	text1 = dict(SAMZ1='A)',
-				 ENEB1='D)',
-				 MATOPIBA1='B)',
-				 SAMZ2='E)',
-				 ENEB2='C)',
+				 SAMZ2='D)',
+				 ENEB1='B)',
+				 ENEB2='E)',
+				 MATOPIBA1='C)',
 				 MATOPIBA2='F)')
 				 
 	# Compute stddev and correlation coefficient of models
 	# Sample std, rho: Be sure to check order and that correct numbers are placed!
 	samples = dict(SAMZ1=[[pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_rcm_samz)[0,1], 'Reg-DJF', 'o', 'g'],
-                          [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_rcm_samz)[0,1], 'Reg-MAM', 'o', 'b'],
-                          [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_rcm_samz)[0,1], 'Reg-JJA', 'o', 'y'],
-                          [pre_son_cru_samz.std(ddof=1), np.corrcoef(pre_son_cru_samz, pre_son_rcm_samz)[0,1], 'Reg-SON', 'o', 'c'],
-                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_rcm_samz)[0,1], 'Reg-ANN', 'o', 'k'],
-                          [pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_gcm_samz)[0,1], 'Had-DJF', '^', 'g'],
-                          [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_gcm_samz)[0,1], 'Had-MAM', '^', 'b'],
-                          [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_gcm_samz)[0,1], 'Had-JJA', '^', 'y'],
-                          [pre_son_cru_samz.std(ddof=1), np.corrcoef(pre_son_cru_samz, pre_son_gcm_samz)[0,1], 'Had-SON', '^', 'c'],
-                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_gcm_samz)[0,1], 'Had-ANN', '^', 'k']],
-                   ENEB1=[[pre_djf_cru_eneb.std(ddof=1), np.corrcoef(pre_djf_cru_eneb, pre_djf_rcm_eneb)[0,1], 'Reg-DJF', 'o', 'g'],
-                          [pre_mam_cru_eneb.std(ddof=1), np.corrcoef(pre_mam_cru_eneb, pre_mam_rcm_eneb)[0,1], 'Reg-MAM', 'o', 'b'],
-                          [pre_jja_cru_eneb.std(ddof=1), np.corrcoef(pre_jja_cru_eneb, pre_jja_rcm_eneb)[0,1], 'Reg-JJA', 'o', 'y'],
-                          [pre_son_cru_eneb.std(ddof=1), np.corrcoef(pre_son_cru_eneb, pre_son_rcm_eneb)[0,1], 'Reg-SON', 'o', 'c'],
-                          [pre_annual_cru_eneb.std(ddof=1), np.corrcoef(pre_annual_cru_eneb, pre_annual_rcm_eneb)[0,1], 'Reg-ANN', 'o', 'k'],
-                          [pre_djf_cru_eneb.std(ddof=1), np.corrcoef(pre_djf_cru_eneb, pre_djf_gcm_eneb)[0,1], 'Had-DJF', '^', 'g'],
-                          [pre_mam_cru_eneb.std(ddof=1), np.corrcoef(pre_mam_cru_eneb, pre_mam_gcm_eneb)[0,1], 'Had-MAM', '^', 'b'],
-                          [pre_jja_cru_eneb.std(ddof=1), np.corrcoef(pre_jja_cru_eneb, pre_jja_gcm_eneb)[0,1], 'Had-JJA', '^', 'y'],
-                          [pre_son_cru_eneb.std(ddof=1), np.corrcoef(pre_son_cru_eneb, pre_son_gcm_eneb)[0,1], 'Had-SON', '^', 'c'],
-                          [pre_annual_cru_eneb.std(ddof=1), np.corrcoef(pre_annual_cru_eneb, pre_annual_gcm_eneb)[0,1], 'Had-ANN', '^', 'k']],                  
-               MATOPIBA1=[[pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_rcm_samz)[0,1], 'Reg-DJF', 'o', 'g'],
                           [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_rcm_samz)[0,1], 'Reg-MAM', 'o', 'b'],
                           [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_rcm_samz)[0,1], 'Reg-JJA', 'o', 'y'],
                           [pre_son_cru_samz.std(ddof=1), np.corrcoef(pre_son_cru_samz, pre_son_rcm_samz)[0,1], 'Reg-SON', 'o', 'c'],
@@ -291,6 +271,16 @@ if __name__=='__main__':
                           [tas_jja_cru_samz.std(ddof=1), np.corrcoef(tas_jja_cru_samz, tas_jja_gcm_samz)[0,1], 'Had-JJA', '^', 'y'],
                           [tas_son_cru_samz.std(ddof=1), np.corrcoef(tas_son_cru_samz, tas_son_gcm_samz)[0,1], 'Had-SON', '^', 'c'],
                           [tas_annual_cru_samz.std(ddof=1), np.corrcoef(tas_annual_cru_samz, tas_annual_gcm_samz)[0,1], 'Had-ANN', '^', 'k']],
+                   ENEB1=[[pre_djf_cru_eneb.std(ddof=1), np.corrcoef(pre_djf_cru_eneb, pre_djf_rcm_eneb)[0,1], 'Reg-DJF', 'o', 'g'],
+                          [pre_mam_cru_eneb.std(ddof=1), np.corrcoef(pre_mam_cru_eneb, pre_mam_rcm_eneb)[0,1], 'Reg-MAM', 'o', 'b'],
+                          [pre_jja_cru_eneb.std(ddof=1), np.corrcoef(pre_jja_cru_eneb, pre_jja_rcm_eneb)[0,1], 'Reg-JJA', 'o', 'y'],
+                          [pre_son_cru_eneb.std(ddof=1), np.corrcoef(pre_son_cru_eneb, pre_son_rcm_eneb)[0,1], 'Reg-SON', 'o', 'c'],
+                          [pre_annual_cru_eneb.std(ddof=1), np.corrcoef(pre_annual_cru_eneb, pre_annual_rcm_eneb)[0,1], 'Reg-ANN', 'o', 'k'],
+                          [pre_djf_cru_eneb.std(ddof=1), np.corrcoef(pre_djf_cru_eneb, pre_djf_gcm_eneb)[0,1], 'Had-DJF', '^', 'g'],
+                          [pre_mam_cru_eneb.std(ddof=1), np.corrcoef(pre_mam_cru_eneb, pre_mam_gcm_eneb)[0,1], 'Had-MAM', '^', 'b'],
+                          [pre_jja_cru_eneb.std(ddof=1), np.corrcoef(pre_jja_cru_eneb, pre_jja_gcm_eneb)[0,1], 'Had-JJA', '^', 'y'],
+                          [pre_son_cru_eneb.std(ddof=1), np.corrcoef(pre_son_cru_eneb, pre_son_gcm_eneb)[0,1], 'Had-SON', '^', 'c'],
+                          [pre_annual_cru_eneb.std(ddof=1), np.corrcoef(pre_annual_cru_eneb, pre_annual_gcm_eneb)[0,1], 'Had-ANN', '^', 'k']],                  
                    ENEB2=[[tas_djf_cru_eneb.std(ddof=1), np.corrcoef(tas_djf_cru_eneb, np.nanmean(tas_djf_rcm_eneb, axis=1))[0,1], 'Reg-DJF', 'o', 'g'],
                           [tas_mam_cru_eneb.std(ddof=1), np.corrcoef(tas_mam_cru_eneb, np.nanmean(tas_mam_rcm_eneb, axis=1))[0,1], 'Reg-MAM', 'o', 'b'],
                           [tas_jja_cru_eneb.std(ddof=1), np.corrcoef(tas_jja_cru_eneb, np.nanmean(tas_jja_rcm_eneb, axis=1))[0,1], 'Reg-JJA', 'o', 'y'],
@@ -300,7 +290,17 @@ if __name__=='__main__':
                           [tas_mam_cru_eneb.std(ddof=1), np.corrcoef(tas_mam_cru_eneb, tas_mam_gcm_eneb)[0,1], 'Had-MAM', '^', 'b'],
                           [tas_jja_cru_eneb.std(ddof=1), np.corrcoef(tas_jja_cru_eneb, tas_jja_gcm_eneb)[0,1], 'Had-JJA', '^', 'y'],
                           [tas_son_cru_eneb.std(ddof=1), np.corrcoef(tas_son_cru_eneb, tas_son_gcm_eneb)[0,1], 'Had-SON', '^', 'c'],
-                          [tas_annual_cru_eneb.std(ddof=1), np.corrcoef(tas_annual_cru_eneb, tas_annual_gcm_eneb)[0,1], 'Had-ANN', '^', 'k']],                  
+                          [tas_annual_cru_eneb.std(ddof=1), np.corrcoef(tas_annual_cru_eneb, tas_annual_gcm_eneb)[0,1], 'Had-ANN', '^', 'k']],
+               MATOPIBA1=[[pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_rcm_samz)[0,1], 'Reg-DJF', 'o', 'g'],
+                          [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_rcm_samz)[0,1], 'Reg-MAM', 'o', 'b'],
+                          [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_rcm_samz)[0,1], 'Reg-JJA', 'o', 'y'],
+                          [pre_son_cru_samz.std(ddof=1), np.corrcoef(pre_son_cru_samz, pre_son_rcm_samz)[0,1], 'Reg-SON', 'o', 'c'],
+                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_rcm_samz)[0,1], 'Reg-ANN', 'o', 'k'],
+                          [pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_gcm_samz)[0,1], 'Had-DJF', '^', 'g'],
+                          [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_gcm_samz)[0,1], 'Had-MAM', '^', 'b'],
+                          [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_gcm_samz)[0,1], 'Had-JJA', '^', 'y'],
+                          [pre_son_cru_samz.std(ddof=1), np.corrcoef(pre_son_cru_samz, pre_son_gcm_samz)[0,1], 'Had-SON', '^', 'c'],
+                          [pre_annual_cru_samz.std(ddof=1), np.corrcoef(pre_annual_cru_samz, pre_annual_gcm_samz)[0,1], 'Had-ANN', '^', 'k']],                  
                MATOPIBA2=[[tas_djf_cru_samz.std(ddof=1), np.corrcoef(tas_djf_cru_samz, np.nanmean(tas_djf_rcm_samz, axis=1))[0,1], 'Reg-DJF', 'o', 'g'],
                           [tas_mam_cru_samz.std(ddof=1), np.corrcoef(tas_mam_cru_samz, np.nanmean(tas_mam_rcm_samz, axis=1))[0,1], 'Reg-MAM', 'o', 'b'],
                           [tas_jja_cru_samz.std(ddof=1), np.corrcoef(tas_jja_cru_samz, np.nanmean(tas_jja_rcm_samz, axis=1))[0,1], 'Reg-JJA', 'o', 'y'],
@@ -314,16 +314,16 @@ if __name__=='__main__':
 
 	# Plot Taylor Diagram
 	rects = dict(SAMZ1=321,
-				 ENEB1=322,
-				 MATOPIBA1=323,
-				 SAMZ2=324,
-				 ENEB2=325,
+				 SAMZ2=322,
+				 ENEB1=323,
+				 ENEB2=324,
+				 MATOPIBA1=325,
 				 MATOPIBA2=326)
 
 	# Plot model end obs data taylor diagram 			 
 	fig = plt.figure(figsize=(8, 8.5))
 	
-	for var in ['SAMZ1', 'ENEB1', 'MATOPIBA1', 'SAMZ2', 'ENEB2', 'MATOPIBA2']:
+	for var in ['SAMZ1', 'SAMZ2', 'ENEB1', 'ENEB2', 'MATOPIBA1', 'MATOPIBA2']:
 
 		dia = TaylorDiagram(stdrefs[var], fig=fig, rect=rects[var], label='Reference', srange=(0., 3.), extend=True)
 		dia.samplePoints[0].set_color('r')
