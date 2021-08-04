@@ -132,15 +132,16 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'A)', loc='left', fontweight='bold') 
-plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.title(u'A)', loc='left', fontweight='bold', fontsize=8) 
+plt.xticks(time, (u'CRU', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES'), fontsize=6)
 plt.ylim(0, 20)
-plt.yticks(np.arange(0, 24, 4), fontsize=7)
+plt.yticks(np.arange(0, 24, 4), fontsize=8)
 plt.setp(ax1.get_xticklabels(), visible=False)
-plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 17., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
-                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
+plt.axhspan(16, 20, alpha=0.5, color='silver')
+plt.axhline(16, lw=1., linestyle='-', color='black')
+plt.axvline(3.5, lw=1., linestyle='-', color='black')
+plt.axvline(5.5, lw=1., linestyle='-', color='black')
+plt.text(0.54, 17., '         Hist            RCP2.6     RCP8.5', fontweight='bold', fontsize=8)
 plt.grid(True, which='major', linestyle='--')
                   
 ax2 = fig.add_subplot(3, 2, 2)
@@ -151,15 +152,16 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'D)', loc='left', fontweight='bold')
-plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.title(u'D)', loc='left', fontweight='bold', fontsize=8)
+plt.xticks(time, (u'CRU', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES'), fontsize=6)
 plt.ylim(22, 42)
-plt.yticks(np.arange(22, 46, 4), fontsize=7)
+plt.yticks(np.arange(22, 46, 4), fontsize=8)
 plt.setp(ax2.get_xticklabels(), visible=False)
+plt.axhspan(38, 42, alpha=0.5, color='silver')
+plt.axhline(38, lw=1., linestyle='-', color='black')
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 39., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
-                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
+plt.text(0.54, 39., '         Hist            RCP2.6     RCP8.5', fontweight='bold', fontsize=8)
 plt.grid(True, which='major', linestyle='--')
                       
 ax3 = fig.add_subplot(3, 2, 3)
@@ -170,16 +172,17 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'B)', loc='left', fontweight='bold')
-plt.ylabel(u'Precipitation (mm d⁻¹)')
-plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.title(u'B)', loc='left', fontweight='bold', fontsize=8)
+plt.ylabel(u'Precipitation (mm d⁻¹)', fontsize=8)
+plt.xticks(time, (u'CRU', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES'), fontsize=6)
 plt.ylim(0, 20)
-plt.yticks(np.arange(0, 24, 4), fontsize=7)
+plt.yticks(np.arange(0, 24, 4), fontsize=8)
 plt.setp(ax3.get_xticklabels(), visible=False)
+plt.axhspan(16, 20, alpha=0.5, color='silver')
+plt.axhline(16, lw=1., linestyle='-', color='black')
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 17., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
-                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
+plt.text(0.54, 17., '         Hist            RCP2.6     RCP8.5', fontweight='bold', fontsize=8)
 plt.grid(True, which='major', linestyle='--')
                                
 ax4 = fig.add_subplot(3, 2, 4)
@@ -190,16 +193,17 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'E)', loc='left', fontweight='bold')
-plt.ylabel(u'Temperature (°C)')
-plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.title(u'E)', loc='left', fontweight='bold', fontsize=8)
+plt.ylabel(u'Temperature (°C)', fontsize=8)
+plt.xticks(time, (u'CRU', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES'), fontsize=8)
 plt.ylim(22, 42)
-plt.yticks(np.arange(22, 44, 4), fontsize=7)
+plt.yticks(np.arange(22, 44, 4), fontsize=8)
 plt.setp(ax4.get_xticklabels(), visible=False)
+plt.axhspan(38, 42, alpha=0.5, color='silver')
+plt.axhline(38, lw=1., linestyle='-', color='black')
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 39., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
-                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
+plt.text(0.54, 39., '         Hist            RCP2.6     RCP8.5', fontweight='bold', fontsize=8)
 plt.grid(True, which='major', linestyle='--')
               
 ax5 = fig.add_subplot(3, 2, 5)
@@ -210,15 +214,16 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'C)', loc='left', fontweight='bold')
-plt.xlabel('Dataset')
-plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.title(u'C)', loc='left', fontweight='bold', fontsize=8)
+plt.xlabel('Dataset', fontsize=8)
+plt.xticks(time, (u'CRU', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES'), rotation=90, fontsize=8)
 plt.ylim(0, 20)
-plt.yticks(np.arange(0, 24, 4), fontsize=7)
+plt.yticks(np.arange(0, 24, 4), fontsize=8)
+plt.axhspan(16, 20, alpha=0.5, color='silver')
+plt.axhline(16, lw=1., linestyle='-', color='black')
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 17., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
-                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
+plt.text(0.54, 17.,  '         Hist            RCP2.6     RCP8.5', fontweight='bold', fontsize=8)
 plt.grid(True, which='major', linestyle='--')
                               
 ax6 = fig.add_subplot(3, 2, 6)
@@ -229,19 +234,18 @@ for median in box['medians']:
     median.set(color='black', linewidth=1)
 for flier in box['fliers']:
     flier.set(marker='+', color='black', alpha=1)
-plt.title(u'F)', loc='left', fontweight='bold')
-plt.xlabel('Dataset')
-plt.xticks(time, (u'CRU', u'Reg', u'Had', u'Reg', u'Had', u'Reg', u'Had'), fontsize=7)
+plt.title(u'F)', loc='left', fontweight='bold', fontsize=8)
+plt.xlabel('Dataset', fontsize=8)
+plt.xticks(time, (u'CRU', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES', u'RegCM4.7', u'HadGEM2-ES'), rotation=90, fontsize=8)
 plt.ylim(22, 42)
-plt.yticks(np.arange(22, 44, 4), fontsize=7)
+plt.yticks(np.arange(22, 44, 4), fontsize=8)
+plt.axhspan(38, 42, alpha=0.5, color='silver')
+plt.axhline(38, lw=1., linestyle='-', color='black')
 plt.axvline(3.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
-plt.text(0.54, 39., '      Hist       RCP2.6 RCP8.5', fontweight='bold', zorder=6, color='k',
-                bbox={'facecolor':'silver', 'alpha':0.5, 'pad':2})
+plt.text(0.54, 39.,  '         Hist            RCP2.6     RCP8.5', fontweight='bold', fontsize=8)
 plt.grid(True, which='major', linestyle='--')
              
-plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.35, hspace=0.35)
-
 # Path out to save bias figure
 path_out = '/home/nice/Downloads'
 name_out = 'pyplt_boxplot_reg_had_obs_1986-2005.png'
