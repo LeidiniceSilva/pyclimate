@@ -19,9 +19,10 @@ from pylab import *
 from netCDF4 import Dataset
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
+
 def import_obs(var, area, dataset, dt):
 	
-	path = '/home/nice/Documents/dataset/obs/rcm'
+	path = '/home/nice/Documents/dataset/obs/rcm_exp1'
 	arq  = '{0}/{1}_{2}_{3}_obs_mon_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
 			
 	data = netCDF4.Dataset(arq)
@@ -42,7 +43,7 @@ def import_obs(var, area, dataset, dt):
 	
 def import_rcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/rcm/{0}'.format(exp)	
+	path = '/home/nice/Documents/dataset/rcm/rcm_exp1/hist'
 	arq  = '{0}/{1}_{2}_reg_had_{3}_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
@@ -60,7 +61,7 @@ def import_rcm(var, area, exp, dt):
 
 def import_gcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/hist'	
+	path = '/home/nice/Documents/dataset/gcm/rcm_exp1/hist'	
 	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
@@ -141,8 +142,8 @@ ax20 = fig.add_subplot(3, 2, 2)
 annual_cycle2 = ax20.plot(time, tas_cru_samz, time, np.nanmean(tas_reg_samz, axis=1), time, tas_had_samz, time, tas_samz_ci1, time, tas_samz_ci2)
 plt.title(u'D)', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.ylim(22, 37)
-plt.yticks(np.arange(22, 40, 3), fontsize=8)
+plt.ylim(22, 34)
+plt.yticks(np.arange(22, 36, 2), fontsize=8)
 plt.setp(ax20.get_xticklabels(), visible=False)
 l1, l2, l3, l4, l5 = annual_cycle2
 plt.setp(l1, linewidth=1.5, color='black', linestyle='-')
@@ -183,8 +184,8 @@ annual_cycle4 = ax40.plot(time, tas_cru_eneb, time, np.nanmean(tas_reg_eneb, axi
 plt.title(u'E)', loc='left', fontweight='bold', fontsize=8)
 plt.ylabel(u'Temperature (°C)', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.ylim(22, 30)
-plt.yticks(np.arange(22, 32, 2), fontsize=8)
+plt.ylim(22, 34)
+plt.yticks(np.arange(22, 36, 2), fontsize=8)
 plt.setp(ax40.get_xticklabels(), visible=False)
 l1, l2, l3, l4, l5 = annual_cycle4
 plt.setp(l1, linewidth=1.5, color='black', linestyle='-')
