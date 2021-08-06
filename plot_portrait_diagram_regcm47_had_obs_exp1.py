@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot seasonal cycle graphics from Reg and Had models end obs database"
+__description__ = "This script plot portrait diagram from Reg and Had models and obs database"
 
 import os
 import netCDF4
@@ -40,6 +40,7 @@ def import_obs(var, area, dataset, dt):
 	son_obs = season_obs[2:80:4]
 
 	return annual_obs, djf_obs, mam_obs, jja_obs, son_obs
+	
 	
 def import_rcm(var, area, exp, dt):
 	

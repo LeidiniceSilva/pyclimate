@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilvae@gmail.com"
 __date__        = "05/26/2018"
-__description__ = "Statistical indices to see performance of the model"
+__description__ = "Statistical indices to assesment skill of the models"
 
 
 from netCDF4 import Dataset
@@ -26,6 +26,7 @@ def compute_corr(model, obs):
     corr = np.corrcoef(model, obs)[0][1]
     
     return corr
+
 
 def compute_r2(model, obs):
 
@@ -51,7 +52,7 @@ def compute_mae(model, obs):
     :Return: Mean Absoluty Error
     """
 
-    mae = np.mean(np.abs(model - obs))
+    mae = np.mean(np.abs(np.array(model) - np.array(obs)))
     
     return mae
     
@@ -107,7 +108,7 @@ def compute_apb(model, obs):
     :Return: Absolute Percent Bias
     """
 
-    apb = 100.0 * sum(np.abs(model, obs)) / sum(obs)
+    apb = 100.0 * sum(np.abs(np.array(model), np.array(obs))) / sum(np.array(obs))
     
     return apb
 
@@ -120,84 +121,33 @@ def compute_nse(model, obs):
     :Param obs: Numpy array with obs data
     :Return: Nash–Sutcliffe Efficient Coefficient
     """
-
-    nse = 1 - sum((model - obs) ** 2) / sum((obs - np.mean(obs)) ** 2)
+    
+    p1 = sum((model - obs) ** 2)
+    p2 = sum((obs - np.mean(obs)) ** 2)
+    nse = 1 - p1 / p2
     
     return nse
-      
     
-def compute_cdf(data):
-
-	"""
-	The input arrays must have the same dimensions
-	:Param data: Numpy array with model or obs data
-	:Return: Cumulative Density Function
-	"""
-
-	x = np.linspace(np.min(data), np.max(data))
-	y = np.nanmean(x)
-	z = np.nanstd(x)
-	cdf = norm.cdf(x,y,z)
-
-	return x, cdf
-
-
-def compute_pdf(data):
-
-	"""
-	The input arrays must have the same dimensions
-	:Param data: Numpy array with model or obs data
-	:Return: Cumulative Density Function
-	"""
-
-	x = np.linspace(np.min(data), np.max(data))
-	y = np.nanmean(x)
-	z = np.nanstd(x)
-	pdf = norm.pdf(x,y,z)
-
-	return x, pdf
-
-
-def compute_anomaly(model, obs):
-
-    """
-    The input arrays must have the same dimensions
-    :Param model: Numpy array with model data
-    :Param obs: Numpy array with obs data
-    :Return: Anomaly and Standard Anomaly
-    """
-
-    clim_mean = np.nanmean(obs, axis=0)
-    clim_std = np.nanstd(obs, axis=0)
-    anomaly = model - clim_mean
-    standard_anomaly = (model - clim_mean)/clim_std
-    
-    return anomaly, standard_anomaly
-   
-    
-def compute_fcst_correct(model, obs, fcst):
-
-    """
-    The input arrays must have the same dimensions
-    :Param model: Numpy array with model data
-    :Param obs: Numpy array with obs data
-    :Return: Forecast Data Correction
-    """
-
-    sim = np.sort(model)
-    alpha_mod, loc_mod, beta_mod = ss.gamma.fit(sim, loc=0)
-    obs = np.sort(obs)
-    alpha_obs, loc_obs, beta_obs = ss.gamma.fit(obs, loc=0)
-
-    fcst_fcst_correc = []
-    for i in fcst:
-        prob = ss.gamma.cdf(i, alpha_mod, scale=beta_mod)
-        fcst_correc.append(ss.gamma.ppf(prob, alpha_obs, scale=beta_obs))
         
-    return fcst_correct
-	
+def compute_diso(model, obs):
 
-def compute_icw(model, obs):
+	"""
+	The input arrays must have the same dimensions
+	:Param model: Numpy array with model data
+	:Param obs: Numpy array with obs data
+	:Return: Distance between Indices of Simulation and Observation
+	"""
+
+	p0 = np.abs(np.array(model).mean())
+	p1 = np.corrcoef(model, obs)[0][1]
+	p2 = np.mean(np.abs(np.array(model) - np.array(obs))) / p0
+	p3 = np.sqrt(((np.array(model) - np.array(obs)) ** 2).mean()) / p0
+	diso = np.sqrt((p1)** 2 + (p2)** 2 + (p3)** 2)
+
+	return diso
+    
+    
+def compute_ioa(model, obs):
 
     """
     The input arrays must have the same dimensions
@@ -209,9 +159,9 @@ def compute_icw(model, obs):
     p1 = (model - obs)**2
     p2 = np.abs(model - np.mean(obs))
     p3 = np.abs(obs - np.mean(obs))
-    icw = 1 - sum(p1) / sum((p2 + p3)**2)
+    ioa = 1 - sum(p1) / sum((p2 + p3)**2)
     
-    return icw
+    return ioa
     
 
 def compute_av(gcm, rcm, obs):
@@ -252,6 +202,38 @@ def compute_ivs(obs, model):
     return ivs    
     
     
+def compute_cdf(data):
+
+	"""
+	The input arrays must have the same dimensions
+	:Param data: Numpy array with model or obs data
+	:Return: Cumulative Density Function
+	"""
+
+	x = np.linspace(np.min(data), np.max(data))
+	y = np.nanmean(x)
+	z = np.nanstd(x)
+	cdf = norm.cdf(x,y,z)
+
+	return x, cdf
+
+
+def compute_pdf(data):
+
+	"""
+	The input arrays must have the same dimensions
+	:Param data: Numpy array with model or obs data
+	:Return: Cumulative Density Function
+	"""
+
+	x = np.linspace(np.min(data), np.max(data))
+	y = np.nanmean(x)
+	z = np.nanstd(x)
+	pdf = norm.pdf(x,y,z)
+
+	return x, pdf
+	
+
 def compute_relative_change(rcp, hist):
 
     """
@@ -268,3 +250,42 @@ def compute_relative_change(rcp, hist):
     rc = p4 * 100
    
     return rc
+    
+    	
+def compute_anomaly(model, obs):
+
+    """
+    The input arrays must have the same dimensions
+    :Param model: Numpy array with model data
+    :Param obs: Numpy array with obs data
+    :Return: Anomaly and Standard Anomaly
+    """
+
+    clim_mean = np.nanmean(obs, axis=0)
+    clim_std = np.nanstd(obs, axis=0)
+    anomaly = model - clim_mean
+    standard_anomaly = (model - clim_mean)/clim_std
+    
+    return anomaly, standard_anomaly
+    
+
+def compute_fcst_correct(model, obs, fcst):
+
+    """
+    The input arrays must have the same dimensions
+    :Param model: Numpy array with model data
+    :Param obs: Numpy array with obs data
+    :Return: Forecast Data Correction
+    """
+
+    sim = np.sort(model)
+    alpha_mod, loc_mod, beta_mod = ss.gamma.fit(sim, loc=0)
+    obs = np.sort(obs)
+    alpha_obs, loc_obs, beta_obs = ss.gamma.fit(obs, loc=0)
+
+    fcst_fcst_correc = []
+    for i in fcst:
+        prob = ss.gamma.cdf(i, alpha_mod, scale=beta_mod)
+        fcst_correc.append(ss.gamma.ppf(prob, alpha_obs, scale=beta_obs))
+        
+    return fcst_correct

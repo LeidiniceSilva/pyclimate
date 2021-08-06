@@ -505,7 +505,7 @@ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_bias_had_obs_1986-2005.png'
+name_out = 'pyplt_maps_bias_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')

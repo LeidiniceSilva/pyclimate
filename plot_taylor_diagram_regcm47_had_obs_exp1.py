@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/08/2019"
-__description__ = "This script plot taylor diagram from Reg and Had models end obs database"
+__description__ = "This script plot taylor diagram from Reg and Had models and obs database"
 
 import os
 import netCDF4
@@ -321,7 +321,7 @@ if __name__=='__main__':
 				 MATOPIBA2=326)
 
 	# Plot model end obs data taylor diagram 			 
-	fig = plt.figure(figsize=(8, 8.5))
+	fig = plt.figure(figsize=(6, 6.5))
 	
 	for var in ['SAMZ1', 'SAMZ2', 'ENEB1', 'ENEB2', 'MATOPIBA1', 'MATOPIBA2']:
 

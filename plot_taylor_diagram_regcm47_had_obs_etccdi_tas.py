@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/08/2019"
-__description__ = "This script plot taylor diagram from Reg and Had models end obs database to ETCCDI"
+__description__ = "This script plot taylor diagram from Reg and Had models and obs database to ETCCDI"
 
 import os
 import netCDF4

@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/08/2019"
-__description__ = "This script plot climatology graphics from CMIP5 models end OBS basedata"
+__description__ = "This script plot scatter plot cmip5 models end obs database"
 
 import os
 import netCDF4

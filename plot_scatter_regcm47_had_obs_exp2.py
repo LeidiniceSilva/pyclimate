@@ -2,8 +2,8 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
-__date__        = "12/29/2020"
-__description__ = "This script plot annual cycle graphics from Reg and Had models end obs database"
+__date__        = "08/05/2021"
+__description__ = "This script plot scatter plot from Reg and Had models and obs database"
 
 import os
 import netCDF4
