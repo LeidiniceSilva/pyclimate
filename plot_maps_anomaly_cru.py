@@ -2,8 +2,8 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
-__date__        = "12/29/2020"
-__description__ = "This script plot climatology maps from Reg and Had models end obs database"
+__date__        = "06/03/2019"
+__description__ = "This script plot climatology maps from obs database"
 
 import os
 import conda

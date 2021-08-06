@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "08/24/2020"
-__description__ = "This script compute time serie from RegCM output"
+__description__ = "This script compute time serie from regcm46 output"
 
 import xarray as xr
 import matplotlib.pyplot as plt
@@ -26,7 +26,7 @@ list_city = ['serra_negra']
 var_names = ['rsnl', 'rsns']
 
 # Set correct path of the netcdf files
-path_var = '/home/nice/Documents/choluck/rttm/'
+path_var = '/home/nice/Documents/'
 
 # Function to read the netcdf files
 def rawData(var2get_xr, var_name2get):

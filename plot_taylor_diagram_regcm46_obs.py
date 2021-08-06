@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "02/15/2019"
-__description__ = "This script plot taylor diagram graphics from Rec_EXP models end OBS basedata"
+__description__ = "This script plot taylor diagram from regcm46 and obs database"
 
 import os
 import netCDF4
@@ -176,8 +176,7 @@ def import_obs_season(area, obs, season):
 
 if __name__=='__main__':
 
-	# Import regcm exps model end obs database seasonaly
-	
+	# Import regcm exps and obs database 
 	nam_exp1_djf = import_sim_season(u'nam', u'regcm_exp1', u'djf')
 	sam_exp1_djf = import_sim_season(u'sam', u'regcm_exp1', u'djf')
 	neb_exp1_djf = import_sim_season(u'neb', u'regcm_exp1', u'djf')
@@ -238,7 +237,7 @@ if __name__=='__main__':
 	rects = dict(DJF=121,
 				 JJA=122)
 
-	# Plot model end obs data taylor diagram 
+	# Plot regcm exps and obs database taylor diagram 
 	fig = plt.figure()
 
 	for season in ['DJF','JJA']:
@@ -260,19 +259,16 @@ if __name__=='__main__':
 		contours = dia.add_contours(levels=5, colors='0.5') 
 		dia.ax.clabel(contours, inline=1, fontsize=8, fmt='%.1f')
 	
-		
 	# Add a figure legend
 	fig.legend(dia.samplePoints,
 			   [ p.get_label() for p in dia.samplePoints ],
 			   numpoints=1, ncol=3, loc='lower center')
-	fig.tight_layout()
    
 	# Path out to save figure
 	path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
 	name_out = 'pyplt_taylor_diagram_pr_regcm_pbl_obs_2001-2010.png'
 	if not os.path.exists(path_out):
 		create_path(path_out)
-	plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
-
+	plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 	plt.show()
 	exit()

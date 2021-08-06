@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "06ssss/24/2021"
-__description__ = "This script compute and plot interannual variability skill score from ETCCDI indices"
+__description__ = "This script plot interannual variability skill score from extremes indices"
 
 import os
 import netCDF4
@@ -127,8 +127,8 @@ def import_gcm(var, area, model, exp, freq, dt):
 
 	return annual_gcm
 
-# Import regcm exp and cru databases 
-# Precipitation indices
+# Import extreme indices 
+# Precipitation 
 # SAMZ
 obs_prcptot_samz = import_obs('eca_prcptot', 'samz', 'cpc_obs', 'yr', '1986-2005')   
 rcm_prcptot_samz = import_rcm('eca_prcptot', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
@@ -225,7 +225,7 @@ obs_r20mm_matopiba = import_obs('eca_r20mm', 'matopiba', 'cpc_obs', 'yr', '1986-
 rcm_r20mm_matopiba = import_rcm('eca_r20mm', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 gcm_r20mm_matopiba = import_gcm('eca_r20mm', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-# Temperature indices
+# Temperature 
 # SAMZ
 obs_txx_samz = import_obs('eca_txx', 'samz', 'cpc_obs', 'yr', '1986-2005')   
 rcm_txx_samz = import_rcm('eca_txx', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
@@ -332,7 +332,7 @@ rcm_tn90p_matopiba = import_rcm('eca_tn90p', 'matopiba', 'RegCM47_had', 'histori
 gcm_tn90p_matopiba = import_gcm('eca_tn90p', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
 # Calculate IVS
-# Precipitation indices
+# Precipitation 
 # RCM
 # SAMZ
 ivs_rcm_prcptot_samz = compute_ivs(obs_prcptot_samz, rcm_prcptot_samz)
@@ -414,10 +414,9 @@ ivs_gcm_samz_pre = [ivs_gcm_prcptot_samz, 7.5, 7.6, ivs_gcm_rx1day_samz, ivs_gcm
 ivs_gcm_eneb_pre = [ivs_gcm_prcptot_eneb, ivs_gcm_r95p_eneb, ivs_gcm_r99p_eneb, ivs_gcm_rx1day_eneb, ivs_gcm_rx5day_eneb, ivs_gcm_sdii_eneb, ivs_gcm_cdd_eneb, ivs_gcm_cwd_eneb, ivs_gcm_r10mm_eneb, ivs_gcm_r20mm_eneb]
 ivs_gcm_matopiba_pre = [ivs_gcm_prcptot_matopiba, ivs_gcm_r95p_matopiba, ivs_gcm_r99p_matopiba, ivs_gcm_rx1day_matopiba, ivs_gcm_rx5day_matopiba, ivs_gcm_sdii_matopiba, ivs_gcm_cdd_matopiba, ivs_gcm_cwd_matopiba, ivs_gcm_r10mm_matopiba, ivs_gcm_r20mm_matopiba]
 
-# Temperature indices
+# Temperature 
 # RCM
 # SAMZ
-
 ivs_rcm_txx_samz = compute_ivs(obs_txx_samz, np.nanmean(rcm_txx_samz, axis=1))
 ivs_rcm_txn_samz = compute_ivs(obs_txn_samz, np.nanmean(rcm_txn_samz, axis=1))
 ivs_rcm_tnx_samz = compute_ivs(obs_tnx_samz, np.nanmean(rcm_tnx_samz, axis=1))
@@ -507,7 +506,7 @@ print(ivs_gcm_samz_tas)
 print(ivs_gcm_eneb_tas)
 print(ivs_gcm_matopiba_tas)
 
-# Plot IVS 
+# Plot extreme indices  
 fig = plt.figure()
 time1 = np.arange(1, 11)
 time2 = np.arange(1, 12)
@@ -590,8 +589,6 @@ name_out = 'pyplt_ivs_etccdi_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-
-plt.close('all')
-plt.cla()
+plt.show()
 exit()	
 

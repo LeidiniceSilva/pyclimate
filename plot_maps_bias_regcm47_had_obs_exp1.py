@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot seasonal bias maps from Reg and Had models output"
+__description__ = "This script plot seasonal climatology bias maps from regcm47 and hadgem models and obs database"
 
 import os
 import conda
@@ -155,7 +155,7 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 
-# Import regcm exp and cru databases 	   
+# Import models and obs database 
 lat, lon, pre_std_djf_cru, pre_std_mam_cru, pre_std_jja_cru, pre_std_son_cru, pre_std_annual_cru, pre_djf_cru, pre_mam_cru, pre_jja_cru, pre_son_cru, pre_annual_cru = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')	   
 lat, lon, pre_std_djf_rcm, pre_std_mam_rcm, pre_std_jja_rcm, pre_std_son_rcm, pre_std_annual_rcm, pre_djf_rcm, pre_mam_rcm, pre_jja_rcm, pre_son_rcm, pre_annual_rcm = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
 lat, lon, pre_std_djf_gcm, pre_std_mam_gcm, pre_std_jja_gcm, pre_std_son_gcm, pre_std_annual_gcm, pre_djf_gcm, pre_mam_gcm, pre_jja_gcm, pre_son_gcm, pre_annual_gcm = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
@@ -164,7 +164,7 @@ lat, lon, tas_std_djf_cru, tas_std_mam_cru, tas_std_jja_cru, tas_std_son_cru, ta
 lat, lon, tas_std_djf_rcm, tas_std_mam_rcm, tas_std_jja_rcm, tas_std_son_rcm, tas_std_annual_rcm, tas_djf_rcm, tas_mam_rcm, tas_jja_rcm, tas_son_rcm, tas_annual_rcm = import_rcm('tas', 'amz_neb', 'hist', '1986-2005')
 lat, lon, tas_std_djf_gcm, tas_std_mam_gcm, tas_std_jja_gcm, tas_std_son_gcm, tas_std_annual_gcm, tas_djf_gcm, tas_mam_gcm, tas_jja_gcm, tas_son_gcm, tas_annual_gcm = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
 
-# Compute and plot bias from regcm exp and cru database
+# Compute bias from models and obs database 
 pre_djf_rcm_bias = pre_djf_rcm - pre_djf_cru
 pre_mam_rcm_bias = pre_mam_rcm - pre_mam_cru
 pre_jja_rcm_bias = pre_jja_rcm - pre_jja_cru
@@ -189,7 +189,7 @@ tas_jja_gcm_bias = tas_jja_gcm - tas_jja_cru
 tas_son_gcm_bias = tas_son_gcm - tas_son_cru
 tas_annual_gcm_bias = tas_annual_gcm - tas_annual_cru
 
-# Compute added value from regcm output
+# Compute added value from models and obs database 
 av_pre_djf = compute_av(pre_djf_gcm, pre_djf_rcm, pre_djf_cru)
 av_pre_mam = compute_av(pre_mam_gcm, pre_mam_rcm, pre_mam_cru)
 av_pre_jja = compute_av(pre_jja_gcm, pre_jja_rcm, pre_jja_cru)
@@ -202,7 +202,7 @@ av_tas_jja = compute_av(tas_jja_gcm, np.nanmean(tas_jja_rcm, axis=0), tas_jja_cr
 av_tas_son = compute_av(tas_son_gcm, np.nanmean(tas_son_rcm, axis=0), tas_son_cru)
 av_tas_annual = compute_av(tas_annual_gcm, np.nanmean(tas_annual_rcm, axis=0), tas_annual_cru)
 
-# Compute ttest
+# Compute ttest from models and obs database 
 p_value_pre_djf_rcm_cru = ttest(pre_djf_rcm, pre_djf_cru, pre_std_djf_rcm, pre_std_djf_cru)
 p_value_pre_mam_rcm_cru = ttest(pre_mam_rcm, pre_mam_cru, pre_std_mam_rcm, pre_std_mam_cru)
 p_value_pre_jja_rcm_cru = ttest(pre_jja_rcm, pre_jja_cru, pre_std_jja_rcm, pre_std_jja_cru)
@@ -227,7 +227,7 @@ p_value_tas_jja_gcm_cru = ttest(tas_jja_gcm, tas_jja_cru, tas_std_jja_gcm, tas_s
 p_value_tas_son_gcm_cru = ttest(tas_son_gcm, tas_son_cru, tas_std_son_gcm, tas_std_son_cru)
 p_value_tas_annual_gcm_cru = ttest(tas_annual_gcm, tas_annual_cru, tas_std_annual_gcm, tas_std_annual_cru)
 
-# Plot bias maps 
+# Plot models and obs database 
 fig = plt.figure(figsize=(8, 6))
 levs1 = [-6, -3, -1, 1, 3, 6]
 levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
@@ -509,7 +509,6 @@ name_out = 'pyplt_maps_bias_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
-
 plt.show()
 exit()
 

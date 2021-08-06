@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/01/2021"
-__description__ = "This script plot maps from extremes index"
+__description__ = "This script plot climatology maps from extremes indices"
 
 import os
 import conda
@@ -128,7 +128,7 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 	
-# Import regcm exp and cru databases 	
+# Import extreme indices 
 lat, lon, obs_prcptot = import_obs('eca_prcptot', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
 lat, lon, rcm_prcptot = import_rcm('eca_prcptot', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 lat, lon, gcm_prcptot = import_gcm('eca_prcptot', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
@@ -169,7 +169,7 @@ lat, lon, obs_r20mm = import_obs('eca_r20mm', 'amz_neb', 'cpc_obs', 'yr', '1986-
 lat, lon, rcm_r20mm = import_rcm('eca_r20mm', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 lat, lon, gcm_r20mm = import_gcm('eca_r20mm', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-# Compute bias from etccdi indices
+# Compute bias from extreme indices 
 bias_rcm_prcptot = rcm_prcptot - obs_prcptot
 bias_rcm_r95p = rcm_r95p - obs_r95p
 bias_rcm_r99p = rcm_r99p - obs_r99p
@@ -203,7 +203,7 @@ av_cwd = compute_added_value(gcm_cwd, rcm_cwd, obs_cwd)
 av_r10mm = compute_added_value(gcm_r10mm, rcm_r10mm, obs_r10mm)
 av_r20mm = compute_added_value(gcm_r20mm, rcm_r20mm, obs_r20mm)
 
-# Plot maps with the function
+# Plot extreme indices 
 fig = plt.figure(figsize=(6, 10))
 levs1 = [-600, -400, -200, 200, 400, 600]
 levs2 = [-40, -30, -10, 10, 30, 40]
@@ -482,15 +482,13 @@ cbar.ax.tick_params(labelsize=6)
 
 plt.subplots_adjust(left=0.10, bottom=0.10, right=0.90, top=0.90, wspace=0.30, hspace=0.30)
 
-# Path out to save bias figure
+# Path out to save figure
 path_out = '/home/nice/Downloads'
 name_out = 'pyplt_maps_bias_etccdi_pre_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
-
-plt.close('all')
-plt.cla()
+plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
+plt.show()
 exit()	
 	
 	

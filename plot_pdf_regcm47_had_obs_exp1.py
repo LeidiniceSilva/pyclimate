@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot pdf function from Reg and Had models end obs database"
+__description__ = "This script plot pdf function from regcm47 and hadgem models and obs database"
 
 import os
 import netCDF4
@@ -65,7 +65,7 @@ def import_gcm(var, area, exp, dt):
 	return value
 
 	              
-# Import regcm exps model end obs database 
+# Import models and obs database 
 # Precipitation
 mon_pre_cru_samz = import_obs('pre', 'samz', 'cru_ts4.04', '1986-2005')
 mon_pre_cru_eneb = import_obs('pre', 'eneb', 'cru_ts4.04', '1986-2005')
@@ -119,7 +119,7 @@ xpdf_tas_had_samz, pdf_tas_had_samz = compute_pdf(mon_tas_had_samz)
 xpdf_tas_had_eneb, pdf_tas_had_eneb = compute_pdf(mon_tas_had_eneb)
 xpdf_tas_had_matopiba, pdf_tas_had_matopiba = compute_pdf(mon_tas_had_matopiba)
 
-# Plot model end obs data climatology
+# Plot models and obs database 
 fig = plt.figure()
 
 ax1 = fig.add_subplot(3, 2, 1)
@@ -233,7 +233,6 @@ name_out = 'pyplt_pdf_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-
 plt.show()
 exit()
 

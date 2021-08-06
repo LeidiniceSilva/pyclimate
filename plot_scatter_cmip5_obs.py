@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/08/2019"
-__description__ = "This script plot scatter plot cmip5 models end obs database"
+__description__ = "This script plot scatter plot from cmip5 models and obs database"
 
 import os
 import netCDF4
@@ -85,17 +85,18 @@ mdl_list = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACC
 
 for mdl in mdl_list:
 	
-	# Import cmip5 model end obs database monthly	
+	# Import cmip5 model and obs database
 	mdl_clim = import_cmip5_clim(mdl)
 	
 	obs  = u'cru_ts4.02'
 	obs_clim = import_obs_clim(obs)
 	
-	# Compute statiscts index from CMIP5 models
+	# Compute statiscts index from cmip5 models
 	x.append(metrics.mean_absolute_error(obs_clim, mdl_clim))
 	y.append(metrics.mean_squared_error(obs_clim, mdl_clim))
 	z.append(compute_pbias(obs_clim, mdl_clim))
 
+# Plot cmip5 model and obs database
 fig = plt.figure()
 ax = Axes3D(fig)
 
@@ -130,14 +131,12 @@ else:
 	
 plt.title(u'Scatter plot de {0} - {1}  \n CMIP5-hist x CRU-ts4.02 - 1975-2005 (Período de Referência: 1850-2005)'.format(var_name, area_name), fontsize=12, y=0.99)
 
-# Save figure
+# Path out to save figure
 path_out = '/home/nice'
 name_out = 'pyplt_scatter_plot_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area)
-
 if not os.path.exists(path_out):
-	create_path(path_out)
-	
-plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
+	create_path(path_out)	
+plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()
 

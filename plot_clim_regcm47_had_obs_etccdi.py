@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot annual cycle graphics from Reg and Had models end obs database"
+__description__ = "This script plot annual climatology from from extremes indices"
 
 import os
 import netCDF4
@@ -86,7 +86,7 @@ def import_gcm(var, area, model, exp, dt):
 	return gcm
 		
 	            
-# Import regcm exps model end obs database climatology
+# Import extreme indices 
 mon_pre_cpc_samz = import_obs('precip', 'samz', 'cpc_obs', '1986-2005')
 mon_pre_cpc_eneb = import_obs('precip', 'eneb', 'cpc_obs', '1986-2005')
 mon_pre_cpc_matopiba = import_obs('precip', 'matopiba', 'cpc_obs', '1986-2005')
@@ -117,7 +117,7 @@ mon_tmin_had_samz = import_gcm('tasmin', 'samz', 'HadGEM2-ES', 'historical', '19
 mon_tmin_had_eneb = import_gcm('tasmin', 'eneb', 'HadGEM2-ES', 'historical', '1986-2005')
 mon_tmin_had_matopiba = import_gcm('tasmin', 'matopiba', 'HadGEM2-ES', 'historical', '1986-2005')
 
-# Plot model end obs data climatology
+# Plot extreme indices 
 fig = plt.figure()
 time = np.arange(0.5, 12 + 0.5)
 
@@ -197,7 +197,6 @@ name_out = 'pyplt_annual_cycle_reg_had_obs_1986-2005_etccdi.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-
 plt.show()
 exit()
 

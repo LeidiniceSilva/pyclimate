@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "06/01/2020"
-__description__ = "This script compute criterion TOPSIS from CMIP5 models end OBS basedata"
+__description__ = "This script compute criterion topsis from cmip5 models and obs database"
 
 import os
 import netCDF4
@@ -14,6 +14,7 @@ from comp_statist_indices import compute_corr
 from comp_statist_indices import compute_r2
 from comp_statist_indices import compute_rmse
 from comp_statist_indices import compute_mae
+
 
 def import_cmip5(model):
 	
@@ -66,7 +67,7 @@ metrics_gcm = []
 
 for mdl in models:
 	
-	# Import cmip5 model end obs database monthly	
+	# Import cmip5 model and obs database
 	month_gcm = import_cmip5(mdl)
 		
 	obs  = u'cru_ts4.02'

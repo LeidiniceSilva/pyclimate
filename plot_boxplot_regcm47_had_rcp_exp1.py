@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot boxplot from Reg and Had models end obs database"
+__description__ = "This script plot boxplot from regcm47 and hadgem models to rcp"
 
 import os
 import netCDF4
@@ -64,7 +64,7 @@ def import_gcm(var, area, exp, dt):
 	return gcm
 
 	              
-# Import regcm exps model end obs database climatology
+# Import models 
 pre_cru_samz_hist = import_obs('pre', 'samz', 'cru_ts4.04', '1986-2005')
 pre_reg_samz_hist = import_rcm('pr', 'samz', 'hist', '1986-2005')
 pre_had_samz_hist = import_gcm('pr', 'samz', 'hist', '1986-2005')
@@ -119,7 +119,7 @@ tas_had_matopiba_rcp26 = import_gcm('tas', 'matopiba', 'rcp26', '2080-2099')
 tas_had_matopiba_rcp85 = import_gcm('tas', 'matopiba', 'rcp85', '2080-2099')
 tas_matopiba = [tmp_cru_matopiba_hist, np.nanmean(tas_reg_matopiba_hist, axis=1), tas_had_matopiba_hist, np.nanmean(tas_reg_matopiba_rcp26, axis=1), tas_had_matopiba_rcp26, np.nanmean(tas_reg_matopiba_rcp85, axis=1), tas_had_matopiba_rcp85]
 
-# Plot model end obs data boxplot
+# Plot models 
 fig = plt.figure()
 time = np.arange(1, 8)
 colors = ['black', 'gray', 'dimgray', 'blue', 'blue', 'red', 'red']
@@ -246,13 +246,12 @@ plt.axvline(5.5, lw=1., linestyle='-', color='black', alpha=2)
 plt.text(0.54, 39.,  '         Hist            RCP2.6     RCP8.5', fontweight='bold', fontsize=8)
 plt.grid(True, which='major', linestyle='--')
              
-# Path out to save bias figure
+# Path out to save figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_boxplot_reg_had_obs_1986-2005.png'
+name_out = 'pyplt_boxplot_reg_had_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
-
+plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()
 

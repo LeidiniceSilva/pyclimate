@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "08/05/2021"
-__description__ = "This script plot seasonal bias maps from Reg and Had models output"
+__description__ = "This script plot seasonal climatology bias maps from regcm47 and hadgem models and obs database"
 
 import os
 import conda
@@ -162,7 +162,7 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 
-# Import regcm exp and cru databases 	   
+# Import models and obs database 
 lat, lon, pre_std_djf_cru, pre_std_jja_cru, pre_std_ann_cru, pre_djf_cru, pre_jja_cru, pre_ann_cru = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')	   
 lat, lon, pre_std_djf_rcm_exp1, pre_std_jja_rcm_exp1, pre_std_ann_rcm_exp1, pre_djf_rcm_exp1, pre_jja_rcm_exp1, pre_ann_rcm_exp1 = import_rcm_exp1('pr', 'amz_neb', 'hist', '1986-2005')
 lat, lon, pre_std_djf_rcm_exp2, pre_std_jja_rcm_exp2, pre_std_ann_rcm_exp2, pre_djf_rcm_exp2, pre_jja_rcm_exp2, pre_ann_rcm_exp2 = import_rcm_exp2('pr', 'amz_neb', 'hist', '1986-2005')
@@ -173,7 +173,7 @@ lat, lon, tas_std_djf_rcm_exp1, tas_std_jja_rcm_exp1, tas_std_ann_rcm_exp1, tas_
 lat, lon, tas_std_djf_rcm_exp2, tas_std_jja_rcm_exp2, tas_std_ann_rcm_exp2, tas_djf_rcm_exp2, tas_jja_rcm_exp2, tas_ann_rcm_exp2 = import_rcm_exp2('tas', 'amz_neb', 'hist', '1986-2005')
 lat, lon, tas_std_djf_gcm, tas_std_jja_gcm, tas_std_ann_gcm, tas_djf_gcm, tas_jja_gcm, tas_ann_gcm = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
 
-# Compute and plot bias from regcm exp and cru database
+# Compute bias from models and obs database 
 pre_djf_rcm_exp1_bias = pre_djf_rcm_exp1 - pre_djf_cru
 pre_jja_rcm_exp1_bias = pre_jja_rcm_exp1 - pre_jja_cru
 pre_ann_rcm_exp1_bias = pre_ann_rcm_exp1 - pre_ann_cru
@@ -194,7 +194,7 @@ tas_djf_gcm_bias = tas_djf_gcm - tas_djf_cru
 tas_jja_gcm_bias = tas_jja_gcm - tas_jja_cru
 tas_ann_gcm_bias = tas_ann_gcm - tas_ann_cru
 
-# Compute ttest
+# Compute ttest from models and obs database 
 p_value_pre_djf_rcm_exp1_cru = ttest(pre_djf_rcm_exp1, pre_djf_cru, pre_std_djf_rcm_exp1, pre_std_djf_cru)
 p_value_pre_jja_rcm_exp1_cru = ttest(pre_jja_rcm_exp1, pre_djf_cru, pre_std_jja_rcm_exp1, pre_std_jja_cru)
 p_value_pre_ann_rcm_exp1_cru = ttest(pre_ann_rcm_exp1, pre_djf_cru, pre_std_ann_rcm_exp1, pre_std_ann_cru)
@@ -215,7 +215,7 @@ p_value_tas_djf_gcm_cru = ttest(tas_djf_gcm, pre_djf_cru, tas_std_djf_gcm, tas_s
 p_value_tas_jja_gcm_cru = ttest(tas_jja_gcm, pre_djf_cru, tas_std_jja_gcm, tas_std_jja_cru)
 p_value_tas_ann_gcm_cru = ttest(tas_ann_gcm, pre_djf_cru, tas_std_ann_gcm, tas_std_ann_cru)
 
-# Compute added value from regcm output
+# Compute added from models and obs database 
 av_pre_djf_exp1 = compute_av(pre_djf_gcm, pre_djf_rcm_exp1, pre_djf_cru)
 av_pre_jja_exp1 = compute_av(pre_jja_gcm, pre_jja_rcm_exp1, pre_jja_cru)
 av_pre_ann_exp1 = compute_av(pre_ann_gcm, pre_ann_rcm_exp1, pre_ann_cru)
@@ -230,7 +230,7 @@ av_tas_djf_exp2 = compute_av(tas_djf_gcm, np.nanmean(tas_djf_rcm_exp2, axis=0), 
 av_tas_jja_exp2 = compute_av(tas_jja_gcm, np.nanmean(tas_jja_rcm_exp2, axis=0), tas_jja_cru)
 av_tas_ann_exp2 = compute_av(tas_ann_gcm, np.nanmean(tas_ann_rcm_exp2, axis=0), tas_ann_cru)
 
-# Plot bias maps 
+# Plot models and obs database 
 fig = plt.figure(figsize=(5, 5))
 levs1 = [-6, -3, -1, 1, 3, 6]
 levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
@@ -523,7 +523,6 @@ name_out = 'pyplt_maps_bias_reg_exp2_tas.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
-
 plt.show()
 exit()
 

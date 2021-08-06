@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot climatology maps from Reg and Had models end obs database"
+__description__ = "This script plot seasonal climatology maps from regcm47 and hadgem models to rcp"
 
 import os
 import conda
@@ -126,7 +126,7 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 
-# Import regcm and hadgem exp
+# Import models
 lat, lon, pre_std_djf_rcm_hist, pre_std_mam_rcm_hist, pre_std_jja_rcm_hist, pre_std_son_rcm_hist, pre_std_annual_rcm_hist, pre_djf_rcm_hist, pre_mam_rcm_hist, pre_jja_rcm_hist, pre_son_rcm_hist, pre_annual_rcm_hist = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
 lat, lon, pre_std_djf_gcm_hist, pre_std_mam_gcm_hist, pre_std_jja_gcm_hist, pre_std_son_gcm_hist, pre_std_annual_gcm_hist, pre_djf_gcm_hist, pre_mam_gcm_hist, pre_jja_gcm_hist, pre_son_gcm_hist, pre_annual_gcm_hist = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
 lat, lon, pre_std_djf_rcm_rcp26, pre_std_mam_rcm_rcp26, pre_std_jja_rcm_rcp26, pre_std_son_rcm_rcp26, pre_std_annual_rcm_rcp26, pre_djf_rcm_rcp26, pre_mam_rcm_rcp26, pre_jja_rcm_rcp26, pre_son_rcm_rcp26, pre_annual_rcm_rcp26 = import_rcm('pr', 'amz_neb', 'rcp26', '2080-2099')
@@ -235,7 +235,7 @@ p_value_tas_jja_gcm_rcp85 = ttest(tas_jja_gcm_rcp85, tas_jja_gcm_hist, tas_std_j
 p_value_tas_son_gcm_rcp85 = ttest(tas_son_gcm_rcp85, tas_son_gcm_hist, tas_std_son_gcm_rcp85, tas_std_son_gcm_hist)
 p_value_tas_annual_gcm_rcp85 = ttest(tas_annual_gcm_rcp26, tas_annual_gcm_hist, tas_std_annual_gcm_rcp85, tas_std_annual_gcm_hist)
 
-# Plot diff maps 
+# Plot models 
 fig = plt.figure(figsize=(8, 9))
 levs1 = [-60, -40, -20, 20, 40, 60]
 levs2 = [-90, -60, -30, 30, 60, 90]
@@ -635,11 +635,10 @@ plt.subplots_adjust(left=0.10, bottom=0.10, right=0.90, top=0.90, wspace=0.10, h
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_diff_reg_had_rcp-hist.png'
+name_out = 'pyplt_maps_diff_reg_had_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
-
 plt.show()
 exit()
 

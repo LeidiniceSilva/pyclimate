@@ -3,8 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "09/22/2018"
-__description__ = "This script plot box and time series simulation and obs databases per region"
-
+__description__ = "This script plot plot boxplot from regcm46 and obs database"
 
 import os
 import netCDF4
@@ -64,7 +63,7 @@ for area in area_list:
 	print "area -----------------> ", area_dict[area]
 	print 
 	
-	# Import simulations experiments and observed databases
+	# Import regcm exps end obs database 
 	exp  = 'exp1'
 	exp1 = import_exp_model(exp, area)
 
@@ -86,7 +85,7 @@ for area in area_list:
 	print "trmm", trmm
 	print
 
-	# Precipitation boxplot per region
+	# Plot regcm exps end obs database 
 	fig = plt.figure(figsize=(12,6))
 	time = np.arange(1, 5)
 
@@ -131,8 +130,11 @@ for area in area_list:
 	font = FontProperties(size=10)
 	plt.legend([u'RegCM4.6_EXP1', U'RegCM4.6_EXP2', u'CMAP', u'TRMM'], loc='best', ncol=2, prop=font)
 
-	path_out = '/home/nice/'
-	plt.savefig(os.path.join(path_out, 'precip_serie_temp_amz_neb_a1_2005.png'), bbox_inches='tight')
-	raise SystemExit
-
+	# Path out to save figure
+	path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
+	name_out = 'precip_serie_temp_amz_neb_a1_2005.png.png'
+	if not os.path.exists(path_out):
+		create_path(path_out)
+	plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
+	plt.show()
 exit()

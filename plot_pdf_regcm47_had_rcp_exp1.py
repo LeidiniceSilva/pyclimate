@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot annual cycle graphics from Reg and Had models end obs database"
+__description__ = "This script plot pdf function from regcm47 and hadgem models to rcp"
 
 import os
 import netCDF4
@@ -71,7 +71,7 @@ def comp_diff_rcp_hist_tas(rcp, hist):
 	return diff_rcp_hist
 	
 	
-# Import regcm exps model end obs database climatology
+# Import models 
 # Precipitation
 pre_reg_samz_hist = import_rcm('pr', 'samz', 'hist', '1986-2005')
 pre_reg_eneb_hist = import_rcm('pr', 'eneb', 'hist', '1986-2005')
@@ -183,7 +183,7 @@ xpdf_tas_had_samz_rcp85_hist, pdf_tas_had_samz_rcp85_hist = compute_pdf(diff_tas
 xpdf_tas_had_eneb_rcp85_hist, pdf_tas_had_eneb_rcp85_hist = compute_pdf(diff_tas_had_eneb_rcp85_hist)
 xpdf_tas_had_matopiba_rcp85_hist, pdf_tas_had_matopiba_rcp85_hist = compute_pdf(diff_tas_had_matopiba_rcp85_hist)
 
-# Plot model end obs data climatology
+# Plot models 
 fig = plt.figure()
 
 ax1 = fig.add_subplot(3, 2, 1)
@@ -327,7 +327,6 @@ name_out = 'pyplt_pdf_reg_had_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-
 plt.show()
 exit()
 

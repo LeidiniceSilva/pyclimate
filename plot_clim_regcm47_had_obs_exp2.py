@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "08/05/2021"
-__description__ = "This script plot annual cycle graphics from Reg and Had models and obs database"
+__description__ = "This script plot annual climatology from regcm47 and hadgem models and obs database"
 
 import os
 import netCDF4
@@ -103,7 +103,7 @@ def compute_bias(sim, obs):
 	return bias
 	
 	          
-# Import regcm exps model end obs database climatology
+# Import models and obs database 
 # Precipitation
 mon_pre_cru_samz = import_obs('pre', 'samz', 'cru_ts4.04', '1986-2005')
 mon_pre_cru_eneb = import_obs('pre', 'eneb', 'cru_ts4.04', '1986-2005')
@@ -138,7 +138,7 @@ mon_tas_had_samz = import_gcm('tas', 'samz', 'hist', '1986-2005')
 mon_tas_had_eneb = import_gcm('tas', 'eneb', 'hist', '1986-2005')
 mon_tas_had_matopiba = import_gcm('tas', 'matopiba', 'hist', '1986-2005')
 
-# Compute bias
+# Compute bias from models and obs database 
 # Precipitation
 bias_pre_reg_exp1_cru_samz = compute_bias(mon_pre_reg_exp1_samz, mon_pre_cru_samz)
 bias_pre_reg_exp1_cru_eneb = compute_bias(mon_pre_reg_exp1_eneb, mon_pre_cru_eneb)
@@ -190,7 +190,7 @@ print(np.nanmean(bias_tas_reg_exp1_cru_matopiba))
 print(np.nanmean(bias_tas_reg_exp2_cru_matopiba))
 print(np.nanmean(bias_tas_had_cru_matopiba))
 
-# Plot model end obs data climatology
+# Plot models and obs database 
 fig = plt.figure()
 time = np.arange(0.5, 12 + 0.5)
 
@@ -317,6 +317,5 @@ name_out = 'pyplt_annual_cycle_reg_exp2.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-
 plt.show()
 exit()

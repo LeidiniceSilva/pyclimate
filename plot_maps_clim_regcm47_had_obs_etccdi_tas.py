@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/01/2021"
-__description__ = "This script plot maps from extremes index"
+__description__ = "This script plot climatology maps from extremes indices"
 
 import os
 import conda
@@ -130,7 +130,7 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 	
-# Import regcm exp and cru databases 	
+# Import extreme indices 
 lat, lon, obs_txx = import_obs('eca_txx', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
 lat, lon, rcm_txx = import_rcm('eca_txx', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 lat, lon, gcm_txx = import_gcm('eca_txx', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
@@ -175,7 +175,7 @@ lat, lon, obs_tn90p = import_obs('eca_tn90p', 'amz_neb', 'cpc_obs', 'yr', '1986-
 lat, lon, rcm_tn90p = import_rcm('eca_tn90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 lat, lon, gcm_tn90p = import_gcm('eca_tn90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-# Plot maps with the function
+# Plot extreme indices 
 fig = plt.figure(figsize=(6, 11))
 
 levs1 = [28, 31, 34, 37, 40, 43]
@@ -456,15 +456,13 @@ cbar.ax.tick_params(labelsize=6)
 
 plt.subplots_adjust(left=0.10, bottom=0.10, right=0.90, top=0.90, wspace=0.30, hspace=0.30)
 
-# Path out to save bias figure
+# Path out to save figure
 path_out = '/home/nice/Downloads'
 name_out = 'pyplt_maps_etccdi_tas_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
-
-plt.close('all')
-plt.cla()
+plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
+plt.show()
 exit()	
 	
 	

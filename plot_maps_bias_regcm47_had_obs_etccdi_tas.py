@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/01/2021"
-__description__ = "This script plot maps from extremes index"
+__description__ = "This script plot climatology maps from extremes index"
 
 import os
 import conda
@@ -131,7 +131,7 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 	
-# Import regcm exp and cru databases 	
+# Import extreme indices 
 lat, lon, obs_txx = import_obs('eca_txx', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
 lat, lon, rcm_txx = import_rcm('eca_txx', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 lat, lon, gcm_txx = import_gcm('eca_txx', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
@@ -176,7 +176,7 @@ lat, lon, obs_tn90p = import_obs('eca_tn90p', 'amz_neb', 'cpc_obs', 'yr', '1986-
 lat, lon, rcm_tn90p = import_rcm('eca_tn90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 lat, lon, gcm_tn90p = import_gcm('eca_tn90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-# Compute bias from etccdi indices
+# Compute bias from extreme indices 
 bias_rcm_txx = np.nanmean(rcm_txx, axis=0) - obs_txx
 bias_rcm_txn = np.nanmean(rcm_txn, axis=0) - obs_txn
 bias_rcm_tnx = np.nanmean(rcm_tnx, axis=0) - obs_tnx
@@ -213,7 +213,7 @@ av_tx90p = compute_added_value(gcm_tx90p, np.nanmean(rcm_tx90p, axis=0), obs_tx9
 av_tn10p = compute_added_value(gcm_tn10p, np.nanmean(rcm_tn10p, axis=0), obs_tn10p)
 av_tn90p = compute_added_value(gcm_tn90p, np.nanmean(rcm_tn90p, axis=0), obs_tn90p)
 
-# Plot maps with the function
+# Plot extreme indices 
 fig = plt.figure(figsize=(6, 11))
 
 levs1 = [-6, -4, -2, 2, 4, 6]
@@ -512,15 +512,13 @@ cbar.ax.tick_params(labelsize=6)
 
 plt.subplots_adjust(left=0.10, bottom=0.10, right=0.90, top=0.90, wspace=0.30, hspace=0.30)
 
-# Path out to save bias figure
+# Path out to save figure
 path_out = '/home/nice/Downloads'
 name_out = 'pyplt_maps_bias_etccdi_tas_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
-
-plt.close('all')
-plt.cla()
+plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
+plt.show()
 exit()	
 	
 	

@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilvae@gmail.com"
 __date__        = "01/08/2019"
-__description__ = "This script create dictionary monthly with information about the best cmip5 models"
+__description__ = "This script create monthly dictionary from cmip5 models and obs database"
 
 import os
 import netCDF4
@@ -73,7 +73,7 @@ for method in ['r', 'mae', 'rmse', 'bias', 'pbias', 'apb', 'effic']:
 		month = month_dict[mon]
 		print 'Month:', month
 				  
-		# Import cmip5 model end obs database climatology
+		# Import cmip5 model and obs database
 		model  = u'BCC-CSM1.1'
 		mdl1_clim = import_cmip5_clim(mon, model)
 

@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot annual cycle graphics from Reg and Had models end obs database"
+__description__ = "This script plot annual climatology from regcm47 and hadgem models to rcp"
 
 import os
 import netCDF4
@@ -98,7 +98,7 @@ def comp_diff_rcp_hist_tas(rcp, hist):
 	return diff_rcp_hist
 	
 	      
-# Import regcm exps model end obs database climatology
+# Import models 
 # Precipitation
 pre_reg_samz_hist, pre_reg_samz_hist_p5, pre_reg_samz_hist_p95 = import_rcm('pr', 'samz', 'hist', '1986-2005')
 pre_had_samz_hist, pre_had_samz_hist_p5, pre_had_samz_hist_p95 = import_gcm('pr', 'samz', 'hist', '1986-2005')
@@ -223,7 +223,7 @@ diff_tas_reg_matopiba_rcp85_hist_p95 = comp_diff_rcp_hist_tas(np.nanmean(tas_reg
 diff_tas_had_matopiba_rcp26_hist_p95 = comp_diff_rcp_hist_tas(tas_had_matopiba_rcp26_p95, tas_had_matopiba_hist_p95)
 diff_tas_had_matopiba_rcp85_hist_p95 = comp_diff_rcp_hist_tas(tas_had_matopiba_rcp85_p95, tas_had_matopiba_hist_p95)
 
-# Plot model end obs data climatology
+# Plot models
 fig = plt.figure()
 time = np.arange(0.5, 12 + 0.5)
 
@@ -366,7 +366,6 @@ name_out = 'pyplt_annual_cycle_reg_had_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-
 plt.show()
 exit()
 

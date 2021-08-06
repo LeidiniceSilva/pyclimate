@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "03/25/2019"
-__description__ = "This script plot correlation Portrait Diagram from CMIP5 models"
+__description__ = "This script plot portrait diagram from cmip5 models and obs database"
 
 import os
 import netCDF4
@@ -160,7 +160,7 @@ annualmt = []
 for model in models:
 	print('CMIP5 Model:', model)
 	
-	# Import cmip5 model end obs database monthly pr
+	# Import cmip5 model and obs database
 	annual_sim_amz_pr, djf_sim_amz_pr, mam_sim_amz_pr, jja_sim_amz_pr, son_sim_amz_pr = import_cmip5_pr('amz', model)
 	annual_sim_neb_pr, djf_sim_neb_pr, mam_sim_neb_pr, jja_sim_neb_pr, son_sim_neb_pr = import_cmip5_pr('neb', model)
 	annual_sim_matopiba_pr, djf_sim_matopiba_pr, mam_sim_matopiba_pr, jja_sim_matopiba_pr, son_sim_matopiba_pr = import_cmip5_pr('matopiba', model)
@@ -169,7 +169,6 @@ for model in models:
 	annual_cru_neb_pre, djf_cru_neb_pre, mam_cru_neb_pre, jja_cru_neb_pre, son_cru_neb_pre = import_cru_pre('neb', u'cru_ts4.02')
 	annual_cru_matopiba_pre, djf_cru_matopiba_pre, mam_cru_matopiba_pre, jja_cru_matopiba_pre, son_cru_matopiba_pre = import_cru_pre('matopiba', u'cru_ts4.02')
 
-	# Import cmip5 model end obs database monthly tas	
 	annual_sim_amz_tas, djf_sim_amz_tas, mam_sim_amz_tas, jja_sim_amz_tas, son_sim_amz_tas = import_cmip5_tas('amz', model)
 	annual_sim_neb_tas, djf_sim_neb_tas, mam_sim_neb_tas, jja_sim_neb_tas, son_sim_neb_tas = import_cmip5_tas('neb', model)
 	annual_sim_matopiba_tas, djf_sim_matopiba_tas, mam_sim_matopiba_tas, jja_sim_matopiba_tas, son_sim_matopiba_tas = import_cmip5_tas('matopiba', model)
@@ -261,7 +260,7 @@ for model in models:
 	matopiba_tas = np.array([sonmt, jjamt, mammt, djfmt, annualmt])
 
 
-# Plot model end obs data climatology
+# Plot cmip5 model and obs database
 fig, axes = plt.subplots(nrows=3, ncols=2, constrained_layout=True, figsize=(10, 8))
 norm = colors.BoundaryNorm(boundaries=np.arange(-8, 9, 1), ncolors=256)
 
@@ -320,14 +319,11 @@ axes[2, 1].set_yticks(np.arange(matopiba_tas.shape[0]) + 0.5)
 axes[2, 1].set_xticklabels(xlabels, rotation=90)
 axes[2, 1].set_yticklabels(ylabels)
 
-
-# Save figure
+# Path out to save figure
 path_out = '/home/nice'
 name_out = 'pyplt_portrait_diagram_cmip5_cru_1975-2005.png'
-
 if not os.path.exists(path_out):
-	create_path(path_out)
-	
+	create_path(path_out)	
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()

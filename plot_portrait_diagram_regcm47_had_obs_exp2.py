@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "08/05/2021"
-__description__ = "This script plot portrait diagram from Reg and Had models and obs database"
+__description__ = "This script plot portrait diagram from regcm47 and hadgem models and obs database"
 
 import os
 import netCDF4
@@ -97,7 +97,7 @@ def import_gcm(var, area, exp, dt):
 	return ann_gcm, djf_gcm, jja_gcm
 
 	              
-# Import regcm exps model end obs database climatology
+# Import models and obs database 
 # Precipitation
 ann_cru_pre_samz, djf_cru_pre_samz, jja_cru_pre_samz = import_obs('pre', 'samz', 'cru_ts4.04', '1986-2005')
 ann_rcm_exp1_pre_samz, djf_rcm_exp1_pre_samz, jja_rcm_exp1_pre_samz = import_rcm_exp1('pr', 'samz', 'hist', '1986-2005')
@@ -223,7 +223,7 @@ diso_matopiba_tas = np.array([[diso_djf_rcm_exp1_tas_matopiba, diso_jja_rcm_exp1
 [diso_djf_rcm_exp2_tas_matopiba, diso_jja_rcm_exp2_tas_matopiba, diso_ann_rcm_exp2_tas_matopiba], 
 [diso_djf_gcm_tas_matopiba, diso_jja_gcm_tas_matopiba, diso_ann_gcm_tas_matopiba]])
 
-# Plot model end obs data climatology
+# Plot models and obs database 
 fig = plt.figure()
 
 norm = colors.BoundaryNorm(boundaries=np.arange(0, 2, 0.2), ncolors=256)
@@ -334,13 +334,11 @@ for y in range(diso_matopiba_tas.shape[0]):
                  ha="center", va="center", color='k',
                  ) 
      
-# Save figure
+# Path out to save figure
 path_out = '/home/nice/Downloads'
 name_out = 'pyplt_portrait_diagram_reg_exp2.png'
-
 if not os.path.exists(path_out):
-	create_path(path_out)
-	
+	create_path(path_out)	
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()

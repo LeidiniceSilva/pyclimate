@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot seasonal climatology maps from Reg and Had models end obs database"
+__description__ = "This script plot seasonal climatology maps from regcm47 and hadgem models and obs database"
 
 import os
 import conda
@@ -142,7 +142,7 @@ def basemap(lat, lon):
 	return map, xx, yy
 
 
-# Import regcm exp and cru databases 
+# Import models and obs database 
 lat, lon, pre_cru_mean, pre_cru_std, pre_djf_cru, pre_mam_cru, pre_jja_cru, pre_son_cru, pre_annual_cru = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')	   
 lat, lon, pre_rcm_mean, pre_rcm_std, pre_djf_rcm, pre_mam_rcm, pre_jja_rcm, pre_son_rcm, pre_annual_rcm = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')
 lat, lon, pre_gcm_mean, pre_gcm_std, pre_djf_gcm, pre_mam_gcm, pre_jja_gcm, pre_son_gcm, pre_annual_gcm = import_gcm('pr', 'amz_neb', 'hist', '1986-2005')
@@ -151,7 +151,7 @@ lat, lon, tas_cru_mean, tas_cru_std, tas_djf_cru, tas_mam_cru, tas_jja_cru, tas_
 lat, lon, tas_rcm_mean, tas_rcm_std, tas_djf_rcm, tas_mam_rcm, tas_jja_rcm, tas_son_rcm, tas_annual_rcm = import_rcm('tas', 'amz_neb', 'hist', '1986-2005')
 lat, lon, tas_gcm_mean, tas_gcm_std, tas_djf_gcm, tas_mam_gcm, tas_jja_gcm, tas_son_gcm, tas_annual_gcm = import_gcm('tas', 'amz_neb', 'hist', '1986-2005')
 
-# Compute ttest
+# Compute ttest from models and obs database 
 p_value_pre_djf_cru = ttest(pre_cru_mean, pre_cru_std, pre_djf_cru)
 p_value_pre_mam_cru = ttest(pre_cru_mean, pre_cru_std, pre_mam_cru)
 p_value_pre_jja_cru = ttest(pre_cru_mean, pre_cru_std, pre_jja_cru)
@@ -188,7 +188,7 @@ p_value_tas_jja_gcm = ttest(tas_gcm_mean, tas_gcm_std, tas_jja_gcm)
 p_value_tas_son_gcm = ttest(tas_gcm_mean, tas_gcm_std, tas_son_gcm)
 p_value_tas_annual_gcm = ttest(tas_gcm_mean, tas_gcm_std, tas_annual_gcm)
 
-# Plot bias maps 
+# Plot models and obs database 
 fig = plt.figure(figsize=(8, 6))
 levs1 = [0, 3, 6, 9, 12, 15]
 levs2 = [22, 25, 28, 31, 34]
@@ -492,7 +492,6 @@ name_out = 'pyplt_maps_clim_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
-
 plt.show()
 exit()
 

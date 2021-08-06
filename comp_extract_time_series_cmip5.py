@@ -3,8 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilvae@gmail.com"
 __date__        = "01/21/2019"
-__description__ = "This script to extract time series from CMIP5 models end OBS database"
-
+__description__ = "This script to extract time series from cmip5 models and obs database"
 
 import netCDF4
 import numpy as np
@@ -54,8 +53,7 @@ def import_obs(database):
 	return obs_month, obs_season
 	
 	
-# Import model end obs database climatology
-
+# Import cmip5 model and obs database
 mdl_list = [u'BCC-CSM1.1', u'BCC-CSM1.1M', u'BNU-ESM', u'CanESM2', u'CNRM-CM5',
 u'CSIRO-ACCESS-1', u'CSIRO-ACCESS-3', u'CSIRO-MK36', u'FIO-ESM', u'GISS-E2-H-CC',
 u'GISS-E2-H', u'GISS-E2-R', u'HadGEM2-AO', u'HadGEM2-CC', u'INMCM4', u'IPSL-CM5A-LR',

@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "02/14/2019"
-__description__ = "This script plot boxplot and from CMIP5 models end OBS basedata"
+__description__ = "This script plot boxplot from cmip5 models and obs database"
 
 import os
 import netCDF4
@@ -60,7 +60,7 @@ def import_obs_clim(database):
 	return obs_data
 	
 	
-# Import cmip5 model end obs database climatology
+# Import cmip5 model and obs database
 model  = u'BCC-CSM1.1'
 mdl1_clim = import_cmip5_clim(model)
 		
@@ -163,7 +163,7 @@ mdl33_clim = import_cmip5_clim(model)
 database  = u'cru_ts4.02'
 obs1_clim = import_obs_clim(database)
 
-# Plot model end obs data boxplot
+# Plot cmip5 model and obs database
 fig, ax = plt.subplots(figsize=(12, 6))
 time = np.arange(1, 35)
 
@@ -223,12 +223,11 @@ plt.yticks(yaxis, fontsize=12)
 plt.tick_params(axis='both', which='major', length=5, width=2, pad=4, labelcolor='black')
 ax.yaxis.grid(True, which='major', linestyle='--', linewidth='1.4', zorder=0.6)
 
+# Path out to save figure
 path_out = '/home/nice'
 name_out = 'pyplt_boxplot_{0}_{1}_cmip5_cru_1975-2005.png'.format(out_var, out_area)
-
 if not os.path.exists(path_out):
-	create_path(path_out)
-	
-plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
+	create_path(path_out)	
+plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()

@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/08/2019"
-__description__ = "This script plot taylor diagram from CMIP5 models end OBS basedata"
+__description__ = "This script plot taylor diagram from cmip5 models and obs database"
 
 import os
 import netCDF4
@@ -170,7 +170,7 @@ def import_obs_clim(param, area, database):
 
 if __name__=='__main__':
 	
-	# Import cmip5 model end obs database climatology
+	# Import cmip5 model and obs database
 	pre_amz_gcm1 = import_cmip5_clim(u'pr', u'amz', u'BCC-CSM1.1')
 	tmp_amz_gcm1 = import_cmip5_clim(u'tas', u'amz', u'BCC-CSM1.1')
 	pre_neb_gcm1 = import_cmip5_clim(u'pr', u'neb', u'BCC-CSM1.1')
@@ -411,7 +411,6 @@ if __name__=='__main__':
 				 TMP3='F)')  
 				 
 	# Compute stddev and correlation coefficient of models
-	# Sample std, rho: Be sure to check order and that correct numbers are placed!
 	samples = dict(PRE1=[[pre_amz_gcm1.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm1)[0,1], 'BCC-CSM1.1'],
                        [pre_amz_gcm2.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm2)[0,1], 'BCC-CSM1.1M'],
                        [pre_amz_gcm3.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm3)[0,1], 'BNU-ESM'],
@@ -597,9 +596,7 @@ if __name__=='__main__':
                        [tmp_mato_gcm28.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm28)[0,1], 'NCAR-CESM1-CAM5'],
                        [tmp_mato_gcm29.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm29)[0,1], 'NorESM1-M'],
                        [tmp_mato_gcm30.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm30)[0,1], 'NorESM1-ME'],
-                       [tmp_mato_gcm31.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm31)[0,1], 'ensmean_cmip5']])
-             
-	# Colormap (see http://www.scipy.org/Cookbook/Matplotlib/Show_colormaps)
+                       [tmp_mato_gcm31.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm31)[0,1], 'ensmean_cmip5']])		          
 
 	# Here set placement of the points marking 95th and 99th significance
 	# levels. For more than 102 samples (degrees freedom > 100), critical
@@ -623,8 +620,8 @@ if __name__=='__main__':
 				 TMP2=324,
 				 PRE3=325,
 				 TMP3=326)
-
-	# Plot model end obs data taylor diagram 			 
+				 
+	# Plot cmip5 model and obs database taylor diagram
 	fig = plt.figure(figsize=(8, 9))
 	
 	for var in ['PRE1', 'TMP1', 'PRE2', 'TMP2', 'PRE3', 'TMP3']:
@@ -635,7 +632,6 @@ if __name__=='__main__':
 		dia.ax.plot(x99,y99,color='black')
 		
 		#~ colors = plt.matplotlib.cm.tab20(np.linspace(0, 1, len(samples['PRE1'])))
-		
 		# Add samples to Taylor diagram
 		for i, (stddev,corrcoef,name) in enumerate(samples[var]):
 			dia.add_sample(stddev, corrcoef,
@@ -670,5 +666,3 @@ if __name__=='__main__':
 	plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 	plt.show()
 	exit()
-
-

@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/08/2019"
-__description__ = "This script plot taylor diagram from Reg and Had models and obs database"
+__description__ = "This script plot taylor diagram from regcm47 and hadgem models and obs database"
 
 import os
 import netCDF4
@@ -209,7 +209,8 @@ def import_gcm(var, area, mod, dt):
 
 if __name__=='__main__':
 	
-	# Import regcm exp and cru databases 
+	# Import models and obs database 
+	# Precipitation
 	pre_djf_cru_samz, pre_mam_cru_samz, pre_jja_cru_samz, pre_son_cru_samz, pre_annual_cru_samz = import_obs('pre', 'samz', 'cru_ts4.04', '1986-2005')	   
 	pre_djf_cru_eneb, pre_mam_cru_eneb, pre_jja_cru_eneb, pre_son_cru_eneb, pre_annual_cru_eneb = import_obs('pre', 'eneb', 'cru_ts4.04', '1986-2005')	   
 	pre_djf_cru_matopiba, pre_mam_cru_matopiba, pre_jja_cru_matopiba, pre_son_cru_matopiba, pre_annual_cru_matopiba = import_obs('pre', 'matopiba', 'cru_ts4.04', '1986-2005')	   
@@ -222,6 +223,7 @@ if __name__=='__main__':
 	pre_djf_gcm_eneb, pre_mam_gcm_eneb, pre_jja_gcm_eneb, pre_son_gcm_eneb, pre_annual_gcm_eneb = import_gcm('pr', 'eneb', 'HadGEM2-ES', '1986-2005')	   
 	pre_djf_gcm_matopiba, pre_mam_gcm_matopiba, pre_jja_gcm_matopiba, pre_son_gcm_matopiba, pre_annual_gcm_matopiba = import_gcm('pr', 'matopiba', 'HadGEM2-ES', '1986-2005')	   
 
+	# Temperature
 	tas_djf_cru_samz, tas_mam_cru_samz, tas_jja_cru_samz, tas_son_cru_samz, tas_annual_cru_samz = import_obs('tmp', 'samz', 'cru_ts4.04', '1986-2005')	   
 	tas_djf_cru_eneb, tas_mam_cru_eneb, tas_jja_cru_eneb, tas_son_cru_eneb, tas_annual_cru_eneb = import_obs('tmp', 'eneb', 'cru_ts4.04', '1986-2005')	   
 	tas_djf_cru_matopiba, tas_mam_cru_matopiba, tas_jja_cru_matopiba, tas_son_cru_matopiba, tas_annual_cru_matopiba = import_obs('tmp', 'matopiba', 'cru_ts4.04', '1986-2005')	   
@@ -250,7 +252,6 @@ if __name__=='__main__':
 				 MATOPIBA2='F)')
 				 
 	# Compute stddev and correlation coefficient of models
-	# Sample std, rho: Be sure to check order and that correct numbers are placed!
 	samples = dict(SAMZ1=[[pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_rcm_samz)[0,1], 'DJF-RegCM4.7', 'o', 'g'],
                           [pre_mam_cru_samz.std(ddof=1), np.corrcoef(pre_mam_cru_samz, pre_mam_rcm_samz)[0,1], 'MAM-RegCM4.7', 'o', 'b'],
                           [pre_jja_cru_samz.std(ddof=1), np.corrcoef(pre_jja_cru_samz, pre_jja_rcm_samz)[0,1], 'JJA-RegCM4.7', 'o', 'y'],
@@ -312,7 +313,6 @@ if __name__=='__main__':
                           [tas_son_cru_matopiba.std(ddof=1), np.corrcoef(tas_son_cru_matopiba, tas_son_gcm_matopiba)[0,1], 'SON-HadGEM2-ES', '^', 'c'],
                           [tas_annual_cru_matopiba.std(ddof=1), np.corrcoef(tas_annual_cru_matopiba, tas_annual_gcm_matopiba)[0,1], 'ANN-HadGEM2-ES', '^', 'k']])
 
-	# Plot Taylor Diagram
 	rects = dict(SAMZ1=321,
 				 SAMZ2=322,
 				 ENEB1=323,
@@ -320,7 +320,7 @@ if __name__=='__main__':
 				 MATOPIBA1=325,
 				 MATOPIBA2=326)
 
-	# Plot model end obs data taylor diagram 			 
+	# Plot models and obs database taylor diagram
 	fig = plt.figure(figsize=(6, 6.5))
 	
 	for var in ['SAMZ1', 'SAMZ2', 'ENEB1', 'ENEB2', 'MATOPIBA1', 'MATOPIBA2']:
@@ -329,7 +329,6 @@ if __name__=='__main__':
 		dia.samplePoints[0].set_color('r')
 		
 		# Add samples to Taylor diagram
-
 		for i, (stddev,corrcoef,name,mark,cor) in enumerate(samples[var]):
 			dia.add_sample(stddev, corrcoef,
 						   label=name, marker=mark, color=cor, ms=8, ls='')			   

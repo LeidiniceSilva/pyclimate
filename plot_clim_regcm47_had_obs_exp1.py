@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot annual cycle graphics from Reg and Had models and obs database"
+__description__ = "This script plot annual climatology from regcm47 and hadgem models and obs database"
 
 import os
 import netCDF4
@@ -77,7 +77,7 @@ def import_gcm(var, area, exp, dt):
 	return value, gcm
 
 	              
-# Import regcm exps model end obs database climatology
+# Import models and obs database 
 mon_pre_cru_samz, pre_cru_samz = import_obs('pre', 'samz', 'cru_ts4.04', '1986-2005')
 mon_pre_reg_samz, pre_reg_samz = import_rcm('pr', 'samz', 'hist', '1986-2005')
 mon_pre_had_samz, pre_had_samz = import_gcm('pr', 'samz', 'hist', '1986-2005')
@@ -113,7 +113,7 @@ tas_eneb_ci2=[27.63031745, 27.23039775, 27.07775173, 25.82194371, 24.92942662, 2
 tas_matopiba_ci1=[25.55731535, 25.70387478, 25.79148459, 25.5457233 , 24.99058108, 24.97589211, 25.75307593, 26.66938272, 26.64489403, 26.10251489, 25.4382093 , 25.45791321]
 tas_matopiba_ci2=[27.15601463, 26.68446865, 27.67121773, 27.08947453, 26.64261518, 26.57647147, 27.74292717, 28.66518302, 28.50709934, 27.67222061, 27.13844676, 26.91656485]
 
-# Plot model end obs data climatology
+# Plotmodels and obs database 
 fig = plt.figure()
 time = np.arange(0.5, 12 + 0.5)
 
@@ -246,7 +246,6 @@ name_out = 'pyplt_annual_cycle_reg_had_obs_1986-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-
 plt.show()
 exit()
 

@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/08/2019"
-__description__ = "This script plot climatology graphics from CMIP5 models end OBS basedata"
+__description__ = "This script plot annual climatology from cmip5 models and obs database"
 
 import os
 import netCDF4
@@ -59,7 +59,7 @@ def import_obs_clim(param, area, database):
 	return obs_clim
 	              
 
-# Import cmip5 model end obs database climatology
+# Import cmip5 model and obs database
 pre_amz_gcm1 = import_cmip5_clim(u'pr', u'amz', u'BCC-CSM1.1')
 tmp_amz_gcm1 = import_cmip5_clim(u'tas', u'amz', u'BCC-CSM1.1')
 pre_neb_gcm1 = import_cmip5_clim(u'pr', u'neb', u'BCC-CSM1.1')
@@ -284,7 +284,7 @@ tmp_neb_obs  = import_obs_clim(u'tmp', u'neb', u'cru_ts4.02')
 pre_mato_obs  = import_obs_clim(u'pre', u'matopiba', u'cru_ts4.02')
 tmp_mato_obs  = import_obs_clim(u'tmp', u'matopiba', u'cru_ts4.02')
 
-# Plot model end obs data climatology
+# Plot cmip5 model and obs database
 fig = plt.figure(figsize=(10, 8))
 time = np.arange(0.5, 12 + 0.5)
 
@@ -594,12 +594,11 @@ legend = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACCES
 plt.legend(plt_clim6, legend, loc=(1.019, -0.19))
 plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.20, hspace=0.35)
 
-# Save figure
+# Path out to save figure
 path_out = '/home/nice'
 name_out = 'pyplt_clim_cmip5_cru_1975-2005.png'
 if not os.path.exists(path_out):
-	create_path(path_out)
-	
+	create_path(path_out)	
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()

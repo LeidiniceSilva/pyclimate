@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "06ssss/24/2021"
-__description__ = "This script plot correlation matrix from ETCCDI indices"
+__description__ = "This script plot portrait diagram from extremes indices to rcp"
 
 import os
 import netCDF4
@@ -71,7 +71,7 @@ def import_gcm(var, area, model, exp, freq, dt):
 	return annual_gcm
 	
 
-# Import regcm and hadgem models
+# Import extreme indices 
 # SAMZ
 rcm_prcptot_rcp26_samz = import_rcm('eca_prcptot', 'samz', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_r95p_rcp26_samz = import_rcm('eca_r95p', 'samz', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
@@ -341,35 +341,35 @@ gcm_rcp85_matopiba = {'PRCPTOT': gcm_prcptot_rcp85_matopiba,
 
 rcm_rcp26_samz = pd.DataFrame(rcm_rcp26_samz,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
 rcm_rcp85_samz = pd.DataFrame(rcm_rcp85_samz,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
-#~ gcm_rcp26_samz = pd.DataFrame(gcm_rcp26_samz,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+gcm_rcp26_samz = pd.DataFrame(gcm_rcp26_samz,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
 gcm_rcp85_samz = pd.DataFrame(gcm_rcp85_samz,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
 
 rcm_rcp26_eneb = pd.DataFrame(rcm_rcp26_eneb,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
 rcm_rcp85_eneb = pd.DataFrame(rcm_rcp85_eneb,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
-#~ gcm_rcp26_eneb = pd.DataFrame(gcm_rcp26_eneb,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+gcm_rcp26_eneb = pd.DataFrame(gcm_rcp26_eneb,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
 gcm_rcp85_eneb = pd.DataFrame(gcm_rcp85_eneb,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
 
 rcm_rcp26_matopiba = pd.DataFrame(rcm_rcp26_matopiba,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
 rcm_rcp85_matopiba = pd.DataFrame(rcm_rcp85_matopiba,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
-#~ gcm_rcp26_matopiba = pd.DataFrame(gcm_rcp26_matopiba,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
+gcm_rcp26_matopiba = pd.DataFrame(gcm_rcp26_matopiba,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
 gcm_rcp85_matopiba = pd.DataFrame(gcm_rcp85_matopiba,columns=['PRCPTOT','R95p','R99p','Rx1day','Rx5day','SDII','CDD','CWD','R10mm','R20mm'])
 
 rcm_rcp26_samz_corr = rcm_rcp26_samz.corr()
 rcm_rcp85_samz_corr = rcm_rcp85_samz.corr()
-#~ gcm_rcp26_samz_corr = gcm_rcp26_samz.corr()
+gcm_rcp26_samz_corr = gcm_rcp26_samz.corr()
 gcm_rcp85_samz_corr = gcm_rcp85_samz.corr()
 
 rcm_rcp26_eneb_corr = rcm_rcp26_eneb.corr()
 rcm_rcp85_eneb_corr = rcm_rcp85_eneb.corr()
-#~ gcm_rcp26_eneb_corr = gcm_rcp26_eneb.corr()
+gcm_rcp26_eneb_corr = gcm_rcp26_eneb.corr()
 gcm_rcp85_eneb_corr = gcm_rcp85_eneb.corr()
 
 rcm_rcp26_matopiba_corr = rcm_rcp26_matopiba.corr()
 rcm_rcp85_matopiba_corr = rcm_rcp85_matopiba.corr()
-#~ gcm_rcp26_matopiba_corr = gcm_rcp26_matopiba.corr()
+gcm_rcp26_matopiba_corr = gcm_rcp26_matopiba.corr()
 gcm_rcp85_matopiba_corr = gcm_rcp85_matopiba.corr()
 
-# Plot correlation matrix 
+# Plot extreme indices 
 fig = plt.figure(figsize=(9, 10))
 
 ax1 = fig.add_subplot(4, 3, 1)
@@ -467,8 +467,6 @@ name_out = 'pyplt_matrix_corr_etccdi_pre_reg_had_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-
-plt.close('all')
-plt.cla()
+plt.show()
 exit()	
 

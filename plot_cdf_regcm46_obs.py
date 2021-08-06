@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script compute CDF functions from Reg and Had models"
+__description__ = "This script compute cdf function from regcm46 and obs database"
 
 import os
 import netCDF4
@@ -58,7 +58,7 @@ def import_obs(area, obs):
 	return obs
 	
 	
-# Import regcm exps model end obs database climatology
+# Import regcm exps and obs database 
 nam_exp1 = import_sim(u'namz', u'regcm_exp1')
 sam_exp1 = import_sim(u'samz', u'regcm_exp1')
 neb_exp1 = import_sim(u'neb', u'regcm_exp1')
@@ -82,7 +82,7 @@ sortedtime_neb_exp1, cdf_neb_exp1 = cdf_function(neb_exp1)
 sortedtime_neb_exp2, cdf_neb_exp2 = cdf_function(neb_exp2)
 sortedtime_neb_obs, cdf_neb_obs = cdf_function(neb_obs)
 
-# Plot model end obs data climatology
+# Plot regcm exps and obs database 
 fig = plt.figure()
 
 ax1 = fig.add_subplot(1, 3, 1)
@@ -118,15 +118,12 @@ plt.xticks(np.arange(0, 14, 2))
 plt.yticks(np.arange(0, 1.1, 0.1))
 plt.legend(loc='lower right', shadow=True, ncol=1, prop=FontProperties(size=8))
 
-fig.tight_layout()
-
 # Path out to save figure
 path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
 name_out = 'pyplt_cdf_pr_regcm_pbl_obs_2001-2010.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
-
+plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()
 

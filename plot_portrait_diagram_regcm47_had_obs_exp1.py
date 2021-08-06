@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/29/2020"
-__description__ = "This script plot portrait diagram from Reg and Had models and obs database"
+__description__ = "This script plot portrait diagram from regcm47 and hadgem models and obs database"
 
 import os
 import netCDF4
@@ -84,7 +84,7 @@ def import_gcm(var, area, exp, dt):
 	return annual_gcm, djf_gcm, mam_gcm, jja_gcm, son_gcm
 
 	              
-# Import regcm exps model end obs database climatology
+# Import models and obs database 
 # Precipitation
 annual_cru_pre_samz, djf_cru_pre_samz, mam_cru_pre_samz, jja_cru_pre_samz, son_cru_pre_samz = import_obs('pre', 'samz', 'cru_ts4.04', '1986-2005')
 annual_rcm_pre_samz, djf_rcm_pre_samz, mam_rcm_pre_samz, jja_rcm_pre_samz, son_rcm_pre_samz = import_rcm('pr', 'samz', 'hist', '1986-2005')
@@ -198,7 +198,7 @@ nse_gcm_tas = np.array([[nse_djf_gcm_tas_samz, nse_mam_gcm_tas_samz, nse_jja_gcm
 [nse_djf_gcm_tas_eneb, nse_mam_gcm_tas_eneb, nse_jja_gcm_tas_eneb, nse_son_gcm_tas_eneb, nse_annual_gcm_tas_eneb], 
 [nse_djf_gcm_tas_matopiba, nse_mam_gcm_tas_matopiba, nse_jja_gcm_tas_matopiba, nse_son_gcm_tas_matopiba, nse_annual_gcm_tas_matopiba]])
 
-# Plot model end obs data climatology
+# Plot models and obs database 
 fig, axes = plt.subplots(nrows=2, ncols=2, constrained_layout=True)
 norm = colors.BoundaryNorm(boundaries=np.arange(0, 1, 0.1), ncolors=256)
 
@@ -263,13 +263,11 @@ for y in range(nse_gcm_tas.shape[0]):
                  ha="center", va="center", color='k',
                  )
                        
-# Save figure
+# Path out to save figure
 path_out = '/home/nice/Downloads'
 name_out = 'pyplt_portrait_diagram_reg_had_obs_1986-2005.png'
-
 if not os.path.exists(path_out):
-	create_path(path_out)
-	
+	create_path(path_out)	
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()

@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/15/2020"
-__description__ = "This script plot maps with koppen classification"
+__description__ = "This script plot annual climatology with koppen classification"
 
 import xarray as xr
 import numpy as np

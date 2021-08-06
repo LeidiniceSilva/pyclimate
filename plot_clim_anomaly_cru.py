@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "06/03/2019"
-__description__ = "This script annual anomaly from cru over neb"
+__description__ = "This script plot annual climatology anomaly from obs database"
 
 import os
 import netCDF4
@@ -13,7 +13,6 @@ import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 
 from netCDF4 import Dataset
-
 
 
 def import_accum_database():
@@ -102,10 +101,10 @@ objects = [u'1901', u'1910', u'1919', u'1928', u'1937', u'1946', u'1955', u'1964
 plt.xticks(np.arange(1., 120., 9), objects)
 
 path_out = '/home/nice/Documents/daniele'
-name_out = 'graph_clim_anom_cru_neb.png'
+name_out = 'pyplt_clim_anomaly_cru.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
+plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
 
 plt.show()
 exit()

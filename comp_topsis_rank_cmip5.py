@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "06/01/2020"
-__description__ = "This script compute rank TOPSIS from CMIP5 models end OBS basedata"
+__description__ = "This script compute rank topsis from cmip5 models and obs database"
 
 import pandas as pd
 import numpy as np

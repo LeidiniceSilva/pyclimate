@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "06ssss/24/2021"
-__description__ = "This script plot correlation matrix from ETCCDI indices"
+__description__ = "This script plot portrait diagram from extremes indices to rcp"
 
 import os
 import netCDF4
@@ -74,7 +74,7 @@ def import_gcm(var, area, model, exp, freq, dt):
 	return annual_gcm
 	
 
-# Import regcm and hadgem models
+# Import extreme indices 
 # SAMZ
 rcm_txx_rcp26_samz = import_rcm('eca_txx', 'samz', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 rcm_txn_rcp26_samz = import_rcm('eca_txn', 'samz', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
@@ -396,7 +396,7 @@ rcm_rcp85_matopiba_corr = rcm_rcp85_matopiba.corr()
 gcm_rcp26_matopiba_corr = gcm_rcp26_matopiba.corr()
 gcm_rcp85_matopiba_corr = gcm_rcp85_matopiba.corr()
 
-# Plot correlation matrix 
+# Plot extreme indices  
 fig = plt.figure(figsize=(9, 10))
 
 ax1 = fig.add_subplot(4, 3, 1)
@@ -494,9 +494,7 @@ name_out = 'pyplt_matrix_corr_etccdi_tas_reg_had_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-
-plt.close('all')
-plt.cla()
+plt.show
 exit()	
 
 

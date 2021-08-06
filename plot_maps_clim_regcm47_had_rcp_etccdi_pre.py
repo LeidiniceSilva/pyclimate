@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/01/2021"
-__description__ = "This script plot RCP2.6 and RCP8.5 maps from extremes index"
+__description__ = "This script climatology maps from extremes indices to rcp"
 
 import os
 import conda
@@ -102,7 +102,7 @@ def basemap(lat, lon):
 	return map, xx, yy
 	
 	
-# Import regcm and gcm databases 	
+# Import extreme indices 
 # Historical period
 lat, lon, rcm_prcptot_hist = import_rcm('eca_prcptot', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 lat, lon, rcm_r95p_hist = import_rcm('eca_r95p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
@@ -219,7 +219,7 @@ diff_gcm_cwd_rcp85_hist = gcm_cwd_rcp85 - gcm_cwd_hist
 diff_gcm_r10mm_rcp85_hist = gcm_r10mm_rcp85 - gcm_r10mm_hist
 diff_gcm_r20mm_rcp85_hist = gcm_r20mm_rcp85 - gcm_r20mm_hist
 
-# Plot maps with the function
+# Plot extreme indices 
 fig = plt.figure(figsize=(8, 10))
 
 levs1 = [-300, -200, -100, 100, 200, 300]
@@ -580,14 +580,12 @@ cbar.ax.tick_params(labelsize=6)
 
 plt.subplots_adjust(left=0.10, bottom=0.10, right=0.90, top=0.90, wspace=0.30, hspace=0.30)
 
-# Path out to save bias figure
+# Path out to save figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_diff_etccdi_pre_reg_had_rcp-hist.png'
+name_out = 'pyplt_maps_diff_etccdi_pre_reg_had_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=200, bbox_inches='tight')
-
-plt.close('all')
-plt.cla()
+plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
+plt.show()
 exit()	
 

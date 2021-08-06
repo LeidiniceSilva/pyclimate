@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilvae@gmail.com"
 __date__        = "02/15/2019"
-__description__ = "This script plot Taylor Diagram seasonal from CMIP5 models end OBS basedata"
+__description__ = "This script plot compute statistic indices from cmip5 models and obs database"
 
 import os
 import netCDF4
@@ -67,13 +67,13 @@ mdl_list = ['BCC-CSM1.1','BCC-CSM1.1M','BNU-ESM','CanESM2','CNRM-CM5','CSIRO-ACC
 for mdl in mdl_list:
 	print 'CMIP5 Model:', mdl
 	
-	# Import cmip5 model end obs database monthly	
+	# Import cmip5 model and obs database
 	mdl_clim = import_cmip5(mdl)
 	
 	obs  = u'cru_ts4.02'
 	obs_clim = import_obs(obs)
 	
-	# Compute statiscts index from CMIP5 models
+	# Compute statiscts index from cmip5 model and obs database
 	r     = round((np.corrcoef(np.array(mdl_clim), np.array(obs_clim)))[0][1], 3)
 	r2    = metrics.r2_score(obs_clim, mdl_clim)
 	mae   = metrics.mean_absolute_error(obs_clim, mdl_clim)
@@ -97,8 +97,7 @@ table = str(tab.draw())
 file_name = 'table_monthly_pre_neb_statist_indices_cmip5_models_1975-2005.asc'
 file_save = open(file_name, 'w')
 file_save.write(table)
-file_save.close()
-        
+file_save.close()        
 exit()
 	
 

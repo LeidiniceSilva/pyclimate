@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/26/2018"
-__description__ = "This script plot climatology graphics from Rec_EXP models end OBS basedata"
+__description__ = "This script plot annual climatology from regcm46 and obs database"
 
 import os
 import netCDF4
@@ -70,7 +70,7 @@ def import_obs(area, obs):
 	return obs_clim
 	              
                
-# Import regcm exps model end obs database climatology
+# Import regcm exps and obs database 
 nam_exp1_clim = import_sim(u'namz', u'regcm_exp1')
 sam_exp1_clim = import_sim(u'samz', u'regcm_exp1')
 neb_exp1_clim = import_sim(u'neb', u'regcm_exp1')
@@ -99,7 +99,7 @@ print(neb_exp1_median)
 print(neb_exp2_median)
 print(neb_obs_median)
 
-# Plot model end obs data climatology
+# Plot regcm exps and obs database 
 fig = plt.figure()
 time = np.arange(1, 13)
 bar_width = .30
@@ -151,8 +151,7 @@ path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
 name_out = 'pyplt_clim_pr_regcm_pbl_obs_2001-2010.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
-
+plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()
 

@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/26/2018"
-__description__ = "This script plot climatology maps from Rec_EXP models end OBS basedata"
+__description__ = "This script plot climatology maps from from regcm46 and obs database"
 
 import os
 import conda
@@ -200,7 +200,7 @@ def plot_maps_bias(bias_exp1_djf, bias_exp1_jja, bias_exp2_djf, bias_exp2_jja):
 	return plt_maps_bias
 
 
-# Import regcm exp and cru databases 	   
+# Import regcm exps and obs database 
 lat, lon, exp1_djf = import_sim('regcm_exp1', 'djf')
 lat, lon, exp1_jja = import_sim('regcm_exp1', 'jja')
 
@@ -210,7 +210,7 @@ lat, lon, exp2_jja = import_sim('regcm_exp1', 'jja')
 lat, lon, obs_djf = import_obs('gpcp_v2.2_obs', 'djf')
 lat, lon, obs_jja = import_obs('gpcp_v2.2_obs', 'jja')
 
-# Compute and plot bias from regcm exp and cru database
+# Compute and plot bias from regcm exps and obs database 
 bias_exp1_djf = exp1_djf - obs_djf
 bias_exp1_jja = exp1_jja - obs_jja
 
@@ -219,7 +219,7 @@ bias_exp2_jja = exp2_jja - obs_jja
 
 # Plot maps with the function
 plt_map = plot_maps_clim(exp1_djf, exp1_jja, exp2_djf, exp2_jja, obs_djf, obs_jja)
-#~ plt_map = plot_maps_bias(bias_exp1_djf, bias_exp1_jja, bias_exp2_djf, bias_exp2_jja)
+plt_map = plot_maps_bias(bias_exp1_djf, bias_exp1_jja, bias_exp2_djf, bias_exp2_jja)
 
 plt.subplots_adjust(left=0.15, bottom=0.15, right=0.93, top=0.93, wspace=0.35, hspace=0.20)
 
@@ -228,8 +228,7 @@ path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
 name_out = 'pyplt_maps_clim_pr_regcm_pbl_obs_2001-2010.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
-
+plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()
 

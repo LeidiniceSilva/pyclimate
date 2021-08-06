@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "08/05/2021"
-__description__ = "This script plot scatter plot from Reg and Had models and obs database"
+__description__ = "This script plot scatter plot from regcm47 and hadgem models and obs database"
 
 import os
 import netCDF4
@@ -86,7 +86,7 @@ def compute_linear_regression(obs, sim):
 	return m, c, eq, r2
 
        
-# Import regcm exps model end obs database climatology
+# Import models and obs database 
 # Precipitation
 mon_pre_cru_samz = import_obs('pre', 'samz', 'cru_ts4.04', '1986-2005')
 mon_pre_cru_eneb = import_obs('pre', 'eneb', 'cru_ts4.04', '1986-2005')
@@ -121,7 +121,7 @@ mon_tas_had_samz = import_gcm('tas', 'samz', 'hist', '1986-2005')
 mon_tas_had_eneb = import_gcm('tas', 'eneb', 'hist', '1986-2005')
 mon_tas_had_matopiba = import_gcm('tas', 'matopiba', 'hist', '1986-2005')
 
-# Imp linear regression
+# Import linear regression
 # Precipitation
 m_pre_reg1_samz, c_pre_reg1_samz, eq_pre_reg1_samz, r2_pre_reg1_samz = compute_linear_regression(mon_pre_cru_samz, mon_pre_reg_exp1_samz)
 m_pre_reg2_samz, c_pre_reg2_samz, eq_pre_reg2_samz, r2_pre_reg2_samz = compute_linear_regression(mon_pre_cru_samz, mon_pre_reg_exp2_samz)
@@ -148,7 +148,7 @@ m_tas_reg1_matopiba, c_tas_reg1_matopiba, eq_tas_reg1_matopiba, r2_tas_reg1_mato
 m_tas_reg2_matopiba, c_tas_reg2_matopiba, eq_tas_reg2_matopiba, r2_tas_reg2_matopiba = compute_linear_regression(mon_tas_cru_matopiba, np.nanmean(mon_tas_reg_exp2_matopiba, axis=1))
 m_tas_had_matopiba, c_tas_had_matopiba, eq_tas_had_matopiba, r2_tas_had_matopiba = compute_linear_regression(mon_tas_cru_matopiba, mon_tas_had_matopiba)
 
-# Plot model end obs data climatology
+# Plot models and obs database 
 fig = plt.figure()
     
 ax1 = fig.add_subplot(3, 2, 1)
@@ -172,7 +172,6 @@ plt.text(10.5, 16, r2_pre_had_samz, fontsize=6, color='gray')
 #~ plt.text(1, 16, eq_pre_reg1_samz, fontsize=6, color='blue')
 #~ plt.text(5.5, 16, eq_pre_reg2_samz, fontsize=6, color='red')
 #~ plt.text(10.5, 16, eq_pre_had_samz, fontsize=6, color='gray')
-
 plt.legend(fontsize=6, loc=2, ncol=1, frameon=False)
 
 ax2 = fig.add_subplot(3, 2, 2)
@@ -293,6 +292,5 @@ name_out = 'pyplt_scatter_reg_exp2.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-
 plt.show()
 exit()

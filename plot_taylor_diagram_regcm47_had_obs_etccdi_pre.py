@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/08/2019"
-__description__ = "This script plot taylor diagram from Reg and Had models end obs database to ETCCDI"
+__description__ = "This script plot taylor diagram from extremes indices"
 
 import os
 import netCDF4
@@ -223,7 +223,7 @@ def import_gcm(var, area, model, exp, freq, dt):
 
 if __name__=='__main__':
 	
-	# Import regcm exp and cru databases 
+	# Import extreme indices 
 	obs_prcptot_samz = import_obs('eca_prcptot', 'samz', 'cpc_obs', 'yr', '1986-2005')   
 	rcm_prcptot_samz = import_rcm('eca_prcptot', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 	gcm_prcptot_samz = import_gcm('eca_prcptot', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
@@ -327,7 +327,6 @@ if __name__=='__main__':
 				 MATOPIBA='C)')
 				 
 	# Compute stddev and correlation coefficient of models
-	# Sample std, rho: Be sure to check order and that correct numbers are placed!
 	samples = dict(SAMZ=[[obs_prcptot_samz.std(ddof=1), np.corrcoef(obs_prcptot_samz, rcm_prcptot_samz)[0,1], 'PRCPTOT-Reg', 'o', 'b'],
                           [obs_r95p_samz.std(ddof=1), np.corrcoef(obs_r95p_samz, rcm_r95p_samz)[0,1], 'R95p-Reg', 's', 'b'],
                           [obs_r99p_samz.std(ddof=1), np.corrcoef(obs_r99p_samz, rcm_r99p_samz)[0,1], 'R99p-Reg', 'v', 'b'],
@@ -389,12 +388,11 @@ if __name__=='__main__':
                           [obs_r10mm_matopiba.std(ddof=1), np.corrcoef(obs_r10mm_matopiba, gcm_r10mm_matopiba)[0,1], 'R10mm-Had', '>', 'r'],
                           [obs_r20mm_matopiba.std(ddof=1), np.corrcoef(obs_r20mm_matopiba, gcm_r20mm_matopiba)[0,1], 'R20mm-Had', '<', 'r']])
 
-	# Plot Taylor Diagram
 	rects = dict(SAMZ=311,
 				 ENEB=312,
 				 MATOPIBA=313)
 
-	# Plot model end obs data taylor diagram 			 
+	# Plot extreme indices taylor diagram 			 
 	fig = plt.figure(figsize=(6, 6.5))
 	
 	for var in ['SAMZ', 'ENEB', 'MATOPIBA']:
@@ -426,7 +424,6 @@ if __name__=='__main__':
 	if not os.path.exists(path_out):
 		create_path(path_out)
 	plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-	plt.close('all')
-	plt.cla()
+	plt.show
 	exit()	
 

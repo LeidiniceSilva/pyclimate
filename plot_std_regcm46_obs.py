@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "01/11/2021"
-__description__ = "This script plot annual standard desviation from Rec_EXP models end OBS basedata"
+__description__ = "This script plot annual standard desviation from regcm46 and obs database"
 
 import os
 import netCDF4
@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 from pylab import *
 from netCDF4 import Dataset
 from matplotlib.font_manager import FontProperties
+
 
 def import_sim(area, exp):
 	
@@ -56,7 +57,7 @@ def import_obs(area, obs):
 	return obs_annual
 	              
                
-# Import regcm exps model end obs database climatology
+# Import regcm exps and obs database 
 nam_exp1 = import_sim(u'namz', u'regcm_exp1')
 sam_exp1 = import_sim(u'samz', u'regcm_exp1')
 neb_exp1 = import_sim(u'neb', u'regcm_exp1')
@@ -95,8 +96,7 @@ nam_obs_std = np.std(nam_obs)
 sam_obs_std = np.std(sam_obs)
 neb_obs_std = np.std(neb_obs)
 
-# Plot model end obs data climatology
-# Create a figure with customized size
+# Plot regcm exps and obs database 
 fig = plt.figure()
 time = np.arange(1, 10 + 1)
 lineStyle_exp1={"linestyle":"-", "linewidth":2, "markeredgewidth":2, "elinewidth":2, "capsize":3}
@@ -144,8 +144,7 @@ path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
 name_out = 'pyplt_std_pr_regcm_pbl_obs_2001-2010.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
-
+plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()
 
