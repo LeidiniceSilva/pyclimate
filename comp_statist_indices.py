@@ -13,7 +13,7 @@ import scipy.stats as st
 from scipy.stats import norm
 
 
-def compute_corr(model, obs):
+def compute_corr(obs, model):
 
     """
     The input arrays must have the same dimentions
@@ -22,8 +22,7 @@ def compute_corr(model, obs):
     :Return: Pearson Linear Correlation
     """
    
-    check_dims(model, obs)
-    corr = np.corrcoef(model, obs)[0][1]
+    corr = np.corrcoef(obs, model)[0][1]
     
     return corr
 

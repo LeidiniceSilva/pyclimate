@@ -9,9 +9,11 @@ import os
 import conda
 import netCDF4
 import numpy as np
+import numpy.ma as ma
+import matplotlib.cm as cm
+import scipy.stats as stats
 import matplotlib.pyplot as plt
 import warnings ; warnings.filterwarnings("ignore")
-import matplotlib.cm as cm
 
 conda_file_dir = conda.__file__
 conda_dir = conda_file_dir.split('lib')[0]
@@ -44,8 +46,9 @@ def import_rcm(var, area, model, exp, freq, dt):
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
 	rcm  = np.nanmean(var[:][:,:,:], axis=0)
+	std  = np.std(var[:][:,:,:], axis=0)
 
-	return lat, lon, rcm
+	return lat, lon, rcm, std
 
 
 def import_gcm(var, area, model, exp, freq, dt):
@@ -69,8 +72,9 @@ def import_gcm(var, area, model, exp, freq, dt):
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
 	gcm  = np.nanmean(var[:][:,:,:], axis=0)
+	std  = np.std(var[:][:,:,:], axis=0)
 
-	return lat, lon, gcm
+	return lat, lon, gcm, std
 
 
 def basemap(lat, lon):

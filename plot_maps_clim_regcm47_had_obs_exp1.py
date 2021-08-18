@@ -99,19 +99,6 @@ def import_gcm(var, area, exp, dt):
 	
 	return lat, lon, mean_gcm, std_gcm, djf_gcm, mam_gcm, jja_gcm, son_gcm, annual_gcm
 
-
-def ttest(mean, std, sample):
-
-	# Calculate t statistics
-	p1 = mean - sample
-	p2= std / np.sqrt(240)
-	p3 = p1 / p2
-
-	# Calculate p value
-	p_value = 1 - stats.t.cdf(p3, df=239)
-	
-	return p_value
-	
 	
 def basemap(lat, lon):
 	
@@ -142,6 +129,19 @@ def basemap(lat, lon):
 	return map, xx, yy
 
 
+def ttest(mean, std, sample):
+
+	# Calculate t statistics
+	p1 = mean - sample
+	p2= std / np.sqrt(240)
+	p3 = p1 / p2
+
+	# Calculate p value
+	p_value = 1 - stats.t.cdf(p3, df=239)
+	
+	return p_value
+	
+	
 # Import models and obs database 
 lat, lon, pre_cru_mean, pre_cru_std, pre_djf_cru, pre_mam_cru, pre_jja_cru, pre_son_cru, pre_annual_cru = import_obs('pre', 'amz_neb', 'cru_ts4.04', '1986-2005')	   
 lat, lon, pre_rcm_mean, pre_rcm_std, pre_djf_rcm, pre_mam_rcm, pre_jja_rcm, pre_son_rcm, pre_annual_rcm = import_rcm('pr', 'amz_neb', 'hist', '1986-2005')

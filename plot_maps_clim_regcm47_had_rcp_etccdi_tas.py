@@ -9,9 +9,11 @@ import os
 import conda
 import netCDF4
 import numpy as np
+import numpy.ma as ma
+import matplotlib.cm as cm
+import scipy.stats as stats
 import matplotlib.pyplot as plt
 import warnings ; warnings.filterwarnings("ignore")
-import matplotlib.cm as cm
 
 conda_file_dir = conda.__file__
 conda_dir = conda_file_dir.split('lib')[0]
@@ -102,6 +104,20 @@ def basemap(lat, lon):
 	map.readshapefile('{0}/lim_unid_fed/lim_unid_fed'.format(path), 'lim_unid_fed', drawbounds=True, color='black', linewidth=.5)
 	
 	return map, xx, yy
+
+
+def ttest(mean_sample1, mean_sample2, std_sample1, std_sample2):
+
+	# Calculate t statistics	
+	p1 = mean_sample1 - mean_sample2 
+	p2 = (std_sample1 - std_sample2) / np.sqrt(240)
+
+	ttest = p1 / p2
+
+	# Calculate p value
+	p_value = 1 - stats.t.cdf(ttest, df=240)
+
+	return p_value
 	
 	
 # Import extreme indices 
