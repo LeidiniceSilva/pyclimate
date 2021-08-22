@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/01/2021"
-__description__ = "This script climatology maps from extremes indices to rcp"
+__description__ = "This script plot climatology maps from extremes indices to rcp"
 
 import os
 import conda
@@ -105,76 +105,90 @@ def basemap(lat, lon):
 	
 	return map, xx, yy
 	
+
+def ttest(mean_sample1, mean_sample2, std_sample1, std_sample2):
+
+	# Calculate t statistics	
+	p1 = mean_sample1 - mean_sample2 
+	p2 = (std_sample1 - std_sample2) / np.sqrt(240)
+
+	ttest = p1 / p2
+
+	# Calculate p value
+	p_value = 1 - stats.t.cdf(ttest, df=240)
+
+	return p_value
+	
 	
 # Import extreme indices 
 # Historical period
-lat, lon, rcm_prcptot_hist = import_rcm('eca_prcptot', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, rcm_r95p_hist = import_rcm('eca_r95p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, rcm_r99p_hist = import_rcm('eca_r99p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, rcm_rx1day_hist = import_rcm('eca_rx1day', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, rcm_rx5day_hist = import_rcm('eca_rx5day', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, rcm_sdii_hist = import_rcm('eca_sdii', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, rcm_cdd_hist = import_rcm('eca_cdd', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, rcm_cwd_hist = import_rcm('eca_cwd', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, rcm_r10mm_hist = import_rcm('eca_r10mm', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, rcm_r20mm_hist = import_rcm('eca_r20mm', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_prcptot_hist, rcm_prcptot_hist_std = import_rcm('eca_prcptot', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_r95p_hist, rcm_r95p_hist_std = import_rcm('eca_r95p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_r99p_hist, rcm_r99p_hist_std = import_rcm('eca_r99p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_rx1day_hist, rcm_rx1day_hist_std = import_rcm('eca_rx1day', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_rx5day_hist, rcm_rx5day_hist_std = import_rcm('eca_rx5day', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_sdii_hist, rcm_sdii_hist_std = import_rcm('eca_sdii', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_cdd_hist, rcm_cdd_hist_std = import_rcm('eca_cdd', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_cwd_hist, rcm_cwd_hist_std = import_rcm('eca_cwd', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_r10mm_hist, rcm_r10mm_hist_std = import_rcm('eca_r10mm', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, rcm_r20mm_hist, rcm_r20mm_hist_std = import_rcm('eca_r20mm', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 
-lat, lon, gcm_prcptot_hist = import_gcm('eca_prcptot', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_r95p_hist = import_gcm('eca_r95p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_r99p_hist = import_gcm('eca_r99p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_rx1day_hist = import_gcm('eca_rx1day', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_rx5day_hist = import_gcm('eca_rx5day', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_sdii_hist = import_gcm('eca_sdii', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_cdd_hist = import_gcm('eca_cdd', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_cwd_hist = import_gcm('eca_cwd', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_r10mm_hist = import_gcm('eca_r10mm', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_r20mm_hist = import_gcm('eca_r20mm', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_prcptot_hist, gcm_prcptot_hist_std = import_gcm('eca_prcptot', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_r95p_hist, gcm_r95p_hist_std = import_gcm('eca_r95p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_r99p_hist , gcm_r99p_hist_std = import_gcm('eca_r99p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_rx1day_hist, gcm_rx1day_hist_std = import_gcm('eca_rx1day', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_rx5day_hist, gcm_rx5day_hist_std = import_gcm('eca_rx5day', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_sdii_hist, gcm_sdii_hist_std = import_gcm('eca_sdii', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_cdd_hist, gcm_cdd_hist_std = import_gcm('eca_cdd', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_cwd_hist, gcm_cwd_hist_std = import_gcm('eca_cwd', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_r10mm_hist, gcm_r10mm_hist_std = import_gcm('eca_r10mm', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_r20mm_hist, gcm_r20mm_hist_std = import_gcm('eca_r20mm', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
 # RCP2.6
-lat, lon, rcm_prcptot_rcp26 = import_rcm('eca_prcptot', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
-lat, lon, rcm_r95p_rcp26 = import_rcm('eca_r95p', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
-lat, lon, rcm_r99p_rcp26= import_rcm('eca_r99p', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
-lat, lon, rcm_rx1day_rcp26 = import_rcm('eca_rx1day', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
-lat, lon, rcm_rx5day_rcp26 = import_rcm('eca_rx5day', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
-lat, lon, rcm_sdii_rcp26 = import_rcm('eca_sdii', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
-lat, lon, rcm_cdd_rcp26 = import_rcm('eca_cdd', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
-lat, lon, rcm_cwd_rcp26 = import_rcm('eca_cwd', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
-lat, lon, rcm_r10mm_rcp26 = import_rcm('eca_r10mm', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
-lat, lon, rcm_r20mm_rcp26 = import_rcm('eca_r20mm', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+lat, lon, rcm_prcptot_rcp26, rcm_prcptot_rcp26_std = import_rcm('eca_prcptot', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+lat, lon, rcm_r95p_rcp26, rcm_r95p_rcp26_std = import_rcm('eca_r95p', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+lat, lon, rcm_r99p_rcp26, rcm_r99p_rcp26_std = import_rcm('eca_r99p', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+lat, lon, rcm_rx1day_rcp26, rcm_rx1day_rcp26_std = import_rcm('eca_rx1day', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+lat, lon, rcm_rx5day_rcp26, rcm_rx5day_rcp26_std = import_rcm('eca_rx5day', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+lat, lon, rcm_sdii_rcp26, rcm_sdii_rcp26_std = import_rcm('eca_sdii', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+lat, lon, rcm_cdd_rcp26, rcm_cdd_rcp26_std = import_rcm('eca_cdd', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+lat, lon, rcm_cwd_rcp26, rcm_cwd_rcp26_std = import_rcm('eca_cwd', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+lat, lon, rcm_r10mm_rcp26, rcm_r10mm_rcp26_std = import_rcm('eca_r10mm', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
+lat, lon, rcm_r20mm_rcp26, rcm_r20mm_rcp26_std = import_rcm('eca_r20mm', 'amz_neb', 'RegCM47_had', 'rcp26', 'yr', '2080-2099')
 
-lat, lon, gcm_prcptot_rcp26 = import_gcm('eca_prcptot', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-lat, lon, gcm_r95p_rcp26 = import_gcm('eca_r95p', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-lat, lon, gcm_r99p_rcp26 = import_gcm('eca_r99p', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-lat, lon, gcm_rx1day_rcp26 = import_gcm('eca_rx1day', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-lat, lon, gcm_rx5day_rcp26 = import_gcm('eca_rx5day', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-lat, lon, gcm_sdii_rcp26 = import_gcm('eca_sdii', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-lat, lon, gcm_cdd_rcp26 = import_gcm('eca_cdd', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-lat, lon, gcm_cwd_rcp26 = import_gcm('eca_cwd', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-lat, lon, gcm_r10mm_rcp26 = import_gcm('eca_r10mm', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
-lat, lon, gcm_r20mm_rcp26 = import_gcm('eca_r20mm', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+lat, lon, gcm_prcptot_rcp26, gcm_prcptot_rcp26_std = import_gcm('eca_prcptot', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+lat, lon, gcm_r95p_rcp26, gcm_r95p_rcp26_std = import_gcm('eca_r95p', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+lat, lon, gcm_r99p_rcp26, gcm_r99p_rcp26_std  = import_gcm('eca_r99p', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+lat, lon, gcm_rx1day_rcp26, gcm_rx1day_rcp26_std = import_gcm('eca_rx1day', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+lat, lon, gcm_rx5day_rcp26, gcm_rx5day_rcp26_std = import_gcm('eca_rx5day', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+lat, lon, gcm_sdii_rcp26, gcm_sdii_rcp26_std = import_gcm('eca_sdii', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+lat, lon, gcm_cdd_rcp26, gcm_cdd_rcp26_std = import_gcm('eca_cdd', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+lat, lon, gcm_cwd_rcp26, gcm_cwd_rcp26_std = import_gcm('eca_cwd', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+lat, lon, gcm_r10mm_rcp26, gcm_r10mm_rcp26_std = import_gcm('eca_r10mm', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
+lat, lon, gcm_r20mm_rcp26, gcm_r20mm_rcp26_std = import_gcm('eca_r20mm', 'amz_neb', 'HadGEM2-ES', 'rcp26', 'yr', '2080-2099')
 
 # RCP8.5
-lat, lon, rcm_prcptot_rcp85 = import_rcm('eca_prcptot', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-lat, lon, rcm_r95p_rcp85 = import_rcm('eca_r95p', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-lat, lon, rcm_r99p_rcp85 = import_rcm('eca_r99p', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-lat, lon, rcm_rx1day_rcp85 = import_rcm('eca_rx1day', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-lat, lon, rcm_rx5day_rcp85 = import_rcm('eca_rx5day', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-lat, lon, rcm_sdii_rcp85 = import_rcm('eca_sdii', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-lat, lon, rcm_cdd_rcp85 = import_rcm('eca_cdd', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-lat, lon, rcm_cwd_rcp85 = import_rcm('eca_cwd', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-lat, lon, rcm_r10mm_rcp85 = import_rcm('eca_r10mm', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
-lat, lon, rcm_r20mm_rcp85 = import_rcm('eca_r20mm', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+lat, lon, rcm_prcptot_rcp85, rcm_prcptot_rcp85_std = import_rcm('eca_prcptot', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+lat, lon, rcm_r95p_rcp85, rcm_r95p_rcp85_std = import_rcm('eca_r95p', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+lat, lon, rcm_r99p_rcp85, rcm_r99p_rcp85_std = import_rcm('eca_r99p', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+lat, lon, rcm_rx1day_rcp85, rcm_rx1day_rcp85_std = import_rcm('eca_rx1day', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+lat, lon, rcm_rx5day_rcp85, rcm_rx5day_rcp85_std = import_rcm('eca_rx5day', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+lat, lon, rcm_sdii_rcp85, rcm_sdii_rcp85_std = import_rcm('eca_sdii', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+lat, lon, rcm_cdd_rcp85, rcm_cdd_rcp85_std = import_rcm('eca_cdd', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+lat, lon, rcm_cwd_rcp85, rcm_cwd_rcp85_std = import_rcm('eca_cwd', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+lat, lon, rcm_r10mm_rcp85, rcm_r10mm_rcp85_std = import_rcm('eca_r10mm', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
+lat, lon, rcm_r20mm_rcp85, rcm_r20mm_rcp85_std = import_rcm('eca_r20mm', 'amz_neb', 'RegCM47_had', 'rcp85', 'yr', '2080-2099')
 
-lat, lon, gcm_prcptot_rcp85 = import_gcm('eca_prcptot', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
-lat, lon, gcm_r95p_rcp85 = import_gcm('eca_r95p', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
-lat, lon, gcm_r99p_rcp85 = import_gcm('eca_r99p', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
-lat, lon, gcm_rx1day_rcp85 = import_gcm('eca_rx1day', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
-lat, lon, gcm_rx5day_rcp85 = import_gcm('eca_rx5day', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
-lat, lon, gcm_sdii_rcp85 = import_gcm('eca_sdii', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
-lat, lon, gcm_cdd_rcp85 = import_gcm('eca_cdd', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
-lat, lon, gcm_cwd_rcp85 = import_gcm('eca_cwd', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
-lat, lon, gcm_r10mm_rcp85 = import_gcm('eca_r10mm', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
-lat, lon, gcm_r20mm_rcp85 = import_gcm('eca_r20mm', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
+lat, lon, gcm_prcptot_rcp85, gcm_prcptot_rcp85_std = import_gcm('eca_prcptot', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
+lat, lon, gcm_r95p_rcp85, gcm_r95p_rcp85_std = import_gcm('eca_r95p', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
+lat, lon, gcm_r99p_rcp85, gcm_r99p_rcp85_std = import_gcm('eca_r99p', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
+lat, lon, gcm_rx1day_rcp85, gcm_rx1day_rcp85_std = import_gcm('eca_rx1day', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
+lat, lon, gcm_rx5day_rcp85, gcm_rx5day_rcp85_std = import_gcm('eca_rx5day', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
+lat, lon, gcm_sdii_rcp85, gcm_sdii_rcp85_std = import_gcm('eca_sdii', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
+lat, lon, gcm_cdd_rcp85, gcm_cdd_rcp85_std = import_gcm('eca_cdd', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
+lat, lon, gcm_cwd_rcp85, gcm_cwd_rcp85_std = import_gcm('eca_cwd', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
+lat, lon, gcm_r10mm_rcp85, gcm_r10mm_rcp85_std = import_gcm('eca_r10mm', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
+lat, lon, gcm_r20mm_rcp85, gcm_r20mm_rcp85_std = import_gcm('eca_r20mm', 'amz_neb', 'HadGEM2-ES', 'rcp85', 'yr', '2080-2099')
 
 # Compute difference between periods
 # RCP26
@@ -223,6 +237,51 @@ diff_gcm_cwd_rcp85_hist = gcm_cwd_rcp85 - gcm_cwd_hist
 diff_gcm_r10mm_rcp85_hist = gcm_r10mm_rcp85 - gcm_r10mm_hist
 diff_gcm_r20mm_rcp85_hist = gcm_r20mm_rcp85 - gcm_r20mm_hist
 
+# Compute ttest from models 
+p_value_rcm_prcptot_rcp26 = ttest(rcm_prcptot_rcp26, rcm_prcptot_hist, rcm_prcptot_rcp26_std, rcm_prcptot_hist_std)
+p_value_rcm_r95p_rcp26 = ttest(rcm_r95p_rcp26, rcm_r95p_hist, rcm_r95p_rcp26_std, rcm_r95p_hist_std)
+p_value_rcm_r99p_rcp26 = ttest(rcm_r99p_rcp26, rcm_r99p_hist, rcm_r99p_rcp26_std, rcm_r99p_hist_std)
+p_value_rcm_rx1day_rcp26 = ttest(rcm_rx1day_rcp26, rcm_rx1day_hist, rcm_rx1day_rcp26_std, rcm_rx1day_hist_std)
+p_value_rcm_rx5day_rcp26 = ttest(rcm_rx5day_rcp26, rcm_rx5day_hist, rcm_rx5day_rcp26_std, rcm_rx5day_hist_std)
+p_value_rcm_sdii_rcp26 = ttest(rcm_sdii_rcp26, rcm_sdii_hist, rcm_sdii_rcp26_std, rcm_sdii_hist_std)
+p_value_rcm_cdd_rcp26 = ttest(rcm_cdd_rcp26, rcm_cdd_hist, rcm_cdd_rcp26_std, rcm_cdd_hist_std)
+p_value_rcm_cwd_rcp26 = ttest(rcm_cwd_rcp26, rcm_cwd_hist, rcm_cwd_rcp26_std, rcm_cwd_hist_std)
+p_value_rcm_r10mm_rcp26 = ttest(rcm_r10mm_rcp26, rcm_r10mm_hist, rcm_r10mm_rcp26_std, rcm_r10mm_hist_std)
+p_value_rcm_r20mm_rcp26 = ttest(rcm_r20mm_rcp26, rcm_r20mm_hist, rcm_r20mm_rcp26_std, rcm_r20mm_hist_std)
+
+p_value_rcm_prcptot_rcp85 = ttest(rcm_prcptot_rcp85, rcm_prcptot_hist, rcm_prcptot_rcp26_std, rcm_prcptot_hist_std)
+p_value_rcm_r95p_rcp85 = ttest(rcm_r95p_rcp85, rcm_r95p_hist, rcm_r95p_rcp85_std, rcm_r95p_hist_std)
+p_value_rcm_r99p_rcp85 = ttest(rcm_r99p_rcp85, rcm_r99p_hist, rcm_r99p_rcp85_std, rcm_r99p_hist_std)
+p_value_rcm_rx1day_rcp85 = ttest(rcm_rx1day_rcp85, rcm_rx1day_hist, rcm_rx1day_rcp85_std, rcm_rx1day_hist_std)
+p_value_rcm_rx5day_rcp85 = ttest(rcm_rx5day_rcp85, rcm_rx5day_hist, rcm_rx5day_rcp85_std, rcm_rx5day_hist_std)
+p_value_rcm_sdii_rcp85 = ttest(rcm_sdii_rcp85, rcm_sdii_hist, rcm_sdii_rcp85_std, rcm_sdii_hist_std)
+p_value_rcm_cdd_rcp85 = ttest(rcm_cdd_rcp85, rcm_cdd_hist, rcm_cdd_rcp85_std, rcm_cdd_hist_std)
+p_value_rcm_cwd_rcp85 = ttest(rcm_cwd_rcp85, rcm_cwd_hist, rcm_cwd_rcp85_std, rcm_cwd_hist_std)
+p_value_rcm_r10mm_rcp85 = ttest(rcm_r10mm_rcp85, rcm_r10mm_hist, rcm_r10mm_rcp85_std, rcm_r10mm_hist_std)
+p_value_rcm_r20mm_rcp85 = ttest(rcm_r20mm_rcp85, rcm_r20mm_hist, rcm_r20mm_rcp85_std, rcm_r20mm_hist_std)
+
+p_value_gcm_prcptot_rcp26 = ttest(gcm_prcptot_rcp26, gcm_prcptot_hist, gcm_prcptot_rcp26_std, gcm_prcptot_hist_std)
+p_value_gcm_r95p_rcp26 = ttest(gcm_r95p_rcp26, gcm_r95p_hist, gcm_r95p_rcp26_std, gcm_r95p_hist_std)
+p_value_gcm_r99p_rcp26 = ttest(gcm_r99p_rcp26, gcm_r99p_hist, gcm_r99p_rcp26_std, gcm_r99p_hist_std)
+p_value_gcm_rx1day_rcp26 = ttest(gcm_rx1day_rcp26, gcm_rx1day_hist, gcm_rx1day_rcp26_std, gcm_rx1day_hist_std)
+p_value_gcm_rx5day_rcp26 = ttest(gcm_rx5day_rcp26, gcm_rx5day_hist, gcm_rx5day_rcp26_std, gcm_rx5day_hist_std)
+p_value_gcm_sdii_rcp26 = ttest(gcm_sdii_rcp26, gcm_sdii_hist, gcm_sdii_rcp26_std, gcm_sdii_hist_std)
+p_value_gcm_cdd_rcp26 = ttest(gcm_cdd_rcp26, gcm_cdd_hist, gcm_cdd_rcp26_std, gcm_cdd_hist_std)
+p_value_gcm_cwd_rcp26 = ttest(gcm_cwd_rcp26, gcm_cwd_hist, gcm_cwd_rcp26_std, gcm_cwd_hist_std)
+p_value_gcm_r10mm_rcp26 = ttest(gcm_r10mm_rcp26, gcm_r10mm_hist, gcm_r10mm_rcp26_std, gcm_r10mm_hist_std)
+p_value_gcm_r20mm_rcp26 = ttest(gcm_r20mm_rcp26, gcm_r20mm_hist, gcm_r20mm_rcp26_std, gcm_r20mm_hist_std)
+
+p_value_gcm_prcptot_rcp85 = ttest(gcm_prcptot_rcp85, gcm_prcptot_hist, gcm_prcptot_rcp85_std, gcm_prcptot_hist_std)
+p_value_gcm_r95p_rcp85 = ttest(gcm_r95p_rcp85, gcm_r95p_hist, gcm_r95p_rcp85_std, gcm_r95p_hist_std)
+p_value_gcm_r99p_rcp85 = ttest(gcm_r99p_rcp85, gcm_r99p_hist, gcm_r99p_rcp85_std, gcm_r99p_hist_std)
+p_value_gcm_rx1day_rcp85 = ttest(gcm_rx1day_rcp85, gcm_rx1day_hist, gcm_rx1day_rcp85_std, gcm_rx1day_hist_std)
+p_value_gcm_rx5day_rcp85 = ttest(gcm_rx5day_rcp85, gcm_rx5day_hist, gcm_rx5day_rcp85_std, gcm_rx5day_hist_std)
+p_value_gcm_sdii_rcp85 = ttest(gcm_sdii_rcp85, gcm_sdii_hist, gcm_sdii_rcp85_std, gcm_sdii_hist_std)
+p_value_gcm_cdd_rcp85 = ttest(gcm_cdd_rcp85, gcm_cdd_hist, gcm_cdd_rcp85_std, gcm_cdd_hist_std)
+p_value_gcm_cwd_rcp85 = ttest(gcm_cwd_rcp85, gcm_cwd_hist, gcm_cwd_rcp85_std, gcm_cwd_hist_std)
+p_value_gcm_r10mm_rcp85 = ttest(gcm_r10mm_rcp85, gcm_r10mm_hist, gcm_r10mm_rcp85_std, gcm_r10mm_hist_std)
+p_value_gcm_r20mm_rcp85 = ttest(gcm_r20mm_rcp85, gcm_r20mm_hist, gcm_r20mm_rcp85_std, gcm_r20mm_hist_std)
+
 # Plot extreme indices 
 fig = plt.figure(figsize=(8, 10))
 
@@ -255,7 +314,9 @@ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_rcm_prcptot_rcp26_hist, levels=levs1, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
+p_value_rcm_prcptot_rcp26 = ma.masked_where(p_value_rcm_prcptot_rcp26 >= 0.05, p_value_rcm_prcptot_rcp26) 
+map.contourf(xx, yy, p_value_rcm_prcptot_rcp26, colors='none', hatches=['....'])
+		
 ax = fig.add_subplot(10, 4, 2)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
@@ -264,6 +325,8 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs1, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
+p_value_rcm_prcptot_rcp85 = ma.masked_where(p_value_rcm_prcptot_rcp85 >= 0.05, p_value_rcm_prcptot_rcp85) 
+map.contourf(xx, yy, p_value_rcm_prcptot_rcp85, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 3)
 map, xx, yy = basemap(lat, lon)
@@ -271,6 +334,8 @@ plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_prcptot_rcp26_hist, levels=levs11, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
+p_value_gcm_prcptot_rcp26 = ma.masked_where(p_value_gcm_prcptot_rcp26 >= 0.05, p_value_gcm_prcptot_rcp26) 
+map.contourf(xx, yy, p_value_gcm_prcptot_rcp26, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 4)
 map, xx, yy = basemap(lat, lon)
@@ -280,6 +345,8 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs11, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
+p_value_gcm_prcptot_rcp85 = ma.masked_where(p_value_gcm_prcptot_rcp85 >= 0.05, p_value_gcm_prcptot_rcp85) 
+map.contourf(xx, yy, p_value_gcm_prcptot_rcp85, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 5)
 map, xx, yy = basemap(lat, lon)
@@ -288,6 +355,8 @@ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_rcm_r95p_rcp26_hist, levels=levs2, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
+p_value_rcm_r95p_rcp26 = ma.masked_where(p_value_rcm_r95p_rcp26 >= 0.05, p_value_rcm_r95p_rcp26) 
+map.contourf(xx, yy, p_value_rcm_r95p_rcp26, colors='none', hatches=['....'])
 	
 ax = fig.add_subplot(10, 4, 6)
 map, xx, yy = basemap(lat, lon)
@@ -297,6 +366,8 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs2, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
+p_value_rcm_r95p_rcp85 = ma.masked_where(p_value_rcm_r95p_rcp85 >= 0.05, p_value_rcm_r95p_rcp85) 
+map.contourf(xx, yy, p_value_rcm_r95p_rcp85, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 7)
 map, xx, yy = basemap(lat, lon)
@@ -304,7 +375,9 @@ plt.title(u'G)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_r95p_rcp26_hist, levels=levs21, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
+p_value_gcm_r95p_rcp26 = ma.masked_where(p_value_gcm_r95p_rcp26 >= 0.05, p_value_gcm_r95p_rcp26) 
+map.contourf(xx, yy, p_value_gcm_r95p_rcp26, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 8)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'H)', loc='left', fontsize=8, fontweight='bold')
@@ -313,6 +386,8 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs21, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
+p_value_gcm_r95p_rcp85 = ma.masked_where(p_value_gcm_r95p_rcp85 >= 0.05, p_value_gcm_r95p_rcp85) 
+map.contourf(xx, yy, p_value_gcm_r95p_rcp85, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 9)
 map, xx, yy = basemap(lat, lon)
@@ -321,6 +396,8 @@ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_rcm_r99p_rcp26_hist, levels=levs3, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
+p_value_rcm_r99p_rcp26 = ma.masked_where(p_value_rcm_r99p_rcp26 >= 0.05, p_value_rcm_r99p_rcp26) 
+map.contourf(xx, yy, p_value_rcm_r99p_rcp26, colors='none', hatches=['....'])
 	
 ax = fig.add_subplot(10, 4, 10)
 map, xx, yy = basemap(lat, lon)
@@ -330,6 +407,8 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs3, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
+p_value_rcm_r99p_rcp85 = ma.masked_where(p_value_rcm_r99p_rcp85 >= 0.05, p_value_rcm_r99p_rcp85) 
+map.contourf(xx, yy, p_value_rcm_r99p_rcp85, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 11)
 map, xx, yy = basemap(lat, lon)
@@ -337,6 +416,8 @@ plt.title(u'K)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_r99p_rcp26_hist, levels=levs31, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
+p_value_gcm_r99p_rcp26 = ma.masked_where(p_value_gcm_r99p_rcp26 >= 0.05, p_value_gcm_r99p_rcp26) 
+map.contourf(xx, yy, p_value_gcm_r99p_rcp26, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 12)
 map, xx, yy = basemap(lat, lon)
@@ -346,6 +427,8 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs31, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
+p_value_gcm_r99p_rcp85 = ma.masked_where(p_value_gcm_r99p_rcp85 >= 0.05, p_value_gcm_r99p_rcp85) 
+map.contourf(xx, yy, p_value_gcm_r99p_rcp85, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 13)
 map, xx, yy = basemap(lat, lon)
@@ -354,6 +437,8 @@ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_rcm_rx1day_rcp26_hist, levels=levs4, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
+p_value_rcm_rx1day_rcp26 = ma.masked_where(p_value_rcm_rx1day_rcp26 >= 0.05, p_value_rcm_rx1day_rcp26) 
+map.contourf(xx, yy, p_value_rcm_rx1day_rcp26, colors='none', hatches=['....'])
 	
 ax = fig.add_subplot(10, 4, 14)
 map, xx, yy = basemap(lat, lon)
@@ -363,6 +448,8 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs4, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
+p_value_rcm_rx1day_rcp85 = ma.masked_where(p_value_rcm_rx1day_rcp85 >= 0.05, p_value_rcm_rx1day_rcp85) 
+map.contourf(xx, yy, p_value_rcm_rx1day_rcp85, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 15)
 map, xx, yy = basemap(lat, lon)
@@ -370,6 +457,8 @@ plt.title(u'O)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_rx1day_rcp26_hist, levels=levs41, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
+p_value_gcm_rx1day_rcp26 = ma.masked_where(p_value_gcm_rx1day_rcp26 >= 0.05, p_value_gcm_rx1day_rcp26) 
+map.contourf(xx, yy, p_value_gcm_rx1day_rcp26, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 16)
 map, xx, yy = basemap(lat, lon)
@@ -379,6 +468,8 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs41, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
+p_value_gcm_rx1day_rcp85 = ma.masked_where(p_value_gcm_rx1day_rcp85 >= 0.05, p_value_gcm_rx1day_rcp85) 
+map.contourf(xx, yy, p_value_gcm_rx1day_rcp85, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 17)
 map, xx, yy = basemap(lat, lon)
@@ -387,7 +478,9 @@ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_rcm_rx5day_rcp26_hist, levels=levs5, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
+p_value_rcm_rx5day_rcp26 = ma.masked_where(p_value_rcm_rx5day_rcp26 >= 0.05, p_value_rcm_rx5day_rcp26) 
+map.contourf(xx, yy, p_value_rcm_rx5day_rcp26, colors='none', hatches=['....'])
+		
 ax = fig.add_subplot(10, 4, 18)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'R)', loc='left', fontsize=8, fontweight='bold')
@@ -396,14 +489,18 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs5, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
-
+p_value_rcm_rx5day_rcp85 = ma.masked_where(p_value_rcm_rx5day_rcp85 >= 0.05, p_value_rcm_rx5day_rcp85) 
+map.contourf(xx, yy, p_value_rcm_rx5day_rcp85, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 19)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'S)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_rx5day_rcp26_hist, levels=levs51, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
+p_value_gcm_rx5day_rcp26 = ma.masked_where(p_value_gcm_rx5day_rcp26 >= 0.05, p_value_gcm_rx5day_rcp26) 
+map.contourf(xx, yy, p_value_gcm_rx5day_rcp26, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 20)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'T)', loc='left', fontsize=8, fontweight='bold')
@@ -412,7 +509,9 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs51, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
-
+p_value_gcm_rx5day_rcp85 = ma.masked_where(p_value_gcm_rx5day_rcp85 >= 0.05, p_value_gcm_rx5day_rcp85) 
+map.contourf(xx, yy, p_value_gcm_rx5day_rcp85, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 21)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'U)', loc='left', fontsize=8, fontweight='bold')
@@ -420,6 +519,8 @@ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_rcm_sdii_rcp26_hist, levels=levs6, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
+p_value_rcm_sdii_rcp26 = ma.masked_where(p_value_rcm_sdii_rcp26 >= 0.05, p_value_rcm_sdii_rcp26) 
+map.contourf(xx, yy, p_value_rcm_sdii_rcp26, colors='none', hatches=['....'])
 	
 ax = fig.add_subplot(10, 4, 22)
 map, xx, yy = basemap(lat, lon)
@@ -429,14 +530,18 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs6, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
-
+p_value_rcm_sdii_rcp85 = ma.masked_where(p_value_rcm_sdii_rcp85 >= 0.05, p_value_rcm_sdii_rcp85) 
+map.contourf(xx, yy, p_value_rcm_sdii_rcp85, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 23)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'W)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_sdii_rcp26_hist, levels=levs61, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
+p_value_gcm_sdii_rcp26 = ma.masked_where(p_value_gcm_sdii_rcp26 >= 0.05, p_value_gcm_sdii_rcp26) 
+map.contourf(xx, yy, p_value_gcm_sdii_rcp26, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 24)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'X)', loc='left', fontsize=8, fontweight='bold')
@@ -445,7 +550,9 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs61, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
-
+p_value_gcm_sdii_rcp85 = ma.masked_where(p_value_gcm_sdii_rcp85 >= 0.05, p_value_gcm_sdii_rcp85) 
+map.contourf(xx, yy, p_value_gcm_sdii_rcp85, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 25)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'Y)', loc='left', fontsize=8, fontweight='bold')
@@ -453,6 +560,8 @@ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_rcm_cdd_rcp26_hist, levels=levs7, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
+p_value_rcm_cdd_rcp26 = ma.masked_where(p_value_rcm_cdd_rcp26 >= 0.05, p_value_rcm_cdd_rcp26) 
+map.contourf(xx, yy, p_value_rcm_cdd_rcp26, colors='none', hatches=['....'])
 	
 ax = fig.add_subplot(10, 4, 26)
 map, xx, yy = basemap(lat, lon)
@@ -462,13 +571,17 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs7, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
-
+p_value_rcm_cdd_rcp85 = ma.masked_where(p_value_rcm_cdd_rcp85 >= 0.05, p_value_rcm_cdd_rcp85) 
+map.contourf(xx, yy, p_value_rcm_cdd_rcp85, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 27)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'A.1)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_cdd_rcp26_hist, levels=levs71, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
+p_value_gcm_cdd_rcp26 = ma.masked_where(p_value_gcm_cdd_rcp26 >= 0.05, p_value_gcm_cdd_rcp26) 
+map.contourf(xx, yy, p_value_gcm_cdd_rcp26, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 28)
 map, xx, yy = basemap(lat, lon)
@@ -478,6 +591,8 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs71, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
+p_value_gcm_cdd_rcp85 = ma.masked_where(p_value_gcm_cdd_rcp85 >= 0.05, p_value_gcm_cdd_rcp85) 
+map.contourf(xx, yy, p_value_gcm_cdd_rcp85, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 29)
 map, xx, yy = basemap(lat, lon)
@@ -486,7 +601,9 @@ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_rcm_cwd_rcp26_hist, levels=levs8, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-
+p_value_rcm_cwd_rcp26 = ma.masked_where(p_value_rcm_cwd_rcp26 >= 0.05, p_value_rcm_cwd_rcp26) 
+map.contourf(xx, yy, p_value_rcm_cwd_rcp26, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 30)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'D.1)', loc='left', fontsize=8, fontweight='bold')
@@ -495,14 +612,18 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs8, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
-
+p_value_rcm_cwd_rcp85 = ma.masked_where(p_value_rcm_cwd_rcp85 >= 0.05, p_value_rcm_cwd_rcp85) 
+map.contourf(xx, yy, p_value_rcm_cwd_rcp85, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 31)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'E.1)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_cwd_rcp26_hist, levels=levs81, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
+p_value_gcm_cwd_rcp26 = ma.masked_where(p_value_gcm_cwd_rcp26 >= 0.05, p_value_gcm_cwd_rcp26) 
+map.contourf(xx, yy, p_value_gcm_cwd_rcp26, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 32)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'F.1)', loc='left', fontsize=8, fontweight='bold')
@@ -511,7 +632,9 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs81, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
-
+p_value_gcm_cwd_rcp85 = ma.masked_where(p_value_gcm_cwd_rcp85 >= 0.05, p_value_gcm_cwd_rcp85) 
+map.contourf(xx, yy, p_value_gcm_cwd_rcp85, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 33)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'G.1)', loc='left', fontsize=8, fontweight='bold')
@@ -519,6 +642,8 @@ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_rcm_r10mm_rcp26_hist, levels=levs9, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
+p_value_rcm_r10mm_rcp26 = ma.masked_where(p_value_rcm_r10mm_rcp26 >= 0.05, p_value_rcm_r10mm_rcp26) 
+map.contourf(xx, yy, p_value_rcm_r10mm_rcp26, colors='none', hatches=['....'])
 	
 ax = fig.add_subplot(10, 4, 34)
 map, xx, yy = basemap(lat, lon)
@@ -528,14 +653,18 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs9, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
-
+p_value_rcm_r10mm_rcp85 = ma.masked_where(p_value_rcm_r10mm_rcp85 >= 0.05, p_value_rcm_r10mm_rcp85) 
+map.contourf(xx, yy, p_value_rcm_r10mm_rcp85, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 35)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'I.1)', loc='left', fontsize=8, fontweight='bold')
 map.contourf(xx, yy, diff_gcm_r10mm_rcp26_hist, levels=levs91, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
-
+p_value_gcm_r10mm_rcp26 = ma.masked_where(p_value_gcm_r10mm_rcp26 >= 0.05, p_value_gcm_r10mm_rcp26) 
+map.contourf(xx, yy, p_value_gcm_r10mm_rcp26, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 36)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'J.1)', loc='left', fontsize=8, fontweight='bold')
@@ -544,7 +673,9 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs91, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
-
+p_value_gcm_r10mm_rcp85 = ma.masked_where(p_value_gcm_r10mm_rcp85 >= 0.05, p_value_gcm_r10mm_rcp85) 
+map.contourf(xx, yy, p_value_gcm_r10mm_rcp85, colors='none', hatches=['....'])
+	
 ax = fig.add_subplot(10, 4, 37)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'K.1)', loc='left', fontsize=8, fontweight='bold')
@@ -553,7 +684,9 @@ plt.ylabel(u'Latitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_rcm_r20mm_rcp26_hist, levels=levs10, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[1,0,0,0], linewidth=0.4, color='black')
-	
+p_value_rcm_r20mm_rcp26 = ma.masked_where(p_value_rcm_r20mm_rcp26 >= 0.05, p_value_rcm_r20mm_rcp26) 
+map.contourf(xx, yy, p_value_rcm_r20mm_rcp26, colors='none', hatches=['....'])
+		
 ax = fig.add_subplot(10, 4, 38)
 map, xx, yy = basemap(lat, lon)
 plt.title(u'L.1)', loc='left', fontsize=8, fontweight='bold')
@@ -563,6 +696,8 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,1], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs10, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6) 
+p_value_rcm_r20mm_rcp85 = ma.masked_where(p_value_rcm_r20mm_rcp85 >= 0.05, p_value_rcm_r20mm_rcp85) 
+map.contourf(xx, yy, p_value_rcm_r20mm_rcp85, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 39)
 map, xx, yy = basemap(lat, lon)
@@ -571,6 +706,8 @@ plt.xlabel(u'Longitude', fontsize=6, fontweight='bold', labelpad=15)
 map.contourf(xx, yy, diff_gcm_r20mm_rcp26_hist, levels=levs101, latlon=True, cmap=cm.BrBG)
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,1], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
+p_value_gcm_r20mm_rcp26 = ma.masked_where(p_value_gcm_r20mm_rcp26 >= 0.05, p_value_gcm_r20mm_rcp26) 
+map.contourf(xx, yy, p_value_gcm_r20mm_rcp26, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(10, 4, 40)
 map, xx, yy = basemap(lat, lon)
@@ -581,6 +718,8 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,1], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs101, drawedges=True, ax=ax)
 cbar.ax.tick_params(labelsize=6)
+p_value_gcm_r20mm_rcp85 = ma.masked_where(p_value_gcm_r20mm_rcp85 >= 0.05, p_value_gcm_r20mm_rcp85) 
+map.contourf(xx, yy, p_value_gcm_r20mm_rcp85, colors='none', hatches=['....'])
 
 plt.subplots_adjust(left=0.10, bottom=0.10, right=0.90, top=0.90, wspace=0.30, hspace=0.30)
 

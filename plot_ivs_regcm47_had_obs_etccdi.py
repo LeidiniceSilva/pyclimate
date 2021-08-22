@@ -2,7 +2,7 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
-__date__        = "06ssss/24/2021"
+__date__        = "06/24/2021"
 __description__ = "This script plot interannual variability skill score from extremes indices"
 
 import os
@@ -335,6 +335,7 @@ gcm_tn90p_matopiba = import_gcm('eca_tn90p', 'matopiba', 'HadGEM2-ES', 'historic
 # Precipitation 
 # RCM
 # SAMZ
+
 ivs_rcm_prcptot_samz = compute_ivs(obs_prcptot_samz, rcm_prcptot_samz)
 ivs_rcm_r95p_samz = compute_ivs(obs_r95p_samz, rcm_r95p_samz)
 ivs_rcm_r99p_samz = compute_ivs(obs_r99p_samz, rcm_r99p_samz)
@@ -408,11 +409,18 @@ ivs_gcm_r10mm_matopiba = compute_ivs(obs_r10mm_matopiba, gcm_r10mm_matopiba)
 ivs_gcm_r20mm_matopiba = compute_ivs(obs_r20mm_matopiba, gcm_r20mm_matopiba)
 
 ivs_rcm_samz_pre = [ivs_rcm_prcptot_samz, ivs_rcm_r95p_samz, ivs_rcm_r99p_samz, ivs_rcm_rx1day_samz, ivs_rcm_rx5day_samz, ivs_rcm_sdii_samz, ivs_rcm_cdd_samz, ivs_rcm_cwd_samz, ivs_rcm_r10mm_samz, ivs_rcm_r20mm_samz]
-ivs_rcm_eneb_pre = [ivs_rcm_prcptot_eneb, ivs_rcm_r95p_eneb, ivs_rcm_r99p_eneb, ivs_rcm_rx1day_eneb, 7.5, ivs_rcm_sdii_eneb, 7.5, ivs_rcm_cwd_eneb, ivs_rcm_r10mm_eneb, ivs_rcm_r20mm_eneb]
-ivs_rcm_matopiba_pre = [ivs_rcm_prcptot_matopiba, ivs_rcm_r95p_matopiba, ivs_rcm_r99p_matopiba, 5, 6, ivs_rcm_sdii_matopiba, ivs_rcm_cdd_matopiba, ivs_rcm_cwd_matopiba, ivs_rcm_r10mm_matopiba, ivs_rcm_r20mm_matopiba]
-ivs_gcm_samz_pre = [ivs_gcm_prcptot_samz, 7.5, 7.6, ivs_gcm_rx1day_samz, ivs_gcm_rx5day_samz, ivs_gcm_sdii_samz, ivs_gcm_cdd_samz, ivs_gcm_cwd_samz, ivs_gcm_r10mm_samz, ivs_gcm_r20mm_samz]
+ivs_rcm_eneb_pre = [ivs_rcm_prcptot_eneb, ivs_rcm_r95p_eneb, ivs_rcm_r99p_eneb, ivs_rcm_rx1day_eneb, ivs_rcm_rx5day_eneb, ivs_rcm_sdii_eneb, ivs_rcm_cdd_eneb, ivs_rcm_cwd_eneb, ivs_rcm_r10mm_eneb, ivs_rcm_r20mm_eneb]
+ivs_rcm_matopiba_pre = [ivs_rcm_prcptot_matopiba, ivs_rcm_r95p_matopiba, ivs_rcm_r99p_matopiba, ivs_rcm_rx1day_matopiba, ivs_rcm_rx5day_matopiba, ivs_rcm_sdii_matopiba, ivs_rcm_cdd_matopiba, ivs_rcm_cwd_matopiba, ivs_rcm_r10mm_matopiba, ivs_rcm_r20mm_matopiba]
+ivs_gcm_samz_pre = [ivs_gcm_prcptot_samz, ivs_gcm_r95p_samz, ivs_gcm_r99p_samz, ivs_gcm_rx1day_samz, ivs_gcm_rx5day_samz, ivs_gcm_sdii_samz, ivs_gcm_cdd_samz, ivs_gcm_cwd_samz, ivs_gcm_r10mm_samz, ivs_gcm_r20mm_samz]
 ivs_gcm_eneb_pre = [ivs_gcm_prcptot_eneb, ivs_gcm_r95p_eneb, ivs_gcm_r99p_eneb, ivs_gcm_rx1day_eneb, ivs_gcm_rx5day_eneb, ivs_gcm_sdii_eneb, ivs_gcm_cdd_eneb, ivs_gcm_cwd_eneb, ivs_gcm_r10mm_eneb, ivs_gcm_r20mm_eneb]
 ivs_gcm_matopiba_pre = [ivs_gcm_prcptot_matopiba, ivs_gcm_r95p_matopiba, ivs_gcm_r99p_matopiba, ivs_gcm_rx1day_matopiba, ivs_gcm_rx5day_matopiba, ivs_gcm_sdii_matopiba, ivs_gcm_cdd_matopiba, ivs_gcm_cwd_matopiba, ivs_gcm_r10mm_matopiba, ivs_gcm_r20mm_matopiba]
+
+print(ivs_rcm_samz_pre)
+print(ivs_rcm_eneb_pre)
+print(ivs_rcm_matopiba_pre)
+print(ivs_gcm_samz_pre)
+print(ivs_gcm_eneb_pre)
+print(ivs_gcm_matopiba_pre)
 
 # Temperature 
 # RCM
@@ -496,12 +504,15 @@ ivs_gcm_tn10p_matopiba = compute_ivs(obs_tn10p_matopiba, gcm_tn10p_matopiba)
 ivs_gcm_tn90p_matopiba = compute_ivs(obs_tn90p_matopiba, gcm_tn90p_matopiba)
 
 ivs_rcm_samz_tas = [ivs_rcm_txx_samz, ivs_rcm_txn_samz, ivs_rcm_tnx_samz, ivs_rcm_tnn_samz, ivs_rcm_dtr_samz, ivs_rcm_su_samz, ivs_rcm_tr_samz, ivs_rcm_tx10p_samz, ivs_rcm_tx90p_samz, ivs_rcm_tn10p_samz, ivs_rcm_tn90p_samz]
-ivs_rcm_eneb_tas = [ivs_rcm_txx_eneb, 7.2, 7, 7.5, ivs_rcm_dtr_eneb, ivs_rcm_su_eneb, ivs_rcm_tr_eneb, ivs_rcm_tx10p_eneb, ivs_rcm_tx90p_eneb, ivs_rcm_tn10p_eneb, ivs_rcm_tn90p_eneb]
-ivs_rcm_matopiba_tas = [ivs_rcm_txx_matopiba, ivs_rcm_txn_matopiba, 7.8, ivs_rcm_tnn_matopiba, ivs_rcm_dtr_matopiba, ivs_rcm_su_matopiba, ivs_rcm_tr_matopiba, ivs_rcm_tx10p_matopiba, ivs_rcm_tx90p_matopiba, ivs_rcm_tn10p_matopiba, ivs_rcm_tn90p_matopiba]
-ivs_gcm_samz_tas = [ivs_gcm_txx_samz, ivs_gcm_txn_samz, ivs_gcm_tnx_samz, ivs_gcm_tnn_samz, ivs_gcm_dtr_samz, 7.8, ivs_gcm_tr_samz, ivs_gcm_tx10p_samz, ivs_gcm_tx90p_samz, ivs_gcm_tn10p_samz, ivs_gcm_tn90p_samz]
-ivs_gcm_eneb_tas = [ivs_gcm_txx_eneb, 7.9, 7.8, 7.9, ivs_gcm_dtr_eneb, ivs_gcm_su_eneb, ivs_gcm_tr_eneb, ivs_gcm_tx10p_eneb, ivs_gcm_tx90p_eneb, ivs_gcm_tn10p_eneb, ivs_gcm_tn90p_eneb]
-ivs_gcm_matopiba_tas = [ivs_gcm_txx_matopiba, 4.5, 5.6, ivs_gcm_tnn_matopiba, ivs_gcm_dtr_matopiba, ivs_gcm_su_matopiba, ivs_gcm_tr_matopiba, ivs_gcm_tx10p_matopiba, ivs_gcm_tx90p_matopiba, ivs_gcm_tn10p_matopiba, ivs_gcm_tn90p_matopiba]
+ivs_rcm_eneb_tas = [ivs_rcm_txx_eneb, ivs_rcm_txn_eneb, ivs_rcm_tnx_eneb, ivs_rcm_tnn_eneb, ivs_rcm_dtr_eneb, ivs_rcm_su_eneb, ivs_rcm_tr_eneb, ivs_rcm_tx10p_eneb, ivs_rcm_tx90p_eneb, ivs_rcm_tn10p_eneb, ivs_rcm_tn90p_eneb]
+ivs_rcm_matopiba_tas = [ivs_rcm_txx_matopiba, ivs_rcm_txn_matopiba, ivs_rcm_tnx_matopiba, ivs_rcm_tnn_matopiba, ivs_rcm_dtr_matopiba, ivs_rcm_su_matopiba, ivs_rcm_tr_matopiba, ivs_rcm_tx10p_matopiba, ivs_rcm_tx90p_matopiba, ivs_rcm_tn10p_matopiba, ivs_rcm_tn90p_matopiba]
+ivs_gcm_samz_tas = [ivs_gcm_txx_samz, ivs_gcm_txn_samz, ivs_gcm_tnx_samz, ivs_gcm_tnn_samz, ivs_gcm_dtr_samz, ivs_gcm_su_samz, ivs_gcm_tr_samz, ivs_gcm_tx10p_samz, ivs_gcm_tx90p_samz, ivs_gcm_tn10p_samz, ivs_gcm_tn90p_samz]
+ivs_gcm_eneb_tas = [ivs_gcm_txx_eneb, ivs_gcm_txn_eneb, ivs_gcm_tnx_eneb, ivs_gcm_tnn_eneb, ivs_gcm_dtr_eneb, ivs_gcm_su_eneb, ivs_gcm_tr_eneb, ivs_gcm_tx10p_eneb, ivs_gcm_tx90p_eneb, ivs_gcm_tn10p_eneb, ivs_gcm_tn90p_eneb]
+ivs_gcm_matopiba_tas = [ivs_gcm_txx_matopiba, ivs_gcm_txn_matopiba, ivs_gcm_tnx_matopiba, ivs_gcm_tnn_matopiba, ivs_gcm_dtr_matopiba, ivs_gcm_su_matopiba, ivs_gcm_tr_matopiba, ivs_gcm_tx10p_matopiba, ivs_gcm_tx90p_matopiba, ivs_gcm_tn10p_matopiba, ivs_gcm_tn90p_matopiba]
 
+print(ivs_rcm_samz_tas)
+print(ivs_rcm_eneb_tas)
+print(ivs_rcm_matopiba_tas)
 print(ivs_gcm_samz_tas)
 print(ivs_gcm_eneb_tas)
 print(ivs_gcm_matopiba_tas)
@@ -513,73 +524,61 @@ time2 = np.arange(1, 12)
 bar_width = .25
 
 ax1 = fig.add_subplot(3, 2, 1)
-ax1.spines['right'].set_visible(False)
-ax1.spines['top'].set_visible(False)
-plt_clim1 = plt.bar(time1, ivs_rcm_samz_pre, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time1 + .25, ivs_gcm_samz_pre,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim1 = plt.bar(time1, ivs_rcm_samz_pre, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time1 + .25, ivs_gcm_samz_pre,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
 plt.title(u'A)', loc='left', fontweight='bold', fontsize=8)
 plt.ylim(0, 8)
 plt.xticks(time1 + .12, ('PRCPTOT', 'R95p', 'R99p', 'Rx1day', 'Rx5day', 'SDII', 'CDD', 'CWD', 'R10mm', 'R20mm'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
+plt.yticks(np.arange(0, 10, 2), fontsize=8)
 plt.setp(ax1.get_xticklabels(), visible=False)
+plt.legend(fontsize=8, ncol=1, handlelength=0.75, handleheight=0.75, frameon=False)
 
 ax2 = fig.add_subplot(3, 2, 2)
-ax2.spines['right'].set_visible(False)
-ax2.spines['top'].set_visible(False)
-plt_clim1 = plt.bar(time2, ivs_rcm_samz_tas, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time2 + .25, ivs_gcm_samz_tas,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim1 = plt.bar(time2, ivs_rcm_samz_tas, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time2 + .25, ivs_gcm_samz_tas,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
 plt.title(u'D)', loc='left', fontweight='bold', fontsize=8)
 plt.ylim(0, 8)
 plt.xticks(time2 + .12, ('TXX', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'Tx10p', 'Tx90p', 'Tn10p', 'Tn90p'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
+plt.yticks(np.arange(0, 10, 2), fontsize=8)
 plt.setp(ax2.get_xticklabels(), visible=False)
-plt.legend(fontsize=8, shadow=True, ncol=1, handlelength=0.75, handleheight=0.75)
 
 ax3 = fig.add_subplot(3, 2, 3)
-ax3.spines['right'].set_visible(False)
-ax3.spines['top'].set_visible(False)
-plt_clim1 = plt.bar(time1, ivs_rcm_eneb_pre, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time1 + .25, ivs_gcm_eneb_pre,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim1 = plt.bar(time1, ivs_rcm_eneb_pre, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time1 + .25, ivs_gcm_eneb_pre,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
 plt.title(u'B)', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Value of IVS', fontsize=8)
+plt.ylabel(u'IVS of precipitation indices', fontsize=8)
 plt.ylim(0, 8)
 plt.xticks(time1 + .12, ('PRCPTOT', 'R95p', 'R99p', 'Rx1day', 'Rx5day', 'SDII', 'CDD', 'CWD', 'R10mm', 'R20mm'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
+plt.yticks(np.arange(0, 10, 2), fontsize=8)
 plt.setp(ax3.get_xticklabels(), visible=False)
 
 ax4 = fig.add_subplot(3, 2, 4)
-ax4.spines['right'].set_visible(False)
-ax4.spines['top'].set_visible(False)
-plt_clim1 = plt.bar(time2, ivs_rcm_eneb_tas, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time2 + .25, ivs_gcm_eneb_tas,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim1 = plt.bar(time2, ivs_rcm_eneb_tas, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time2 + .25, ivs_gcm_eneb_tas,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
 plt.title(u'E)', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Value of IVS', fontsize=8)
+plt.ylabel(u'IVS of temperature indices', fontsize=8)
 plt.ylim(0, 8)
 plt.xticks(time2 + .12, ('TXX', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'Tx10p', 'Tx90p', 'Tn10p', 'Tn90p'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
+plt.yticks(np.arange(0, 10, 2), fontsize=8)
 plt.setp(ax4.get_xticklabels(), visible=False)
 
 ax5 = fig.add_subplot(3, 2, 5)
-ax5.spines['right'].set_visible(False)
-ax5.spines['top'].set_visible(False)
-plt_clim1 = plt.bar(time1, ivs_rcm_matopiba_pre, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time1 + .25, ivs_gcm_matopiba_pre,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim1 = plt.bar(time1, ivs_rcm_matopiba_pre, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time1 + .25, ivs_gcm_matopiba_pre,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
 plt.title(u'C)', loc='left', fontweight='bold', fontsize=8)
 plt.ylim(0, 8)
 plt.xticks(time1 + .12, ('PRCPTOT', 'R95p', 'R99p', 'Rx1day', 'Rx5day', 'SDII', 'CDD', 'CWD', 'R10mm', 'R20mm'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
+plt.yticks(np.arange(0, 10, 2), fontsize=8)
 labels = ax5.get_xticklabels()
 plt.setp(labels, rotation=90)
 
 ax6 = fig.add_subplot(3, 2, 6)
-ax6.spines['right'].set_visible(False)
-ax6.spines['top'].set_visible(False)
-plt_clim1 = plt.bar(time2, ivs_rcm_matopiba_tas, color='blue', label='Reg', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time2 + .25, ivs_gcm_matopiba_tas,  color='red', label='Had', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim1 = plt.bar(time2, ivs_rcm_matopiba_tas, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time2 + .25, ivs_gcm_matopiba_tas,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
 plt.title(u'F)', loc='left', fontweight='bold', fontsize=8)
 plt.ylim(0, 8)
 plt.xticks(time2 + .12, ('TXX', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'Tx10p', 'Tx90p', 'Tn10p', 'Tn90p'), fontsize=8)
-plt.yticks(np.arange(0, 9, 1), fontsize=8)
+plt.yticks(np.arange(0, 10, 2), fontsize=8)
 labels = ax6.get_xticklabels()
 plt.setp(labels, rotation=90)
 

@@ -2,7 +2,7 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
-__date__        = "06ssss/24/2021"
+__date__        = "06/24/2021"
 __description__ = "This script plot portrait diagram from extremes indices to rcp"
 
 import os

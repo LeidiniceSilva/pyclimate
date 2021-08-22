@@ -25,7 +25,7 @@ class TaylorDiagram(object):
     theta=arccos(correlation).
     """
 
-    def __init__(self, refstd, fig=None, rect=313, label='_', marker='', color='', srange=(0., 9), extend=False):
+    def __init__(self, refstd, fig=None, rect=313, label='_', marker='', color='', srange=(0., 9.), extend=False):
         """
         Set up Taylor diagram axes, i.e. single quadrant polar
         plot, using `mpl_toolkits.axisartist.floating_axes`.
