@@ -577,7 +577,7 @@ plt_clim1 = plt.bar(time2, ivs_rcm_matopiba_tas, color='white', label='RegCM4.7'
 plt_clim2 = plt.bar(time2 + .25, ivs_gcm_matopiba_tas,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
 plt.title(u'F)', loc='left', fontweight='bold', fontsize=8)
 plt.ylim(0, 8)
-plt.xticks(time2 + .12, ('TXX', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'Tx10p', 'Tx90p', 'Tn10p', 'Tn90p'), fontsize=8)
+plt.xticks(time2 + .12, ('TXX', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'TX10p', 'TX90p', 'TN10p', 'TN90p'), fontsize=8)
 plt.yticks(np.arange(0, 10, 2), fontsize=8)
 labels = ax6.get_xticklabels()
 plt.setp(labels, rotation=90)

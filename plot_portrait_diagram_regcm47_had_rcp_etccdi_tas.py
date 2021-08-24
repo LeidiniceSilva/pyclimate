@@ -42,7 +42,7 @@ def import_rcm(var, area, model, exp, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	annual_rcm = np.nanmean(np.nanmean(var[:][:20,:,:], axis=1), axis=1)
+	annual_rcm = np.nanmean(np.nanmean(var[:][0:20,:,:], axis=1), axis=1)
 	annual_rcm = np.nanmean(annual_rcm, axis=1)
 	
 	return annual_rcm
@@ -69,7 +69,7 @@ def import_gcm(var, area, model, exp, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	annual_gcm = np.nanmean(np.nanmean(var[:][:20,:,:], axis=1), axis=1)
+	annual_gcm = np.nanmean(np.nanmean(var[:][0:20,:,:], axis=1), axis=1)
 
 	return annual_gcm
 	
@@ -229,10 +229,10 @@ rcm_rcp26_samz = {'TXx': rcm_txx_rcp26_samz,
 'DTR': rcm_dtr_rcp26_samz,
 'SU': rcm_su_rcp26_samz,
 'TR': rcm_tr_rcp26_samz,
-'Tx10p': rcm_tx10p_rcp26_samz, 
-'Tx90p': rcm_tx90p_rcp26_samz,
-'Tn10p': rcm_tn10p_rcp26_samz,
-'Tn90p': rcm_tn90p_rcp26_samz}
+'TX10p': rcm_tx10p_rcp26_samz, 
+'TX90p': rcm_tx90p_rcp26_samz,
+'TN10p': rcm_tn10p_rcp26_samz,
+'TN90p': rcm_tn90p_rcp26_samz}
 
 rcm_rcp85_samz = {'TXx': rcm_txx_rcp85_samz,
 'TXn': rcm_txn_rcp85_samz,
@@ -241,10 +241,10 @@ rcm_rcp85_samz = {'TXx': rcm_txx_rcp85_samz,
 'DTR': rcm_dtr_rcp85_samz,
 'SU': rcm_su_rcp85_samz,
 'TR': rcm_tr_rcp85_samz,
-'Tx10p': rcm_tx10p_rcp85_samz, 
-'Tx90p': rcm_tx90p_rcp85_samz,
-'Tn10p': rcm_tn10p_rcp85_samz,
-'Tn90p': rcm_tn90p_rcp85_samz}
+'TX10p': rcm_tx10p_rcp85_samz, 
+'TX90p': rcm_tx90p_rcp85_samz,
+'TN10p': rcm_tn10p_rcp85_samz,
+'TN90p': rcm_tn90p_rcp85_samz}
 
 gcm_rcp26_samz = {'TXx': gcm_txx_rcp26_samz,
 'TXn': gcm_txn_rcp26_samz,
@@ -253,10 +253,10 @@ gcm_rcp26_samz = {'TXx': gcm_txx_rcp26_samz,
 'DTR': gcm_dtr_rcp26_samz,
 'SU': gcm_su_rcp26_samz,
 'TR': gcm_tr_rcp26_samz,
-'Tx10p': gcm_tx10p_rcp26_samz, 
-'Tx90p': gcm_tx90p_rcp26_samz,
-'Tn10p': gcm_tn10p_rcp26_samz,
-'Tn90p': gcm_tn90p_rcp26_samz}
+'TX10p': gcm_tx10p_rcp26_samz, 
+'TX90p': gcm_tx90p_rcp26_samz,
+'TN10p': gcm_tn10p_rcp26_samz,
+'TN90p': gcm_tn90p_rcp26_samz}
 
 gcm_rcp85_samz = {'TXx': gcm_txx_rcp85_samz,
 'TXn': gcm_txn_rcp85_samz,
@@ -265,10 +265,10 @@ gcm_rcp85_samz = {'TXx': gcm_txx_rcp85_samz,
 'DTR': gcm_dtr_rcp85_samz,
 'SU': gcm_su_rcp85_samz,
 'TR': gcm_tr_rcp85_samz,
-'Tx10p': gcm_tx10p_rcp85_samz, 
-'Tx90p': gcm_tx90p_rcp85_samz,
-'Tn10p': gcm_tn10p_rcp85_samz,
-'Tn90p': gcm_tn90p_rcp85_samz}
+'TX10p': gcm_tx10p_rcp85_samz, 
+'TX90p': gcm_tx90p_rcp85_samz,
+'TN10p': gcm_tn10p_rcp85_samz,
+'TN90p': gcm_tn90p_rcp85_samz}
 
 rcm_rcp26_eneb = {'TXx': rcm_txx_rcp26_eneb,
 'TXn': rcm_txn_rcp26_eneb,
@@ -277,10 +277,10 @@ rcm_rcp26_eneb = {'TXx': rcm_txx_rcp26_eneb,
 'DTR': rcm_dtr_rcp26_eneb,
 'SU': rcm_su_rcp26_eneb,
 'TR': rcm_tr_rcp26_eneb,
-'Tx10p': rcm_tx10p_rcp26_eneb, 
-'Tx90p': rcm_tx90p_rcp26_eneb,
-'Tn10p': rcm_tn10p_rcp26_eneb,
-'Tn90p': rcm_tn90p_rcp26_eneb}
+'TX10p': rcm_tx10p_rcp26_eneb, 
+'TX90p': rcm_tx90p_rcp26_eneb,
+'TN10p': rcm_tn10p_rcp26_eneb,
+'TN90p': rcm_tn90p_rcp26_eneb}
 
 rcm_rcp85_eneb = {'TXx': rcm_txx_rcp85_eneb,
 'TXn': rcm_txn_rcp85_eneb,
@@ -289,10 +289,10 @@ rcm_rcp85_eneb = {'TXx': rcm_txx_rcp85_eneb,
 'DTR': rcm_dtr_rcp85_eneb,
 'SU': rcm_su_rcp85_eneb,
 'TR': rcm_tr_rcp85_eneb,
-'Tx10p': rcm_tx10p_rcp85_eneb, 
-'Tx90p': rcm_tx90p_rcp85_eneb,
-'Tn10p': rcm_tn10p_rcp85_eneb,
-'Tn90p': rcm_tn90p_rcp85_eneb}
+'TX10p': rcm_tx10p_rcp85_eneb, 
+'TX90p': rcm_tx90p_rcp85_eneb,
+'TN10p': rcm_tn10p_rcp85_eneb,
+'TN90p': rcm_tn90p_rcp85_eneb}
 
 gcm_rcp26_eneb = {'TXx': gcm_txx_rcp26_eneb,
 'TXn': gcm_txn_rcp26_eneb,
@@ -301,10 +301,10 @@ gcm_rcp26_eneb = {'TXx': gcm_txx_rcp26_eneb,
 'DTR': gcm_dtr_rcp26_eneb,
 'SU': gcm_su_rcp26_eneb,
 'TR': gcm_tr_rcp26_eneb,
-'Tx10p': gcm_tx10p_rcp26_eneb, 
-'Tx90p': gcm_tx90p_rcp26_eneb,
-'Tn10p': gcm_tn10p_rcp26_eneb,
-'Tn90p': gcm_tn90p_rcp26_eneb}
+'TX10p': gcm_tx10p_rcp26_eneb, 
+'TX90p': gcm_tx90p_rcp26_eneb,
+'TN10p': gcm_tn10p_rcp26_eneb,
+'TN90p': gcm_tn90p_rcp26_eneb}
 
 gcm_rcp85_eneb = {'TXx': gcm_txx_rcp85_eneb,
 'TXn': gcm_txn_rcp85_eneb,
@@ -313,10 +313,10 @@ gcm_rcp85_eneb = {'TXx': gcm_txx_rcp85_eneb,
 'DTR': gcm_dtr_rcp85_eneb,
 'SU': gcm_su_rcp85_eneb,
 'TR': gcm_tr_rcp85_eneb,
-'Tx10p': gcm_tx10p_rcp85_eneb, 
-'Tx90p': gcm_tx90p_rcp85_eneb,
-'Tn10p': gcm_tn10p_rcp85_eneb,
-'Tn90p': gcm_tn90p_rcp85_eneb}
+'TX10p': gcm_tx10p_rcp85_eneb, 
+'TX90p': gcm_tx90p_rcp85_eneb,
+'TN10p': gcm_tn10p_rcp85_eneb,
+'TN90p': gcm_tn90p_rcp85_eneb}
 
 rcm_rcp26_matopiba = {'TXx': rcm_txx_rcp26_matopiba,
 'TXn': rcm_txn_rcp26_matopiba,
@@ -325,10 +325,10 @@ rcm_rcp26_matopiba = {'TXx': rcm_txx_rcp26_matopiba,
 'DTR': rcm_dtr_rcp26_matopiba,
 'SU': rcm_su_rcp26_matopiba,
 'TR': rcm_tr_rcp26_matopiba,
-'Tx10p': rcm_tx10p_rcp26_matopiba, 
-'Tx90p': rcm_tx90p_rcp26_matopiba,
-'Tn10p': rcm_tn10p_rcp26_matopiba,
-'Tn90p': rcm_tn90p_rcp26_matopiba}
+'TX10p': rcm_tx10p_rcp26_matopiba, 
+'TX90p': rcm_tx90p_rcp26_matopiba,
+'TN10p': rcm_tn10p_rcp26_matopiba,
+'TN90p': rcm_tn90p_rcp26_matopiba}
 
 rcm_rcp85_matopiba = {'TXx': rcm_txx_rcp85_matopiba,
 'TXn': rcm_txn_rcp85_matopiba,
@@ -337,10 +337,10 @@ rcm_rcp85_matopiba = {'TXx': rcm_txx_rcp85_matopiba,
 'DTR': rcm_dtr_rcp85_matopiba,
 'SU': rcm_su_rcp85_matopiba,
 'TR': rcm_tr_rcp85_matopiba,
-'Tx10p': rcm_tx10p_rcp85_matopiba, 
-'Tx90p': rcm_tx90p_rcp85_matopiba,
-'Tn10p': rcm_tn10p_rcp85_matopiba,
-'Tn90p': rcm_tn90p_rcp85_matopiba}
+'TX10p': rcm_tx10p_rcp85_matopiba, 
+'TX90p': rcm_tx90p_rcp85_matopiba,
+'TN10p': rcm_tn10p_rcp85_matopiba,
+'TN90p': rcm_tn90p_rcp85_matopiba}
 
 gcm_rcp26_matopiba = {'TXx': gcm_txx_rcp26_matopiba,
 'TXn': gcm_txn_rcp26_matopiba,
@@ -349,10 +349,10 @@ gcm_rcp26_matopiba = {'TXx': gcm_txx_rcp26_matopiba,
 'DTR': gcm_dtr_rcp26_matopiba,
 'SU': gcm_su_rcp26_matopiba,
 'TR': gcm_tr_rcp26_matopiba,
-'Tx10p': gcm_tx10p_rcp26_matopiba, 
-'Tx90p': gcm_tx90p_rcp26_matopiba,
-'Tn10p': gcm_tn10p_rcp26_matopiba,
-'Tn90p': gcm_tn90p_rcp26_matopiba}
+'TX10p': gcm_tx10p_rcp26_matopiba, 
+'TX90p': gcm_tx90p_rcp26_matopiba,
+'TN10p': gcm_tn10p_rcp26_matopiba,
+'TN90p': gcm_tn90p_rcp26_matopiba}
 
 gcm_rcp85_matopiba = {'TXx': gcm_txx_rcp85_matopiba,
 'TXn': gcm_txn_rcp85_matopiba,
@@ -361,25 +361,25 @@ gcm_rcp85_matopiba = {'TXx': gcm_txx_rcp85_matopiba,
 'DTR': gcm_dtr_rcp85_matopiba,
 'SU': gcm_su_rcp85_matopiba,
 'TR': gcm_tr_rcp85_matopiba,
-'Tx10p': gcm_tx10p_rcp85_matopiba, 
-'Tx90p': gcm_tx90p_rcp85_matopiba,
-'Tn10p': gcm_tn10p_rcp85_matopiba,
-'Tn90p': gcm_tn90p_rcp85_matopiba}
+'TX10p': gcm_tx10p_rcp85_matopiba, 
+'TX90p': gcm_tx90p_rcp85_matopiba,
+'TN10p': gcm_tn10p_rcp85_matopiba,
+'TN90p': gcm_tn90p_rcp85_matopiba}
 
-rcm_rcp26_samz = pd.DataFrame(rcm_rcp26_samz,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
-rcm_rcp85_samz = pd.DataFrame(rcm_rcp85_samz,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
-gcm_rcp26_samz = pd.DataFrame(gcm_rcp26_samz,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
-gcm_rcp85_samz = pd.DataFrame(gcm_rcp85_samz,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
+rcm_rcp26_samz = pd.DataFrame(rcm_rcp26_samz,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
+rcm_rcp85_samz = pd.DataFrame(rcm_rcp85_samz,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
+gcm_rcp26_samz = pd.DataFrame(gcm_rcp26_samz,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
+gcm_rcp85_samz = pd.DataFrame(gcm_rcp85_samz,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
 
-rcm_rcp26_eneb = pd.DataFrame(rcm_rcp26_eneb,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
-rcm_rcp85_eneb = pd.DataFrame(rcm_rcp85_eneb,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
-gcm_rcp26_eneb = pd.DataFrame(gcm_rcp26_eneb,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
-gcm_rcp85_eneb = pd.DataFrame(gcm_rcp85_eneb,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
+rcm_rcp26_eneb = pd.DataFrame(rcm_rcp26_eneb,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
+rcm_rcp85_eneb = pd.DataFrame(rcm_rcp85_eneb,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
+gcm_rcp26_eneb = pd.DataFrame(gcm_rcp26_eneb,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
+gcm_rcp85_eneb = pd.DataFrame(gcm_rcp85_eneb,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
 
-rcm_rcp26_matopiba = pd.DataFrame(rcm_rcp26_matopiba,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
-rcm_rcp85_matopiba = pd.DataFrame(rcm_rcp85_matopiba,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
-gcm_rcp26_matopiba = pd.DataFrame(gcm_rcp26_matopiba,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
-gcm_rcp85_matopiba = pd.DataFrame(gcm_rcp85_matopiba,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','Tx10p','Tx90p','Tn10p', 'Tn90p'])
+rcm_rcp26_matopiba = pd.DataFrame(rcm_rcp26_matopiba,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
+rcm_rcp85_matopiba = pd.DataFrame(rcm_rcp85_matopiba,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
+gcm_rcp26_matopiba = pd.DataFrame(gcm_rcp26_matopiba,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
+gcm_rcp85_matopiba = pd.DataFrame(gcm_rcp85_matopiba,columns=['TXx','TXn','TNx','TNn','DTR','SU','TR','TX10p','TX90p','TN10p','TN90p'])
 
 rcm_rcp26_samz_corr = rcm_rcp26_samz.corr()
 rcm_rcp85_samz_corr = rcm_rcp85_samz.corr()
@@ -446,24 +446,24 @@ plt.setp(ax6.get_xticklabels(), visible=False)
 plt.setp(ax6.get_yticklabels(), visible=False)
 
 ax7 = fig.add_subplot(4, 3, 7)
-mask = np.zeros_like(rcm_rcp26_eneb_corr, dtype=np.bool)
+mask = np.zeros_like(gcm_rcp26_samz_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
-heatmap = sns.heatmap(rcm_rcp26_eneb_corr, cmap='bwr', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5},linewidths=.6, ax=ax7)
+heatmap = sns.heatmap(gcm_rcp26_samz_corr, cmap='bwr', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5},linewidths=.6, ax=ax7)
 heatmap.set_title('G)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
 plt.setp(ax7.get_xticklabels(), visible=False)
 
 ax8 = fig.add_subplot(4, 3, 8)
-mask = np.zeros_like(rcm_rcp26_eneb_corr, dtype=np.bool)
+mask = np.zeros_like(gcm_rcp26_eneb_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
-heatmap = sns.heatmap(rcm_rcp26_eneb_corr, cmap='bwr', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5},linewidths=.6, ax=ax8)
+heatmap = sns.heatmap(gcm_rcp26_eneb_corr, cmap='bwr', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5},linewidths=.6, ax=ax8)
 heatmap.set_title('H)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
 plt.setp(ax8.get_xticklabels(), visible=False)
 plt.setp(ax8.get_yticklabels(), visible=False)
 
 ax9 = fig.add_subplot(4, 3, 9)
-mask = np.zeros_like(rcm_rcp26_matopiba_corr, dtype=np.bool)
+mask = np.zeros_like(gcm_rcp26_matopiba_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
-heatmap = sns.heatmap(rcm_rcp26_matopiba_corr, cmap='bwr', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5},linewidths=.6, ax=ax9)
+heatmap = sns.heatmap(gcm_rcp26_matopiba_corr, cmap='bwr', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5},linewidths=.6, ax=ax9)
 heatmap.set_title('I)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
 plt.setp(ax9.get_xticklabels(), visible=False)
 plt.setp(ax9.get_yticklabels(), visible=False)
@@ -494,7 +494,7 @@ name_out = 'pyplt_matrix_corr_etccdi_tas_reg_had_rcp.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-plt.show
+plt.show()
 exit()	
 
 

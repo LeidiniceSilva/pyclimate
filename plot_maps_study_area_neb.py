@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "11/22/2019"
-__description__ = "This script plot climatology maps from Xavier basedata"
+__description__ = "This script plot study area NEB domain"
 
 import os
 import cartopy

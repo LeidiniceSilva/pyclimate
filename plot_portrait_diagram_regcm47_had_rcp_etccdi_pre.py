@@ -41,7 +41,7 @@ def import_rcm(var, area, model, exp, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	annual_rcm = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
+	annual_rcm = np.nanmean(np.nanmean(var[:][0:20,:,:], axis=1), axis=1)
 	
 	return annual_rcm
 
@@ -419,24 +419,24 @@ plt.setp(ax6.get_xticklabels(), visible=False)
 plt.setp(ax6.get_yticklabels(), visible=False)
 
 ax7 = fig.add_subplot(4, 3, 7)
-mask = np.zeros_like(rcm_rcp26_eneb_corr, dtype=np.bool)
+mask = np.zeros_like(gcm_rcp26_samz_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
-heatmap = sns.heatmap(rcm_rcp26_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax7)
+heatmap = sns.heatmap(gcm_rcp26_samz_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax7)
 heatmap.set_title('G)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
 plt.setp(ax7.get_xticklabels(), visible=False)
 
 ax8 = fig.add_subplot(4, 3, 8)
-mask = np.zeros_like(rcm_rcp26_eneb_corr, dtype=np.bool)
+mask = np.zeros_like(gcm_rcp26_eneb_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
-heatmap = sns.heatmap(rcm_rcp26_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax8)
+heatmap = sns.heatmap(gcm_rcp26_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax8)
 heatmap.set_title('H)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
 plt.setp(ax8.get_xticklabels(), visible=False)
 plt.setp(ax8.get_yticklabels(), visible=False)
 
 ax9 = fig.add_subplot(4, 3, 9)
-mask = np.zeros_like(rcm_rcp26_matopiba_corr, dtype=np.bool)
+mask = np.zeros_like(gcm_rcp26_matopiba_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
-heatmap = sns.heatmap(rcm_rcp26_matopiba_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax9)
+heatmap = sns.heatmap(gcm_rcp26_matopiba_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax9)
 heatmap.set_title('I)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
 plt.setp(ax9.get_xticklabels(), visible=False)
 plt.setp(ax9.get_yticklabels(), visible=False)
