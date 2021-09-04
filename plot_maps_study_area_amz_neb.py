@@ -1,132 +1,109 @@
-# -*- coding: utf-8 -*-
-
-__author__      = "Leidinice Silva"
-__email__       = "leidinicesilva@gmail.com"
-__date__        = "01/10/2020"
-__description__ = "This script plot study area AMZ_NEB domain"
+#!/usr/bin/python
 
 import os
+import sys
 import conda
-import cartopy
 import numpy as np
-import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 
 conda_file_dir = conda.__file__
 conda_dir = conda_file_dir.split('lib')[0]
 proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
 os.environ["PROJ_LIB"] = proj_lib
 
+from netCDF4 import Dataset as nc
 from matplotlib.patches import Polygon
-from mpl_toolkits.basemap import Basemap
-from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
-from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+from mpl_toolkits.basemap import Basemap, cm
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-# Create a large figure:
+
+def map_RegCMtopo(ax, lat, lon, topo, latc , lonc ,
+        lat_start, lat_end, lon_start, lon_end, fontsize=10):
+	"""
+	use: map = map_RegCMdomain(ax, latc, lonc, lat_start, lat_end,
+							   lon_start, lon_end) # to create a basemap object
+	"""
+	m = Basemap(ax=ax, llcrnrlon=lon_start, llcrnrlat=lat_start,
+				urcrnrlon=lon_end, urcrnrlat=lat_end,
+				resolution='i', area_thresh=10000., 
+				projection='mill', lon_0=lonc, lat_0=latc, lat_ts=0)
+	llevels = (1, 100, 200, 300, 400, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500)
+	x, y = m(lon,lat)
+
+	path = '/home/nice/Documents/github_projects/shp'
+	m.readshapefile('{0}/shp_world/world'.format(path), 'world', drawbounds=True, color='black', linewidth=1.)
+	m.readshapefile('{0}/lim_unid_fed/lim_unid_fed'.format(path), 'lim_unid_fed', drawbounds=True, color='black', linewidth=1.)
+	
+	im = m.contourf(x, y, topo, llevels, cmap=plt.cm.RdYlGn_r)
+	m.drawparallels(np.arange(lat_start, lat_end,  5.), labels=[1,0,0,0], fontsize=fontsize, dashes=[1, 2], linewidth=1., color='black', zorder=1.)
+	m.drawmeridians(np.arange(lon_start, lon_end, 10.), labels=[0,0,0,1], fontsize=fontsize, dashes=[1, 2], linewidth=1., color='black', zorder=1.)                  
+	m.drawmeridians(np.arange(lon_start, lon_end, 10.), labels=[0,0,0,1], fontsize=fontsize, dashes=[1, 2], linewidth=1., color='black', zorder=1.)                  
+	cbar = fig.colorbar(im, drawedges=True, pad=0.05, orientation='horizontal', aspect=40)
+
+	plt.text(7000000, 150000, u'\u25B2 \nN', fontsize=10, fontweight='bold')
+	plt.text(2200000, 1500000, u'SAMZ', fontsize=10, fontweight='bold')
+	plt.text(5200000, 2000000, u'ENEB', fontsize=10, fontweight='bold')
+	plt.text(4000000, 2600000, u'MATOPIBA', fontsize=10, fontweight='bold')
+	
+	x1,i1 = m(-68,-12)
+	x2,i2 = m(-68,-3)
+	x3,i3 = m(-52,-3)
+	x4,i4 = m(-52,-12)
+
+	poly1 = Polygon([(x1,i1),(x2,i2),(x3,i3),(x4,i4)], facecolor='none', edgecolor='black', linewidth=1.5)
+	plt.gca().add_patch(poly1)
+
+	y1,j1 = m(-40,-16)
+	y2,j2 = m(-40,-3)
+	y3,j3 = m(-35,-3)
+	y4,j4 = m(-35,-16)
+
+	poly2 = Polygon([(y1,j1),(y2,j2),(y3,j3),(y4,j4)], facecolor='none', edgecolor='black', linewidth=1.5)
+	plt.gca().add_patch(poly2)
+
+	z1,k1 = m(-50.5,-15)
+	z2,k2 = m(-50.5,2.5)
+	z3,k3 = m(-42.5,2.5)
+	z4,k4 = m(-42.5,-15)
+
+	poly2 = Polygon([(z1,k1),(z2,k2),(z3,k3),(z4,k4)], facecolor='none', edgecolor='black', linewidth=1.5)
+	plt.gca().add_patch(poly2)
+	
+	return m
+
+
+# Specify directories 
+dirnc = '/home/nice'
+domname = 'amz_neb'
+
+# RegCM file
+if len(sys.argv) > 1:
+    RCMf = nc(sys.argv[1], mode='r')
+else:
+    RCMf = nc(os.path.join(dirnc,domname+'_DOMAIN000.nc'), mode='r')
+lat  = RCMf.variables['xlat'][:,:]
+lon  = RCMf.variables['xlon'][:,:]
+topo = RCMf.variables['topo'][:,:]
+mask = RCMf.variables['mask'][:,:]
+lonc = RCMf.longitude_of_projection_origin
+latc = RCMf.latitude_of_projection_origin
+RCMf.close()
+
+lat_start  = -20
+lat_end    = 10
+lon_start  = -85
+lon_end    = -15
+
+# Plot study area
 fig = plt.figure()
-ax = fig.add_subplot(111)
-
-# First plot
-map1 = Basemap(projection='cyl', lat_0=0, lon_0=0)
-map1.drawmeridians(np.arange(-180.,181.,60.), labels=[0,0,0,1], linewidth=0.4)
-map1.drawparallels(np.arange(-90.,91.,30.), labels=[1,0,0,0], linewidth=0.4)
-map1.drawcoastlines(linewidth=1, color='k')
-map1.drawcountries(linewidth=1, color='k')
-
-plt.title(u'Área de Estudo (AMZ_NEB)', fontsize=15)
-plt.xlabel(u'Longitude', fontsize=15, labelpad=20)
-plt.ylabel(u'Latitude', fontsize=15, labelpad=30)
-
-lons = np.arange(-180,180,0.25) 
-lats  = np.arange(90,-90,-0.25) 
-x, y = map1(lons, lats)
-
-axins = zoomed_inset_axes(ax, 4, loc="center", bbox_to_anchor=(0,0))
-axins.set_xlim(-85, -15)
-axins.set_ylim(-20, 10)
-
-# Second plot
-map2 = Basemap(llcrnrlon=-85, llcrnrlat=-20, urcrnrlon=-15, urcrnrlat=10, ax=axins)
-map2.drawmeridians(np.arange(-85.,-5.,10.), labels=[0,0,0,1], linewidth=0.)
-map2.drawparallels(np.arange(-20.,20.,10.), labels=[1,0,0,0], linewidth=0.)
-map2.etopo()
-map2.drawcoastlines(linewidth=1, color='k')
-map2.drawcountries(linewidth=1, color='k')
-mark_inset(ax, axins, loc1=4, loc2=2)
-plt.text(-22, 3.5, u'\u25B2 \nN ', ha='center', fontsize=10, family='Arial', rotation = 0)
-plt.text(-62, -9, u'AMZ', ha='center', fontsize=10, family='Arial', rotation = 0)
-plt.text(-41, -8, u'NEB', ha='center', fontsize=10, family='Arial', rotation = 0)
-
-x1,y1 = map2(-46,-15)
-x2,y2 = map2(-46,-2)
-x3,y3 = map2(-34,-2)
-x4,y4 = map2(-34,-15)
-
-poly1 = Polygon([(x1,y1),(x2,y2),(x3,y3),(x4,y4)], facecolor='none', edgecolor='k', linewidth=1)
-plt.gca().add_patch(poly1)
-
-i1,j1 = map2(-74,-16)
-i2,j2 = map2(-74,4)
-i3,j3 = map2(-48,4)
-i4,j4 = map2(-48,-16)
-
-# AMZ (Lat:16S 4N, Lon:74W 48W) or NEB (Lat:15S 2N, Lon:46W 34W)
-
-poly2 = Polygon([(i1,j1),(i2,j2),(i3,j3),(i4,j4)], facecolor='none', edgecolor='k', linewidth=1)
-plt.gca().add_patch(poly2)
+ax = plt.subplot(1,1,1)
+m = map_RegCMtopo(ax, lat, lon, topo, latc, lonc, lat_start, lat_end, lon_start, lon_end)
 
 # Path out to save figure
-path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
-name_out = 'pyplt_maps_study_area_amz_neb.png'
+path_out = '/home/nice/Downloads'
+name_out = 'pyplt_study_area_reg_exp2.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
-
-plt.show()
-exit()
-
-
-# Create a large figure:
-fig = plt.figure()
-
-# Add an axes set and draw coastlines:
-ax1 = plt.axes([0.01, 0.49, 0.8, 0.5], projection=ccrs.PlateCarree())
-ax1.set_global()
-ax1.coastlines()
-ax1.set_title(u'Área de Estudo (AMZ_NEB)', fontsize=15)
-
-# Draw the rectangular extent of the second plot on the first:
-ax1.add_patch(mpatches.Rectangle(xy=[-85, -20], width=70, height=30, facecolor='none',
-                                    edgecolor='blue', transform=ccrs.PlateCarree()))
-                                    
-# Add a second axes set (overlaps first) and draw coastlines:
-ax2 = plt.axes([0.35, 0.15, 0.5, 0.3], projection=ccrs.PlateCarree())
-ax2.set_extent([-85, -15, -20, 10], crs=ccrs.PlateCarree())
-ax2.coastlines()
-ax2.set_xlabel('Longitude')
-ax2.set_ylabel('Latitude')
-ax2.set_xticks(np.linspace(-85, -15, 5), crs=cartopy.crs.PlateCarree())
-ax2.set_yticks(np.linspace(-20, 10, 5), crs=cartopy.crs.PlateCarree())
-ax2.text(-22, 3.5, u'\u25B2 \nN ', ha='center', fontsize=10, family='Arial', rotation = 0)
-ax2.text(-60, -2.5, u'NAMZ', ha='center', fontsize=10, family='Arial', rotation = 0)
-ax2.text(-60, -13, u'SAMZ', ha='center', fontsize=10, family='Arial', rotation = 0)
-ax2.text(-41, -8, u'NEB', ha='center', fontsize=10, family='Arial', rotation = 0)
-
-ax2.add_patch(mpatches.Rectangle(xy=[-72, -8], width=23, height=14, facecolor='none',
-                                    edgecolor='red', transform=ccrs.PlateCarree()))
-                                    
-ax2.add_patch(mpatches.Rectangle(xy=[-72, -18], width=23, height=10, facecolor='none',
-                                    edgecolor='red', transform=ccrs.PlateCarree()))
-
-ax2.add_patch(mpatches.Rectangle(xy=[-49, -18], width=15, height=17, facecolor='none',
-                                    edgecolor='red', transform=ccrs.PlateCarree()))      
-# Path out to save figure
-path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
-name_out = 'pyplt_maps_study_area_amz_neb.png'
-if not os.path.exists(path_out):
-	create_path(path_out)
-plt.savefig(os.path.join(path_out, name_out), dpi=400, bbox_inches='tight')
-
+plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
 plt.show()
 exit()
