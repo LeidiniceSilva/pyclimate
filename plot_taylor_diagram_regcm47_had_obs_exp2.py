@@ -60,7 +60,6 @@ class TaylorDiagram(object):
         # Standard deviation axis extent (in units of reference stddev)
         self.smin = srange[0] * self.refstd
         self.smax = srange[1] * self.refstd
-        
 
         ghelper = FA.GridHelperCurveLinear(tr,
                                            extremes=(0,self.tmax, # 1st quadrant
@@ -95,11 +94,7 @@ class TaylorDiagram(object):
         ax.axis["bottom"].set_visible(False)      # Unused
 
         ax.grid(color='k', axis='x', linestyle='--', linewidth=1)
-        
-        #~ if self.smin:
-            #~ ax.axis["bottom"].toggle(ticklabels=True, label=True)
-        #~ else:
-
+  
         self._ax = ax                   # Graphical axes
         self.ax = ax.get_aux_axes(tr)   # Polar coordinates
 

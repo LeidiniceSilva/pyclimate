@@ -39,7 +39,6 @@ class TaylorDiagram(object):
         """
 
         self.refstd = refstd    
-               
         tr = PolarAxes.PolarTransform()
 
         # Correlation labels
@@ -61,7 +60,6 @@ class TaylorDiagram(object):
         self.smin = srange[0] * self.refstd
         self.smax = srange[1] * self.refstd
         
-
         ghelper = FA.GridHelperCurveLinear(tr,
                                            extremes=(0,self.tmax, # 1st quadrant
                                                      self.smin,self.smax),

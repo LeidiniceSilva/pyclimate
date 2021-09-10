@@ -25,7 +25,7 @@ class TaylorDiagram(object):
     theta=arccos(correlation).
     """
 
-    def __init__(self, refstd, fig=None, rect=336, label='_', srange=(0., 6.5), extend=False):
+    def __init__(self, refstd, fig=None, rect=336, label='_', marker='', color='', srange=(0., 3.), extend=False):
         """
         Set up Taylor diagram axes, i.e. single quadrant polar
         plot, using `mpl_toolkits.axisartist.floating_axes`.
@@ -78,15 +78,18 @@ class TaylorDiagram(object):
         ax.axis["top"].toggle(ticklabels=True, label=True)
         ax.axis["top"].major_ticklabels.set_axis_direction("top")
         ax.axis["top"].label.set_axis_direction("top")
-        ax.axis["top"].label.set_text(u'Correlação')
+        ax.axis["top"].label.set_text(u'Correlation')
 
         ax.axis["left"].set_axis_direction("bottom")  # "X axis"
-        ax.axis["left"].label.set_text(u'Desvio padrão')
+        ax.axis["left"].toggle(ticklabels=True, label=True)
+        ax.axis["left"].label.set_text(u'Standard Deviation')
         
         ax.axis["right"].set_axis_direction("top")    # "Y-axis"
         ax.axis["right"].toggle(ticklabels=True)
         ax.axis["right"].major_ticklabels.set_axis_direction(
 			"bottom" if extend else "left")
+
+        #~ ax.grid(color='k', axis='x', linestyle='--', linewidth=1)
 
         if self.smin:
             ax.axis["bottom"].toggle(ticklabels=False, label=False)
@@ -97,7 +100,7 @@ class TaylorDiagram(object):
         self.ax = ax.get_aux_axes(tr)   # Polar coordinates
 
         # Add reference point and stddev contour
-        l, = self.ax.plot([0], self.refstd, 'k*', ls='', ms=10, label=label)
+        l, = self.ax.plot([0], self.refstd, 'k*', ls='', ms=8, label=label)
         t = np.linspace(0, self.tmax)
         r = np.zeros_like(t) + self.refstd
         self.ax.plot(t, r, 'k--', label='_')
@@ -136,90 +139,89 @@ class TaylorDiagram(object):
         return contours
 
 
-def import_sim_season(area, exp, season):
-	
-	param = 'pr' # pr or tas
-	date  = '2001-2010'
-
-	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
-	arq   = '{0}/{1}_{2}_{3}_{4}_{5}.nc'.format(path, param, area, exp, season, date)	
-	
-	data  = netCDF4.Dataset(arq)
-	var   = data.variables[param][:] 
-	lat   = data.variables['lat'][:]
-	lon   = data.variables['lon'][:]
-	value = var[:][:,:,:]
-	
-	season_exp = np.nanmean(np.nanmean(value[:,:,:], axis=1), axis=1)
-	
-	return season_exp
-
-
-def import_obs_season(area, obs, season):
+def import_obs(area, obs):
 	
 	param = 'precip' # precip, pre or tmp
 	date  = '2001-2010'
 
 	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
-	arq   = '{0}/{1}_{2}_{3}_{4}_{5}.nc'.format(path, param, area, obs, season, date)	
+	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, obs, date)	
 		
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[param][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
+
+	season_obs = value[2:120:3,:,:]
+	djf_obs = np.nanmean(np.nanmean(season_obs[3:40:4], axis=1), axis=1)
+	mam_obs = np.nanmean(np.nanmean(season_obs[0:40:4], axis=1), axis=1)
+	jja_obs = np.nanmean(np.nanmean(season_obs[1:40:4], axis=1), axis=1)
+
+	return djf_obs, mam_obs, jja_obs
 	
-	season_obs = np.nanmean(np.nanmean(value[:,:,:], axis=1), axis=1)
 
-	return season_obs
+def import_sim(area, exp):
+	
+	param = 'pr' # pr or tas
+	date  = '2001-2010'
 
+	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
+	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, exp, date)	
+	
+	data  = netCDF4.Dataset(arq)
+	var   = data.variables[param][:] 
+	lat   = data.variables['lat'][:]
+	lon   = data.variables['lon'][:]
+	value  = var[:][:,:,:]
 
+	season_sim = value[2:120:3,:,:]
+	djf_sim = np.nanmean(np.nanmean(season_sim[3:40:4], axis=1), axis=1)
+	mam_sim = np.nanmean(np.nanmean(season_sim[0:40:4], axis=1), axis=1)
+	jja_sim = np.nanmean(np.nanmean(season_sim[1:40:4], axis=1), axis=1)
+
+	return djf_sim, mam_sim, jja_sim
+	
+	
 if __name__=='__main__':
 
 	# Import regcm exps and obs database 
-	nam_exp1_djf = import_sim_season(u'nam', u'regcm_exp1', u'djf')
-	sam_exp1_djf = import_sim_season(u'sam', u'regcm_exp1', u'djf')
-	neb_exp1_djf = import_sim_season(u'neb', u'regcm_exp1', u'djf')
 
-	nam_exp1_jja = import_sim_season(u'nam', u'regcm_exp1', u'jja')
-	sam_exp1_jja = import_sim_season(u'sam', u'regcm_exp1', u'jja')
-	neb_exp1_jja = import_sim_season(u'neb', u'regcm_exp1', u'jja')
-		
-	nam_exp2_djf = import_sim_season(u'nam', u'regcm_exp2', u'djf')
-	sam_exp2_djf = import_sim_season(u'sam', u'regcm_exp2', u'djf')
-	neb_exp2_djf = import_sim_season(u'neb', u'regcm_exp2', u'djf')
-
-	nam_exp2_jja = import_sim_season(u'nam', u'regcm_exp2', u'jja')
-	sam_exp2_jja = import_sim_season(u'sam', u'regcm_exp2', u'jja')
-	neb_exp2_jja = import_sim_season(u'neb', u'regcm_exp2', u'jja')
+	djf_obs_namz, mam_obs_namz, jja_obs_namz = import_obs(u'namz', u'gpcp_v2.3_obs')
+	djf_exp1_namz, mam_exp1_namz, jja_exp1_namz = import_sim(u'namz', u'regcm_exp1')
+	djf_exp2_namz, mam_exp2_namz, jja_exp2_namz = import_sim(u'namz', u'regcm_exp2')
 	
-	nam_obs_djf = import_obs_season(u'nam', u'gpcp_v2.2_obs', u'djf')
-	sam_obs_djf = import_obs_season(u'sam', u'gpcp_v2.2_obs', u'djf')
-	neb_obs_djf = import_obs_season(u'neb', u'gpcp_v2.2_obs', u'djf')
-
-	nam_obs_jja = import_obs_season(u'nam', u'gpcp_v2.2_obs', u'jja')
-	sam_obs_jja = import_obs_season(u'sam', u'gpcp_v2.2_obs', u'jja')
-	neb_obs_jja = import_obs_season(u'neb', u'gpcp_v2.2_obs', u'jja')
-
-
+	djf_obs_samz, mam_obs_samz, jja_obs_samz = import_obs(u'samz', u'gpcp_v2.3_obs')
+	djf_exp1_samz, mam_exp1_samz, jja_exp1_samz = import_sim(u'samz', u'regcm_exp1')
+	djf_exp2_samz, mam_exp2_samz, jja_exp2_samz = import_sim(u'samz', u'regcm_exp2')
+	
+	djf_obs_neb, mam_obs_neb, jja_obs_neb = import_obs(u'neb', u'gpcp_v2.3_obs')
+	djf_exp1_neb, mam_exp1_neb, jja_exp1_neb = import_sim(u'neb', u'regcm_exp1')
+	djf_exp2_neb, mam_exp2_neb, jja_exp2_neb = import_sim(u'neb', u'regcm_exp2')
+	
 	# Reference database standard desviation		   
-	stdrefs = nam_obs_djf.std(ddof=1) 
-	text1 = dict(DJF='A) DJF (mm d⁻¹)',
-				 JJA='B) JJA (mm d⁻¹)')       
-	
+	stdrefs = 1
+	text1 = dict(DJF='A)', MAM='B)', JJA='C)')       
+       
 	# Sample std, rho: Be sure to check order and that correct numbers are placed!
-	samples = dict(DJF=[[nam_exp1_djf.std(ddof=1), np.corrcoef(nam_exp1_djf, nam_obs_djf)[0,1], 'Reg_Exp1_NAMZ'],
-						[sam_exp1_djf.std(ddof=1), np.corrcoef(sam_exp1_djf, sam_obs_djf)[0,1], 'Reg_Exp1_SAMZ'],
-						[neb_exp1_djf.std(ddof=1), np.corrcoef(neb_exp1_djf, neb_obs_djf)[0,1], 'Reg_Exp1_NEB'],
-						[nam_exp2_djf.std(ddof=1), np.corrcoef(nam_exp2_djf, nam_obs_djf)[0,1], 'Reg_Exp2_NAMZ'],
-						[sam_exp2_djf.std(ddof=1), np.corrcoef(sam_exp2_djf, sam_obs_djf)[0,1], 'Reg_Exp2_SAMZ'],
-						[neb_exp2_djf.std(ddof=1), np.corrcoef(neb_exp2_djf, neb_obs_djf)[0,1], 'Reg_Exp2_NEB']],
-					JJA=[[nam_exp1_jja.std(ddof=1), np.corrcoef(nam_exp1_jja, nam_obs_jja)[0,1], 'Reg_Exp1_NAMZ'],
-						[sam_exp1_jja.std(ddof=1), np.corrcoef(sam_exp1_jja, sam_obs_jja)[0,1], 'Reg_Exp1_SAMZ'],
-						[neb_exp1_jja.std(ddof=1), np.corrcoef(neb_exp1_jja, neb_obs_jja)[0,1], 'Reg_Exp1_NEB'],
-						[nam_exp2_jja.std(ddof=1), np.corrcoef(nam_exp2_jja, nam_obs_jja)[0,1], 'Reg_Exp2_NAMZ'],
-						[sam_exp2_jja.std(ddof=1), np.corrcoef(sam_exp2_jja, sam_obs_jja)[0,1], 'Reg_Exp2_SAMZ'],
-						[neb_exp2_jja.std(ddof=1), np.corrcoef(neb_exp2_jja, neb_obs_jja)[0,1], 'Reg_Exp2_NEB']])	
+	samples = dict(DJF=[[djf_obs_namz.std(ddof=1), np.corrcoef(djf_obs_namz, djf_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
+						[djf_obs_samz.std(ddof=1), np.corrcoef(djf_obs_samz, djf_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
+						[djf_obs_neb.std(ddof=1),  np.corrcoef(djf_obs_neb,  djf_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
+						[djf_obs_namz.std(ddof=1), np.corrcoef(djf_obs_namz, djf_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
+						[djf_obs_samz.std(ddof=1), np.corrcoef(djf_obs_samz, djf_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
+						[djf_obs_neb.std(ddof=1),  np.corrcoef(djf_obs_neb,  djf_exp2_neb)[0,1],  'NEB',  '^', 'red']],
+				   MAM=[[mam_obs_namz.std(ddof=1), np.corrcoef(mam_obs_namz, mam_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
+						[mam_obs_samz.std(ddof=1), np.corrcoef(mam_obs_samz, mam_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
+						[mam_obs_neb.std(ddof=1),  np.corrcoef(mam_obs_neb,  mam_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
+						[mam_obs_namz.std(ddof=1), np.corrcoef(mam_obs_namz, mam_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
+						[mam_obs_samz.std(ddof=1), np.corrcoef(mam_obs_samz, mam_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
+						[mam_obs_neb.std(ddof=1),  np.corrcoef(mam_obs_neb,  mam_exp2_neb)[0,1],  'NEB',  '^', 'red']],
+				   JJA=[[jja_obs_namz.std(ddof=1), np.corrcoef(jja_obs_namz, jja_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
+						[jja_obs_samz.std(ddof=1), np.corrcoef(jja_obs_samz, jja_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
+						[jja_obs_neb.std(ddof=1),  np.corrcoef(jja_obs_neb,  jja_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
+						[jja_obs_namz.std(ddof=1), np.corrcoef(jja_obs_namz, jja_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
+						[jja_obs_samz.std(ddof=1), np.corrcoef(jja_obs_samz, jja_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
+						[jja_obs_neb.std(ddof=1),  np.corrcoef(jja_obs_neb,  jja_exp2_neb)[0,1],  'NEB',  '^', 'red']])	
 				 			   
 	# Colormap (see http://www.scipy.org/Cookbook/Matplotlib/Show_colormaps)
 
@@ -230,40 +232,43 @@ if __name__=='__main__':
 	# standard deviation x and y axis.
 
 	x95 = [0.01, 0.55] 
-	y95 = [0.0, 3.1]
+	y95 = [0.0, 3.01]
 	x99 = [0.01, 0.95] 
-	y99 = [0.0, 3.1]
+	y99 = [0.0, 3.01]
 
-	rects = dict(DJF=121,
-				 JJA=122)
+	rects = dict(DJF=221,
+				 MAM=222,
+				 JJA=223)
 
 	# Plot regcm exps and obs database taylor diagram 
-	fig = plt.figure()
+	fig = plt.figure(figsize=(6.5, 6.5))
 
-	for season in ['DJF','JJA']:
+	for season in ['DJF','MAM','JJA']:
 
-		dia = TaylorDiagram(stdrefs, fig=fig, rect=rects[season], label=u'Referência', srange=(0., 3.), extend=False)
+		dia = TaylorDiagram(stdrefs, fig=fig, rect=rects[season], label=u'Reference', srange=(0., 3.), extend=False)
 		dia.samplePoints[0].set_color('r')
 		dia.ax.plot(x95,y95,color='black')
 		dia.ax.plot(x99,y99,color='black')
 
 		# Add samples to Taylor diagram
-		for i,(stddev,corrcoef,name) in enumerate(samples[season]):
+		for i,(stddev,corrcoef,name, mark, cor) in enumerate(samples[season]):
 			dia.add_sample(stddev, corrcoef,
-						   marker='$%d$' % (i+1), ms=9, ls='',
-						   mfc='k', mec='k', label=name)
-			plt.text(0.2, 2., 'RSM', fontweight='bold', color='0.6')
-			plt.text(0., 3.4, text1[season], fontweight='bold')
+						   label=name, marker=mark, color='black', mfc=cor, ms=8, ls='')
+			plt.text(0.2, 2., 'RMSE', fontweight='bold', color='0.6')
+			plt.text(-0.2, 3.3, text1[season], fontweight='bold')
 
 		# Add RMS contours, and label them
 		contours = dia.add_contours(levels=5, colors='0.5') 
-		dia.ax.clabel(contours, inline=1, fontsize=8, fmt='%.1f')
-	
+		dia.ax.clabel(contours, inline=1, fontsize=10, fmt='%.1f')
+
+	plt.text(4.1, 0.5, 'Reg_Exp1', color='blue', fontsize=10, fontweight='bold')
+	plt.text(4.1, 0.2, 'Reg_Exp2', color='red', fontsize=10, fontweight='bold')
+		
 	# Add a figure legend
-	fig.legend(dia.samplePoints,
-			   [ p.get_label() for p in dia.samplePoints ],
-			   numpoints=1, ncol=3, loc='lower center')
-   
+	fig.legend(dia.samplePoints, 
+			   [ p.get_label() for p in dia.samplePoints ], 
+			   prop=dict(size=10), bbox_to_anchor=(0.50, 0.40), ncol=1, numpoints=1, loc=2)
+				   
 	# Path out to save figure
 	path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
 	name_out = 'pyplt_taylor_diagram_pr_regcm_pbl_obs_2001-2010.png'

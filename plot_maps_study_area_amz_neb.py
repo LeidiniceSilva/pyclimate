@@ -27,7 +27,7 @@ def map_RegCMtopo(ax, lat, lon, topo, latc , lonc ,
 				urcrnrlon=lon_end, urcrnrlat=lat_end,
 				resolution='i', area_thresh=10000., 
 				projection='mill', lon_0=lonc, lat_0=latc, lat_ts=0)
-	llevels = (1, 100, 200, 300, 400, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500)
+	llevels = (1, 50, 100, 200, 300, 400, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000)
 	x, y = m(lon,lat)
 
 	path = '/home/nice/Documents/github_projects/shp'
@@ -37,34 +37,33 @@ def map_RegCMtopo(ax, lat, lon, topo, latc , lonc ,
 	im = m.contourf(x, y, topo, llevels, cmap=plt.cm.RdYlGn_r)
 	m.drawparallels(np.arange(lat_start, lat_end,  5.), labels=[1,0,0,0], fontsize=fontsize, dashes=[1, 2], linewidth=1., color='black', zorder=1.)
 	m.drawmeridians(np.arange(lon_start, lon_end, 10.), labels=[0,0,0,1], fontsize=fontsize, dashes=[1, 2], linewidth=1., color='black', zorder=1.)                  
-	m.drawmeridians(np.arange(lon_start, lon_end, 10.), labels=[0,0,0,1], fontsize=fontsize, dashes=[1, 2], linewidth=1., color='black', zorder=1.)                  
 	cbar = fig.colorbar(im, drawedges=True, pad=0.05, orientation='horizontal', aspect=40)
 
 	plt.text(7000000, 150000, u'\u25B2 \nN', fontsize=10, fontweight='bold')
-	plt.text(2200000, 1500000, u'SAMZ', fontsize=10, fontweight='bold')
-	plt.text(5200000, 2000000, u'ENEB', fontsize=10, fontweight='bold')
-	plt.text(4000000, 2600000, u'MATOPIBA', fontsize=10, fontweight='bold')
-	
-	x1,i1 = m(-68,-12)
-	x2,i2 = m(-68,-3)
-	x3,i3 = m(-52,-3)
-	x4,i4 = m(-52,-12)
+	plt.text(1800000, 2100000, u'NAMZ', fontsize=10, fontweight='bold')
+	plt.text(1800000, 1400000, u'SAMZ', fontsize=10, fontweight='bold')
+	plt.text(4600000, 930000, u'NEB', fontsize=10, fontweight='bold')
+
+	x1,i1 = m(-70,-3)
+	x2,i2 = m(-70,5)
+	x3,i3 = m(-50,5)
+	x4,i4 = m(-50,-3)
 
 	poly1 = Polygon([(x1,i1),(x2,i2),(x3,i3),(x4,i4)], facecolor='none', edgecolor='black', linewidth=1.5)
 	plt.gca().add_patch(poly1)
 
-	y1,j1 = m(-40,-16)
-	y2,j2 = m(-40,-3)
-	y3,j3 = m(-35,-3)
-	y4,j4 = m(-35,-16)
+	y1,j1 = m(-70,-12)
+	y2,j2 = m(-70,-3)
+	y3,j3 = m(-50,-3)
+	y4,j4 = m(-50,-12)
 
 	poly2 = Polygon([(y1,j1),(y2,j2),(y3,j3),(y4,j4)], facecolor='none', edgecolor='black', linewidth=1.5)
 	plt.gca().add_patch(poly2)
 
-	z1,k1 = m(-50.5,-15)
-	z2,k2 = m(-50.5,2.5)
-	z3,k3 = m(-42.5,2.5)
-	z4,k4 = m(-42.5,-15)
+	z1,k1 = m(-47,-18)
+	z2,k2 = m(-47,-2)
+	z3,k3 = m(-35,-2)
+	z4,k4 = m(-35,-18)
 
 	poly2 = Polygon([(z1,k1),(z2,k2),(z3,k3),(z4,k4)], facecolor='none', edgecolor='black', linewidth=1.5)
 	plt.gca().add_patch(poly2)
@@ -73,7 +72,7 @@ def map_RegCMtopo(ax, lat, lon, topo, latc , lonc ,
 
 
 # Specify directories 
-dirnc = '/home/nice'
+dirnc = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
 domname = 'amz_neb'
 
 # RegCM file
@@ -100,10 +99,11 @@ ax = plt.subplot(1,1,1)
 m = map_RegCMtopo(ax, lat, lon, topo, latc, lonc, lat_start, lat_end, lon_start, lon_end)
 
 # Path out to save figure
-path_out = '/home/nice/Downloads'
-name_out = 'pyplt_study_area_reg_exp2.png'
+path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
+name_out = 'pyplt_study_area_amz_neb.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
 plt.show()
 exit()
+
