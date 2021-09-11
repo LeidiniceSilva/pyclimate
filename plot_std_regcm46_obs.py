@@ -24,7 +24,7 @@ def import_sim(area, exp):
 	param = 'pr' # pr or tas
 	date  = '2001-2010'
 
-	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
+	path  = '/home/nice/Documents/ufrn/phd_project/papers/paper_rcm_pbl/datas'
 	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, exp, date)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -42,7 +42,7 @@ def import_obs(area, obs):
 	param = 'precip' # precip, pre or tmp
 	date  = '2001-2010'
 
-	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
+	path  = '/home/nice/Documents/ufrn/phd_project/papers/paper_rcm_pbl/datas'
 	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, obs, date)	
 		
 	data  = netCDF4.Dataset(arq)
@@ -79,6 +79,20 @@ neb_exp1_std = np.std(exp1_neb)
 namz_exp2_std = np.std(exp2_namz)
 samz_exp2_std = np.std(exp2_samz)
 neb_exp2_std = np.std(exp2_neb)
+
+
+# generate some data
+x = np.arange(0, 10, 0.2)
+y = np.sin(x)
+
+# plot it
+f, (a0, a1) = plt.subplots(1, 2, gridspec_kw={'width_ratios': [3, 1]})
+a0.plot(x, y)
+a1.plot(y, x)
+
+f.tight_layout()
+f.savefig('grid_figure.pdf')
+
 
 # Plot regcm exps and obs database 
 fig = plt.figure()
