@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/26/2018"
-__description__ = "This script plot climatology maps from from regcm46 and obs database"
+__description__ = "This script plot bias maps from from regcm46 and obs database"
 
 import os
 import conda
@@ -127,8 +127,8 @@ def basemap(lat, lon):
 	
 def plot_maps_bias(bias_exp1_djf, bias_exp2_djf, bias_exp1_mam, bias_exp2_mam, bias_exp1_jja, bias_exp2_jja, p_djf_exp1, p_djf_exp2, p_mam_exp1, p_mam_exp2, p_jja_exp1, p_jja_exp2, diff_djf, diff_mam, diff_jja, p_djf, p_mam, p_jja):
 		
-	fig = plt.figure(figsize=(5,4))
-	levs = [-7, -5, -3, -1, 1, 3, 5, 7]
+	fig = plt.figure(figsize=(8,4))
+	levs = [-6, -4, -2, 2, 4, 6]
 
 	ax = fig.add_subplot(331)
 	plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
@@ -137,8 +137,8 @@ def plot_maps_bias(bias_exp1_djf, bias_exp2_djf, bias_exp1_mam, bias_exp2_mam, b
 	plt_maps_bias = map.contourf(xx, yy, bias_exp1_djf, levels=levs, latlon=True, cmap=cm.RdBu) 
 	p_djf_exp1 = ma.masked_where(p_djf_exp1 >= 0.05, p_djf_exp1) 
 	map.contourf(xx, yy, p_djf_exp1, colors='none', hatches=['....'])
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.5, color='black')
 	
 	ax = fig.add_subplot(332)
 	plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
@@ -146,8 +146,8 @@ def plot_maps_bias(bias_exp1_djf, bias_exp2_djf, bias_exp1_mam, bias_exp2_mam, b
 	plt_maps_bias = map.contourf(xx, yy, bias_exp2_djf, levels=levs, latlon=True, cmap=cm.RdBu)
 	p_djf_exp2 = ma.masked_where(p_djf_exp2 >= 0.05, p_djf_exp2) 
 	map.contourf(xx, yy, p_djf_exp2, colors='none', hatches=['....'])
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 
 	ax = fig.add_subplot(333)
 	plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
@@ -157,8 +157,8 @@ def plot_maps_bias(bias_exp1_djf, bias_exp2_djf, bias_exp1_mam, bias_exp2_mam, b
 	cbar.ax.tick_params(labelsize=6) 
 	p_djf = ma.masked_where(p_djf >= 0.05, p_djf) 
 	map.contourf(xx, yy, p_djf, colors='none', hatches=['....'])
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 		
 	ax = fig.add_subplot(334)
 	plt.title(u'D)', loc='left', fontsize=8, fontweight='bold')
@@ -167,8 +167,8 @@ def plot_maps_bias(bias_exp1_djf, bias_exp2_djf, bias_exp1_mam, bias_exp2_mam, b
 	plt_maps_bias = map.contourf(xx, yy, bias_exp1_mam, levels=levs, latlon=True, cmap=cm.RdBu)
 	p_mam_exp1 = ma.masked_where(p_mam_exp1 >= 0.05, p_mam_exp1) 
 	map.contourf(xx, yy, p_mam_exp1, colors='none', hatches=['....'])
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.5, color='black')
 	
 	ax = fig.add_subplot(335)
 	plt.title(u'E)', loc='left', fontsize=8, fontweight='bold')
@@ -176,8 +176,8 @@ def plot_maps_bias(bias_exp1_djf, bias_exp2_djf, bias_exp1_mam, bias_exp2_mam, b
 	plt_maps_bias = map.contourf(xx, yy, bias_exp2_mam, levels=levs, latlon=True, cmap=cm.RdBu)
 	p_mam_exp2 = ma.masked_where(p_mam_exp2 >= 0.05, p_mam_exp2) 
 	map.contourf(xx, yy, p_mam_exp2, colors='none', hatches=['....'])
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 
 	ax = fig.add_subplot(336)
 	plt.title(u'F)', loc='left', fontsize=8, fontweight='bold')
@@ -187,8 +187,8 @@ def plot_maps_bias(bias_exp1_djf, bias_exp2_djf, bias_exp1_mam, bias_exp2_mam, b
 	cbar.ax.tick_params(labelsize=6) 
 	p_mam = ma.masked_where(p_mam >= 0.05, p_mam) 
 	map.contourf(xx, yy, p_mam, colors='none', hatches=['....'])
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 		
 	ax = fig.add_subplot(337)
 	plt.title(u'G)', loc='left', fontsize=8, fontweight='bold')
@@ -198,8 +198,8 @@ def plot_maps_bias(bias_exp1_djf, bias_exp2_djf, bias_exp1_mam, bias_exp2_mam, b
 	plt_maps_bias = map.contourf(xx, yy, bias_exp1_jja, levels=levs, latlon=True, cmap=cm.RdBu)
 	p_jja_exp1 = ma.masked_where(p_jja_exp1 >= 0.05, p_jja_exp1) 
 	map.contourf(xx, yy, p_jja_exp1, colors='none', hatches=['....'])
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.5, color='black')
 		
 	ax = fig.add_subplot(338)
 	plt.title(u'H)', loc='left', fontsize=8, fontweight='bold')
@@ -208,8 +208,8 @@ def plot_maps_bias(bias_exp1_djf, bias_exp2_djf, bias_exp1_mam, bias_exp2_mam, b
 	plt_maps_bias = map.contourf(xx, yy, bias_exp2_jja, levels=levs, latlon=True, cmap=cm.RdBu)
 	p_jja_exp2 = ma.masked_where(p_jja_exp2 >= 0.05, p_jja_exp2) 
 	map.contourf(xx, yy, p_jja_exp2, colors='none', hatches=['....'])
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 
 	ax = fig.add_subplot(339)
 	plt.title(u'I)', loc='left', fontsize=8, fontweight='bold')
@@ -220,8 +220,8 @@ def plot_maps_bias(bias_exp1_djf, bias_exp2_djf, bias_exp1_mam, bias_exp2_mam, b
 	cbar.ax.tick_params(labelsize=6) 
 	p_jja_exp2 = ma.masked_where(p_jja_exp2 >= 0.05, p_jja_exp2) 
 	map.contourf(xx, yy, p_jja_exp2, colors='none', hatches=['....'])
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 			
 	return plt_maps_bias
 
@@ -257,7 +257,6 @@ p_jja = ttest(jja_exp2, jja_exp1, jja_exp2_std, jja_exp1_std)
 
 # Plot maps with the function
 plt_map = plot_maps_bias(bias_exp1_djf, bias_exp2_djf, bias_exp1_mam, bias_exp2_mam, bias_exp1_jja, bias_exp2_jja, p_djf_exp1, p_djf_exp2, p_mam_exp1, p_mam_exp2, p_jja_exp1, p_jja_exp2, diff_djf, diff_mam, diff_jja, p_djf, p_mam, p_jja)
-plt.subplots_adjust(left=0.15, bottom=0.15, right=0.90, top=0.90, wspace=0.10, hspace=0.10)
 
 # Path out to save figure
 path_out = '/home/nice/Documents/ufrn/phd_project/papers/paper_rcm_pbl/figs'

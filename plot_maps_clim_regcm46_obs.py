@@ -33,7 +33,7 @@ def import_obs(area, obs):
 	param = 'precip' # precip, pre or tmp
 	date  = '2001-2010'
 
-	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
+	path  = '/home/nice/Documents/ufrn/phd_project/papers/paper_rcm_pbl/datas'
 	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, obs, date)	
 		
 	data  = netCDF4.Dataset(arq)
@@ -58,7 +58,7 @@ def import_sim(area, exp):
 	param = 'pr' # pr or tas
 	date  = '2001-2010'
 
-	path  = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
+	path  = '/home/nice/Documents/ufrn/phd_project/papers/paper_rcm_pbl/datas'
 	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, exp, date)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -81,11 +81,11 @@ def import_sim(area, exp):
 def ttest(mean, std, sample):
 
 	# Calculate t statistics
-	p2= std / np.sqrt(120)
+	p2= std / np.sqrt(40)
 	p3 = sample / p2
 
 	# Calculate p value
-	p_value = 1 - stats.t.cdf(p3, df=120)
+	p_value = 1 - stats.t.cdf(p3, df=40)
 	
 	return p_value
 	
@@ -122,16 +122,16 @@ def basemap(lat, lon):
 	
 def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, mam_obs, mam_exp1, mam_exp2, jja_obs, jja_exp1, jja_exp2, p_djf_obs, p_mam_obs, p_jja_obs, p_djf_exp1, p_mam_exp1, p_jja_exp1, p_djf_exp2, p_mam_exp2, p_jja_exp2):
 		
-	fig = plt.figure(figsize=(5,4))
-	levs = [1, 3, 5, 7, 9, 11, 13]
+	fig = plt.figure(figsize=(8,4))
+	levs = [1, 3, 6, 9, 12, 15]
 
 	ax = fig.add_subplot(331)
 	plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_map = map.contourf(xx, yy, djf_obs, levels=levs, latlon=True, cmap=cm.YlGnBu) 
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.5, color='black')
 	p_djf_obs = ma.masked_where(p_djf_obs >= 0.05, p_djf_obs) 
 	map.contourf(xx, yy, p_djf_obs, colors='none', hatches=['....'])
 	
@@ -139,8 +139,8 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, mam_obs, mam_exp1, mam_exp2, jja
 	plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_clim = map.contourf(xx, yy, djf_exp1, levels=levs, latlon=True, cmap=cm.YlGnBu)
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 	p_djf_exp1 = ma.masked_where(p_djf_exp1 >= 0.05, p_djf_exp1) 
 	map.contourf(xx, yy, p_djf_exp1, colors='none', hatches=['....'])
 	
@@ -150,8 +150,8 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, mam_obs, mam_exp1, mam_exp2, jja
 	plt_maps_clim = map.contourf(xx, yy, djf_exp2, levels=levs, latlon=True, cmap=cm.YlGnBu)
 	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
 	cbar.ax.tick_params(labelsize=6) 
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 	p_djf_exp2 = ma.masked_where(p_djf_exp2 >= 0.05, p_djf_exp2) 
 	map.contourf(xx, yy, p_djf_exp2, colors='none', hatches=['....'])
 			
@@ -160,8 +160,8 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, mam_obs, mam_exp1, mam_exp2, jja
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_clim = map.contourf(xx, yy, mam_obs, levels=levs, latlon=True, cmap=cm.YlGnBu) 
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.5, color='black')
 	p_mam_obs = ma.masked_where(p_mam_obs >= 0.05, p_mam_obs) 
 	map.contourf(xx, yy, p_mam_obs, colors='none', hatches=['....'])
 			
@@ -169,8 +169,8 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, mam_obs, mam_exp1, mam_exp2, jja
 	plt.title(u'E)', loc='left', fontsize=8, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_map = map.contourf(xx, yy, mam_exp1, levels=levs, latlon=True, cmap=cm.YlGnBu)
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 	p_mam_exp1 = ma.masked_where(p_mam_exp1 >= 0.05, p_mam_exp1) 
 	map.contourf(xx, yy, p_mam_exp1, colors='none', hatches=['....'])
 		
@@ -180,8 +180,8 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, mam_obs, mam_exp1, mam_exp2, jja
 	plt_map = map.contourf(xx, yy, mam_exp2, levels=levs, latlon=True, cmap=cm.YlGnBu)
 	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
 	cbar.ax.tick_params(labelsize=6)
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 	p_mam_exp2 = ma.masked_where(p_mam_exp2 >= 0.05, p_mam_exp2) 
 	map.contourf(xx, yy, p_mam_exp2, colors='none', hatches=['....'])
 				
@@ -191,8 +191,8 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, mam_obs, mam_exp1, mam_exp2, jja
 	plt.xlabel(u'Longitude', fontsize=8, labelpad=16, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_clim = map.contourf(xx, yy, jja_obs, levels=levs, latlon=True, cmap=cm.YlGnBu)
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[1,0,0,0], linewidth=0.5, color='black')
 	p_jja_obs = ma.masked_where(p_jja_obs >= 0.05, p_jja_obs) 
 	map.contourf(xx, yy, p_jja_obs, colors='none', hatches=['....'])
 	
@@ -201,8 +201,8 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, mam_obs, mam_exp1, mam_exp2, jja
 	plt.xlabel(u'Longitude', fontsize=8, labelpad=16, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_clim = map.contourf(xx, yy, jja_exp1, levels=levs, latlon=True, cmap=cm.YlGnBu)
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 	p_jja_exp1 = ma.masked_where(p_jja_exp1 >= 0.05, p_jja_exp1) 
 	map.contourf(xx, yy, p_jja_exp1, colors='none', hatches=['....'])
 				
@@ -213,8 +213,8 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, mam_obs, mam_exp1, mam_exp2, jja
 	plt_maps_clim = map.contourf(xx, yy, jja_exp2, levels=levs, latlon=True, cmap=cm.YlGnBu)
 	cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
 	cbar.ax.tick_params(labelsize=6) 
-	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.4, color='black')
-	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.4, color='black')
+	map.drawmeridians(np.arange(-85.,-5.,20.), size=7, labels=[0,0,0,1], linewidth=0.5, color='black')
+	map.drawparallels(np.arange(-20.,15.,10.), size=7, labels=[0,0,0,0], linewidth=0.5, color='black')
 	p_jja_exp2 = ma.masked_where(p_jja_exp2 >= 0.05, p_jja_exp2) 
 	map.contourf(xx, yy, p_jja_exp2, colors='none', hatches=['....'])
 	
@@ -250,10 +250,9 @@ p_jja_exp2 = ttest(mean_exp1, std_exp2, jja_exp2)
 
 # Plot maps with the function
 plt_map = plot_maps_clim(djf_obs, djf_exp1, djf_exp2, mam_obs, mam_exp1, mam_exp2, jja_obs, jja_exp1, jja_exp2, p_djf_obs, p_mam_obs, p_jja_obs, p_djf_exp1, p_mam_exp1, p_jja_exp1, p_djf_exp2, p_mam_exp2, p_jja_exp2)
-plt.subplots_adjust(left=0.15, bottom=0.15, right=0.90, top=0.90, wspace=0.10, hspace=0.10)
 
 # Path out to save figure
-path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
+path_out = '/home/nice/Documents/ufrn/phd_project/papers/paper_rcm_pbl/figs'
 name_out = 'pyplt_maps_clim_pr_regcm_pbl_obs_2001-2010.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
