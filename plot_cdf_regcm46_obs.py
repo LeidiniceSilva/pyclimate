@@ -115,9 +115,9 @@ sortedtime_mam_exp2_namz, cdf_mam_exp2_namz = compute_cdf(bias_mam_exp2_namz)
 sortedtime_mam_exp2_samz, cdf_mam_exp2_samz = compute_cdf(bias_mam_exp2_samz)
 sortedtime_mam_exp2_neb, cdf_mam_exp2_neb = compute_cdf(bias_mam_exp2_neb)
 
-sortedtime_jja_exp2_namz, cdf_jja_exp2_namz = compute_cdf(jja_exp2_namz)
-sortedtime_jja_exp2_samz, cdf_jja_exp2_samz = compute_cdf(jja_exp2_samz)
-sortedtime_jja_exp2_neb, cdf_jja_exp2_neb = compute_cdf(jja_exp2_neb)
+sortedtime_jja_exp2_namz, cdf_jja_exp2_namz = compute_cdf(bias_jja_exp2_namz)
+sortedtime_jja_exp2_samz, cdf_jja_exp2_samz = compute_cdf(bias_jja_exp2_samz)
+sortedtime_jja_exp2_neb, cdf_jja_exp2_neb = compute_cdf(bias_jja_exp2_neb)
 
 # Plot regcm exps and obs database 
 fig = plt.figure()
