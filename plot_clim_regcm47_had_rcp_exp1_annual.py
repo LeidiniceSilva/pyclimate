@@ -25,7 +25,7 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 def import_rcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/rcm/{0}'.format(exp)	
+	path = '/home/nice/Documents/dataset/rcm/rcm_exp1/{0}'.format(exp)	
 	arq  = '{0}/{1}_{2}_reg_had_{3}_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
 		
 	data = netCDF4.Dataset(arq)
@@ -52,7 +52,7 @@ def import_rcm(var, area, exp, dt):
 
 def import_gcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/{0}'.format(exp)	
+	path = '/home/nice/Documents/dataset/gcm/rcm_exp1/{0}'.format(exp)
 	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
 		
 	data = netCDF4.Dataset(arq)
@@ -240,7 +240,7 @@ plt.setp(l1, linewidth=1.5, color='blue', linestyle='-')
 plt.setp(l2, linewidth=1.5, color='red', linestyle='-')
 plt.setp(l3, linewidth=1.5, color='blue', linestyle='--')
 plt.setp(l4, linewidth=1.5, color='red', linestyle='--')
-plt.legend(annual_cycle1, ['Reg RCP2.6-Hist', 'Reg RCP8.5-Hist', 'Had RCP2.6-Hist', 'Had RCP8.5-Hist'], loc=9, shadow=True, ncol=2, fontsize=6)
+plt.legend(annual_cycle1, ['RegCM4.7 RCP2.6', 'RegCM4.7 RCP8.5', 'HadGEM2-ES RCP2.6', 'HadGEM2-ES RCP8.5'], loc=9, shadow=True, ncol=2, fontsize=5.5)
 plt.axhline(0, linewidth=1., linestyle='-', color='black')
 plt.axvline(3.5, linewidth=1., linestyle='-', color='black')
 plt.axvline(8.5, linewidth=1., linestyle='-', color='black')
