@@ -27,47 +27,33 @@ from matplotlib.colors import BoundaryNorm
 from mpl_toolkits.basemap import Basemap
 from os.path import expanduser
 
-
-def import_data(var):
 	
-	path  = '/home/nice/Downloads'
-	arq   = '{0}/{1}_lonlat.nc'.format(path, var)	
-		
-	data  = netCDF4.Dataset(arq)
-	var   = data.variables[var][:] 
-	lat   = data.variables['lat'][:]
-	lon   = data.variables['lon'][:]
-	value = var[:][0,:,:]
-
-	return lat, lon, value
-	
-
 def import_data_lev1(var):
 	
-	path  = '/home/nice/Downloads'
-	arq   = '{0}/{1}_lonlat.nc'.format(path, var)	
+	path  = '/home/nice/Documents/dataset/gcm/rcm_exp2'
+	arq   = '{0}/{1}_amz_neb_Amon_HadGEM2-ES_historical_r1i1p1_1986-2005_lonlat.nc'.format(path, var)	
 		
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[var][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
-	lev   = data.variables['kz'][:]
-	value = var[:][0,17,:,:]
-
+	lev   = data.variables['plev'][:]
+	value = var[:][4,2,:,:]
+	
 	return lat, lon, value
 
 
 def import_data_lev2(var):
 	
-	path  = '/home/nice/Downloads'
-	arq   = '{0}/{1}_lonlat.nc'.format(path, var)	
+	path  = '/home/nice/Documents/dataset/gcm/rcm_exp2'
+	arq   = '{0}/{1}_amz_neb_Amon_HadGEM2-ES_historical_r1i1p1_1986-2005_lonlat.nc'.format(path, var)	
 		
 	data  = netCDF4.Dataset(arq)
 	var   = data.variables[var][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
-	lev   = data.variables['kz'][:]
-	value = var[:][0,4,:,:]
+	lev   = data.variables['plev'][:]
+	value = var[:][4,2,:,:]
 
 	return lat, lon, value
 		
@@ -110,12 +96,12 @@ def basemap(lat, lon):
 	
 	return map, xx, yy
 	
+	
 print('Import data')	
 # Import regcm exps and obs database 
-lat, lon, ps = import_data(u'ps')
-#~ lat, lon, ua_lev1 = import_data_lev1(u'ua')
-#~ lat, lon, va_lev1 = import_data_lev1(u'va')
-#~ lat, lon, hus_lev1 = import_data_lev1(u'hus')
+lat, lon, ua_lev1 = import_data_lev1(u'ua')
+lat, lon, va_lev1 = import_data_lev1(u'va')
+lat, lon, hus_lev1 = import_data_lev1(u'hus')
 
 #~ lat, lon, ua_lev2 = import_data_lev2(u'ua')
 #~ lat, lon, va_lev2 = import_data_lev2(u'va')
@@ -129,36 +115,86 @@ lat, lon, ps = import_data(u'ps')
 #~ ua_vimf = 75 * (vimf_lev1)
 #~ va_vimf = 75 * (vimf_lev1)
 
-#~ print('Compute wind speed')
-#~ # Compute wind speed
-#~ windspeed = (ua_lev1 ** 2 + va_lev1 ** 2) ** 0.5
+print('Compute wind speed')
+# Compute wind speed
+windspeed = (ua_lev1 ** 2 + va_lev1 ** 2) ** 0.5
 
 print('Plot maps')	 
-# Plot maps                                      
+# Plot maps          
 fig = plt.figure()
-levels = np.arange(575.1194, 1017.6015, 100)
+levs = [0, 3, 6, 9, 12, 15, 18, 21]
 
 ax = fig.add_subplot(111)
 map, xx, yy = basemap(lat, lon) 
-ps = map.contour(xx, yy, ps, levels=levels, linewidths=1, colors='gray')
-plt.clabel(ps, levels[1::2], inline=1, fmt='%1.1f', fontsize=12)
-plt.title(u'A) Surface pressure (hPa)', loc='left', fontsize=8, fontweight='bold')
+map.contourf(xx, yy, hus_lev1 * 1000, levels=levs, latlon=True, cmap=cm.Greens, extend='max')
+map.quiver(xx[::8,::8], yy[::8,::8], ua_lev1[::8,::8], va_lev1[::8,::8]) 
+plt.title(u'A) HadGEM2-ES - Specific Humidity (g kg⁻¹) Wind (m s⁻¹) 850hPa', loc='left', fontsize=8, fontweight='bold')
 plt.xlabel(u'Longitude', labelpad=15, fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', labelpad=25, fontsize=8, fontweight='bold')
+cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+cbar.ax.tick_params(labelsize=8) 
 map.drawmeridians(np.arange(-85.,-5.,10.), size=8, labels=[0,0,0,1], linewidth=0.5, color='black')
 map.drawparallels(np.arange(-20.,15.,5.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
 
 print('Save figure')	
 # Path out to save figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_sp.png'
+name_out = 'pyplt_maps_sh_uv.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()
 
+print('Plot maps')	
+# Plot maps 
+fig = plt.figure()
+levs = [-9, -7, -5, -3, -1, 1, 3, 5, 7, 9]
+ax = fig.add_subplot(111)
+map, xx, yy = basemap(lat, lon)
+map.contourf(xx, yy, vimf, levels=levs, latlon=True, cmap=cm.PiYG, extend='both')
+plt.title(u'A) HadGEM2-ES – VIMF (1000hPa – 250hPa)', loc='left', fontsize=8, fontweight='bold')
+plt.xlabel(u'Longitude', labelpad=15, fontsize=8, fontweight='bold')
+plt.ylabel(u'Latitude', labelpad=25, fontsize=8, fontweight='bold')
+cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
+cbar.ax.tick_params(labelsize=8) 
+map.drawmeridians(np.arange(-85.,-5.,10.), size=8, labels=[0,0,0,1], linewidth=0.5, color='black')
+map.drawparallels(np.arange(-20.,15.,5.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
 
+print('Save figure')	
+# Path out to save figure
+path_out = '/home/nice/Downloads'
+name_out = 'pyplt_maps_wimf.png'
+if not os.path.exists(path_out):
+	create_path(path_out)
+plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
+plt.show()
+exit()
+
+#~ print('Plot maps')	 
+#~ # Plot maps                                      
+#~ fig = plt.figure()
+#~ levels = np.arange(575.1194, 1017.6015, 100)
+
+#~ ax = fig.add_subplot(111)
+#~ map, xx, yy = basemap(lat, lon) 
+#~ ps = map.contour(xx, yy, ps, levels=levels, linewidths=1, colors='gray')
+#~ plt.clabel(ps, levels[1::2], inline=1, fmt='%1.1f', fontsize=12)
+#~ plt.title(u'A) Surface pressure (hPa)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.xlabel(u'Longitude', labelpad=15, fontsize=8, fontweight='bold')
+#~ plt.ylabel(u'Latitude', labelpad=25, fontsize=8, fontweight='bold')
+#~ map.drawmeridians(np.arange(-85.,-5.,10.), size=8, labels=[0,0,0,1], linewidth=0.5, color='black')
+#~ map.drawparallels(np.arange(-20.,15.,5.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
+
+#~ print('Save figure')	
+#~ # Path out to save figure
+#~ path_out = '/home/nice/Downloads'
+#~ name_out = 'pyplt_maps_sp.png'
+#~ if not os.path.exists(path_out):
+	#~ create_path(path_out)
+#~ plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
+#~ plt.show()
+#~ exit()
            
 #~ print('Plot maps')	 
 #~ # Plot maps                                      
@@ -211,56 +247,7 @@ exit()
 #~ plt.show()
 #~ exit()
 
-#~ print('Plot maps')	 
-#~ # Plot maps          
-#~ fig = plt.figure()
-#~ levs = [0, 5, 10, 15, 20, 25, 30]
 
-#~ ax = fig.add_subplot(111)
-#~ map, xx, yy = basemap(lat, lon) 
-#~ map.contourf(xx, yy, hus_lev1, levels=levs, latlon=True, cmap=cm.Greens, extend='max')
-#~ map.quiver(xx[::8,::8], yy[::8,::8], ua_lev1[::8,::8], va_lev1[::8,::8]) 
-#~ plt.title(u'A) Specific Humidity (g kg⁻¹) Wind (––> 8 m s⁻¹) 1000hPa', loc='left', fontsize=8, fontweight='bold')
-#~ plt.xlabel(u'Longitude', labelpad=15, fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', labelpad=25, fontsize=8, fontweight='bold')
-#~ cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=8) 
-#~ map.drawmeridians(np.arange(-85.,-5.,10.), size=8, labels=[0,0,0,1], linewidth=0.5, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,5.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
 
-#~ print('Save figure')	
-#~ # Path out to save figure
-#~ path_out = '/home/nice/Downloads'
-#~ name_out = 'pyplt_maps_sh_uv.png'
-#~ if not os.path.exists(path_out):
-	#~ create_path(path_out)
-#~ plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-#~ plt.show()
-#~ exit()
 
-#~ print('Plot maps')	
-#~ # Plot maps 
-#~ fig = plt.figure()
-#~ levs = [-16, -12, -8, -4, 4, 8, 12, 16]
 
-#~ ax = fig.add_subplot(111)
-#~ map, xx, yy = basemap(lat, lon)
-#~ map.contourf(xx, yy, vimf, levels=levs, latlon=True, cmap=cm.PiYG, extend='both')
-#~ map.quiver(xx[::10,::10], yy[::10,::10], ua_vimf[::10,::10], va_vimf[::10,::10]) 
-#~ plt.title(u'A) Vertically Integrated Moisture Flux (1000hPa – 250hPa)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.xlabel(u'Longitude', labelpad=15, fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', labelpad=25, fontsize=8, fontweight='bold')
-#~ cbar = map.colorbar(ticks=levs, drawedges=True, ax=ax)
-#~ cbar.ax.tick_params(labelsize=8) 
-#~ map.drawmeridians(np.arange(-85.,-5.,10.), size=8, labels=[0,0,0,1], linewidth=0.5, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,5.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
-
-#~ print('Save figure')	
-#~ # Path out to save figure
-#~ path_out = '/home/nice/Downloads'
-#~ name_out = 'pyplt_maps_wimf.png'
-#~ if not os.path.exists(path_out):
-	#~ create_path(path_out)
-#~ plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
-#~ plt.show()
-#~ exit()
