@@ -51,7 +51,7 @@ def map_RegCMdomain(lat_start, lat_end, lon_start, lon_end, lon0, lat0):
 	 
 # Open and read models and obs database 	         
 dirIN  = '/home/nice/Downloads'
-infMOD = os.path.join(dirIN,'reg_amz_neb_historical_ATM_djf_2004020100_pressure.nc')
+infMOD = os.path.join(dirIN,'atm_RegCM4_HadG_historical_yr_1986-2005.nc')
 
 inf_mod   = nc(infMOD, mode='r')
 lat       = inf_mod.variables['xlat'][:]
