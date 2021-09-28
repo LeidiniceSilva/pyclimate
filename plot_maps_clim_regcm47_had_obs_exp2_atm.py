@@ -98,9 +98,8 @@ def basemap(lat, lon):
 	lats = np.arange(-20.,15.,-0.25) 
 	
 	path = '/home/nice/Documents/github_projects/shp'
-	map.readshapefile('{0}/shp_world/world'.format(path), 'world', drawbounds=True, color='gray', linewidth=.5)
-	map.readshapefile('{0}/lim_unid_fed/lim_unid_fed'.format(path), 'lim_unid_fed', drawbounds=True, color='black', linewidth=.5)
-	
+	map.readshapefile('{0}/shp_america_sul/america_sul'.format(path), 'world', drawbounds=True, color='black', linewidth=1.)
+
 	return map, xx, yy
 	
 
@@ -184,7 +183,7 @@ cbar = map.colorbar()
 cbar.ax.tick_params(labelsize=6) 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
-#~ plt.quiverkey(q, 0.85, -0.15, 20, '8 m s⁻¹', labelpos='N')
+plt.quiverkey(q, 0.85, -0.15, 20, '8 m s⁻¹', labelpos='N')
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'

@@ -67,7 +67,7 @@ def import_rcm(var, area, exp, dt):
 def import_gcm(var, area, exp, dt):
 	
 	path = '/home/nice/Documents/dataset/gcm/rcm_exp2'	
-	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_{4}_lonlat.nc'.format(path, var, area, exp, dt)	
+	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_mon_{4}_lonlat.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[var][:]
@@ -134,9 +134,8 @@ def basemap(lat, lon):
 	lats = np.arange(-20.,15.,-0.25) 
 	
 	path = '/home/nice/Documents/github_projects/shp'
-	map.readshapefile('{0}/shp_world/world'.format(path), 'world', drawbounds=True, color='gray', linewidth=.5)
-	map.readshapefile('{0}/lim_unid_fed/lim_unid_fed'.format(path), 'lim_unid_fed', drawbounds=True, color='black', linewidth=.5)
-	
+	map.readshapefile('{0}/shp_america_sul/america_sul'.format(path), 'world', drawbounds=True, color='black', linewidth=1.)
+
 	return map, xx, yy
 	
 
@@ -165,7 +164,7 @@ tas_djf_rcm_era5 = np.nanmean(tas_djf_rcm, axis=0) - tas_djf_era5
 tas_djf_gcm_cru = tas_djf_gcm - tas_djf_cru
 tas_djf_gcm_era5 = tas_djf_gcm - tas_djf_era5
 
-# Plot models and obs database 
+#~ # Plot models and obs database 
 #~ fig = plt.figure(figsize=(8,4))
 #~ levs1 = [-6, -4, -2, 2, 4, 6]
 
@@ -234,7 +233,7 @@ tas_djf_gcm_era5 = tas_djf_gcm - tas_djf_era5
 
 
 # Plot models and obs database 
-fig = plt.figure(figsize=(6,4))
+fig = plt.figure(figsize=(5,4))
 levs1 = [-5, -3, -1, 1, 3, 5]
 
 ax1 = fig.add_subplot(2, 2, 1)
