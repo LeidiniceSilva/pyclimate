@@ -11,8 +11,10 @@ conda_dir = conda_file_dir.split('lib')[0]
 proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
 os.environ["PROJ_LIB"] = proj_lib
 
+from matplotlib.path import Path
 from netCDF4 import Dataset as nc
 from matplotlib.patches import Polygon
+from matplotlib.patches import PathPatch
 from mpl_toolkits.basemap import Basemap, cm
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -23,63 +25,52 @@ def map_RegCMtopo(ax, lat, lon, topo, latc , lonc ,
 	use: map = map_RegCMdomain(ax, latc, lonc, lat_start, lat_end,
 							   lon_start, lon_end) # to create a basemap object
 	"""
-	m = Basemap(ax=ax, llcrnrlon=lon_start, llcrnrlat=lat_start,
-				urcrnrlon=lon_end, urcrnrlat=lat_end,
-				resolution='i', area_thresh=10000., 
-				projection='mill', lon_0=lonc, lat_0=latc, lat_ts=0)
-	llevels = (1, 50, 100, 200, 300, 400, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000)
+	m = Basemap(ax=ax, llcrnrlon=lon_start, llcrnrlat=lat_start, urcrnrlon=lon_end, urcrnrlat=lat_end, resolution='i', area_thresh=10000., projection='mill', lon_0=lonc, lat_0=latc, lat_ts=0)	
+	llevels = (1, 50, 100, 200, 300, 400, 500, 1000, 1500, 2000, 2500, 3000, 3500)
 	x, y = m(lon,lat)
 
 	path = '/home/nice/Documents/github_projects/shp'
-	m.readshapefile('{0}/shp_world/world'.format(path), 'world', drawbounds=True, color='black', linewidth=1.)
-	m.readshapefile('{0}/lim_unid_fed/lim_unid_fed'.format(path), 'lim_unid_fed', drawbounds=True, color='black', linewidth=1.)
+	m.readshapefile('{0}/shp_america_sul/america_sul'.format(path), 'world', drawbounds=True, color='black', linewidth=1.)
+	m.readshapefile('{0}/lim_semiarido/LIM_Semiarido_OFICIAL_POLIGONAL'.format(path), 'world', drawbounds=True, color='red', linewidth=1.)
 	
-	im = m.contourf(x, y, topo, llevels, cmap=plt.cm.RdYlGn_r)
-	m.drawparallels(np.arange(lat_start, lat_end,  5.), labels=[1,0,0,0], fontsize=fontsize, dashes=[1, 2], linewidth=1., color='black', zorder=1.)
-	m.drawmeridians(np.arange(lon_start, lon_end, 10.), labels=[0,0,0,1], fontsize=fontsize, dashes=[1, 2], linewidth=1., color='black', zorder=1.)                  
+	im = m.contourf(x, y, topo, llevels, cmap=plt.cm.RdYlGn_r, extend='max')
+	m.drawmapboundary(fill_color='deepskyblue')
+	m.drawparallels(np.arange(lat_start, lat_end,  5.), labels=[1,0,0,0], fontsize=fontsize, linewidth=1., color='black')
+	m.drawmeridians(np.arange(lon_start, lon_end, 10.), labels=[0,0,0,1], fontsize=fontsize, linewidth=1., color='black')                  
 	cbar = fig.colorbar(im, drawedges=True, pad=0.05, orientation='horizontal', aspect=40)
 
 	plt.text(7000000, 150000, u'\u25B2 \nN', fontsize=10, fontweight='bold')
-	plt.text(1800000, 2100000, u'NAMZ', fontsize=10, fontweight='bold')
-	plt.text(1800000, 1400000, u'SAMZ', fontsize=10, fontweight='bold')
-	plt.text(4600000, 930000, u'NEB', fontsize=10, fontweight='bold')
+	plt.text(2100000, 1500000, u'AMZ', fontsize=10, fontweight='bold')
+	plt.text(4600000, 1100000, u'NEB', fontsize=10, fontweight='bold')
 
-	x1,i1 = m(-70,-3)
-	x2,i2 = m(-70,5)
-	x3,i3 = m(-50,5)
-	x4,i4 = m(-50,-3)
+	x1,i1 = m(-72,-12)
+	x2,i2 = m(-72,0)
+	x3,i3 = m(-55,0)
+	x4,i4 = m(-55,-12)
 
 	poly1 = Polygon([(x1,i1),(x2,i2),(x3,i3),(x4,i4)], facecolor='none', edgecolor='black', linewidth=1.5)
 	plt.gca().add_patch(poly1)
 
-	y1,j1 = m(-70,-12)
-	y2,j2 = m(-70,-3)
-	y3,j3 = m(-50,-3)
-	y4,j4 = m(-50,-12)
+	y1,j1 = m(-47,-18)
+	y2,j2 = m(-47,-2)
+	y3,j3 = m(-35,-2)
+	y4,j4 = m(-35,-18)
 
 	poly2 = Polygon([(y1,j1),(y2,j2),(y3,j3),(y4,j4)], facecolor='none', edgecolor='black', linewidth=1.5)
-	plt.gca().add_patch(poly2)
-
-	z1,k1 = m(-47,-18)
-	z2,k2 = m(-47,-2)
-	z3,k3 = m(-35,-2)
-	z4,k4 = m(-35,-18)
-
-	poly2 = Polygon([(z1,k1),(z2,k2),(z3,k3),(z4,k4)], facecolor='none', edgecolor='black', linewidth=1.5)
 	plt.gca().add_patch(poly2)
 	
 	return m
 
 
 # Specify directories 
-dirnc = '/home/nice/Documents/ufrn/papers/regcm_pbl/datas'
-domname = 'amz_neb'
+dirnc = '/home/nice/Downloads'
+domname = 'reg_amz_neb'
 
 # RegCM file
 if len(sys.argv) > 1:
     RCMf = nc(sys.argv[1], mode='r')
 else:
-    RCMf = nc(os.path.join(dirnc,domname+'_DOMAIN000.nc'), mode='r')
+    RCMf = nc(os.path.join(dirnc,domname+'_historical_STS.2005110100.nc'), mode='r')
 lat  = RCMf.variables['xlat'][:,:]
 lon  = RCMf.variables['xlon'][:,:]
 topo = RCMf.variables['topo'][:,:]
@@ -99,7 +90,7 @@ ax = plt.subplot(1,1,1)
 m = map_RegCMtopo(ax, lat, lon, topo, latc, lonc, lat_start, lat_end, lon_start, lon_end)
 
 # Path out to save figure
-path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
+path_out = '/home/nice/Downloads'
 name_out = 'pyplt_study_area_amz_neb.png'
 if not os.path.exists(path_out):
 	create_path(path_out)

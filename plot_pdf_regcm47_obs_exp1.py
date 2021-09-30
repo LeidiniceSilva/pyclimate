@@ -9,9 +9,9 @@ import os
 import netCDF4
 import statistics
 import numpy as np
+import matplotlib as mpl
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 
 # mpl.use('agg')
 

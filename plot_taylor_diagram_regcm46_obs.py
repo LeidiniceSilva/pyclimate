@@ -2,7 +2,7 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
-__date__        = "02/15/2019"
+__date__        = "12/29/2020"
 __description__ = "This script plot taylor diagram from regcm46 and obs database"
 
 import os
@@ -270,7 +270,7 @@ if __name__=='__main__':
 			   prop=dict(size=10), bbox_to_anchor=(0.50, 0.40), ncol=1, numpoints=1, loc=2)
 				   
 	# Path out to save figure
-	path_out = '/home/nice/Documents/ufrn/papers/regcm_pbl/results'
+	path_out = '/home/nice/Documents/ufrn/phd_project/papers/paper_rcm_pbl/figs'
 	name_out = 'pyplt_taylor_diagram_pr_regcm_pbl_obs_2001-2010.png'
 	if not os.path.exists(path_out):
 		create_path(path_out)

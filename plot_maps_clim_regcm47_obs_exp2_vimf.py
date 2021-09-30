@@ -91,20 +91,14 @@ def comp_vimfc(hus1, ua1, va1, hus2, ua2, va2):
 		
 def comp_vimfc_rea(hus, ua, va):
 	
-	p1 = hus[0,:,:] * (ua[0,:,:] + va[0,:,:])
-	p2 = hus[1,:,:] * (ua[1,:,:] + va[1,:,:])
-	p3 = hus[2,:,:] * (ua[2,:,:] + va[2,:,:])
-	p4 = hus[3,:,:] * (ua[3,:,:] + va[3,:,:])
-	p5 = hus[4,:,:] * (ua[4,:,:] + va[4,:,:])
-	p6 = hus[5,:,:] * (ua[5,:,:] + va[5,:,:])
-	p7 = hus[6,:,:] * (ua[6,:,:] + va[6,:,:])
-	p8 = hus[7,:,:] * (ua[7,:,:] + va[7,:,:])
-	p9 = hus[8,:,:] * (ua[8,:,:] + va[8,:,:])
+	p1 = (hus[0,:,:] + hus[1,:,:] + hus[2,:,:] + hus[3,:,:] + hus[4,:,:] + hus[5,:,:] + hus[6,:,:] + hus[7,:,:] + hus[8,:,:]) / 9
+	p2 = (ua[0,:,:] + ua[1,:,:] + ua[2,:,:] + ua[3,:,:] + ua[4,:,:] + ua[5,:,:] + ua[6,:,:] + ua[7,:,:] + ua[8,:,:]) / 9
+	p3 = (va[0,:,:] + va[1,:,:] + va[2,:,:] + va[3,:,:] + va[4,:,:] + va[5,:,:] + va[6,:,:] + va[7,:,:] + va[8,:,:]) / 9 
+		
+	p4 = p1 * p2 + p1 * p3
+	p5 = 300 * p4
 	
-	p10 = (p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9) / 9
-	p11 = 300 * p10
-	
-	return p11
+	return p5
 		
 	
 def basemap(lat, lon):
@@ -154,9 +148,6 @@ print(hus_djf_gcm.shape)
 
 # Compute Vertical Integrated Moisture Flux Convergence between 1000hPa and 300hPa
 vimfc_rea = comp_vimfc_rea(hus_djf_rea, ua_djf_rea, va_djf_rea)
-print(vimfc_rea.shape)
-print(np.min(vimfc_rea), np.max(vimfc_rea))
-exit()
 
 #~ # Compute Moisture Flux Convergence at 850hPa
 #~ mfc_rea = comp_mfc(hus_djf_rea_850hPa, ua_djf_rea_850hPa, va_djf_rea_850hPa)
@@ -170,12 +161,12 @@ exit()
 
 # Plot models and obs database 
 fig = plt.figure()
-levs = [0, 0.001, 0.003, 0.006, 0.009, 0.01, 0.016, 0.019]
+levs = [-20, -16, -12, -8, -4, 4, 8, 12, 16, 20]
 
 ax1 = fig.add_subplot(3, 1, 1)
 map, xx, yy = basemap(lat, lon)
-map.contourf(xx, yy, vimfc_rea, levels=levs, latlon=True, cmap=cm.Greens, extend='max')
-map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_rea_850hPa[::10,::10], va_djf_rea_850hPa[::10,::10])
+map.contourf(xx, yy, vimfc_rea, levels=levs, latlon=True, cmap=cm.PuOr, extend='both')
+#~ map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_rea_850hPa[::10,::10], va_djf_rea_850hPa[::10,::10])
 map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black') 
 plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
@@ -185,8 +176,8 @@ cbar.ax.tick_params(labelsize=6)
 
 ax2 = fig.add_subplot(3, 1, 2)
 map, xx, yy = basemap(lat, lon)
-map.contourf(xx, yy, vimfc_rcm, levels=levs, latlon=True, cmap=cm.Greens, extend='max')
-map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_rcm_850hPa[::10,::10], va_djf_rcm_850hPa[::10,::10]) 
+map.contourf(xx, yy, vimfc_rea, levels=levs, latlon=True, cmap=cm.PuOr, extend='both')
+#~ map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_rcm_850hPa[::10,::10], va_djf_rcm_850hPa[::10,::10]) 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
@@ -196,8 +187,8 @@ cbar.ax.tick_params(labelsize=6)
 
 ax3 = fig.add_subplot(3, 1, 3)
 map, xx, yy = basemap(lat, lon)
-map.contourf(xx, yy, vimfc_gcm, levels=levs, latlon=True, cmap=cm.Greens, extend='max')
-map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_gcm_850hPa[::10,::10], va_djf_gcm_850hPa[::10,::10]) 
+map.contourf(xx, yy, vimfc_rea, levels=levs, latlon=True, cmap=cm.PuOr, extend='both')
+#~ map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_gcm_850hPa[::10,::10], va_djf_gcm_850hPa[::10,::10]) 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')

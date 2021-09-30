@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/01/2021"
-__description__ = "This script plot climatology maps from extremes index"
+__description__ = "This script plot climatology maps from extremes indices"
 
 import os
 import conda

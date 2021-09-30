@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "12/26/2018"
-__description__ = "This script plot annual climatology from regcm46 and obs database"
+__description__ = "This script plot annual climatology from cmip6"
 
 import os
 import netCDF4
@@ -34,8 +34,6 @@ def import_obs(param, area):
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
 
-	obs_ann = np.nanmean(np.nanmean(value[0::12,:,:], axis=1), axis=1)
-
 	obs_data1 = np.nanmean(np.nanmean(value[0:44,:,:], axis=1), axis=1)
 	obs_clim1 = []
 	for mon in range(1, 12 + 1):
@@ -48,7 +46,7 @@ def import_obs(param, area):
 		obs2 = np.nanmean(obs_data2[mon::12], axis=0)
 		obs_clim2.append(obs2)
 			
-	return obs_ann, obs_clim1, obs_clim2
+	return obs_clim1, obs_clim2
 	
 
 def import_cmip(param, area, cmip, exp, date):
@@ -62,41 +60,39 @@ def import_cmip(param, area, cmip, exp, date):
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
 
-	sim_ann = np.nanmean(np.nanmean(value[0::12,:,:], axis=1), axis=1)
-
 	sim_data = np.nanmean(np.nanmean(value[:,:,:], axis=1), axis=1)
 	sim_clim = []
 	for mon in range(1, 12 + 1):
 		sim = np.nanmean(sim_data[mon::12], axis=0)
 		sim_clim.append(sim)
 	
-	return sim_ann, sim_clim	
+	return sim_clim	
 	              
                
 # Import regcm exps and obs database 
-ann_samz_cru, clim1_samz_cru, clim2_samz_cru = import_obs(u'pre', 'SAMZ')
-ann_slpb_cru, clim1_slpb_cru, clim2_slpb_cru = import_obs(u'pre', 'SLPB')
-ann_neb_cru,  clim1_neb_cru,  clim2_neb_cru  = import_obs(u'pre', 'NEB')
+pre_clim1_samz_cru, pre_clim2_samz_cru = import_obs(u'pre', 'SAMZ')
+pre_clim1_slpb_cru, pre_clim2_slpb_cru = import_obs(u'pre', 'SLPB')
+pre_clim1_neb_cru,  pre_clim2_neb_cru  = import_obs(u'pre', 'NEB')
 
-ann_samz_cmip5, clim_samz_cmip5 = import_cmip(u'pr', 'SAMZ', u'cmip5', 'r1i1p1', '1961-2005')
-ann_slpb_cmip5, clim_slpb_cmip5 = import_cmip(u'pr', 'SLPB', u'cmip5', 'r1i1p1', '1961-2005')
-ann_neb_cmip5, clim_neb_cmip5  = import_cmip(u'pr', 'NEB', u'cmip5', 'r1i1p1', '1961-2005')
+pre_clim_samz_cmip5 = import_cmip(u'pr', 'SAMZ', u'cmip5', 'r1i1p1', '1961-2005')
+pre_clim_slpb_cmip5 = import_cmip(u'pr', 'SLPB', u'cmip5', 'r1i1p1', '1961-2005')
+pre_clim_neb_cmip5  = import_cmip(u'pr', 'NEB', u'cmip5', 'r1i1p1', '1961-2005')
 
-ann_samz_cmip6, clim_samz_cmip6 = import_cmip(u'pr', 'SAMZ', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
-ann_slpb_cmip6, clim_slpb_cmip6 = import_cmip(u'pr', 'SLPB', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
-ann_neb_cmip6, clim_neb_cmip6  = import_cmip(u'pr', 'NEB', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
+pre_clim_samz_cmip6 = import_cmip(u'pr', 'SAMZ', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
+pre_clim_slpb_cmip6 = import_cmip(u'pr', 'SLPB', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
+pre_clim_neb_cmip6  = import_cmip(u'pr', 'NEB', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
 
-#~ ann_samz_cru, clim1_samz_cru, clim2_samz_cru = import_obs(u'tmp', 'SAMZ')
-#~ ann_slpb_cru, clim1_slpb_cru, clim2_slpb_cru = import_obs(u'tmp', 'SLPB')
-#~ ann_neb_cru,  clim1_neb_cru,  clim2_neb_cru  = import_obs(u'tmp', 'NEB')
+pre_clim1_samz_cru, clim2_samz_cru = import_obs(u'tmp', 'SAMZ')
+pre_clim1_slpb_cru, clim2_slpb_cru = import_obs(u'tmp', 'SLPB')
+pre_clim1_neb_cru,  clim2_neb_cru  = import_obs(u'tmp', 'NEB')
 
-#~ ann_samz_cmip5, clim_samz_cmip5 = import_cmip(u'tas', 'SAMZ', u'cmip5', 'r1i1p1', '1961-2005')
-#~ ann_slpb_cmip5, clim_slpb_cmip5 = import_cmip(u'tas', 'SLPB', u'cmip5', 'r1i1p1', '1961-2005')
-#~ ann_neb_cmip5, clim_neb_cmip5  = import_cmip(u'tas', 'NEB', u'cmip5', 'r1i1p1', '1961-2005')
+pre_clim_samz_cmip5 = import_cmip(u'tas', 'SAMZ', u'cmip5', 'r1i1p1', '1961-2005')
+pre_clim_slpb_cmip5 = import_cmip(u'tas', 'SLPB', u'cmip5', 'r1i1p1', '1961-2005')
+pre_clim_neb_cmip5  = import_cmip(u'tas', 'NEB', u'cmip5', 'r1i1p1', '1961-2005')
 
-#~ ann_samz_cmip6, clim_samz_cmip6 = import_cmip(u'tas', 'SAMZ', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
-#~ ann_slpb_cmip6, clim_slpb_cmip6 = import_cmip(u'tas', 'SLPB', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
-#~ ann_neb_cmip6, clim_neb_cmip6  = import_cmip(u'tas', 'NEB', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
+pre_clim_samz_cmip6 = import_cmip(u'tas', 'SAMZ', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
+pre_clim_slpb_cmip6 = import_cmip(u'tas', 'SLPB', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
+pre_clim_neb_cmip6  = import_cmip(u'tas', 'NEB', u'cmip6', 'r1i1p1f1_gn', '1961-2014')
 
 # Plot regcm exps and obs database 
 fig = plt.figure(figsize=(10, 8)) 

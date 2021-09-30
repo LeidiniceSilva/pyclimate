@@ -8,9 +8,9 @@ __description__ = "This script plot portrait diagram from regcm47 and hadgem mod
 import os
 import netCDF4
 import numpy as np
+import matplotlib as mpl
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import matplotlib.colors as colors
 
 # mpl.use('agg')

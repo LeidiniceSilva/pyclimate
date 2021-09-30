@@ -3,7 +3,7 @@
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
 __date__        = "08/05/2021"
-__description__ = "This script plot seasonal climatology bias maps from regcm47 and hadgem models and obs database"
+__description__ = "This script plot seasonal climatology maps from regcm47 and hadgem models and obs database"
 
 import os
 import conda

@@ -12,8 +12,8 @@ import numpy as np
 import numpy.ma as ma
 import matplotlib as mpl 
 import matplotlib.cm as cm
-import matplotlib.pyplot as plt
 import scipy.stats as stats
+import matplotlib.pyplot as plt
 
 # mpl.use('Agg')
 

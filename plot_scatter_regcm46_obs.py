@@ -2,7 +2,7 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilva@gmail.com"
-__date__        = "09/10/2021"
+__date__        = "12/29/2020"
 __description__ = "This script plot scatter from regcm46 and obs database"
 
 import os
