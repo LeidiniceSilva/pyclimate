@@ -22,9 +22,9 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 def import_obs(var, area, dataset, dt):
 	
-	path = '/home/nice/Documents/dataset/obs/rcm_exp1'
+	path = '/home/nice/Documents/dataset/obs/reg_exp2'
 	arq  = '{0}/{1}_{2}_{3}_obs_mon_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
-			
+
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[var][:] 
 	lat  = data.variables['lat'][:]
@@ -41,9 +41,9 @@ def import_obs(var, area, dataset, dt):
 	
 def import_rcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/rcm/rcm_exp2'	
-	arq  = '{0}/{1}_{2}_reg_had_{3}_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
-	
+	path = '/home/nice/Documents/dataset/rcm/reg_exp2/historical'	
+	arq  = '{0}/{1}_{2}_RegCM4_HadG_{3}_mon_{4}_lonlat.nc'.format(path, var, area, exp, dt)	
+		
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[var][:]
 	lat  = data.variables['lat'][:]
@@ -59,8 +59,8 @@ def import_rcm(var, area, exp, dt):
 
 def import_gcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/rcm_exp1/hist'	
-	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
+	path = '/home/nice/Documents/dataset/gcm/reg_exp2/historical'	
+	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_mon_{4}_lonlat.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[var][:]
@@ -74,200 +74,95 @@ def import_gcm(var, area, exp, dt):
 	
 	return gcm
 
-
-def compute_bias(sim, obs):
-	
-	bias = []
-	for mon in range(0, 12):
-		diff = sim[mon] - obs[mon]
-		bias.append(diff)
-	
-	return bias
-	
-	          
+        
 # Import models and obs database 
-# Precipitation
-mon_pre_cru_samz = import_obs('pre', 'samz', 'cru_ts4.04', '1986-2005')
-mon_pre_cru_eneb = import_obs('pre', 'eneb', 'cru_ts4.04', '1986-2005')
-mon_pre_cru_matopiba = import_obs('pre', 'matopiba', 'cru_ts4.04', '1986-2005')
+mon_pre_cru_amz = import_obs('pre', 'amz', 'cru_ts4.04', '1986-2005')
+mon_pre_gpcp_amz = import_obs('precip', 'amz', 'gpcp_v2.2', '1986-2005')
+mon_pre_era5_amz = import_obs('mtpr', 'amz', 'era5', '1986-2005')
+mon_pre_reg_amz = import_rcm('pr', 'amz', 'historical', '1986-2005')
+mon_pre_had_amz = import_gcm('pr', 'amz', 'historical', '1986-2005')
 
-mon_pre_reg_samz = import_rcm('pr', 'samz', 'hist', '1986-2005')
-mon_pre_reg_eneb = import_rcm('pr', 'eneb', 'hist', '1986-2005')
-mon_pre_reg_matopiba = import_rcm('pr', 'matopiba', 'hist', '1986-2005')
+mon_pre_cru_neb = import_obs('pre', 'neb', 'cru_ts4.04', '1986-2005')
+mon_pre_gpcp_neb = import_obs('precip', 'neb', 'gpcp_v2.2', '1986-2005')
+mon_pre_era5_neb = import_obs('mtpr', 'neb', 'era5', '1986-2005')
+mon_pre_reg_neb = import_rcm('pr', 'neb', 'historical', '1986-2005')
+mon_pre_had_neb = import_gcm('pr', 'neb', 'historical', '1986-2005')
 
-mon_pre_had_samz = import_gcm('pr', 'samz', 'hist', '1986-2005')
-mon_pre_had_eneb = import_gcm('pr', 'eneb', 'hist', '1986-2005')
-mon_pre_had_matopiba = import_gcm('pr', 'matopiba', 'hist', '1986-2005')
+mon_tas_cru_amz = import_obs('tmp', 'amz', 'cru_ts4.04', '1986-2005')
+mon_tas_era5_amz = import_obs('t2m', 'amz', 'era5', '1986-2005')
+mon_tas_reg_amz = import_rcm('tas', 'amz', 'historical', '1986-2005')
+mon_tas_had_amz = import_gcm('tas', 'amz', 'historical', '1986-2005')
 
-# Temperature
-mon_tas_cru_samz = import_obs('tmp', 'samz', 'cru_ts4.04', '1986-2005')
-mon_tas_cru_eneb = import_obs('tmp', 'eneb', 'cru_ts4.04', '1986-2005')
-mon_tas_cru_matopiba = import_obs('tmp', 'matopiba', 'cru_ts4.04', '1986-2005')
-
-mon_tas_reg_samz = import_rcm('tas', 'samz', 'hist', '1986-2005')
-mon_tas_reg_eneb = import_rcm('tas', 'eneb', 'hist', '1986-2005')
-mon_tas_reg_matopiba = import_rcm('tas', 'matopiba', 'hist', '1986-2005')
-
-mon_tas_had_samz = import_gcm('tas', 'samz', 'hist', '1986-2005')
-mon_tas_had_eneb = import_gcm('tas', 'eneb', 'hist', '1986-2005')
-mon_tas_had_matopiba = import_gcm('tas', 'matopiba', 'hist', '1986-2005')
-
-# Compute bias from models and obs database 
-# Precipitation
-bias_pre_reg_cru_samz = compute_bias(mon_pre_reg_samz, mon_pre_cru_samz)
-bias_pre_reg_cru_eneb = compute_bias(mon_pre_reg_eneb, mon_pre_cru_eneb)
-bias_pre_reg_cru_matopiba = compute_bias(mon_pre_reg_matopiba, mon_pre_cru_matopiba)
-
-bias_pre_had_cru_samz = compute_bias(mon_pre_had_samz, mon_pre_cru_samz)
-bias_pre_had_cru_eneb = compute_bias(mon_pre_had_eneb, mon_pre_cru_eneb)
-bias_pre_had_cru_matopiba = compute_bias(mon_pre_had_matopiba, mon_pre_cru_matopiba)
-
-# Temperature
-bias_tas_reg_cru_samz = compute_bias(np.nanmean(mon_tas_reg_samz, axis=1), mon_tas_cru_samz)
-bias_tas_reg_cru_eneb = compute_bias(np.nanmean(mon_tas_reg_eneb, axis=1), mon_tas_cru_eneb)
-bias_tas_reg_cru_matopiba = compute_bias(np.nanmean(mon_tas_reg_matopiba, axis=1), mon_tas_cru_matopiba)
-
-bias_tas_had_cru_samz = compute_bias(mon_tas_had_samz, mon_tas_cru_samz)
-bias_tas_had_cru_eneb = compute_bias(mon_tas_had_eneb, mon_tas_cru_eneb)
-bias_tas_had_cru_matopiba = compute_bias(mon_tas_had_matopiba, mon_tas_cru_matopiba)
-
-print('a')
-print(np.nanmean(bias_pre_reg_cru_samz))
-print(np.nanmean(bias_pre_had_cru_samz))
-print('b')
-print(np.nanmean(bias_pre_reg_cru_eneb))
-print(np.nanmean(bias_pre_had_cru_eneb))
-print('c')
-print(np.nanmean(bias_pre_reg_cru_matopiba))
-print(np.nanmean(bias_pre_had_cru_matopiba))
-print('d')
-print(np.nanmean(bias_tas_reg_cru_samz))
-print(np.nanmean(bias_tas_had_cru_samz))
-print('e')
-print(np.nanmean(bias_tas_reg_cru_eneb))
-print(np.nanmean(bias_tas_had_cru_eneb))
-print('f')
-print(np.nanmean(bias_tas_reg_cru_matopiba))
-print(np.nanmean(bias_tas_had_cru_matopiba))
+mon_tas_cru_neb = import_obs('tmp', 'neb', 'cru_ts4.04', '1986-2005')
+mon_tas_era5_neb = import_obs('t2m', 'neb', 'era5', '1986-2005')
+mon_tas_reg_neb = import_rcm('tas', 'neb', 'historical', '1986-2005')
+mon_tas_had_neb = import_gcm('tas', 'neb', 'historical', '1986-2005')
 
 # Plot models and obs database 
 fig = plt.figure()
 time = np.arange(0.5, 12 + 0.5)
 
-ax = fig.add_subplot(3, 2, 1)
-annual_cycle = ax.plot(time, bias_pre_reg_cru_samz, time, bias_pre_had_cru_samz)
-plt.title(u'A)', loc='left', fontweight='bold', fontsize=8)
+ax = fig.add_subplot(2, 2, 1)
+annual_cycle = ax.plot(time, mon_pre_cru_amz,  linewidth=1.5, linestyle='--', markersize=5, marker='.', markerfacecolor='white', color='black', label='CRU')
+annual_cycle = ax.plot(time, mon_pre_gpcp_amz, linewidth=1.5, linestyle='--', markersize=5, marker='.', markerfacecolor='white', color='gray', label='GPCP')
+annual_cycle = ax.plot(time, mon_pre_era5_amz, linewidth=1.5, linestyle='--', markersize=5, marker='.', markerfacecolor='white', color='blue', label='ERA5')
+annual_cycle = ax.plot(time, mon_pre_reg_amz,  linewidth=1.5, linestyle='--', markersize=5, marker='.', markerfacecolor='white', color='green', label='RegCM4')
+annual_cycle = ax.plot(time, mon_pre_had_amz,  linewidth=1.5, linestyle='--', markersize=5, marker='.', markerfacecolor='white', color='red', label='HadGEM2-ES')
+plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
+plt.ylabel(u'Precipitation (mm d⁻¹)', fontsize=8, fontweight='bold')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.ylim(-5, 5)
-plt.yticks(np.arange(-5, 6, 2), fontsize=8)
+plt.yticks(np.arange(0, 14, 2), fontsize=8)
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
 plt.setp(ax.get_xticklabels(), visible=False)
-l1, l2 = annual_cycle1
-plt.setp(l1, linewidth=1.5, color='blue', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.setp(l2, linewidth=1.5, color='red', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.grid(True, which='major', linestyle='--')
-plt.axhline(0, linewidth=1., linestyle='-', color='black')
-plt.axhline(-2, linewidth=1., linestyle='-', color='black')
-plt.axhline(2, linewidth=1., linestyle='-', color='black')
-plt.legend(annual_cycle, ['RegCM4.7', 'HadGEM2-ES'], fontsize=6, loc=9, ncol=2, frameon=False)
-plt.text(1, 5.7, u'MBE = {}'.format(-1.6), fontsize=6, color='blue')
-plt.text(5, 5.7, u'MBE = {}'.format(-0.8), fontsize=6, color='red')
-plt.text(9, 5.7, u'MBE = {}'.format(0.3), fontsize=6, color='gray')
+plt.legend(fontsize=6, loc=9, ncol=1)
 
-ax = fig.add_subplot(3, 2, 2)
-annual_cycle = ax.plot(time, bias_tas_reg_cru_samz, time, bias_tas_had_cru_samz)
-plt.title(u'D)', loc='left', fontweight='bold', fontsize=8)
+ax = fig.add_subplot(2, 2, 2)
+annual_cycle = ax.plot(time, mon_tas_cru_amz,  linewidth=1.5, linestyle='--', markersize=5, marker='.', markerfacecolor='white', color='black', label='CRU')
+annual_cycle = ax.plot(time, mon_tas_era5_amz, linewidth=1.5, linestyle='--', markersize=5, marker='.', markerfacecolor='white', color='blue', label='ERA5')
+annual_cycle = ax.plot(time, np.nanmean(mon_tas_reg_amz, axis=1),  linewidth=1.5, linestyle='--', markersize=5, marker='.', markerfacecolor='white', color='green', label='RegCM4')
+annual_cycle = ax.plot(time, mon_tas_had_amz,  linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='red', label='HadGEM2-ES')
+plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
+plt.ylabel(u'Temperature (°C)', fontsize=8, fontweight='bold')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.ylim(-5, 5)
-plt.yticks(np.arange(-5, 6, 2), fontsize=8)
+plt.yticks(np.arange(20, 34, 2), fontsize=8)
+ax.yaxis.tick_right()
+ax.yaxis.set_label_position("right")
+ax.tick_params(axis='both', which='major', labelsize=8)
+ax.spines['left'].set_visible(False)
+ax.spines['top'].set_visible(False)
 plt.setp(ax.get_xticklabels(), visible=False)
-l1, l2 = annual_cycle2
-plt.setp(l1, linewidth=1.5, color='blue', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.setp(l2, linewidth=1.5, color='red', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.grid(True, which='major', linestyle='--')
-plt.axhline(0, linewidth=1., linestyle='-', color='black')
-plt.axhline(-2, linewidth=1., linestyle='-', color='black')
-plt.axhline(2, linewidth=1., linestyle='-', color='black')
-plt.text(1, 5.7, u'MBE = {}'.format(0.9), fontsize=6, color='blue')
-plt.text(5, 5.7, u'MBE = {}'.format(-1.5), fontsize=6, color='red')
-plt.text(9, 5.7, u'MBE = {}'.format(-1.0), fontsize=6, color='gray')
+plt.legend(fontsize=6, loc=9, ncol=1)
 
-ax30 = fig.add_subplot(3, 2, 3)
-annual_cycle3 = ax30.plot(time, bias_pre_reg_exp1_cru_eneb, time, bias_pre_reg_exp2_cru_eneb, time, bias_pre_had_cru_eneb)
-plt.title(u'B)', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Precipitation (mm d⁻¹)', fontsize=8)
+ax = fig.add_subplot(2, 2, 3)
+annual_cycle = ax.plot(time, mon_pre_cru_neb,  linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='black')
+annual_cycle = ax.plot(time, mon_pre_gpcp_neb, linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='gray')
+annual_cycle = ax.plot(time, mon_pre_era5_neb, linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='blue')
+annual_cycle = ax.plot(time, mon_pre_reg_neb,  linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='green')
+annual_cycle = ax.plot(time, mon_pre_had_neb,  linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='red')
+plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
+plt.xlabel(u'Months', fontsize=8, fontweight='bold')
+plt.ylabel(u'Precipitation (mm d⁻¹)', fontsize=8, fontweight='bold')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.ylim(-5, 5)
-plt.yticks(np.arange(-5, 6, 2), fontsize=8)
-plt.setp(ax30.get_xticklabels(), visible=False)
-l1, l2, l3 = annual_cycle3
-plt.setp(l1, linewidth=1.5, color='blue', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.setp(l2, linewidth=1.5, color='red', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.setp(l3, linewidth=1.5, color='gray', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.grid(True, which='major', linestyle='--')
-plt.axhline(0, linewidth=1., linestyle='-', color='black')
-plt.axhline(-2, linewidth=1., linestyle='-', color='black')
-plt.axhline(2, linewidth=1., linestyle='-', color='black')
-plt.text(1, 5.7, u'MBE = {}'.format(-0.8), fontsize=6, color='blue')
-plt.text(5, 5.7, u'MBE = {}'.format(0.2), fontsize=6, color='red')
-plt.text(9, 5.7, u'MBE = {}'.format(-0.5), fontsize=6, color='gray')
- 
-ax40 = fig.add_subplot(3, 2, 4)
-annual_cycle4 = ax40.plot(time, bias_tas_reg_exp1_cru_eneb, time, bias_tas_reg_exp2_cru_eneb, time, bias_tas_had_cru_eneb)
-plt.title(u'E)', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Temperature (°C)', fontsize=8)
-plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.ylim(-5, 5)
-plt.yticks(np.arange(-5, 6, 2), fontsize=8)
-plt.setp(ax40.get_xticklabels(), visible=False)
-l1, l2, l3 = annual_cycle4
-plt.setp(l1, linewidth=1.5, color='blue', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.setp(l2, linewidth=1.5, color='red', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.setp(l3, linewidth=1.5, color='gray', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.grid(True, which='major', linestyle='--')
-plt.axhline(0, linewidth=1., linestyle='-', color='black')
-plt.axhline(-2, linewidth=1., linestyle='-', color='black')
-plt.axhline(2, linewidth=1., linestyle='-', color='black')
-plt.text(1, 5.7, u'MBE = {}'.format(1.1), fontsize=6, color='blue')
-plt.text(5, 5.7, u'MBE = {}'.format(-0.1), fontsize=6, color='red')
-plt.text(9, 5.7, u'MBE = {}'.format(-0.9), fontsize=6, color='gray')
-	 
-ax50 = fig.add_subplot(3, 2, 5)
-annual_cycle5 = ax50.plot(time, bias_pre_reg_exp1_cru_matopiba, time, bias_pre_reg_exp2_cru_matopiba, time, bias_pre_had_cru_matopiba)
-plt.title(u'C)', loc='left', fontweight='bold', fontsize=8)
-plt.xlabel(u'Months', fontsize=8)
-plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.ylim(-5, 5)
-plt.yticks(np.arange(-5, 6, 2), fontsize=8)
-l1, l2, l3 = annual_cycle5
-plt.setp(l1, linewidth=1.5, color='blue', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.setp(l2, linewidth=1.5, color='red', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.setp(l3, linewidth=1.5, color='gray', markersize=5, marker='.', markerfacecolor='white', linestyle='--')
-plt.grid(True, which='major', linestyle='--')
-plt.axhline(0, linewidth=1., linestyle='-', color='black')
-plt.axhline(-2, linewidth=1., linestyle='-', color='black')
-plt.axhline(2, linewidth=1., linestyle='-', color='black')
-plt.text(1, 5.7, u'MBE = {}'.format(-1.8), fontsize=6, color='blue')
-plt.text(5, 5.7, u'MBE = {}'.format(0.5), fontsize=6, color='red')
-plt.text(9, 5.7, u'MBE = {}'.format(0.3), fontsize=6, color='gray')
+plt.yticks(np.arange(0, 14, 2), fontsize=8)
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
 
-ax60 = fig.add_subplot(3, 2, 6)
-annual_cycle6 = ax60.plot(time, bias_tas_reg_exp1_cru_matopiba, time, bias_tas_reg_exp2_cru_matopiba, time, bias_tas_had_cru_matopiba)
-plt.title(u'F)', loc='left', fontweight='bold', fontsize=8)
-plt.xlabel(u'Months', fontsize=8)
+ax = fig.add_subplot(2, 2, 4)
+annual_cycle = ax.plot(time, mon_tas_cru_neb,  linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='black')
+annual_cycle = ax.plot(time, mon_tas_era5_neb, linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='blue')
+annual_cycle = ax.plot(time, np.nanmean(mon_tas_reg_neb, axis=1),  linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='green')
+annual_cycle = ax.plot(time, mon_tas_had_neb,  linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='red')
+plt.title(u'D)', loc='left', fontsize=8, fontweight='bold')
+plt.xlabel(u'Months', fontsize=8, fontweight='bold')
+plt.ylabel(u'Temperature (°C)', fontsize=8, fontweight='bold')
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.ylim(-5, 5)
-plt.yticks(np.arange(-5, 6, 2), fontsize=8)
-l1, l2, l3 = annual_cycle6
-plt.setp(l1, linewidth=1.5, color='blue', markersize=6, marker='.', markerfacecolor='white', linestyle='--')
-plt.setp(l2, linewidth=1.5, color='red', markersize=6, marker='.', markerfacecolor='white', linestyle='--')
-plt.setp(l3, linewidth=1.5, color='gray', markersize=6, marker='.', markerfacecolor='white', linestyle='--')
-plt.grid(True, which='major', linestyle='--')
-plt.axhline(0, linewidth=1., linestyle='-', color='black')
-plt.axhline(-2, linewidth=1., linestyle='-', color='black')
-plt.axhline(2, linewidth=1., linestyle='-', color='black')
-plt.text(1, 5.7, u'MBE = {}'.format(2.0), fontsize=7, color='blue')
-plt.text(5, 5.7, u'MBE = {}'.format(-0.2), fontsize=7, color='red')
-plt.text(9, 5.7, u'MBE = {}'.format(-1.3), fontsize=7, color='gray')
+plt.yticks(np.arange(20, 34, 2), fontsize=8)
+ax.yaxis.tick_right()
+ax.yaxis.set_label_position("right")
+ax.tick_params(axis='both', which='major', labelsize=8)
+ax.spines['left'].set_visible(False)
+ax.spines['top'].set_visible(False)
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'

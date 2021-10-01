@@ -119,67 +119,67 @@ lat, lon, tas_djf_rcm, tas_jja_rcm = import_rcm('tas', 'amz_neb', 'historical', 
 lat, lon, tas_djf_gcm, tas_jja_gcm = import_gcm('tas', 'amz_neb', 'historical', '1986-2005')
 
 # Plot models and obs database 
-#~ fig = plt.figure(figsize=(8,4))
-#~ levs1 = [0, 2, 4, 6, 8, 10, 12, 14]
+fig = plt.figure(figsize=(8,4))
+levs1 = [0, 2, 4, 6, 8, 10, 12, 14]
 
-#~ ax1 = fig.add_subplot(2, 3, 1)
-#~ map, xx, yy = basemap(lat, lon)
-#~ map.contourf(xx, yy, pre_djf_cru, levels=levs1, latlon=True, cmap=cm.Blues)
-#~ plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
-#~ plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
+ax1 = fig.add_subplot(2, 3, 1)
+map, xx, yy = basemap(lat, lon)
+map.contourf(xx, yy, pre_djf_cru, levels=levs1, latlon=True, cmap=cm.Blues)
+plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
+plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
+map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
+map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 
-#~ ax2 = fig.add_subplot(2, 3, 2)
-#~ map, xx, yy = basemap(lat, lon)
-#~ map.contourf(xx, yy, pre_djf_gpcp, levels=levs1, latlon=True, cmap=cm.Blues)
-#~ plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
+ax2 = fig.add_subplot(2, 3, 2)
+map, xx, yy = basemap(lat, lon)
+map.contourf(xx, yy, pre_djf_gpcp, levels=levs1, latlon=True, cmap=cm.Blues)
+plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
+map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
+map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
 
-#~ ax2 = fig.add_subplot(2, 3, 3)
-#~ map, xx, yy = basemap(lat, lon)
-#~ map.contourf(xx, yy, pre_djf_era5, levels=levs1, latlon=True, cmap=cm.Blues, extend='max')
-#~ plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
-#~ cbar = map.colorbar()
-#~ cbar.ax.tick_params(labelsize=6)
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
+ax2 = fig.add_subplot(2, 3, 3)
+map, xx, yy = basemap(lat, lon)
+map.contourf(xx, yy, pre_djf_era5, levels=levs1, latlon=True, cmap=cm.Blues, extend='max')
+plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6)
+map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
+map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
 
-#~ ax4 = fig.add_subplot(2, 3, 4)
-#~ map, xx, yy = basemap(lat, lon)
-#~ map.contourf(xx, yy, pre_djf_rcm, levels=levs1, latlon=True, cmap=cm.Blues)
-#~ plt.title(u'D)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
-#~ plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
+ax4 = fig.add_subplot(2, 3, 4)
+map, xx, yy = basemap(lat, lon)
+map.contourf(xx, yy, pre_djf_rcm, levels=levs1, latlon=True, cmap=cm.Blues)
+plt.title(u'D)', loc='left', fontsize=8, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
+plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
+map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
+map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 
-#~ ax5 = fig.add_subplot(2, 3, 5)
-#~ map, xx, yy = basemap(lat, lon)
-#~ map.contourf(xx, yy, pre_djf_gcm, levels=levs1, latlon=True, cmap=cm.Blues, extend='max')
-#~ plt.title(u'E)', loc='left', fontsize=8, fontweight='bold')
-#~ plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
-#~ cbar = map.colorbar()
-#~ cbar.ax.tick_params(labelsize=6) 
-#~ map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
-#~ map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
+ax5 = fig.add_subplot(2, 3, 5)
+map, xx, yy = basemap(lat, lon)
+map.contourf(xx, yy, pre_djf_gcm, levels=levs1, latlon=True, cmap=cm.Blues, extend='max')
+plt.title(u'E)', loc='left', fontsize=8, fontweight='bold')
+plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6) 
+map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
+map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 #~ fig_coord = [0.35,0.08,0.3,0.03]
 #~ cbar_ax = fig.add_axes(fig_coord)
 #~ cb1 = plt.colorbar(plt_maps, cax=cbar_ax, orientation='horizontal', ticks=levs1)
 
-#~ # Path out to save figure
-#~ path_out = '/home/nice/Downloads'
-#~ name_out = 'pyplt_maps_clim_reg_exp2_pre.png'
-#~ if not os.path.exists(path_out):
-	#~ create_path(path_out)
-#~ plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
-#~ plt.show()
-#~ exit()
+# Path out to save figure
+path_out = '/home/nice/Downloads'
+name_out = 'pyplt_maps_clim_reg_exp2_pre.png'
+if not os.path.exists(path_out):
+	create_path(path_out)
+plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
+plt.show()
+exit()
 
 fig = plt.figure(figsize=(5,4))
 levs2 = [18, 20, 22, 24, 26, 28, 30, 32]
