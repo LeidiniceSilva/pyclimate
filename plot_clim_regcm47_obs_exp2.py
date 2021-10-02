@@ -7,11 +7,11 @@ __description__ = "This script plot annual climatology from regcm47 and hadgem m
 
 import os
 import netCDF4
-import statistics
 import numpy as np
-import matplotlib.cm as cm
-import matplotlib.pyplot as plt
 import matplotlib as mpl
+import matplotlib.cm as cm
+import scipy.stats as stats
+import matplotlib.pyplot as plt
 
 # mpl.use('agg')
 
@@ -74,7 +74,17 @@ def import_gcm(var, area, exp, dt):
 	
 	return gcm
 
-        
+
+def compute_linear_regression(obs, sim):
+
+	m, c, r, p, se1 = stats.linregress(obs, sim)
+	eq = 'y = %2.2fx+%2.2f'%(m, c)
+	r2 = 'R² = %1.2f'%(r)
+	p = 'p-value = %1.2f'%(p)
+   
+	return r2
+	
+	        
 # Import models and obs database 
 mon_pre_cru_amz = import_obs('pre', 'amz', 'cru_ts4.04', '1986-2005')
 mon_pre_gpcp_amz = import_obs('precip', 'amz', 'gpcp_v2.2', '1986-2005')
@@ -98,6 +108,38 @@ mon_tas_era5_neb = import_obs('t2m', 'neb', 'era5', '1986-2005')
 mon_tas_reg_neb = import_rcm('tas', 'neb', 'historical', '1986-2005')
 mon_tas_had_neb = import_gcm('tas', 'neb', 'historical', '1986-2005')
 
+# Import linear regression
+r2_pre_reg_cru_amz  = compute_linear_regression(mon_pre_cru_amz,  mon_pre_reg_amz)
+r2_pre_reg_gpcp_amz = compute_linear_regression(mon_pre_gpcp_amz, mon_pre_reg_amz)
+r2_pre_reg_era5_amz = compute_linear_regression(mon_pre_era5_amz, mon_pre_reg_amz)
+r2_pre_reg_cru_neb  = compute_linear_regression(mon_pre_cru_neb,  mon_pre_reg_neb)
+r2_pre_reg_gpcp_neb = compute_linear_regression(mon_pre_gpcp_neb, mon_pre_reg_neb)
+r2_pre_reg_era5_neb = compute_linear_regression(mon_pre_era5_neb, mon_pre_reg_neb)
+r2_pre_had_cru_amz  = compute_linear_regression(mon_pre_cru_amz,  mon_pre_had_amz)
+r2_pre_had_gpcp_amz = compute_linear_regression(mon_pre_gpcp_amz, mon_pre_had_amz)
+r2_pre_had_era5_amz = compute_linear_regression(mon_pre_era5_amz, mon_pre_had_amz)
+r2_pre_had_cru_neb  = compute_linear_regression(mon_pre_cru_neb,  mon_pre_had_neb)
+r2_pre_had_gpcp_neb = compute_linear_regression(mon_pre_gpcp_neb, mon_pre_had_neb)
+r2_pre_had_era5_neb = compute_linear_regression(mon_pre_era5_neb, mon_pre_had_neb)
+
+r2_tas_reg_cru_amz  = compute_linear_regression(mon_tas_cru_amz,  np.nanmean(mon_tas_reg_amz, axis=1))
+r2_tas_reg_era5_amz = compute_linear_regression(mon_tas_era5_amz, np.nanmean(mon_tas_reg_amz, axis=1))
+r2_tas_reg_cru_neb  = compute_linear_regression(mon_tas_cru_neb,  np.nanmean(mon_tas_reg_neb, axis=1))
+r2_tas_reg_era5_neb = compute_linear_regression(mon_tas_era5_neb, np.nanmean(mon_tas_reg_neb, axis=1))
+r2_tas_had_cru_amz  = compute_linear_regression(mon_tas_cru_amz,  mon_tas_had_amz)
+r2_tas_had_era5_amz = compute_linear_regression(mon_tas_era5_amz, mon_tas_had_amz)
+r2_tas_had_cru_neb  = compute_linear_regression(mon_tas_cru_neb,  mon_tas_had_neb)
+r2_tas_had_era5_neb = compute_linear_regression(mon_tas_era5_neb, mon_tas_had_neb)
+
+print(r2_tas_reg_cru_amz)
+print(r2_tas_reg_era5_amz)
+print(r2_tas_had_cru_amz)
+print(r2_tas_had_era5_amz)
+print(r2_tas_reg_cru_neb)
+print(r2_tas_reg_era5_neb)
+print(r2_tas_had_cru_neb)
+print(r2_tas_had_era5_neb)
+
 # Plot models and obs database 
 fig = plt.figure()
 time = np.arange(0.5, 12 + 0.5)
@@ -115,6 +157,12 @@ plt.yticks(np.arange(0, 14, 2), fontsize=8)
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
 plt.setp(ax.get_xticklabels(), visible=False)
+plt.text(0.5, 2.5, 'R²=0.84 (CRU)', fontsize=6, color='green', fontweight='bold')
+plt.text(0.5, 1.5, 'R²=0.82 (GPCP)', fontsize=6, color='green', fontweight='bold')
+plt.text(0.5, 0.5, 'R²=0.82 (ERA5)', fontsize=6, color='green', fontweight='bold')
+plt.text(7.5, 2.5, 'R²=0.98 (CRU)', fontsize=6, color='red', fontweight='bold')
+plt.text(7.5, 1.5, 'R²=0.97 (GPCP)', fontsize=6, color='red', fontweight='bold')
+plt.text(7.5, 0.5, 'R²=0.96 (ERA5)', fontsize=6, color='red', fontweight='bold')
 plt.legend(fontsize=6, loc=9, ncol=1)
 
 ax = fig.add_subplot(2, 2, 2)
@@ -132,6 +180,10 @@ ax.tick_params(axis='both', which='major', labelsize=8)
 ax.spines['left'].set_visible(False)
 ax.spines['top'].set_visible(False)
 plt.setp(ax.get_xticklabels(), visible=False)
+plt.text(0.5, 22, 'R²=0.85 (CRU)', fontsize=6, color='green', fontweight='bold')
+plt.text(0.5, 21, 'R²=0.76 (ERA5)', fontsize=6, color='green', fontweight='bold')
+plt.text(7.5, 22, 'R²=0.89 (CRU)', fontsize=6, color='red', fontweight='bold')
+plt.text(7.5, 21, 'R²=0.68 (ERA5)', fontsize=6, color='red', fontweight='bold')
 plt.legend(fontsize=6, loc=9, ncol=1)
 
 ax = fig.add_subplot(2, 2, 3)
@@ -147,6 +199,12 @@ plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), f
 plt.yticks(np.arange(0, 14, 2), fontsize=8)
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
+plt.text(0.5, 10, 'R²=0.96 (CRU)', fontsize=6, color='green', fontweight='bold')
+plt.text(0.5, 9, 'R²=0.96 (GPCP)', fontsize=6, color='green', fontweight='bold')
+plt.text(0.5, 8, 'R²=0.96 (ERA5)', fontsize=6, color='green', fontweight='bold')
+plt.text(7.5, 10, 'R²=0.94 (CRU)', fontsize=6, color='red', fontweight='bold')
+plt.text(7.5, 9, 'R²=0.95 (GPCP)', fontsize=6, color='red', fontweight='bold')
+plt.text(7.5, 8, 'R²=0.95 (ERA5)', fontsize=6, color='red', fontweight='bold')
 
 ax = fig.add_subplot(2, 2, 4)
 annual_cycle = ax.plot(time, mon_tas_cru_neb,  linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='black')
@@ -163,6 +221,10 @@ ax.yaxis.set_label_position("right")
 ax.tick_params(axis='both', which='major', labelsize=8)
 ax.spines['left'].set_visible(False)
 ax.spines['top'].set_visible(False)
+plt.text(0.5, 22, 'R²=0.81 (CRU)', fontsize=6, color='green', fontweight='bold')
+plt.text(0.5, 21, 'R²=0.86 (ERA5)', fontsize=6, color='green', fontweight='bold')
+plt.text(7.5, 22, 'R²=0.96 (CRU)', fontsize=6, color='red', fontweight='bold')
+plt.text(7.5, 21, 'R²=0.97 (ERA5)', fontsize=6, color='red', fontweight='bold')
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'

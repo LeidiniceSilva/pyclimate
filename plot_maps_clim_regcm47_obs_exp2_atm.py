@@ -30,7 +30,7 @@ from matplotlib.colors import BoundaryNorm
 
 def import_obs(var, area, dataset, dt):
 	
-	path = '/home/nice/Documents/dataset/obs/rcm_exp2'
+	path = '/home/nice/Documents/dataset/obs/reg_exp2'
 	arq  = '{0}/{1}_{2}_{3}_obs_djf_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
 			
 	data = netCDF4.Dataset(arq)
@@ -46,7 +46,7 @@ def import_obs(var, area, dataset, dt):
 	
 def import_rcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/rcm/rcm_exp2'
+	path = '/home/nice/Documents/dataset/rcm/reg_exp2/historical'
 	arq  = '{0}/{1}_{2}_RegCM4_HadG_{3}_djf_{4}_lonlat.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
@@ -62,7 +62,7 @@ def import_rcm(var, area, exp, dt):
 
 def import_gcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/rcm_exp2'	
+	path = '/home/nice/Documents/dataset/gcm/reg_exp2/historical'	
 	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_djf_{4}_lonlat.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
@@ -118,18 +118,19 @@ wind_djf_rcm = ua_djf_rcm_850hPa - ua_djf_rcm_200hPa
 wind_djf_gcm = ua_djf_gcm_850hPa - ua_djf_gcm_200hPa
 
 # Plot models and obs database 
-fig = plt.figure(figsize=(8,4))
+fig = plt.figure()
 levs1 = [2, 4, 6, 8, 10, 12, 14, 16]
 
-ax1 = fig.add_subplot(1, 3, 1)
+ax1 = fig.add_subplot(3, 1, 1)
 map, xx, yy = basemap(lat, lon)
-map.contourf(xx, yy, hus_djf_rea_850hPa*1000, levels=levs1, latlon=True, cmap=cm.RdYlGn)
+map.contourf(xx, yy, hus_djf_rea_850hPa*1000, levels=levs1, latlon=True, cmap=cm.RdYlGn, extend='max')
 map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_rea_850hPa[::10,::10], va_djf_rea_850hPa[::10,::10]) 
+map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
+map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
-plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
-map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
-map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6)
 
 y1,j1 = map(-35,-4)
 y2,j2 = map(-35,7)
@@ -138,14 +139,16 @@ y4,j4 = map(-19,-4)
 poly2 = Polygon([(y1,j1),(y2,j2),(y3,j3),(y4,j4)], facecolor='none', edgecolor='black', linewidth=1.0)
 plt.gca().add_patch(poly2)
 	
-ax2 = fig.add_subplot(1, 3, 2)
+ax2 = fig.add_subplot(3, 1, 2)
 map, xx, yy = basemap(lat, lon)
-map.contourf(xx, yy, hus_djf_rcm_850hPa*1000, levels=levs1, latlon=True, cmap=cm.RdYlGn)
+map.contourf(xx, yy, hus_djf_rcm_850hPa*1000, levels=levs1, latlon=True, cmap=cm.RdYlGn, extend='max')
 map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_rcm_850hPa[::10,::10], va_djf_rcm_850hPa[::10,::10]) 
+map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
+map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
-plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
-map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
-map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
+plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6)
 
 y1,j1 = map(-35,-4)
 y2,j2 = map(-35,7)
@@ -154,16 +157,17 @@ y4,j4 = map(-19,-4)
 poly2 = Polygon([(y1,j1),(y2,j2),(y3,j3),(y4,j4)], facecolor='none', edgecolor='black', linewidth=1.0)
 plt.gca().add_patch(poly2)
 
-ax2 = fig.add_subplot(1, 3, 3)
+ax3 = fig.add_subplot(3, 1, 3)
 map, xx, yy = basemap(lat, lon)
 map.contourf(xx, yy, hus_djf_gcm_850hPa*1000, levels=levs1, latlon=True, cmap=cm.RdYlGn, extend='max')
 map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_gcm_850hPa[::10,::10], va_djf_gcm_850hPa[::10,::10]) 
+map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
+map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
+plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
 plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
 cbar = map.colorbar()
 cbar.ax.tick_params(labelsize=6)
-map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
-map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 y1,j1 = map(-35,-4)
 y2,j2 = map(-35,7)
@@ -182,38 +186,42 @@ plt.show()
 exit()
 
 # Plot models and obs database 
-fig = plt.figure(figsize=(8,4))
+fig = plt.figure()
 levs1 = [-20, -15, -10, -5, 5, 10, 15, 20]
 
-ax1 = fig.add_subplot(1, 3, 1)
+ax1 = fig.add_subplot(3, 1, 1)
 map, xx, yy = basemap(lat, lon)
-map.contourf(xx, yy, wind_djf_rea, levels=levs1, latlon=True, cmap=cm.PuOr)
+map.contourf(xx, yy, wind_djf_rea, levels=levs1, latlon=True, cmap=cm.PuOr, extend='both')
 map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_rea_200hPa[::10,::10], va_djf_rea_200hPa[::10,::10]) 
+map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
+map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
-plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
-map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
-map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6)
 	
-ax2 = fig.add_subplot(1, 3, 2)
+ax2 = fig.add_subplot(3, 1, 2)
 map, xx, yy = basemap(lat, lon)
-map.contourf(xx, yy, wind_djf_rcm, levels=levs1, latlon=True, cmap=cm.PuOr)
+map.contourf(xx, yy, wind_djf_rcm, levels=levs1, latlon=True, cmap=cm.PuOr, extend='both')
 map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_rcm_200hPa[::10,::10], va_djf_rcm_200hPa[::10,::10]) 
+map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
+map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
-plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
-map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
-map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
+plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
+cbar = map.colorbar()
+cbar.ax.tick_params(labelsize=6)
 
-ax2 = fig.add_subplot(1, 3, 3)
+ax3 = fig.add_subplot(3, 1, 3)
 map, xx, yy = basemap(lat, lon)
 map.contourf(xx, yy, wind_djf_gcm, levels=levs1, latlon=True, cmap=cm.PuOr, extend='both')
 map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_gcm_200hPa[::10,::10], va_djf_gcm_200hPa[::10,::10]) 
+map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
+map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
+plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
 plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
 cbar = map.colorbar()
 cbar.ax.tick_params(labelsize=6)
-map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
-map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'
