@@ -30,16 +30,16 @@ from matplotlib.colors import BoundaryNorm
 
 def import_obs(var, area, dt):
 	
-	path = '/home/nice/Documents/dataset/obs/reg_exp2'
+	path = '/home/nice/Documents/dataset/obs/reg_exp2/'
 	arq  = '{0}/{1}_{2}_era5_obs_djf_{3}_lonlat.nc'.format(path, var, area, dt)	
 			
 	data = netCDF4.Dataset(arq)
-	lon  = data.variables['lon'][:]
+	lat  = data.variables['lat'][:]
 	lev  = data.variables['level'][:]
-	value = data.variables[var][:,:,0,:] 
+	value = data.variables[var][:,:,:,0] 
 	value = np.nanmean(value, axis=0)
 
-	return lon, lev, value
+	return lat, lev, value
 	
 		
 def import_rcm(var, area, exp, dt):
@@ -48,17 +48,17 @@ def import_rcm(var, area, exp, dt):
 	arq  = '{0}/{1}_{2}_RegCM4_HadG_{3}_djf_{4}_lonlat.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
-	lon  = data.variables['lon'][:]
+	lat  = data.variables['lat'][:]
 	lev  = data.variables['plev'][:]
-	value = data.variables[var][:,:,0,:] 
+	value = data.variables[var][:,:,:,0] 
 	value = np.nanmean(value, axis=0)
 
-	return lon, lev, value
+	return lat, lev, value
 	
 
 def import_gcm(var, area, exp, dt):
 	
-	path = '/home/nice/Downloads'	
+	path = '/home/nice/Documents/dataset/gcm/reg_exp2/historical'	
 	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_djf_{4}_lonlat.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
@@ -71,61 +71,66 @@ def import_gcm(var, area, exp, dt):
 	
 		
 # Import models and obs database    
-lon, hur_lev_rea, hur_var_rea = import_obs('r', 'amz_neb', '1986-2005')
-lon, hur_lev_rcm, hur_var_rcm = import_rcm('rh', 'amz_neb', 'historical', '1986-2005')
-lat, hur_lev_gcm, hur_var_gcm = import_gcm('wap', 'amz_neb', 'historical', '1986-2005')
+lat, w_lev_rea, w_var_rea = import_obs('w', 'amz_neb', '1986-2005')
+lat, w_lev_rcm, w_var_rcm = import_rcm('omega', 'amz_neb', 'historical', '1986-2005')
+lat, w_lev_gcm, w_var_gcm = import_gcm('wap', 'amz_neb', 'historical', '1986-2005')
 
-print(lon.shape, hur_lev_rea.shape, hur_var_rea.shape)
-print(lon.shape, hur_lev_rcm.shape, hur_var_rcm.shape)
-print(lat.shape, hur_lev_gcm.shape, hur_var_gcm.shape)
+print(lat.shape, w_lev_rea.shape, w_var_rea.shape)
+print(lat.shape, w_lev_rcm.shape, w_var_rcm.shape)
+print(lat.shape, w_lev_gcm.shape, w_var_gcm.shape)
 
 # Plot models and obs database 
 fig = plt.figure(figsize=(8,6))
-time = np.arange(-85, -15, 5)
-xtime = np.arange(-20, 15, 5)
-ytime = np.arange(10000, 110000, 10000)
+xtime = np.arange(-20, 13, 3)
 
 ax = fig.add_subplot(3, 1, 1)
+ytime = np.arange(100, 1100, 100)
 plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
-plt1 = ax.contourf(lon, hur_lev_rea, hur_var_rea, np.arange(10, 90, 10), cmap=plt.cm.Blues, extend='max')
+plt1 = ax.contourf(lat, w_lev_rea, w_var_rea*1000, np.arange(-60, 70, 10), cmap=plt.cm.PiYG, extend='both')
 plt.colorbar(plt1, aspect=10, pad=0.025)
-plt2 = ax.contour(lon, hur_lev_rea, hur_var_rea, np.arange(10, 90, 10), linewidths=0.5, colors='black')
+plt2 = ax.contour(lat, w_lev_rea, w_var_rea*1000, np.arange(-60, 70, 10), linewidths=0.5, colors='black')
 ax.clabel(plt2, fmt='%d', fontsize=8, colors='black')
 plt.ylabel('Pressure (hPa)', fontsize=8, fontweight='bold')
-plt.ylim(100, 1000)
-plt.xticks(time, ('85°W', '80°W', '75°W', '70°W', '65°W', '60°W', '55°W', '50°W', '45°W', '40°W', '35°W', '30°W', '25°W', '20°W', '15°W'), fontsize=8)
-plt.yticks(np.arange(100, 1100, 100), fontsize=8)
+plt.xticks(xtime, ('20°S', '17°S', '14°S', '11°S', '8°S', '5°S', '2°S', '1°N', '4°N', '7°S', '10°N'), fontsize=8)
+plt.yticks(ytime, ('100', '200', '300', '400', '500', '600', '700', '800', '900', '1000'), fontsize=8)
 plt.setp(ax.get_xticklabels(), visible=False)
 plt.gca().invert_yaxis()
+plt.axvline(0, linewidth=1., linestyle='--', color='black')
+plt.axvline(-10, linewidth=1., linestyle='--', color='black')
 
 ax = fig.add_subplot(3, 1, 2)
+ytime = np.arange(100, 1100, 100)
 plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
-plt1 = ax.contourf(lon, hur_lev_rcm, hur_var_rcm, np.arange(10, 90, 10), cmap=plt.cm.Blues, extend='max')
+plt1 = ax.contourf(lat, w_lev_rcm, w_var_rcm*100000, np.arange(-60, 70, 10), cmap=plt.cm.PiYG, extend='both')
 plt.colorbar(plt1, aspect=10, pad=0.025)
-plt2 = ax.contour(lon, hur_lev_rcm, hur_var_rcm, np.arange(10, 90, 10), linewidths=0.5, colors='black')
+plt2 = ax.contour(lat, w_lev_rcm, w_var_rcm*100000, np.arange(-60, 70, 10), linewidths=0.5, colors='black')
 ax.clabel(plt2, fmt='%d', fontsize=8, colors='black')
 plt.ylabel('Pressure (hPa)', fontsize=8, fontweight='bold')
-plt.ylim(100, 1000)
-plt.xticks(time, ('85°W', '80°W', '75°W', '70°W', '65°W', '60°W', '55°W', '50°W', '45°W', '40°W', '35°W', '30°W', '25°W', '20°W', '15°W'), fontsize=8)
-plt.yticks(np.arange(100, 1100, 100), fontsize=8)
+plt.xticks(xtime, ('20°S', '17°S', '14°S', '11°S', '8°S', '5°S', '2°S', '1°N', '4°N', '7°S', '10°N'), fontsize=8)
+plt.yticks(ytime, ('100', '2plot_maps_clim_regcm47_obs_exp2_vert.py00', '300', '400', '500', '600', '700', '800', '900', '1000'), fontsize=8)
 plt.setp(ax.get_xticklabels(), visible=False)
 plt.gca().invert_yaxis()
+plt.axvline(0, linewidth=1., linestyle='--', color='black')
+plt.axvline(-10, linewidth=1., linestyle='--', color='black')
 
 ax = fig.add_subplot(3, 1, 3)
+ytime = np.arange(10000, 110000, 10000)
 plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
-plt1 = ax.contourf(lat, hur_lev_gcm, hur_var_gcm, np.arange(-0.10, 0.10, 0.02), cmap=plt.cm.seismic, extend='both')
+plt1 = ax.contourf(lat, w_lev_gcm, w_var_gcm*1000, np.arange(-60, 70, 10), cmap=plt.cm.PiYG, extend='both')
 plt.colorbar(plt1, aspect=10, pad=0.025)
-plt2 = ax.contour(lat, hur_lev_gcm, hur_var_gcm, np.arange(-0.10, 0.10, 0.02), linewidths=0.5, colors='black')
-ax.clabel(plt2, fmt='%.02f', fontsize=8, colors='black')
-plt.ylabel('Vertical velocity (hPa)', fontsize=8, fontweight='bold')
+plt2 = ax.contour(lat, w_lev_gcm, w_var_gcm*1000, np.arange(-60, 70, 10), linewidths=0.5, colors='black')
+ax.clabel(plt2, fmt='%d', fontsize=8, colors='black')
+plt.ylabel('Pressure (hPa)', fontsize=8, fontweight='bold')
 plt.xlabel('Latitude', fontsize=8, fontweight='bold')
-plt.xticks(xtime, ('20°S', '15°S', '10°S', '5°S', '0°', '5°N', '10°N'), fontsize=8)
+plt.xticks(xtime, ('20°S', '17°S', '14°S', '11°S', '8°S', '5°S', '2°S', '1°N', '4°N', '7°S', '10°N'), fontsize=8)
 plt.yticks(ytime, ('100', '200', '300', '400', '500', '600', '700', '800', '900', '1000'), fontsize=8)
 plt.gca().invert_yaxis()
+plt.axvline(0, linewidth=1., linestyle='--', color='black')
+plt.axvline(-10, linewidth=1., linestyle='--', color='black')
 																				
 # Path out to save figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_clim_reg_exp2_hur.png'
+name_out = 'pyplt_maps_clim_reg_exp2_omega.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
