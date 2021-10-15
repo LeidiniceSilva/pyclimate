@@ -49,7 +49,7 @@ def import_rcm(var, area, exp, dt):
 	
 	data = netCDF4.Dataset(arq)
 	lat  = data.variables['lat'][:]
-	lev  = data.variables['plev'][:]
+	lev  = data.variables['kz'][:]
 	value = data.variables[var][:,:,:,0] 
 	value = np.nanmean(value, axis=0)
 
@@ -136,5 +136,6 @@ if not os.path.exists(path_out):
 plt.savefig(os.path.join(path_out, name_out), dpi=300, bbox_inches='tight')
 plt.show()
 exit()
+
 
 
