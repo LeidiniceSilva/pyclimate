@@ -36,7 +36,7 @@ def import_obs(var, area, dt):
 	data = netCDF4.Dataset(arq)
 	lat  = data.variables['lat'][:]
 	lev  = data.variables['level'][:]
-	value = data.variables[var][:,:,:,0] 
+	value = data.variables[var][:,:,:,:] 
 	value = np.nanmean(value, axis=0)
 
 	return lat, lev, value
@@ -49,8 +49,8 @@ def import_rcm(var, area, exp, dt):
 	
 	data = netCDF4.Dataset(arq)
 	lat  = data.variables['lat'][:]
-	lev  = data.variables['kz'][:]
-	value = data.variables[var][:,:,:,0] 
+	lev  = data.variables['plev'][:]
+	value = data.variables[var][:,:,:,:] 
 	value = np.nanmean(value, axis=0)
 
 	return lat, lev, value
@@ -64,7 +64,7 @@ def import_gcm(var, area, exp, dt):
 	data = netCDF4.Dataset(arq)
 	lat  = data.variables['lat'][:]
 	lev  = data.variables['plev'][:]
-	value = data.variables[var][:,:,:,0] 
+	value = data.variables[var][:,:,:,:] 
 	value = np.nanmean(value, axis=0)
 
 	return lat, lev, value
@@ -75,9 +75,17 @@ lat, w_lev_rea, w_var_rea = import_obs('w', 'amz_neb', '1986-2005')
 lat, w_lev_rcm, w_var_rcm = import_rcm('omega', 'amz_neb', 'historical', '1986-2005')
 lat, w_lev_gcm, w_var_gcm = import_gcm('wap', 'amz_neb', 'historical', '1986-2005')
 
+w_var_rea = np.nanmean(w_var_rea, axis=2)
+w_var_rcm = np.nanmean(w_var_rcm, axis=2)
+w_var_gcm = np.nanmean(w_var_gcm, axis=2)
+
 print(lat.shape, w_lev_rea.shape, w_var_rea.shape)
 print(lat.shape, w_lev_rcm.shape, w_var_rcm.shape)
 print(lat.shape, w_lev_gcm.shape, w_var_gcm.shape)
+
+print(np.min(w_var_rea), np.max(w_var_rea))
+print(np.min(w_var_rcm), np.max(w_var_rcm))
+print(np.min(w_var_gcm), np.max(w_var_gcm))
 
 # Plot models and obs database 
 fig = plt.figure(figsize=(8,6))
@@ -107,7 +115,7 @@ plt2 = ax.contour(lat, w_lev_rcm, w_var_rcm*100000, np.arange(-60, 70, 10), line
 ax.clabel(plt2, fmt='%d', fontsize=8, colors='black')
 plt.ylabel('Pressure (hPa)', fontsize=8, fontweight='bold')
 plt.xticks(xtime, ('20°S', '17°S', '14°S', '11°S', '8°S', '5°S', '2°S', '1°N', '4°N', '7°S', '10°N'), fontsize=8)
-plt.yticks(ytime, ('100', '2plot_maps_clim_regcm47_obs_exp2_vert.py00', '300', '400', '500', '600', '700', '800', '900', '1000'), fontsize=8)
+plt.yticks(ytime, ('100', '200', '300', '400', '500', '600', '700', '800', '900', '1000'), fontsize=8)
 plt.setp(ax.get_xticklabels(), visible=False)
 plt.gca().invert_yaxis()
 plt.axvline(0, linewidth=1., linestyle='--', color='black')
@@ -122,7 +130,7 @@ plt2 = ax.contour(lat, w_lev_gcm, w_var_gcm*1000, np.arange(-60, 70, 10), linewi
 ax.clabel(plt2, fmt='%d', fontsize=8, colors='black')
 plt.ylabel('Pressure (hPa)', fontsize=8, fontweight='bold')
 plt.xlabel('Latitude', fontsize=8, fontweight='bold')
-plt.xticks(xtime, ('20°S', '17°S', '14°S', '11°S', '8°S', '5°S', '2°S', '1°N', '4°N', '7°S', '10°N'), fontsize=8)
+plt.xticks(xtime, ('20°S', '17°S', '14°S', '11°S', '8°S', '5°S', '2°S', '1°N', '4°N', '7°N', '10°N'), fontsize=8)
 plt.yticks(ytime, ('100', '200', '300', '400', '500', '600', '700', '800', '900', '1000'), fontsize=8)
 plt.gca().invert_yaxis()
 plt.axvline(0, linewidth=1., linestyle='--', color='black')

@@ -221,10 +221,10 @@ ax.yaxis.set_label_position("right")
 ax.tick_params(axis='both', which='major', labelsize=8)
 ax.spines['left'].set_visible(False)
 ax.spines['top'].set_visible(False)
-plt.text(0.5, 22, 'R²=0.81 (CRU)', fontsize=6, color='green', fontweight='bold')
-plt.text(0.5, 21, 'R²=0.86 (ERA5)', fontsize=6, color='green', fontweight='bold')
-plt.text(7.5, 22, 'R²=0.96 (CRU)', fontsize=6, color='red', fontweight='bold')
-plt.text(7.5, 21, 'R²=0.97 (ERA5)', fontsize=6, color='red', fontweight='bold')
+plt.text(0.5, 30, 'R²=0.81 (CRU)', fontsize=6, color='green', fontweight='bold')
+plt.text(0.5, 29, 'R²=0.86 (ERA5)', fontsize=6, color='green', fontweight='bold')
+plt.text(7.5, 30, 'R²=0.96 (CRU)', fontsize=6, color='red', fontweight='bold')
+plt.text(7.5, 29, 'R²=0.97 (ERA5)', fontsize=6, color='red', fontweight='bold')
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'
