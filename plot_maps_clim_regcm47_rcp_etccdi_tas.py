@@ -102,9 +102,8 @@ def basemap(lat, lon):
 	lats = np.arange(-20.,15.,-0.25) 
 	
 	path = '/home/nice/Documents/github_projects/shp'
-	map.readshapefile('{0}/shp_world/world'.format(path), 'world', drawbounds=True, color='gray', linewidth=.5)
-	map.readshapefile('{0}/lim_unid_fed/lim_unid_fed'.format(path), 'lim_unid_fed', drawbounds=True, color='black', linewidth=.5)
-	
+	map.readshapefile('{0}/shp_america_sul/america_sul'.format(path), 'world', drawbounds=True, color='black', linewidth=0.8)
+
 	return map, xx, yy
 
 

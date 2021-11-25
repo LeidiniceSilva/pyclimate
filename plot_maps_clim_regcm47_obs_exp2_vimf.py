@@ -30,21 +30,22 @@ from comp_statist_indices import compute_av
 
 def import_obs(var, area, dataset, dt):
 	
-	path = '/home/nice/Documents/dataset/obs/rcm_exp2'
+	path = '/home/nice/Documents/dataset/obs/reg_exp2'
 	arq  = '{0}/{1}_{2}_{3}_obs_djf_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
 			
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[var][:] 
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	obs  = np.nanmean(var[:][:,27:36,:,:], axis=0)
+	obs_1000hPa  = np.nanmean(var[:][:,36:,:,:], axis=0)
+	obs_300hPa  = np.nanmean(var[:][:,15,:,:], axis=0)
 
-	return lat, lon, obs
+	return lat, lon, obs_1000hPa, obs_300hPa
 	
 	
 def import_rcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/rcm/rcm_exp2'
+	path = '/home/nice/Documents/dataset/rcm/reg_exp2/historical'
 	arq  = '{0}/{1}_{2}_RegCM4_HadG_{3}_djf_{4}_lonlat.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
@@ -58,7 +59,7 @@ def import_rcm(var, area, exp, dt):
 
 def import_gcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/rcm_exp2'	
+	path = '/home/nice/Documents/dataset/gcm/reg_exp2/historical'	
 	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_djf_{4}_lonlat.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
@@ -69,36 +70,18 @@ def import_gcm(var, area, exp, dt):
 
 	return lat, lon, gcm
 	
+		
+def comp_vimfc(hus_1000hPa, hus_300hPa, ua_1000hPa, ua_300hPa, va_1000hPa, va_300hPa):
+	
+	p1 = (hus_1000hPa * ua_1000hPa) 
+	p2 = (hus_1000hPa * va_1000hPa) 
+	p3 = 0.1 * p1 * 2000
+	p4 = 0.1 * p2 * 2000
 
-def comp_mfc(hus1, ua1, va1):
-	
-	p1 = ua1 + va1
-	p2 = hus1 * p1
-	p3 = -1 * p2
-	
-	return p3
-	
-		
-def comp_vimfc(hus1, ua1, va1, hus2, ua2, va2):
-	
-	p1 = hus1 * (ua1 + va1) 
-	p2 = hus2 * (ua2 + va2) 
-	p3 = p1 - p2
-	p4 = -0.1 * p3
-	
-	return p4
+	p5 = np.nanmean(p3, axis=0)
+	p6 = np.nanmean(p4, axis=0)
 
-		
-def comp_vimfc_rea(hus, ua, va):
-	
-	p1 = (hus[0,:,:] + hus[1,:,:] + hus[2,:,:] + hus[3,:,:] + hus[4,:,:] + hus[5,:,:] + hus[6,:,:] + hus[7,:,:] + hus[8,:,:]) / 9
-	p2 = (ua[0,:,:] + ua[1,:,:] + ua[2,:,:] + ua[3,:,:] + ua[4,:,:] + ua[5,:,:] + ua[6,:,:] + ua[7,:,:] + ua[8,:,:]) / 9
-	p3 = (va[0,:,:] + va[1,:,:] + va[2,:,:] + va[3,:,:] + va[4,:,:] + va[5,:,:] + va[6,:,:] + va[7,:,:] + va[8,:,:]) / 9 
-		
-	p4 = p1 * p2 + p1 * p3
-	p5 = 300 * p4
-	
-	return p5
+	return p5, p6
 		
 	
 def basemap(lat, lon):
@@ -130,72 +113,62 @@ def basemap(lat, lon):
 		
 	
 # Import models and obs database 	   
-lat, lon, hus_djf_rea = import_obs('q', 'amz_neb', 'era5', '1986-2005')	   
+lat, lon, hus_djf_rea_1000hPa, hus_djf_rea_300hPa = import_obs('q', 'amz_neb', 'era5', '1986-2005')	   
 lat, lon, hus_djf_rcm = import_rcm('hus', 'amz_neb', 'historical', '1986-2005')
 lat, lon, hus_djf_gcm = import_gcm('hus', 'amz_neb', 'historical', '1986-2005')
 
-lat, lon, ua_djf_rea = import_obs('u', 'amz_neb', 'era5', '1986-2005')	   
+lat, lon, ua_djf_rea_1000hPa, ua_djf_rea_300hPa = import_obs('u', 'amz_neb', 'era5', '1986-2005')	   
 lat, lon, ua_djf_rcm = import_rcm('ua', 'amz_neb', 'historical', '1986-2005')
 lat, lon, ua_djf_gcm = import_gcm('ua', 'amz_neb', 'historical', '1986-2005')
 
-lat, lon, va_djf_rea = import_obs('v', 'amz_neb', 'era5', '1986-2005')	   
+lat, lon, va_djf_rea_1000hPa, va_djf_rea_300hPa = import_obs('v', 'amz_neb', 'era5', '1986-2005')	   
 lat, lon, va_djf_rcm = import_rcm('va', 'amz_neb', 'historical', '1986-2005')
 lat, lon, va_djf_gcm = import_gcm('va', 'amz_neb', 'historical', '1986-2005')
 
-print(hus_djf_rea.shape)
-print(hus_djf_rcm.shape)
-print(hus_djf_gcm.shape)
-
 # Compute Vertical Integrated Moisture Flux Convergence between 1000hPa and 300hPa
-vimfc_rea = comp_vimfc_rea(hus_djf_rea, ua_djf_rea, va_djf_rea)
+vimfc_rea_ua, vimfc_rea_va = comp_vimfc(hus_djf_rea_1000hPa, hus_djf_rea_300hPa, ua_djf_rea_1000hPa, ua_djf_rea_300hPa, va_djf_rea_1000hPa, va_djf_rea_300hPa)
 
-#~ # Compute Moisture Flux Convergence at 850hPa
-#~ mfc_rea = comp_mfc(hus_djf_rea_850hPa, ua_djf_rea_850hPa, va_djf_rea_850hPa)
-#~ mfc_rcm = comp_mfc(hus_djf_rcm_850hPa, ua_djf_rcm_850hPa, va_djf_rcm_850hPa)
-#~ mfc_gcm = comp_mfc(hus_djf_gcm_850hPa, ua_djf_gcm_850hPa, va_djf_gcm_850hPa)
-
-#~ # Compute Vertical Integrated Moisture Flux Convergence between 850hPa and 200hPa
-#~ vimfc_rea = comp_vimfc(hus_djf_rea_850hPa, ua_djf_rea_850hPa, va_djf_rea_850hPa, hus_djf_rea_200hPa, ua_djf_rea_200hPa, va_djf_rea_200hPa)
-#~ vimfc_rcm = comp_vimfc(hus_djf_rcm_850hPa, ua_djf_rcm_850hPa, va_djf_rcm_850hPa, hus_djf_rcm_200hPa, ua_djf_rcm_200hPa, va_djf_rcm_200hPa)
-#~ vimfc_gcm = comp_vimfc(hus_djf_gcm_850hPa, ua_djf_gcm_850hPa, va_djf_gcm_850hPa, hus_djf_gcm_200hPa, ua_djf_gcm_200hPa, va_djf_gcm_200hPa)
+print(vimfc_rea_ua.shape, vimfc_rea_va.shape)
+print(np.min(vimfc_rea_ua), np.max(vimfc_rea_ua))
+print(np.min(vimfc_rea_va), np.max(vimfc_rea_va))
 
 # Plot models and obs database 
 fig = plt.figure()
-levs = [-20, -16, -12, -8, -4, 4, 8, 12, 16, 20]
+#~ levs = [-20, -16, -12, -8, -4, 4, 8, 12, 16, 20]
 
 ax1 = fig.add_subplot(3, 1, 1)
 map, xx, yy = basemap(lat, lon)
-map.contourf(xx, yy, vimfc_rea, levels=levs, latlon=True, cmap=cm.PuOr, extend='both')
-#~ map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_rea_850hPa[::10,::10], va_djf_rea_850hPa[::10,::10])
+#~ map.contourf(xx, yy, vimfc_rea, levels=levs, latlon=True, cmap=cm.PuOr, extend='both')
+map.quiver(xx[::100,::100], yy[::100,::100], vimfc_rea_ua[::100,::100], vimfc_rea_va[::100,::100])
 map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black') 
 plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
-cbar = map.colorbar()
-cbar.ax.tick_params(labelsize=6)
+#~ cbar = map.colorbar()
+#~ cbar.ax.tick_params(labelsize=6)
 
 ax2 = fig.add_subplot(3, 1, 2)
 map, xx, yy = basemap(lat, lon)
-map.contourf(xx, yy, vimfc_rea, levels=levs, latlon=True, cmap=cm.PuOr, extend='both')
-#~ map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_rcm_850hPa[::10,::10], va_djf_rcm_850hPa[::10,::10]) 
+#~ map.contourf(xx, yy, vimfc_rea, levels=levs, latlon=True, cmap=cm.PuOr, extend='both')
+map.quiver(xx[::10,::10], yy[::10,::10], vimfc_rea_ua[::10,::10], vimfc_rea_va[::10,::10])
 map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
-cbar = map.colorbar()
-cbar.ax.tick_params(labelsize=6)
+#~ cbar = map.colorbar()
+#~ cbar.ax.tick_params(labelsize=6)
 
 ax3 = fig.add_subplot(3, 1, 3)
 map, xx, yy = basemap(lat, lon)
-map.contourf(xx, yy, vimfc_rea, levels=levs, latlon=True, cmap=cm.PuOr, extend='both')
-#~ map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_gcm_850hPa[::10,::10], va_djf_gcm_850hPa[::10,::10]) 
+#~ map.contourf(xx, yy, vimfc_rea, levels=levs, latlon=True, cmap=cm.PuOr, extend='both')
+map.quiver(xx[::10,::10], yy[::10,::10], vimfc_rea_ua[::10,::10], vimfc_rea_va[::10,::10])
 map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
 plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
-cbar = map.colorbar()
-cbar.ax.tick_params(labelsize=6)
+#~ cbar = map.colorbar()
+#~ cbar.ax.tick_params(labelsize=6)
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'

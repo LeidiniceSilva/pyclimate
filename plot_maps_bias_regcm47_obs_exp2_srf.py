@@ -105,35 +105,6 @@ def basemap(lat, lon):
 	lats = np.arange(-20.,15.,-0.25) 
 	
 	path = '/home/nice/Documents/github_projects/shp'
-	map.readshapefile('{0}/shp_world/world'.format(path), 'world', drawbounds=True, color='gray', linewidth=.5)
-	map.readshapefile('{0}/lim_unid_fed/lim_unid_fed'.format(path), 'lim_unid_fed', drawbounds=True, color='black', linewidth=.5)
-	
-	return map, xx, yy
-	
-
-def basemap(lat, lon):
-	
-	aux_lon1 = []
-	aux_lon2 = []
-	for l in lon:
-		if l <= 180:
-			aux_lon1.append(l)
-		else:
-			aux_lon2.append(l-360)
-		
-	lon = np.array(aux_lon1[::-1] + aux_lon2[::-1])
-	new_lat = lat
-	new_lon = lon[::-1]
-	
-	map = Basemap(projection='cyl', llcrnrlon=-85., llcrnrlat=-20., urcrnrlon=-15.,urcrnrlat=10., resolution='c')
-	lons, lats = np.meshgrid(new_lon, new_lat)
-	xx, yy = map(lons,lats)
-	xin = np.linspace(map.xmin,map.xmax,20) 
-	yin = np.linspace(map.ymin,map.ymax,20) 
-	lons = np.arange(-85.,-5.,0.25) 
-	lats = np.arange(-20.,15.,-0.25) 
-	
-	path = '/home/nice/Documents/github_projects/shp'
 	map.readshapefile('{0}/shp_america_sul/america_sul'.format(path), 'world', drawbounds=True, color='black', linewidth=1.)
 
 	return map, xx, yy
