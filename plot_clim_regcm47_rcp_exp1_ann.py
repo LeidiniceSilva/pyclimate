@@ -25,7 +25,7 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 def import_rcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/rcm/rcm_exp1/{0}'.format(exp)	
+	path = '/home/nice/Documents/dataset/rcm/reg_exp1/{0}'.format(exp)	
 	arq  = '{0}/{1}_{2}_reg_had_{3}_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
 		
 	data = netCDF4.Dataset(arq)
@@ -52,7 +52,7 @@ def import_rcm(var, area, exp, dt):
 
 def import_gcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/rcm_exp1/{0}'.format(exp)
+	path = '/home/nice/Documents/dataset/gcm/reg_exp1/{0}'.format(exp)
 	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
 		
 	data = netCDF4.Dataset(arq)
@@ -255,14 +255,15 @@ annual_cycle2 = ax2.plot(time, diff_tas_reg_samz_rcp26_hist, time, diff_tas_reg_
 time, diff_tas_had_samz_rcp26_hist, time, diff_tas_had_samz_rcp85_hist)
 plt.title(u'D)', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-ax2.set_ylim(0, 9)
-plt.yticks(np.arange(0, 10, 1), fontsize=8)
+ax2.set_ylim(-8, 8)
+plt.yticks(np.arange(-8, 10, 2), fontsize=8)
 plt.setp(ax2.get_xticklabels(), visible=False)
 l1, l2, l3, l4 = annual_cycle2
 plt.setp(l1, linewidth=1.5, color='blue', linestyle='-')
 plt.setp(l2, linewidth=1.5, color='red', linestyle='-')
 plt.setp(l3, linewidth=1.5, color='blue', linestyle='--')
 plt.setp(l4, linewidth=1.5, color='red', linestyle='--')
+plt.axhline(0, linewidth=1., linestyle='-', color='black')
 plt.axvline(3.5, linewidth=1., linestyle='-', color='black')
 plt.axvline(8.5, linewidth=1., linestyle='-', color='black')
 plt.fill_between(time, diff_tas_reg_samz_rcp26_hist_p5, diff_tas_reg_samz_rcp26_hist_p95, facecolor='blue', alpha=0.3, interpolate=True)	
@@ -300,14 +301,15 @@ time, diff_tas_had_eneb_rcp26_hist, time, diff_tas_had_eneb_rcp85_hist)
 plt.title(u'E)', loc='left', fontweight='bold', fontsize=8)
 plt.ylabel(u'Temperature change (°C)', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-ax4.set_ylim(0, 9)
-plt.yticks(np.arange(0, 10, 1), fontsize=8)
+ax4.set_ylim(-8, 8)
+plt.yticks(np.arange(-8, 10, 2), fontsize=8)
 plt.setp(ax4.get_xticklabels(), visible=False)
 l1, l2, l3, l4 = annual_cycle4
 plt.setp(l1, linewidth=1.5, color='blue', linestyle='-')
 plt.setp(l2, linewidth=1.5, color='red', linestyle='-')
 plt.setp(l3, linewidth=1.5, color='blue', linestyle='--')
 plt.setp(l4, linewidth=1.5, color='red', linestyle='--')
+plt.axhline(0, linewidth=1., linestyle='-', color='black')
 plt.axvline(3.5, linewidth=1., linestyle='-', color='black')
 plt.axvline(8.5, linewidth=1., linestyle='-', color='black')	
 plt.fill_between(time, diff_tas_reg_eneb_rcp26_hist_p5, diff_tas_reg_eneb_rcp26_hist_p95, facecolor='blue', alpha=0.3, interpolate=True)	
@@ -345,13 +347,14 @@ time, diff_tas_had_matopiba_rcp26_hist, time, diff_tas_had_matopiba_rcp85_hist)
 plt.title(u'F)', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.xlabel('Months', fontsize=8)
-ax6.set_ylim(0, 9)
-plt.yticks(np.arange(0, 10, 1), fontsize=8)
+ax6.set_ylim(-8, 8)
+plt.yticks(np.arange(-8, 10, 2), fontsize=8)
 l1, l2, l3, l4 = annual_cycle6
 plt.setp(l1, linewidth=1.5, color='blue', linestyle='-')
 plt.setp(l2, linewidth=1.5, color='red', linestyle='-')
 plt.setp(l3, linewidth=1.5, color='blue', linestyle='--')
 plt.setp(l4, linewidth=1.5, color='red', linestyle='--')
+plt.axhline(0, linewidth=1., linestyle='-', color='black')
 plt.axvline(3.5, linewidth=1., linestyle='-', color='black')
 plt.axvline(8.5, linewidth=1., linestyle='-', color='black')
 plt.fill_between(time, diff_tas_reg_matopiba_rcp26_hist_p5, diff_tas_reg_matopiba_rcp26_hist_p95, facecolor='blue', alpha=0.3, interpolate=True)	
