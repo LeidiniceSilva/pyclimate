@@ -148,7 +148,7 @@ def ttest(mean, std, sample):
 	p3 = p1 / p2
 
 	# Calculate p value
-	p_value = 1 - stats.t.cdf(p3, df=239)
+	p_value = 1 - stats.t.cdf(p3, df=240)
 	
 	return p_value
 	
