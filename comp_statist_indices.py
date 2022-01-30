@@ -288,3 +288,4 @@ def compute_fcst_correct(model, obs, fcst):
         fcst_correc.append(ss.gamma.ppf(prob, alpha_obs, scale=beta_obs))
         
     return fcst_correct
+	

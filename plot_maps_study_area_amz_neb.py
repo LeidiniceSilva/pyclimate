@@ -1,4 +1,9 @@
-#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+__author__      = "Leidinice Silva"
+__email__       = "leidinicesilva@gmail.com"
+__date__        = "09/29/2021"
+__description__ = "This script plot study area AMZ_NEB"
 
 import os
 import sys

@@ -13,12 +13,12 @@ import matplotlib as mpl
 import matplotlib.cm as cm
 import scipy.stats as stats
 import matplotlib.pyplot as plt
-from matplotlib import gridspec
 
 # mpl.use('agg')
 
 from pylab import *
 from netCDF4 import Dataset
+from matplotlib import gridspec
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from matplotlib.font_manager import FontProperties
 
