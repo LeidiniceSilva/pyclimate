@@ -71,7 +71,7 @@ def import_gcm(var, area, exp, dt):
 		gcm_p5  = norm.ppf(0.05, loc=np.nanmean(value[mon::12], axis=0), scale=np.nanstd(value[mon::12], axis=0))
 		ci_p5.append(gcm_p5)
 		
-		gcm_p95  = norm.ppf(0.2, loc=np.nanmean(value[mon::12], axis=0), scale=np.nanstd(value[mon::12], axis=0))
+		gcm_p95  = norm.ppf(0.95, loc=np.nanmean(value[mon::12], axis=0), scale=np.nanstd(value[mon::12], axis=0))
 		ci_p95.append(gcm_p95)
 	
 	return gcm, ci_p5, ci_p95
