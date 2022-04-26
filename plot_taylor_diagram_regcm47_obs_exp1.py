@@ -78,13 +78,13 @@ class TaylorDiagram(object):
         ax.axis["top"].toggle(ticklabels=True, label=True)
         ax.axis["top"].major_ticklabels.set_axis_direction("top")
         ax.axis["top"].label.set_axis_direction("top")
-        ax.axis["top"].label.set_text(u'Correlation')
+        ax.axis["top"].label.set_text(u'                    Correlação')
 
         ax.axis["left"].set_axis_direction("bottom")  # "X axis"
         ax.axis["left"].toggle(ticklabels=True, label=True)
         ax.axis["left"].major_ticklabels.set_rotation(-90)
         ax.axis["left"].label.set_pad(10) 
-        ax.axis["left"].label.set_text(u'  Standard Deviation')
+        ax.axis["left"].label.set_text(u'  Desvio padrão')
         		
         ax.axis["right"].set_axis_direction("top")    # "Y-axis"
         ax.axis["right"].toggle(ticklabels=True, label=True)
@@ -92,7 +92,7 @@ class TaylorDiagram(object):
         ax.axis["right"].major_ticklabels.set_pad(12)
         ax.axis["bottom"].set_visible(False)      # Unused
 
-        ax.grid(color='k', axis='x', linestyle='--', linewidth=1)
+        #~ ax.grid(color='k', axis='x', linestyle='--', linewidth=1)
         
         #~ if self.smin:
             #~ ax.axis["bottom"].toggle(ticklabels=True, label=True)
@@ -144,7 +144,7 @@ class TaylorDiagram(object):
 
 def import_obs(var, area, dataset, dt):
 	
-	path = '/home/nice/Documents/dataset/obs/rcm_exp1'
+	path = '/home/nice/Documents/dataset/obs/reg_exp1'
 	arq  = '{0}/{1}_{2}_{3}_obs_mon_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
 			
 	data = netCDF4.Dataset(arq)
@@ -165,7 +165,7 @@ def import_obs(var, area, dataset, dt):
 
 def import_rcm(var, area, mod, dt):
 	
-	path = '/home/nice/Documents/dataset/rcm/rcm_exp1/hist'
+	path = '/home/nice/Documents/dataset/rcm/reg_exp1/hist'
 	arq  = '{0}/{1}_{2}_{3}_hist_mon_{4}_lonlat_seamask.nc'.format(path, var, area, mod, dt)	
 
 	data = netCDF4.Dataset(arq)
@@ -186,7 +186,7 @@ def import_rcm(var, area, mod, dt):
 
 def import_gcm(var, area, mod, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/rcm_exp1/hist'
+	path = '/home/nice/Documents/dataset/gcm/reg_exp1/hist'	
 	arq  = '{0}/{1}_{2}_Amon_{3}_hist_r1i1p1_mon_{4}_lonlat_seamask.nc'.format(path, var, area, mod, dt)	
 		
 	data = netCDF4.Dataset(arq)
@@ -242,12 +242,12 @@ if __name__=='__main__':
 				 MATOPIBA1=1,
 				 MATOPIBA2=1)       
 
-	text1 = dict(SAMZ1='A)',
-				 SAMZ2='D)',
-				 ENEB1='B)',
-				 ENEB2='E)',
-				 MATOPIBA1='C)',
-				 MATOPIBA2='F)')
+	text1 = dict(SAMZ1='A) SAMZ',
+				 SAMZ2='D) SAMZ',
+				 ENEB1='B) ENEB',
+				 ENEB2='E) ENEB',
+				 MATOPIBA1='C) MATOPIBA',
+				 MATOPIBA2='F) MATOPIBA')
 				 
 	# Compute stddev and correlation coefficient of models
 	samples = dict(SAMZ1=[[pre_djf_cru_samz.std(ddof=1), np.corrcoef(pre_djf_cru_samz, pre_djf_rcm_samz)[0,1], 'DJF', 'o', 'g'],
@@ -311,6 +311,11 @@ if __name__=='__main__':
                           [tas_son_cru_matopiba.std(ddof=1), np.corrcoef(tas_son_cru_matopiba, tas_son_gcm_matopiba)[0,1], 'SON', 's', 'c'],
                           [tas_annual_cru_matopiba.std(ddof=1), np.corrcoef(tas_annual_cru_matopiba, tas_annual_gcm_matopiba)[0,1], 'ANN', 's', 'r']])
 
+	x95 = [0.01, 8.5] # For Tair, this is for 95th level (r = 0.195)
+	y95 = [0.0, 3]
+	x99 = [0.01, 0.9] # For Tair, this is for 99th level (r = 0.254)
+	y99 = [0.0, 3]
+
 	rects = dict(SAMZ1=321,
 				 SAMZ2=322,
 				 ENEB1=323,
@@ -323,18 +328,24 @@ if __name__=='__main__':
 	
 	for var in ['SAMZ1', 'SAMZ2', 'ENEB1', 'ENEB2', 'MATOPIBA1', 'MATOPIBA2']:
 
-		dia = TaylorDiagram(stdrefs[var], fig=fig, rect=rects[var], label='Reference', srange=(0., 3.), extend=True)
+		dia = TaylorDiagram(stdrefs[var], fig=fig, rect=rects[var], label=u'Referência', srange=(0., 3.), extend=True)
 		dia.samplePoints[0].set_color('r')
-		
+		dia.ax.plot(x95,y95,color='black')
+		dia.ax.plot(x99,y99,color='black')
+				
 		# Add samples to Taylor diagram
 		for i, (stddev,corrcoef,name,mark,cor) in enumerate(samples[var]):
 			dia.add_sample(stddev, corrcoef,
 						   label=name, marker=mark, mfc=cor, color='black', ms=8, ls='')			   
-			plt.text(-3., 2.8, text1[var], fontweight='bold')
+			plt.text(-3.3, 3.7, text1[var], fontweight='bold')
+			
 
 		# Add RMS contours, and label them
 		contours = dia.add_contours(levels=5, colors='0.5')
 		plt.clabel(contours, inline=1, fontsize=8, fmt='%.1f')
+
+	plt.text(-9.0, -1.8, u'Precipitação (mm d⁻¹)')
+	plt.text(-1.5, -1.8, u'Temperatura (°C)')
 
 	# Add a figure legend
 	fig.legend(dia.samplePoints, 

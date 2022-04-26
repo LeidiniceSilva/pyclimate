@@ -41,9 +41,9 @@ def import_rcm(var, area, model, exp, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	annual_rcm = np.nanmean(np.nanmean(var[:][0:20,:,:], axis=1), axis=1)
-	
-	return annual_rcm
+	ann_rcm = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
+
+	return ann_rcm
 
 
 def import_gcm(var, area, model, exp, freq, dt):
@@ -66,9 +66,9 @@ def import_gcm(var, area, model, exp, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	annual_gcm = np.nanmean(np.nanmean(var[:][20:,:,:], axis=1), axis=1)
+	ann_gcm = np.nanmean(np.nanmean(var[:][20:,:,:], axis=1), axis=1)
 
-	return annual_gcm
+	return ann_gcm
 	
 
 # Import extreme indices 
@@ -234,7 +234,7 @@ gcm_rcp26_samz = {'PRCPTOT': gcm_prcptot_rcp26_samz,
 'R99p': gcm_r99p_rcp26_samz,
 'Rx1day': gcm_rx1day_rcp26_samz,
 'Rx5day': gcm_rx5day_rcp26_samz,
-'SDII': gcm_sdii_rcp26_samz,
+'SDII': gcm_sdii_rcp26_samz[20:40],
 'CDD': gcm_cdd_rcp26_samz,
 'CWD': gcm_cwd_rcp26_samz, 
 'R10mm': gcm_r10mm_rcp26_samz,
@@ -278,7 +278,7 @@ gcm_rcp26_eneb = {'PRCPTOT': gcm_prcptot_rcp26_eneb,
 'R99p': gcm_r99p_rcp26_eneb,
 'Rx1day': gcm_rx1day_rcp26_eneb,
 'Rx5day': gcm_rx5day_rcp26_eneb,
-'SDII': gcm_sdii_rcp26_eneb,
+'SDII': gcm_sdii_rcp26_eneb[20:40],
 'CDD': gcm_cdd_rcp26_eneb,
 'CWD': gcm_cwd_rcp26_eneb, 
 'R10mm': gcm_r10mm_rcp26_eneb,
@@ -322,7 +322,7 @@ gcm_rcp26_matopiba = {'PRCPTOT': gcm_prcptot_rcp26_matopiba,
 'R99p': gcm_r99p_rcp26_matopiba,
 'Rx1day': gcm_rx1day_rcp26_matopiba,
 'Rx5day': gcm_rx5day_rcp26_matopiba,
-'SDII': gcm_sdii_rcp26_matopiba,
+'SDII': gcm_sdii_rcp26_matopiba[20:40],
 'CDD': gcm_cdd_rcp26_matopiba,
 'CWD': gcm_cwd_rcp26_matopiba, 
 'R10mm': gcm_r10mm_rcp26_matopiba,
@@ -376,90 +376,111 @@ ax1 = fig.add_subplot(4, 3, 1)
 mask = np.zeros_like(rcm_rcp26_samz_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(rcm_rcp26_samz_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax1)
-heatmap.set_title('A)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('A) SAMZ', fontdict={'fontsize':9}, loc='left', fontweight='bold')
+heatmap.set_ylabel('RegCM4.7 RCP2.6', fontdict={'fontsize':9}, fontweight='bold')
 plt.setp(ax1.get_xticklabels(), visible=False)
+ax1.tick_params(bottom=False)
 
 ax2 = fig.add_subplot(4, 3, 2)
 mask = np.zeros_like(rcm_rcp26_eneb_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(rcm_rcp26_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax2)
-heatmap.set_title('B)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('B) ENEB', fontdict={'fontsize':9}, loc='left', fontweight='bold')
 plt.setp(ax2.get_xticklabels(), visible=False)
 plt.setp(ax2.get_yticklabels(), visible=False)
+ax2.tick_params(left=False)
+ax2.tick_params(bottom=False)
 
 ax3 = fig.add_subplot(4, 3, 3)
 mask = np.zeros_like(rcm_rcp26_matopiba_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(rcm_rcp26_matopiba_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax3)
-heatmap.set_title('C)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('C) MATOPIBA', fontdict={'fontsize':9}, loc='left', fontweight='bold')
 plt.setp(ax3.get_xticklabels(), visible=False)
 plt.setp(ax3.get_yticklabels(), visible=False)
+ax3.tick_params(left=False)
+ax3.tick_params(bottom=False)
 
 ax4 = fig.add_subplot(4, 3, 4)
 mask = np.zeros_like(rcm_rcp85_samz_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(rcm_rcp85_samz_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax4)
-heatmap.set_title('D)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('D) SAMZ', fontdict={'fontsize':9}, loc='left', fontweight='bold')
+heatmap.set_ylabel('RegCM4.7 RCP8.5', fontdict={'fontsize':9}, fontweight='bold')
 plt.setp(ax4.get_xticklabels(), visible=False)
+ax4.tick_params(bottom=False)
 
 ax5 = fig.add_subplot(4, 3, 5)
 mask = np.zeros_like(rcm_rcp85_eneb_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(rcm_rcp85_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax5)
-heatmap.set_title('E)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('E) ENEB', fontdict={'fontsize':9}, loc='left', fontweight='bold')
 plt.setp(ax5.get_xticklabels(), visible=False)
 plt.setp(ax5.get_yticklabels(), visible=False)
+ax5.tick_params(left=False)
+ax5.tick_params(bottom=False)
 
 ax6 = fig.add_subplot(4, 3, 6)
 mask = np.zeros_like(rcm_rcp85_matopiba_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(rcm_rcp85_matopiba_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax6)
-heatmap.set_title('F)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('F) MATOPIBA', fontdict={'fontsize':9}, loc='left', fontweight='bold')
 plt.setp(ax6.get_xticklabels(), visible=False)
 plt.setp(ax6.get_yticklabels(), visible=False)
+ax6.tick_params(left=False)
+ax6.tick_params(bottom=False)
 
 ax7 = fig.add_subplot(4, 3, 7)
 mask = np.zeros_like(gcm_rcp26_samz_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(gcm_rcp26_samz_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax7)
-heatmap.set_title('G)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('G) SAMZ', fontdict={'fontsize':9}, loc='left', fontweight='bold')
+heatmap.set_ylabel('HadGEM2-ES RCP2.6', fontdict={'fontsize':9}, fontweight='bold')
 plt.setp(ax7.get_xticklabels(), visible=False)
+ax7.tick_params(bottom=False)
 
 ax8 = fig.add_subplot(4, 3, 8)
 mask = np.zeros_like(gcm_rcp26_eneb_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(gcm_rcp26_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax8)
-heatmap.set_title('H)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('H) ENEB', fontdict={'fontsize':9}, loc='left', fontweight='bold')
 plt.setp(ax8.get_xticklabels(), visible=False)
 plt.setp(ax8.get_yticklabels(), visible=False)
+ax8.tick_params(left=False)
+ax8.tick_params(bottom=False)
 
 ax9 = fig.add_subplot(4, 3, 9)
 mask = np.zeros_like(gcm_rcp26_matopiba_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(gcm_rcp26_matopiba_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax9)
-heatmap.set_title('I)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('I) MATOPIBA', fontdict={'fontsize':9}, loc='left', fontweight='bold')
 plt.setp(ax9.get_xticklabels(), visible=False)
 plt.setp(ax9.get_yticklabels(), visible=False)
+ax9.tick_params(left=False)
+ax9.tick_params(bottom=False)
 
 ax10 = fig.add_subplot(4, 3, 10)
 mask = np.zeros_like(gcm_rcp85_samz_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(gcm_rcp85_samz_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax10)
-heatmap.set_title('J)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('J) SAMZ', fontdict={'fontsize':9}, loc='left', fontweight='bold')
+heatmap.set_ylabel('HadGEM2-ES RCP8.5', fontdict={'fontsize':9}, fontweight='bold')
 
 ax11 = fig.add_subplot(4, 3, 11)
 mask = np.zeros_like(gcm_rcp85_eneb_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(gcm_rcp85_eneb_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax11)
-heatmap.set_title('K)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('K) ENEB', fontdict={'fontsize':9}, loc='left', fontweight='bold')
 plt.setp(ax11.get_yticklabels(), visible=False)
+ax11.tick_params(left=False)
 
 ax12 = fig.add_subplot(4, 3, 12)
 mask = np.zeros_like(gcm_rcp85_matopiba_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(gcm_rcp85_matopiba_corr, cmap='BrBG', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5}, linewidths=.6, ax=ax12)
-heatmap.set_title('L)', fontdict={'fontsize':8}, loc='left', fontweight='bold')
+heatmap.set_title('L) MATOPIBA', fontdict={'fontsize':9}, loc='left', fontweight='bold')
 plt.setp(ax12.get_yticklabels(), visible=False)
+ax12.tick_params(left=False)
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'

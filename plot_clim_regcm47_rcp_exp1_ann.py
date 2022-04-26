@@ -71,7 +71,7 @@ def import_gcm(var, area, exp, dt):
 		gcm_p5  = norm.ppf(0.05, loc=np.nanmean(value[mon::12], axis=0), scale=np.nanstd(value[mon::12], axis=0))
 		ci_p5.append(gcm_p5)
 		
-		gcm_p95  = norm.ppf(0.95, loc=np.nanmean(value[mon::12], axis=0), scale=np.nanstd(value[mon::12], axis=0))
+		gcm_p95  = norm.ppf(0.2, loc=np.nanmean(value[mon::12], axis=0), scale=np.nanstd(value[mon::12], axis=0))
 		ci_p95.append(gcm_p95)
 	
 	return gcm, ci_p5, ci_p95
@@ -230,7 +230,7 @@ time = np.arange(0.5, 12 + 0.5)
 ax1 = fig.add_subplot(3, 2, 1)
 annual_cycle1 = ax1.plot(time, diff_pre_reg_samz_rcp26_hist, time, diff_pre_reg_samz_rcp85_hist, 
 time, diff_pre_had_samz_rcp26_hist, time, diff_pre_had_samz_rcp85_hist)
-plt.title(u'A)', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'A) SAMZ', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 ax1.set_ylim(-80, 80)
 plt.yticks(np.arange(-80, 100, 20), fontsize=8)
@@ -249,11 +249,12 @@ plt.fill_between(time, diff_pre_had_samz_rcp26_hist_p5, diff_pre_had_samz_rcp26_
 plt.fill_between(time, diff_pre_reg_samz_rcp85_hist_p5, diff_pre_reg_samz_rcp85_hist_p95, facecolor='red', alpha=0.3, interpolate=True)	
 plt.fill_between(time, diff_pre_had_samz_rcp85_hist_p5, diff_pre_had_samz_rcp85_hist_p95, facecolor='red', alpha=0.3, interpolate=True)	
 plt.grid(True, which='major', linestyle='--')
+plt.tick_params(bottom = False)
 
 ax2 = fig.add_subplot(3, 2, 2)
 annual_cycle2 = ax2.plot(time, diff_tas_reg_samz_rcp26_hist, time, diff_tas_reg_samz_rcp85_hist, 
 time, diff_tas_had_samz_rcp26_hist, time, diff_tas_had_samz_rcp85_hist)
-plt.title(u'D)', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'D) SAMZ', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 ax2.set_ylim(-8, 8)
 plt.yticks(np.arange(-8, 10, 2), fontsize=8)
@@ -271,12 +272,13 @@ plt.fill_between(time, diff_tas_had_samz_rcp26_hist_p5, diff_tas_had_samz_rcp26_
 plt.fill_between(time, diff_tas_reg_samz_rcp85_hist_p5, diff_tas_reg_samz_rcp85_hist_p95, facecolor='red', alpha=0.3, interpolate=True)	
 plt.fill_between(time, diff_tas_had_samz_rcp85_hist_p5, diff_tas_had_samz_rcp85_hist_p95, facecolor='red', alpha=0.3, interpolate=True)	
 plt.grid(True, which='major', linestyle='--')
+plt.tick_params(bottom = False)
 
 ax3 = fig.add_subplot(3, 2, 3)
 annual_cycle3 = ax3.plot(time, diff_pre_reg_eneb_rcp26_hist, time, diff_pre_reg_eneb_rcp85_hist, 
 time, diff_pre_had_eneb_rcp26_hist, time, diff_pre_had_eneb_rcp85_hist)
-plt.title(u'B)', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Precipitation change (%)', fontsize=8)
+plt.title(u'B) ENEB', loc='left', fontweight='bold', fontsize=8)
+plt.ylabel(u'Mudança de precipitação (%)', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 ax3.set_ylim(-80, 80)
 plt.yticks(np.arange(-80, 100, 20), fontsize=8)
@@ -294,12 +296,13 @@ plt.fill_between(time, diff_pre_had_eneb_rcp26_hist_p5, diff_pre_had_eneb_rcp26_
 plt.fill_between(time, diff_pre_reg_eneb_rcp85_hist_p5, diff_pre_reg_eneb_rcp85_hist_p95, facecolor='red', alpha=0.3, interpolate=True)	
 plt.fill_between(time, diff_pre_had_eneb_rcp85_hist_p5, diff_pre_had_eneb_rcp85_hist_p95, facecolor='red', alpha=0.3, interpolate=True)	
 plt.grid(True, which='major', linestyle='--')
+plt.tick_params(bottom = False)
 
 ax4 = fig.add_subplot(3, 2, 4)
 annual_cycle4 = ax4.plot(time, diff_tas_reg_eneb_rcp26_hist, time, diff_tas_reg_eneb_rcp85_hist, 
 time, diff_tas_had_eneb_rcp26_hist, time, diff_tas_had_eneb_rcp85_hist)
-plt.title(u'E)', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Temperature change (°C)', fontsize=8)
+plt.title(u'E) ENEB', loc='left', fontweight='bold', fontsize=8)
+plt.ylabel(u'Mudança de temperatura (°C)', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 ax4.set_ylim(-8, 8)
 plt.yticks(np.arange(-8, 10, 2), fontsize=8)
@@ -317,13 +320,14 @@ plt.fill_between(time, diff_tas_had_eneb_rcp26_hist_p5, diff_tas_had_eneb_rcp26_
 plt.fill_between(time, diff_tas_reg_eneb_rcp85_hist_p5, diff_tas_reg_eneb_rcp85_hist_p95, facecolor='red', alpha=0.3, interpolate=True)	
 plt.fill_between(time, diff_tas_had_eneb_rcp85_hist_p5, diff_tas_had_eneb_rcp85_hist_p95, facecolor='red', alpha=0.3, interpolate=True)	
 plt.grid(True, which='major', linestyle='--')
+plt.tick_params(bottom = False)
 
 ax5 = fig.add_subplot(3, 2, 5)
 annual_cycle5 = ax5.plot(time, diff_pre_reg_matopiba_rcp26_hist, time, diff_pre_reg_matopiba_rcp85_hist, 
 time, diff_pre_had_matopiba_rcp26_hist, time, diff_pre_had_matopiba_rcp85_hist)
-plt.title(u'C)', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'C) MATOPIBA', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.xlabel('Months', fontsize=8)
+plt.xlabel('Meses', fontsize=8)
 ax5.set_ylim(-80, 80)
 plt.yticks(np.arange(-80, 100, 20), fontsize=8)
 plt.setp(ax2.get_xticklabels(), visible=False)
@@ -344,9 +348,9 @@ plt.grid(True, which='major', linestyle='--')
 ax6 = fig.add_subplot(3, 2, 6)
 annual_cycle6 = ax6.plot(time, diff_tas_reg_matopiba_rcp26_hist, time, diff_tas_reg_matopiba_rcp85_hist, 
 time, diff_tas_had_matopiba_rcp26_hist, time, diff_tas_had_matopiba_rcp85_hist)
-plt.title(u'F)', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'F) MATOPIBA', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.xlabel('Months', fontsize=8)
+plt.xlabel('Meses', fontsize=8)
 ax6.set_ylim(-8, 8)
 plt.yticks(np.arange(-8, 10, 2), fontsize=8)
 l1, l2, l3, l4 = annual_cycle6

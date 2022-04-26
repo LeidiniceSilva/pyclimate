@@ -227,11 +227,11 @@ p_value_tas_ann_gcm_cru = ttest(tas_ann_gcm, tas_ann_cru, tas_std_ann_gcm, tas_s
 
 # Plot models and obs database 
 fig = plt.figure(figsize=(7,7))
-levs1 = [-6, -3, -1, 1, 3, 6]
-levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
+levs1 = [-6, -4, -2, 2, 4, 6]
+levs2 = [-1, -0.5, -0.1, 0.1, 0.5, 1]
 	
 #~ ax = fig.add_subplot(5, 3, 1)
-#~ plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'A) MBE RegCM4.7 DJF', loc='left', fontsize=8, fontweight='bold')
 #~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, pre_djf_rcm_bias, levels=levs1, latlon=True, cmap=cm.BrBG)
@@ -241,7 +241,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.contourf(xx, yy, p_value_pre_djf_rcm_cru, colors='none', hatches=['....'])
 
 #~ ax = fig.add_subplot(5, 3, 2)
-#~ plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'B) MBE HadGEM2-ES DJF', loc='left', fontsize=8, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, pre_djf_gcm_bias, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
 #~ cbar = map.colorbar()
@@ -252,7 +252,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.contourf(xx, yy, p_value_pre_djf_gcm_cru, colors='none', hatches=['....'])
 
 #~ ax = fig.add_subplot(5, 3, 3)
-#~ plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'C) AV DJF', loc='left', fontsize=8, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, av_pre_djf, levels=levs2, latlon=True, cmap=cm.PiYG, extend='both') 
 #~ cbar = map.colorbar()
@@ -261,7 +261,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 #~ ax = fig.add_subplot(5, 3, 4)
-#~ plt.title(u'D)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'D) MBE RegCM4.7 MAM', loc='left', fontsize=8, fontweight='bold')
 #~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, pre_mam_rcm_bias, levels=levs1, latlon=True, cmap=cm.BrBG)
@@ -271,7 +271,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.contourf(xx, yy, p_value_pre_mam_rcm_cru, colors='none', hatches=['....'])
 
 #~ ax = fig.add_subplot(5, 3, 5)
-#~ plt.title(u'E)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'E) MBE HadGEM2-ES MAM', loc='left', fontsize=8, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, pre_mam_gcm_bias, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
 #~ cbar = map.colorbar()
@@ -282,7 +282,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.contourf(xx, yy, p_value_pre_mam_gcm_cru, colors='none', hatches=['....'])
 
 #~ ax = fig.add_subplot(5, 3, 6)
-#~ plt.title(u'F)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'F) AV MAM', loc='left', fontsize=8, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, av_pre_mam, levels=levs2, latlon=True, cmap=cm.PiYG, extend='both') 
 #~ cbar = map.colorbar()
@@ -291,7 +291,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 #~ ax = fig.add_subplot(5, 3, 7)
-#~ plt.title(u'G)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'G) MBE RegCM4.7 JJA', loc='left', fontsize=8, fontweight='bold')
 #~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, pre_jja_rcm_bias, levels=levs1, latlon=True, cmap=cm.BrBG)
@@ -301,7 +301,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.contourf(xx, yy, p_value_pre_jja_rcm_cru, colors='none', hatches=['....'])
 
 #~ ax = fig.add_subplot(5, 3, 8)
-#~ plt.title(u'H)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'H) MBE HadGEM2-ES JJA', loc='left', fontsize=8, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, pre_jja_gcm_bias, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both') 
 #~ cbar = map.colorbar()
@@ -312,7 +312,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.contourf(xx, yy, p_value_pre_jja_gcm_cru, colors='none', hatches=['....'])
 
 #~ ax = fig.add_subplot(5, 3, 9)
-#~ plt.title(u'I)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'I) AV JJA', loc='left', fontsize=8, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, av_pre_jja, levels=levs2, latlon=True, cmap=cm.PiYG, extend='both')
 #~ cbar = map.colorbar()
@@ -321,7 +321,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 #~ ax = fig.add_subplot(5, 3, 10)
-#~ plt.title(u'J)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'J) MBE RegCM4.7 SON', loc='left', fontsize=8, fontweight='bold')
 #~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, pre_son_rcm_bias, levels=levs1, latlon=True, cmap=cm.BrBG)
@@ -331,7 +331,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.contourf(xx, yy, p_value_pre_son_rcm_cru, colors='none', hatches=['....'])
 
 #~ ax = fig.add_subplot(5, 3, 11)
-#~ plt.title(u'K)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'K) MBE HadGEM2-ES SON', loc='left', fontsize=8, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, pre_son_gcm_bias, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both')
 #~ cbar = map.colorbar()
@@ -342,7 +342,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.contourf(xx, yy, p_value_pre_son_gcm_cru, colors='none', hatches=['....'])
 
 #~ ax = fig.add_subplot(5, 3, 12)
-#~ plt.title(u'L)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'L) AV SON', loc='left', fontsize=8, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, av_pre_son, levels=levs2, latlon=True, cmap=cm.PiYG, extend='both')
 #~ cbar = map.colorbar()
@@ -351,7 +351,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 #~ ax = fig.add_subplot(5, 3, 13)
-#~ plt.title(u'M)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'M) MBE RegCM4.7 ANN', loc='left', fontsize=8, fontweight='bold')
 #~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 #~ plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
@@ -362,7 +362,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.contourf(xx, yy, p_value_pre_ann_rcm_cru, colors='none', hatches=['....'])
 
 #~ ax = fig.add_subplot(5, 3, 14)
-#~ plt.title(u'N)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'N) MBE HadGEM2-ES ANN', loc='left', fontsize=8, fontweight='bold')
 #~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, pre_ann_gcm_bias, levels=levs1, latlon=True, cmap=cm.BrBG, extend='both') 
@@ -374,7 +374,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ map.contourf(xx, yy, p_value_pre_ann_gcm_cru, colors='none', hatches=['....'])
 
 #~ ax = fig.add_subplot(5, 3, 15)
-#~ plt.title(u'O)', loc='left', fontsize=8, fontweight='bold')
+#~ plt.title(u'O) AV ANN', loc='left', fontsize=8, fontweight='bold')
 #~ plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 #~ map, xx, yy = basemap(lat, lon)
 #~ plt_maps_bias = map.contourf(xx, yy, av_pre_ann, levels=levs2, latlon=True, cmap=cm.PiYG, extend='both')
@@ -393,7 +393,7 @@ levs2 = [-1, -0.7, -0.4, 0.4, 0.7, 1]
 #~ exit()
 
 ax = fig.add_subplot(5, 3, 1)
-plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'A) MBE RegCM4.7 DJF', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, tas_djf_rcm_bias, levels=levs1, latlon=True, cmap=cm.bwr)
@@ -403,7 +403,7 @@ p_value_tas_djf_rcm_cru = ma.masked_where(p_value_tas_djf_rcm_cru >= 0.05, p_val
 map.contourf(xx, yy, p_value_tas_djf_rcm_cru[0,:,:], colors='none', hatches=['....'])
 
 ax = fig.add_subplot(5, 3, 2)
-plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'B) MBE HadGEM2-ES DJF', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, tas_djf_gcm_bias, levels=levs1, latlon=True, cmap=cm.bwr, extend='both')
 cbar = map.colorbar()
@@ -414,7 +414,7 @@ p_value_tas_djf_gcm_cru = ma.masked_where(p_value_tas_djf_gcm_cru >= 0.05, p_val
 map.contourf(xx, yy, p_value_tas_djf_gcm_cru, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(5, 3, 3)
-plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'C) AV DJF', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, av_tas_djf, levels=levs2, latlon=True, cmap=cm.PiYG, extend='both') 
 cbar = map.colorbar()
@@ -423,7 +423,7 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 ax = fig.add_subplot(5, 3, 4)
-plt.title(u'D)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'D) MBE RegCM4.7 MAM', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, tas_mam_rcm_bias, levels=levs1, latlon=True, cmap=cm.bwr)
@@ -433,7 +433,7 @@ p_value_tas_mam_rcm_cru = ma.masked_where(p_value_tas_mam_rcm_cru >= 0.05, p_val
 map.contourf(xx, yy, p_value_tas_mam_rcm_cru[0,:,:], colors='none', hatches=['....'])
 
 ax = fig.add_subplot(5, 3, 5)
-plt.title(u'E)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'E) MBE HadGEM2-ES MAM', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, tas_mam_gcm_bias, levels=levs1, latlon=True, cmap=cm.bwr, extend='both')
 cbar = map.colorbar()
@@ -444,7 +444,7 @@ p_value_tas_mam_gcm_cru = ma.masked_where(p_value_tas_mam_gcm_cru >= 0.05, p_val
 map.contourf(xx, yy, p_value_tas_mam_gcm_cru, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(5, 3, 6)
-plt.title(u'F)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'F) AV MAM', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, av_tas_mam, levels=levs2, latlon=True, cmap=cm.PiYG, extend='both') 
 cbar = map.colorbar()
@@ -453,7 +453,7 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 ax = fig.add_subplot(5, 3, 7)
-plt.title(u'G)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'G) MBE RegCM4.7 JJA', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, tas_jja_rcm_bias, levels=levs1, latlon=True, cmap=cm.bwr)
@@ -463,7 +463,7 @@ p_value_tas_jja_rcm_cru = ma.masked_where(p_value_tas_jja_rcm_cru >= 0.05, p_val
 map.contourf(xx, yy, p_value_tas_jja_rcm_cru[0,:,:], colors='none', hatches=['....'])
 
 ax = fig.add_subplot(5, 3, 8)
-plt.title(u'H)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'H) MBE HadGEM2-ES JJA', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, tas_jja_gcm_bias, levels=levs1, latlon=True, cmap=cm.bwr, extend='both') 
 cbar = map.colorbar()
@@ -474,7 +474,7 @@ p_value_tas_jja_gcm_cru = ma.masked_where(p_value_tas_jja_gcm_cru >= 0.05, p_val
 map.contourf(xx, yy, p_value_tas_jja_gcm_cru, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(5, 3, 9)
-plt.title(u'I)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'I) AV JJA', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, av_tas_jja, levels=levs2, latlon=True, cmap=cm.PiYG, extend='both')
 cbar = map.colorbar()
@@ -483,7 +483,7 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 ax = fig.add_subplot(5, 3, 10)
-plt.title(u'J)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'J) MBE RegCM4.7 SON', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, tas_son_rcm_bias, levels=levs1, latlon=True, cmap=cm.bwr)
@@ -493,7 +493,7 @@ p_value_tas_son_rcm_cru = ma.masked_where(p_value_tas_son_rcm_cru >= 0.05, p_val
 map.contourf(xx, yy, p_value_tas_son_rcm_cru[0,:,:], colors='none', hatches=['....'])
 
 ax = fig.add_subplot(5, 3, 11)
-plt.title(u'K)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'K) MBE HadGEM2-ES SON', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, tas_son_gcm_bias, levels=levs1, latlon=True, cmap=cm.bwr, extend='both')
 cbar = map.colorbar()
@@ -504,7 +504,7 @@ p_value_tas_son_gcm_cru = ma.masked_where(p_value_tas_son_gcm_cru >= 0.05, p_val
 map.contourf(xx, yy, p_value_tas_son_gcm_cru, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(5, 3, 12)
-plt.title(u'L)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'L) AV SON', loc='left', fontsize=8, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, av_tas_son, levels=levs2, latlon=True, cmap=cm.PiYG, extend='both')
 cbar = map.colorbar()
@@ -513,7 +513,7 @@ map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 
 ax = fig.add_subplot(5, 3, 13)
-plt.title(u'M)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'M) MBE RegCM4.7 ANN', loc='left', fontsize=8, fontweight='bold')
 plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 plt.ylabel(u'Latitude', fontsize=6, labelpad=15, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
@@ -524,7 +524,7 @@ p_value_tas_ann_rcm_cru = ma.masked_where(p_value_tas_ann_rcm_cru >= 0.05, p_val
 map.contourf(xx, yy, p_value_tas_ann_rcm_cru[0,:,:], colors='none', hatches=['....'])
 
 ax = fig.add_subplot(5, 3, 14)
-plt.title(u'N)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'N) MBE HadGEM2-ES ANN', loc='left', fontsize=8, fontweight='bold')
 plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, tas_ann_gcm_bias, levels=levs1, latlon=True, cmap=cm.bwr, extend='both') 
@@ -536,7 +536,7 @@ p_value_tas_ann_gcm_cru = ma.masked_where(p_value_tas_ann_gcm_cru >= 0.05, p_val
 map.contourf(xx, yy, p_value_tas_ann_gcm_cru, colors='none', hatches=['....'])
 
 ax = fig.add_subplot(5, 3, 15)
-plt.title(u'O)', loc='left', fontsize=8, fontweight='bold')
+plt.title(u'O) AV ANN', loc='left', fontsize=8, fontweight='bold')
 plt.xlabel(u'Longitude', fontsize=6, labelpad=10, fontweight='bold')
 map, xx, yy = basemap(lat, lon)
 plt_maps_bias = map.contourf(xx, yy, av_tas_ann, levels=levs2, latlon=True, cmap=cm.PiYG, extend='both')

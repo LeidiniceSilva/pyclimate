@@ -18,12 +18,12 @@ import matplotlib.colors as colors
 from pylab import *
 from netCDF4 import Dataset
 from matplotlib.font_manager import FontProperties
-from comp_statist_indices import compute_index_agreement
+from comp_statist_indices import compute_ioa
 
 
 def import_obs(var, area, dataset, dt):
 	
-	path = '/home/nice/Documents/dataset/obs/rcm'
+	path = '/home/nice/Documents/dataset/obs/reg_exp1'
 	arq  = '{0}/{1}_{2}_{3}_obs_mon_{4}_lonlat.nc'.format(path, var, area, dataset, dt)	
 			
 	data = netCDF4.Dataset(arq)
@@ -44,7 +44,7 @@ def import_obs(var, area, dataset, dt):
 	
 def import_rcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/rcm/{0}'.format(exp)	
+	path = '/home/nice/Documents/dataset/rcm/reg_exp1/hist'
 	arq  = '{0}/{1}_{2}_reg_had_{3}_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
@@ -65,7 +65,7 @@ def import_rcm(var, area, exp, dt):
 
 def import_gcm(var, area, exp, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/{0}'.format(exp)	
+	path = '/home/nice/Documents/dataset/gcm/reg_exp1/hist'	
 	arq  = '{0}/{1}_{2}_Amon_HadGEM2-ES_{3}_r1i1p1_mon_{4}_lonlat_seamask.nc'.format(path, var, area, exp, dt)	
 	
 	data = netCDF4.Dataset(arq)
@@ -114,73 +114,73 @@ annual_gcm_tas_matopiba, djf_gcm_tas_matopiba, mam_gcm_tas_matopiba, jja_gcm_tas
 # Compute Nash–Sutcliffe Efficient Coefficient
 # Precipitation
 # RegCM
-nse_djf_rcm_pre_samz = compute_index_agreement(djf_rcm_pre_samz, djf_cru_pre_samz)
-nse_mam_rcm_pre_samz = compute_index_agreement(mam_rcm_pre_samz, mam_cru_pre_samz)
-nse_jja_rcm_pre_samz = compute_index_agreement(jja_rcm_pre_samz, jja_cru_pre_samz)
-nse_son_rcm_pre_samz = compute_index_agreement(son_rcm_pre_samz, son_cru_pre_samz)
-nse_annual_rcm_pre_samz = compute_index_agreement(annual_rcm_pre_samz, annual_cru_pre_samz)
-nse_djf_rcm_pre_eneb = compute_index_agreement(djf_rcm_pre_eneb, djf_cru_pre_eneb)
-nse_mam_rcm_pre_eneb = compute_index_agreement(mam_rcm_pre_eneb, mam_cru_pre_eneb)
-nse_jja_rcm_pre_eneb = compute_index_agreement(jja_rcm_pre_eneb, jja_cru_pre_eneb)
-nse_son_rcm_pre_eneb = compute_index_agreement(son_rcm_pre_eneb, son_cru_pre_eneb)
-nse_annual_rcm_pre_eneb = compute_index_agreement(annual_rcm_pre_eneb, annual_cru_pre_eneb)
-nse_djf_rcm_pre_matopiba = compute_index_agreement(djf_rcm_pre_matopiba, djf_cru_pre_matopiba)
-nse_mam_rcm_pre_matopiba = compute_index_agreement(mam_rcm_pre_matopiba, mam_cru_pre_matopiba)
-nse_jja_rcm_pre_matopiba = compute_index_agreement(jja_rcm_pre_matopiba, jja_cru_pre_matopiba)
-nse_son_rcm_pre_matopiba = compute_index_agreement(son_rcm_pre_matopiba, son_cru_pre_matopiba)
-nse_annual_rcm_pre_matopiba = compute_index_agreement(annual_rcm_pre_matopiba, annual_cru_pre_matopiba)
+nse_djf_rcm_pre_samz = compute_ioa(djf_rcm_pre_samz, djf_cru_pre_samz)
+nse_mam_rcm_pre_samz = compute_ioa(mam_rcm_pre_samz, mam_cru_pre_samz)
+nse_jja_rcm_pre_samz = compute_ioa(jja_rcm_pre_samz, jja_cru_pre_samz)
+nse_son_rcm_pre_samz = compute_ioa(son_rcm_pre_samz, son_cru_pre_samz)
+nse_annual_rcm_pre_samz = compute_ioa(annual_rcm_pre_samz, annual_cru_pre_samz)
+nse_djf_rcm_pre_eneb = compute_ioa(djf_rcm_pre_eneb, djf_cru_pre_eneb)
+nse_mam_rcm_pre_eneb = compute_ioa(mam_rcm_pre_eneb, mam_cru_pre_eneb)
+nse_jja_rcm_pre_eneb = compute_ioa(jja_rcm_pre_eneb, jja_cru_pre_eneb)
+nse_son_rcm_pre_eneb = compute_ioa(son_rcm_pre_eneb, son_cru_pre_eneb)
+nse_annual_rcm_pre_eneb = compute_ioa(annual_rcm_pre_eneb, annual_cru_pre_eneb)
+nse_djf_rcm_pre_matopiba = compute_ioa(djf_rcm_pre_matopiba, djf_cru_pre_matopiba)
+nse_mam_rcm_pre_matopiba = compute_ioa(mam_rcm_pre_matopiba, mam_cru_pre_matopiba)
+nse_jja_rcm_pre_matopiba = compute_ioa(jja_rcm_pre_matopiba, jja_cru_pre_matopiba)
+nse_son_rcm_pre_matopiba = compute_ioa(son_rcm_pre_matopiba, son_cru_pre_matopiba)
+nse_annual_rcm_pre_matopiba = compute_ioa(annual_rcm_pre_matopiba, annual_cru_pre_matopiba)
 
 # HadGEM2-ES
-nse_djf_gcm_pre_samz = compute_index_agreement(djf_gcm_pre_samz, djf_cru_pre_samz)
-nse_mam_gcm_pre_samz = compute_index_agreement(mam_gcm_pre_samz, mam_cru_pre_samz)
-nse_jja_gcm_pre_samz = compute_index_agreement(jja_gcm_pre_samz, jja_cru_pre_samz)
-nse_son_gcm_pre_samz = compute_index_agreement(son_gcm_pre_samz, son_cru_pre_samz)
-nse_annual_gcm_pre_samz = compute_index_agreement(annual_gcm_pre_samz, annual_cru_pre_samz)
-nse_djf_gcm_pre_eneb = compute_index_agreement(djf_gcm_pre_eneb, djf_cru_pre_eneb)
-nse_mam_gcm_pre_eneb = compute_index_agreement(mam_gcm_pre_eneb, mam_cru_pre_eneb)
-nse_jja_gcm_pre_eneb = compute_index_agreement(jja_gcm_pre_eneb, jja_cru_pre_eneb)
-nse_son_gcm_pre_eneb = compute_index_agreement(son_gcm_pre_eneb, son_cru_pre_eneb)
-nse_annual_gcm_pre_eneb = compute_index_agreement(annual_gcm_pre_eneb, annual_cru_pre_eneb)
-nse_djf_gcm_pre_matopiba = compute_index_agreement(djf_gcm_pre_matopiba, djf_cru_pre_matopiba)
-nse_mam_gcm_pre_matopiba = compute_index_agreement(mam_gcm_pre_matopiba, mam_cru_pre_matopiba)
-nse_jja_gcm_pre_matopiba = compute_index_agreement(jja_gcm_pre_matopiba, jja_cru_pre_matopiba)
-nse_son_gcm_pre_matopiba = compute_index_agreement(son_gcm_pre_matopiba, son_cru_pre_matopiba)
-nse_annual_gcm_pre_matopiba = compute_index_agreement(annual_gcm_pre_matopiba, annual_cru_pre_matopiba)
+nse_djf_gcm_pre_samz = compute_ioa(djf_gcm_pre_samz, djf_cru_pre_samz)
+nse_mam_gcm_pre_samz = compute_ioa(mam_gcm_pre_samz, mam_cru_pre_samz)
+nse_jja_gcm_pre_samz = compute_ioa(jja_gcm_pre_samz, jja_cru_pre_samz)
+nse_son_gcm_pre_samz = compute_ioa(son_gcm_pre_samz, son_cru_pre_samz)
+nse_annual_gcm_pre_samz = compute_ioa(annual_gcm_pre_samz, annual_cru_pre_samz)
+nse_djf_gcm_pre_eneb = compute_ioa(djf_gcm_pre_eneb, djf_cru_pre_eneb)
+nse_mam_gcm_pre_eneb = compute_ioa(mam_gcm_pre_eneb, mam_cru_pre_eneb)
+nse_jja_gcm_pre_eneb = compute_ioa(jja_gcm_pre_eneb, jja_cru_pre_eneb)
+nse_son_gcm_pre_eneb = compute_ioa(son_gcm_pre_eneb, son_cru_pre_eneb)
+nse_annual_gcm_pre_eneb = compute_ioa(annual_gcm_pre_eneb, annual_cru_pre_eneb)
+nse_djf_gcm_pre_matopiba = compute_ioa(djf_gcm_pre_matopiba, djf_cru_pre_matopiba)
+nse_mam_gcm_pre_matopiba = compute_ioa(mam_gcm_pre_matopiba, mam_cru_pre_matopiba)
+nse_jja_gcm_pre_matopiba = compute_ioa(jja_gcm_pre_matopiba, jja_cru_pre_matopiba)
+nse_son_gcm_pre_matopiba = compute_ioa(son_gcm_pre_matopiba, son_cru_pre_matopiba)
+nse_annual_gcm_pre_matopiba = compute_ioa(annual_gcm_pre_matopiba, annual_cru_pre_matopiba)
 
 # Temperature
 # RegCM
-nse_djf_rcm_tas_samz = compute_index_agreement(np.nanmean(djf_rcm_tas_samz, axis=1), djf_cru_tas_samz)
-nse_mam_rcm_tas_samz = compute_index_agreement(np.nanmean(mam_rcm_tas_samz, axis=1), mam_cru_tas_samz)
-nse_jja_rcm_tas_samz = compute_index_agreement(np.nanmean(jja_rcm_tas_samz, axis=1), jja_cru_tas_samz)
-nse_son_rcm_tas_samz = compute_index_agreement(np.nanmean(son_rcm_tas_samz, axis=1), son_cru_tas_samz)
-nse_annual_rcm_tas_samz = compute_index_agreement(np.nanmean(annual_rcm_tas_samz, axis=1), annual_cru_tas_samz)
-nse_djf_rcm_tas_eneb = compute_index_agreement(np.nanmean(djf_rcm_tas_eneb, axis=1), djf_cru_tas_eneb)
-nse_mam_rcm_tas_eneb = compute_index_agreement(np.nanmean(mam_rcm_tas_eneb, axis=1), mam_cru_tas_eneb)
-nse_jja_rcm_tas_eneb = compute_index_agreement(np.nanmean(jja_rcm_tas_eneb, axis=1), jja_cru_tas_eneb)
-nse_son_rcm_tas_eneb = compute_index_agreement(np.nanmean(son_rcm_tas_eneb, axis=1), son_cru_tas_eneb)
-nse_annual_rcm_tas_eneb = compute_index_agreement(np.nanmean(annual_rcm_tas_eneb, axis=1), annual_cru_tas_eneb)
-nse_djf_rcm_tas_matopiba = compute_index_agreement(np.nanmean(djf_rcm_tas_matopiba, axis=1), djf_cru_tas_matopiba)
-nse_mam_rcm_tas_matopiba = compute_index_agreement(np.nanmean(mam_rcm_tas_matopiba, axis=1), mam_cru_tas_matopiba)
-nse_jja_rcm_tas_matopiba = compute_index_agreement(np.nanmean(jja_rcm_tas_matopiba, axis=1), jja_cru_tas_matopiba)
-nse_son_rcm_tas_matopiba = compute_index_agreement(np.nanmean(son_rcm_tas_matopiba, axis=1), son_cru_tas_matopiba)
-nse_annual_rcm_tas_matopiba = compute_index_agreement(np.nanmean(annual_rcm_tas_matopiba, axis=1), annual_cru_tas_matopiba)
+nse_djf_rcm_tas_samz = compute_ioa(np.nanmean(djf_rcm_tas_samz, axis=1), djf_cru_tas_samz)
+nse_mam_rcm_tas_samz = compute_ioa(np.nanmean(mam_rcm_tas_samz, axis=1), mam_cru_tas_samz)
+nse_jja_rcm_tas_samz = compute_ioa(np.nanmean(jja_rcm_tas_samz, axis=1), jja_cru_tas_samz)
+nse_son_rcm_tas_samz = compute_ioa(np.nanmean(son_rcm_tas_samz, axis=1), son_cru_tas_samz)
+nse_annual_rcm_tas_samz = compute_ioa(np.nanmean(annual_rcm_tas_samz, axis=1), annual_cru_tas_samz)
+nse_djf_rcm_tas_eneb = compute_ioa(np.nanmean(djf_rcm_tas_eneb, axis=1), djf_cru_tas_eneb)
+nse_mam_rcm_tas_eneb = compute_ioa(np.nanmean(mam_rcm_tas_eneb, axis=1), mam_cru_tas_eneb)
+nse_jja_rcm_tas_eneb = compute_ioa(np.nanmean(jja_rcm_tas_eneb, axis=1), jja_cru_tas_eneb)
+nse_son_rcm_tas_eneb = compute_ioa(np.nanmean(son_rcm_tas_eneb, axis=1), son_cru_tas_eneb)
+nse_annual_rcm_tas_eneb = compute_ioa(np.nanmean(annual_rcm_tas_eneb, axis=1), annual_cru_tas_eneb)
+nse_djf_rcm_tas_matopiba = compute_ioa(np.nanmean(djf_rcm_tas_matopiba, axis=1), djf_cru_tas_matopiba)
+nse_mam_rcm_tas_matopiba = compute_ioa(np.nanmean(mam_rcm_tas_matopiba, axis=1), mam_cru_tas_matopiba)
+nse_jja_rcm_tas_matopiba = compute_ioa(np.nanmean(jja_rcm_tas_matopiba, axis=1), jja_cru_tas_matopiba)
+nse_son_rcm_tas_matopiba = compute_ioa(np.nanmean(son_rcm_tas_matopiba, axis=1), son_cru_tas_matopiba)
+nse_annual_rcm_tas_matopiba = compute_ioa(np.nanmean(annual_rcm_tas_matopiba, axis=1), annual_cru_tas_matopiba)
 
 # HadGEM2-ES
-nse_djf_gcm_tas_samz = compute_index_agreement(djf_gcm_tas_samz, djf_cru_tas_samz)
-nse_mam_gcm_tas_samz = compute_index_agreement(mam_gcm_tas_samz, mam_cru_tas_samz)
-nse_jja_gcm_tas_samz = compute_index_agreement(jja_gcm_tas_samz, jja_cru_tas_samz)
-nse_son_gcm_tas_samz = compute_index_agreement(son_gcm_tas_samz, son_cru_tas_samz)
-nse_annual_gcm_tas_samz = compute_index_agreement(annual_gcm_tas_samz, annual_cru_tas_samz)
-nse_djf_gcm_tas_eneb = compute_index_agreement(djf_gcm_tas_eneb, djf_cru_tas_eneb)
-nse_mam_gcm_tas_eneb = compute_index_agreement(mam_gcm_tas_eneb, mam_cru_tas_eneb)
-nse_jja_gcm_tas_eneb = compute_index_agreement(jja_gcm_tas_eneb, jja_cru_tas_eneb)
-nse_son_gcm_tas_eneb = compute_index_agreement(son_gcm_tas_eneb, son_cru_tas_eneb)
-nse_annual_gcm_tas_eneb = compute_index_agreement(annual_gcm_tas_eneb, annual_cru_tas_eneb)
-nse_djf_gcm_tas_matopiba = compute_index_agreement(djf_gcm_tas_matopiba, djf_cru_tas_matopiba)
-nse_mam_gcm_tas_matopiba = compute_index_agreement(mam_gcm_tas_matopiba, mam_cru_tas_matopiba)
-nse_jja_gcm_tas_matopiba = compute_index_agreement(jja_gcm_tas_matopiba, jja_cru_tas_matopiba)
-nse_son_gcm_tas_matopiba = compute_index_agreement(son_gcm_tas_matopiba, son_cru_tas_matopiba)
-nse_annual_gcm_tas_matopiba = compute_index_agreement(annual_gcm_tas_matopiba, annual_cru_tas_matopiba)
+nse_djf_gcm_tas_samz = compute_ioa(djf_gcm_tas_samz, djf_cru_tas_samz)
+nse_mam_gcm_tas_samz = compute_ioa(mam_gcm_tas_samz, mam_cru_tas_samz)
+nse_jja_gcm_tas_samz = compute_ioa(jja_gcm_tas_samz, jja_cru_tas_samz)
+nse_son_gcm_tas_samz = compute_ioa(son_gcm_tas_samz, son_cru_tas_samz)
+nse_annual_gcm_tas_samz = compute_ioa(annual_gcm_tas_samz, annual_cru_tas_samz)
+nse_djf_gcm_tas_eneb = compute_ioa(djf_gcm_tas_eneb, djf_cru_tas_eneb)
+nse_mam_gcm_tas_eneb = compute_ioa(mam_gcm_tas_eneb, mam_cru_tas_eneb)
+nse_jja_gcm_tas_eneb = compute_ioa(jja_gcm_tas_eneb, jja_cru_tas_eneb)
+nse_son_gcm_tas_eneb = compute_ioa(son_gcm_tas_eneb, son_cru_tas_eneb)
+nse_annual_gcm_tas_eneb = compute_ioa(annual_gcm_tas_eneb, annual_cru_tas_eneb)
+nse_djf_gcm_tas_matopiba = compute_ioa(djf_gcm_tas_matopiba, djf_cru_tas_matopiba)
+nse_mam_gcm_tas_matopiba = compute_ioa(mam_gcm_tas_matopiba, mam_cru_tas_matopiba)
+nse_jja_gcm_tas_matopiba = compute_ioa(jja_gcm_tas_matopiba, jja_cru_tas_matopiba)
+nse_son_gcm_tas_matopiba = compute_ioa(son_gcm_tas_matopiba, son_cru_tas_matopiba)
+nse_annual_gcm_tas_matopiba = compute_ioa(annual_gcm_tas_matopiba, annual_cru_tas_matopiba)
 
 nse_rcm_pre = np.array([[nse_djf_rcm_pre_samz, nse_mam_rcm_pre_samz, nse_jja_rcm_pre_samz, nse_son_rcm_pre_samz, nse_annual_rcm_pre_samz],
 [nse_djf_rcm_pre_eneb, nse_mam_rcm_pre_eneb, nse_jja_rcm_pre_eneb, nse_son_rcm_pre_eneb, nse_annual_rcm_pre_eneb], 
@@ -207,11 +207,12 @@ ylabels = [u'MATOPIBA', u'ENEB', u'SAMZ']
 
 # First column heatmaps with same colormap
 pcm1 = axes[0, 0].pcolormesh(nse_rcm_pre, edgecolors ='k', linewidths = 1.5, norm=norm, cmap='YlGnBu')
-axes[0, 0].set_title(u'A)', loc='left', fontweight='bold', fontsize=8)
+axes[0, 0].set_title(u'A) RegCM4.7', loc='left', fontweight='bold', fontsize=8)
 axes[0, 0].set_xticks(np.arange(nse_rcm_pre.shape[1]) + 0.5)
 axes[0, 0].set_yticks(np.arange(nse_rcm_pre.shape[0]) + 0.5)
 axes[0, 0].set_yticklabels(ylabels, fontsize=8)
 plt.setp(axes[0, 0].get_xticklabels(), visible=False)
+axes[0, 0].tick_params(bottom = False)
 for y in range(nse_rcm_pre.shape[0]):
     for x in range(nse_rcm_pre.shape[1]):
         axes[0, 0].text(x + 0.5, y + 0.5, '%.1f' % nse_rcm_pre[y, x],
@@ -219,13 +220,13 @@ for y in range(nse_rcm_pre.shape[0]):
                  )
                  
 pcm2 = axes[1, 0].pcolormesh(nse_gcm_pre, edgecolors ='k', linewidths = 1.5, norm=norm, cmap='YlGnBu')
-axes[1, 0].set_title(u'B)', loc='left', fontweight='bold', fontsize=8)
+axes[1, 0].set_title(u'B) HadGEM2-ES', loc='left', fontweight='bold', fontsize=8)
 axes[1, 0].set_xticks(np.arange(nse_gcm_pre.shape[1]) + 0.5)
 axes[1, 0].set_yticks(np.arange(nse_gcm_pre.shape[0]) + 0.5)
 axes[1, 0].set_xticklabels(xlabels, fontsize=8)
 axes[1, 0].set_yticklabels(ylabels, fontsize=8)
 clb=fig.colorbar(pcm2, ax=axes[:, 0], extend='max', shrink=0.7)
-clb.set_label('Precipitation (mm d⁻¹)', rotation=90)
+clb.set_label('IOA de precipitação', rotation=90)
 clb.ax.yaxis.set_label_position('left')
 for y in range(nse_gcm_pre.shape[0]):
     for x in range(nse_gcm_pre.shape[1]):
@@ -235,10 +236,12 @@ for y in range(nse_gcm_pre.shape[0]):
                  
 # Second column heatmaps with same colormap
 pcm3 = axes[0, 1].pcolormesh(nse_rcm_tas, edgecolors ='k', linewidths = 1.5, norm=norm, cmap='YlOrRd')
-axes[0, 1].set_title('C)', loc='left', fontweight='bold', fontsize=8)
+axes[0, 1].set_title('C) RegCM4.7', loc='left', fontweight='bold', fontsize=8)
 axes[0, 1].set_xticks(np.arange(nse_rcm_tas.shape[1]) + 0.5)
 axes[0, 1].set_yticks(np.arange(nse_rcm_tas.shape[0]) + 0.5)
 axes[0, 1].set_yticklabels(ylabels, fontsize=8)
+axes[0, 1].tick_params(left = False)
+axes[0, 1].tick_params(bottom = False)
 plt.setp(axes[0, 1].get_xticklabels(), visible=False)
 plt.setp(axes[0, 1].get_yticklabels(), visible=False)
 for y in range(nse_rcm_tas.shape[0]):
@@ -248,14 +251,15 @@ for y in range(nse_rcm_tas.shape[0]):
                  )
                  
 pcm4 = axes[1, 1].pcolormesh(nse_gcm_tas, edgecolors ='k', linewidths = 1.5, norm=norm, cmap='YlOrRd')
-axes[1, 1].set_title('D)', loc='left', fontweight='bold', fontsize=8)
+axes[1, 1].set_title('D) HadGEM2-ES', loc='left', fontweight='bold', fontsize=8)
 axes[1, 1].set_xticks(np.arange(nse_gcm_tas.shape[1]) + 0.5)
 axes[1, 1].set_yticks(np.arange(nse_gcm_tas.shape[0]) + 0.5)
 axes[1, 1].set_xticklabels(xlabels, fontsize=8)
 axes[1, 1].set_yticklabels(ylabels, fontsize=8)
+axes[1, 1].tick_params(left = False)
 plt.setp(axes[1, 1].get_yticklabels(), visible=False)
 clb=fig.colorbar(pcm4, ax=axes[:, 1], extend='max', shrink=0.7)
-clb.set_label('Temperature (°C)', rotation=90)
+clb.set_label('IOA de temperatura', rotation=90)
 clb.ax.yaxis.set_label_position('left')
 for y in range(nse_gcm_tas.shape[0]):
     for x in range(nse_gcm_tas.shape[1]):
