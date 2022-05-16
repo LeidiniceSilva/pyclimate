@@ -37,8 +37,24 @@ def import_obs(var, area, dataset, freq, dt):
 	u'eca_tnn': u'tmin',
 	u'eca_dtr': u'tmax',
 	u'eca_su': u'summer_days_index_per_time_period', 
-	u'eca_tr': u'tropical_nights_index_per_time_period',
-	u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tr': u'tropical_nights_index_per_time_period'}
+
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[dict_var[var]][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	obs  = np.nanmean(var[:][:,:,:], axis=0)
+	std   = np.std(var[:][:,:,:], axis=0)
+	
+	return lat, lon, obs, std
+	
+
+def import_obs_p(var, area, dataset, freq, dt):
+	
+	path = '/home/nice/Documents/dataset/obs/eca'
+	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_lonlat.nc'.format(path, var, area, dataset, freq, dt)	
+
+	dict_var = {u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
 	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
 	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
 	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
@@ -47,7 +63,7 @@ def import_obs(var, area, dataset, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	obs  = np.nanmean(var[:][:,:,:], axis=0)
+	obs  = np.nanmean(var[:][10:20,:,:], axis=0)
 	std   = np.std(var[:][:,:,:], axis=0)
 	
 	return lat, lon, obs, std
@@ -64,11 +80,7 @@ def import_rcm(var, area, model, exp, freq, dt):
 	u'eca_tnn': u'tasmin',
 	u'eca_dtr': u'tasmax',
 	u'eca_su': u'summer_days_index_per_time_period', 
-	u'eca_tr': u'tropical_nights_index_per_time_period',
-	u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
-	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
-	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
-	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
+	u'eca_tr': u'tropical_nights_index_per_time_period'}
 	
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[dict_var[var]][:]
@@ -79,7 +91,27 @@ def import_rcm(var, area, model, exp, freq, dt):
 
 	return lat, lon, rcm, std
 
+	
+def import_rcm_p(var, area, model, exp, freq, dt):
+	
+	path = '/home/nice/Documents/dataset/rcm/eca'	
+	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
 
+	dict_var = {u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
+	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
+	
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[dict_var[var]][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	rcm  = np.nanmean(var[:][10:20,:,:], axis=0)
+	std   = np.std(var[:][:,:,:], axis=0)
+
+	return lat, lon, rcm, std
+	
+	
 def import_gcm(var, area, model, exp, freq, dt):
 	
 	path = '/home/nice/Documents/dataset/gcm/eca'
@@ -91,11 +123,7 @@ def import_gcm(var, area, model, exp, freq, dt):
 	u'eca_tnn': u'tasmin',
 	u'eca_dtr': u'tasmax',
 	u'eca_su': u'summer_days_index_per_time_period', 
-	u'eca_tr': u'tropical_nights_index_per_time_period',
-	u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
-	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
-	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
-	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
+	u'eca_tr': u'tropical_nights_index_per_time_period'}
 
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[dict_var[var]][:]
@@ -107,6 +135,26 @@ def import_gcm(var, area, model, exp, freq, dt):
 	return lat, lon, gcm, std
 
 
+def import_gcm_p(var, area, model, exp, freq, dt):
+	
+	path = '/home/nice/Documents/dataset/gcm/eca'
+	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
+
+	dict_var = {u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
+	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
+
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[dict_var[var]][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	gcm  = np.nanmean(var[:][10:20,:,:], axis=0)
+	std   = np.std(var[:][:,:,:], axis=0)
+
+	return lat, lon, gcm, std
+
+	
 def basemap(lat, lon):
 	
 	aux_lon1 = []
@@ -178,21 +226,21 @@ lat, lon, obs_tr, obs_tr_std = import_obs('eca_tr', 'amz_neb', 'cpc_obs', 'yr', 
 lat, lon, rcm_tr, rcm_tr_std = import_rcm('eca_tr', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 lat, lon, gcm_tr, gcm_tr_std = import_gcm('eca_tr', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_tx10p, obs_tx10p_std = import_obs('eca_tx10p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
-lat, lon, rcm_tx10p, rcm_tx10p_std = import_rcm('eca_tx10p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_tx10p, gcm_tx10p_std = import_gcm('eca_tx10p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tx10p, obs_tx10p_std = import_obs_p('eca_tx10p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tx10p, rcm_tx10p_std = import_rcm_p('eca_tx10p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tx10p, gcm_tx10p_std = import_gcm_p('eca_tx10p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_tx90p, obs_tx90p_std = import_obs('eca_tx90p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
-lat, lon, rcm_tx90p, rcm_tx90p_std = import_rcm('eca_tx90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_tx90p, gcm_tx90p_std = import_gcm('eca_tx90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tx90p, obs_tx90p_std = import_obs_p('eca_tx90p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tx90p, rcm_tx90p_std = import_rcm_p('eca_tx90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tx90p, gcm_tx90p_std = import_gcm_p('eca_tx90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_tn10p, obs_tn10p_std = import_obs('eca_tn10p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
-lat, lon, rcm_tn10p, rcm_tn10p_std = import_rcm('eca_tn10p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_tn10p, gcm_tn10p_std = import_gcm('eca_tn10p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tn10p, obs_tn10p_std = import_obs_p('eca_tn10p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tn10p, rcm_tn10p_std = import_rcm_p('eca_tn10p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tn10p, gcm_tn10p_std = import_gcm_p('eca_tn10p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_tn90p, obs_tn90p_std = import_obs('eca_tn90p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
-lat, lon, rcm_tn90p, rcm_tn90p_std = import_rcm('eca_tn90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_tn90p, gcm_tn90p_std = import_gcm('eca_tn90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tn90p, obs_tn90p_std = import_obs_p('eca_tn90p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tn90p, rcm_tn90p_std = import_rcm_p('eca_tn90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tn90p, gcm_tn90p_std = import_gcm_p('eca_tn90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
 # Compute bias from extreme indices 
 bias_rcm_txx = np.nanmean(rcm_txx, axis=0) - obs_txx
@@ -255,12 +303,13 @@ p_value_gcm_tx10p = ttest(gcm_tx10p, obs_tx10p, gcm_tx10p_std, obs_tx10p_std)
 p_value_gcm_tx90p = ttest(gcm_tx90p, obs_tx90p, gcm_tx90p_std, obs_tx90p_std)
 p_value_gcm_tn10p = ttest(gcm_tn10p, obs_tn10p, gcm_tn10p_std, obs_tn10p_std)
 p_value_gcm_tn90p = ttest(gcm_tn90p, obs_tn90p, gcm_tn90p_std, obs_tn90p_std)
+
 # Plot extreme indices 
 fig = plt.figure(figsize=(6, 11))
 
 levs1 = [-6, -4, -2, 2, 4, 6]
 levs2 = [-60, -40, -20, 20, 40, 60]
-levs3 = [-0.5, -0.3, -0.1, 0.1, 0.3, 0.5]
+levs3 = [-6, -4, -2, 2, 4, 6]
 levs11 = [-1, -0.5, -0.1, 0.1, 0.5, 1]
 
 ax = fig.add_subplot(11, 3, 1)

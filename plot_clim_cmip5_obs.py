@@ -34,7 +34,7 @@ def import_cmip5_clim(param, area, model):
 	mdl_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
 
 	mdl_clim = []
-	for mon in range(1, 12 + 1):
+	for mon in range(0, 11 + 1):
 		mdl = np.nanmean(mdl_data[mon::12], axis=0)
 		mdl_clim.append(mdl)
 	return mdl_clim
@@ -42,7 +42,7 @@ def import_cmip5_clim(param, area, model):
 
 def import_obs_clim(param, area, database):
 
-	path  = '/home/nice/Documents/dataset/obs/gcm'
+	path  = '/home/nice/Documents/dataset/obs/cmip5'
 	arq   = '{0}/{1}_{2}_{3}_obs_mon_197512-200511.nc'.format(path, param, area, database)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -53,7 +53,7 @@ def import_obs_clim(param, area, database):
 	obs_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
 
 	obs_clim = []
-	for mon in range(1, 12 + 1):
+	for mon in range(0, 11 + 1):
 		obs = np.nanmean(obs_data[mon::12], axis=0)
 		obs_clim.append(obs)
 	return obs_clim

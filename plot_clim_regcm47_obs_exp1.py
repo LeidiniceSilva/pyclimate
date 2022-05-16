@@ -30,12 +30,17 @@ def import_obs(var, area, dataset, dt):
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
 	value = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
+	print(value)
 	
 	obs = []
 	conf_int = []		
-	for mon in range(1, 12 + 1):
-		obs.append(np.nanmean(value[mon::12], axis=0))
-		conf_int.append(np.percentile(value[mon::12], [2.5, 97.5]))
+	for mon in range(0, 11 + 1):
+		print(value[mon])
+	exit()
+	
+	obs.append(np.nanmean(value[mon::12], axis=0))
+
+	conf_int.append(np.percentile(value[mon::12], [2.5, 97.5]))
 	print(conf_int)
 
 	return value, obs
@@ -53,7 +58,7 @@ def import_rcm(var, area, exp, dt):
 	value = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
 
 	rcm = []
-	for mon in range(1, 12 + 1):
+	for mon in range(0, 11 + 1):
 		rcm.append(np.nanmean(value[mon::12], axis=0))
 	
 	return value, rcm
@@ -71,7 +76,7 @@ def import_gcm(var, area, exp, dt):
 	value = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
 
 	gcm = []
-	for mon in range(1, 12 + 1):
+	for mon in range(0, 11 + 1):
 		gcm.append(np.nanmean(value[mon::12], axis=0))
 	
 	return value, gcm
@@ -99,19 +104,19 @@ mon_tas_reg_matopiba, tas_reg_matopiba = import_rcm('tas', 'matopiba', 'hist', '
 mon_tas_had_matopiba, tas_had_matopiba = import_gcm('tas', 'matopiba', 'hist', '1986-2005')
 
 # Confidence interval 95%
-pre_samz_ci1=[8.66463728, 9.4697933, 6.85738347, 3.80205981, 1.48250971, 0.92583204, 1.22552552, 2.63836498, 4.51578057, 5.77292271, 7.07533377, 8.21227317]
-pre_samz_ci2=[10.75263259, 11.66272891, 8.50332589, 5.47224972, 2.52379874, 1.68387562, 2.02090873, 3.62090154, 5.93973876, 7.98845394, 10.45760779, 11.00553899]
-pre_eneb_ci1=[1.00524572, 1.1608404, 1.77165509, 1.30258448, 1.71733001, 1.79458527, 0.79820421, 0.28923712, 0.29726263, 0.5088564 , 0.39716837, 0.84027369]
-pre_eneb_ci2=[4.5356897, 7.152737, 7.64559294, 5.35725617, 5.83513105, 4.48715296, 2.64040059, 2.33545691, 1.56852434, 1.90245899, 3.78144468, 5.38589151]
-pre_matopiba_ci1=[5.23713094, 5.05914688, 3.40499815, 1.34858458, 0.50445026, 0.22964761, 0.18256121, 0.42671296, 1.65213115, 2.92743726, 4.84032965, 4.16228163]
-pre_matopiba_ci2=[10.35689692, 11.49636469, 7.45052783, 4.22976214, 1.72208759, 1.12680329, 0.80865735, 1.84274545, 4.14807294, 6.75314355, 10.0606626, 11.274613]
+pre_samz_ci1=[8.21227317, 8.66463728, 9.4697933, 6.85738347, 3.80205981, 1.48250971, 0.92583204, 1.22552552, 2.63836498, 4.51578057, 5.77292271, 7.07533377]
+pre_samz_ci2=[11.00553899, 10.75263259, 11.66272891, 8.50332589, 5.47224972, 2.52379874, 1.68387562, 2.02090873, 3.62090154, 5.93973876, 7.98845394, 10.45760779]
+pre_eneb_ci1=[0.84027369, 1.00524572, 1.1608404, 1.77165509, 1.30258448, 1.71733001, 1.79458527, 0.79820421, 0.28923712, 0.29726263, 0.5088564 , 0.39716837]
+pre_eneb_ci2=[5.38589151, 4.5356897, 7.152737, 7.64559294, 5.35725617, 5.83513105, 4.48715296, 2.64040059, 2.33545691, 1.56852434, 1.90245899, 3.78144468]
+pre_matopiba_ci1=[4.16228163, 5.23713094, 5.05914688, 3.40499815, 1.34858458, 0.50445026, 0.22964761, 0.18256121, 0.42671296, 1.65213115, 2.92743726, 4.84032965]
+pre_matopiba_ci2=[11.274613, 10.35689692, 11.49636469, 7.45052783, 4.22976214, 1.72208759, 1.12680329, 0.80865735, 1.84274545, 4.14807294, 6.75314355, 10.0606626]
 
-tas_samz_ci1=[25.69711699, 25.71469378, 25.97765923, 25.39793468, 24.91330719, 24.70398798, 25.73415108, 26.23648839, 26.75862598,26.37253828, 26.01073117, 25.61359653]
-tas_samz_ci2=[26.92223835, 26.85330153, 27.19564362, 26.84376068 , 26.48522525, 26.68297215, 27.20409451, 27.39006267, 28.20131063, 27.48015785, 27.10853429, 27.11589193]
-tas_eneb_ci1=[25.99318895, 25.83138466, 25.38425841, 24.71016569, 23.53299055, 23.11000266, 23.37063761, 24.47628813, 25.65004044, 26.16076336, 26.20762401, 26.22430735]
-tas_eneb_ci2=[27.63031745, 27.23039775, 27.07775173, 25.82194371, 24.92942662, 24.34608192, 24.69219999, 25.40287352, 26.57566276, 27.12908754, 27.51666064, 27.58264961]
-tas_matopiba_ci1=[25.55731535, 25.70387478, 25.79148459, 25.5457233 , 24.99058108, 24.97589211, 25.75307593, 26.66938272, 26.64489403, 26.10251489, 25.4382093 , 25.45791321]
-tas_matopiba_ci2=[27.15601463, 26.68446865, 27.67121773, 27.08947453, 26.64261518, 26.57647147, 27.74292717, 28.66518302, 28.50709934, 27.67222061, 27.13844676, 26.91656485]
+tas_samz_ci1=[25.61359653, 25.69711699, 25.71469378, 25.97765923, 25.39793468, 24.91330719, 24.70398798, 25.73415108, 26.23648839, 26.75862598,26.37253828, 26.01073117]
+tas_samz_ci2=[27.11589193, 26.92223835, 26.85330153, 27.19564362, 26.84376068 , 26.48522525, 26.68297215, 27.20409451, 27.39006267, 28.20131063, 27.48015785, 27.10853429]
+tas_eneb_ci1=[26.22430735, 25.99318895, 25.83138466, 25.38425841, 24.71016569, 23.53299055, 23.11000266, 23.37063761, 24.47628813, 25.65004044, 26.16076336, 26.20762401]
+tas_eneb_ci2=[27.58264961, 27.63031745, 27.23039775, 27.07775173, 25.82194371, 24.92942662, 24.34608192, 24.69219999, 25.40287352, 26.57566276, 27.12908754, 27.51666064]
+tas_matopiba_ci1=[25.45791321, 25.55731535, 25.70387478, 25.79148459, 25.5457233 , 24.99058108, 24.97589211, 25.75307593, 26.66938272, 26.64489403, 26.10251489, 25.4382093]
+tas_matopiba_ci2=[26.91656485, 27.15601463, 26.68446865, 27.67121773, 27.08947453, 26.64261518, 26.57647147, 27.74292717, 28.66518302, 28.50709934, 27.67222061, 27.13844676]
 
 # Plotmodels and obs database 
 fig = plt.figure()
@@ -119,7 +124,7 @@ time = np.arange(0.5, 12 + 0.5)
 
 ax10 = fig.add_subplot(3, 2, 1)
 annual_cycle1 = ax10.plot(time, pre_cru_samz, time, pre_reg_samz, time, pre_had_samz, time, pre_samz_ci1, time, pre_samz_ci2)
-plt.title(u'A) SAMZ', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'A)', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.ylim(0, 15)
 plt.yticks(np.arange(0, 18, 3), fontsize=8)
@@ -141,7 +146,7 @@ plt.legend(annual_cycle1[:-1], ['CRU', 'RegCM4.7', 'HadGEM2-ES'], fontsize=6, lo
 
 ax20 = fig.add_subplot(3, 2, 2)
 annual_cycle2 = ax20.plot(time, tas_cru_samz, time, np.nanmean(tas_reg_samz, axis=1), time, tas_had_samz, time, tas_samz_ci1, time, tas_samz_ci2)
-plt.title(u'D) SAMZ', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'D)', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.ylim(22, 34)
 plt.yticks(np.arange(22, 36, 2), fontsize=8)
@@ -162,8 +167,8 @@ plt.axvline(8.5, linewidth=1., linestyle='-', color='black')
 
 ax30 = fig.add_subplot(3, 2, 3)
 annual_cycle3 = ax30.plot(time, pre_cru_eneb, time, pre_reg_eneb, time, pre_had_eneb, time, pre_eneb_ci1, time, pre_eneb_ci2)
-plt.title(u'B) ENEB', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Precipitação (mm d⁻¹)', fontsize=8)
+plt.title(u'B)', loc='left', fontweight='bold', fontsize=8)
+plt.ylabel(u'Precipitation (mm d⁻¹)', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.ylim(0, 15)
 plt.yticks(np.arange(0, 18, 3), fontsize=8)
@@ -184,8 +189,8 @@ plt.axvline(8.5, linewidth=1., linestyle='-', color='black')
 	 
 ax40 = fig.add_subplot(3, 2, 4)
 annual_cycle4 = ax40.plot(time, tas_cru_eneb, time, np.nanmean(tas_reg_eneb, axis=1), time, tas_had_eneb, time, tas_eneb_ci1, time, tas_eneb_ci2)
-plt.title(u'E) ENEB', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'Temperatura (°C)', fontsize=8)
+plt.title(u'E)', loc='left', fontweight='bold', fontsize=8)
+plt.ylabel(u'Temperature (°C)', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.ylim(22, 34)
 plt.yticks(np.arange(22, 36, 2), fontsize=8)
@@ -206,7 +211,7 @@ plt.axvline(8.5, linewidth=1., linestyle='-', color='black')
 	 
 ax50 = fig.add_subplot(3, 2, 5)
 annual_cycle5 = ax50.plot(time, pre_cru_matopiba, time, pre_reg_matopiba, time, pre_had_matopiba, time, pre_matopiba_ci1, time, pre_matopiba_ci2)
-plt.title(u'C) MATOPIBA', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'C)', loc='left', fontweight='bold', fontsize=8)
 plt.xlabel(u'Meses', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.ylim(0, 15)
@@ -226,7 +231,7 @@ plt.axvline(8.5, linewidth=1., linestyle='-', color='black')
 
 ax60 = fig.add_subplot(3, 2, 6)
 annual_cycle6 = ax60.plot(time, tas_cru_matopiba, time, np.nanmean(tas_reg_matopiba, axis=1), time, tas_had_matopiba, time, tas_matopiba_ci1, time, tas_matopiba_ci2)
-plt.title(u'F) MATOPIBA', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'F)', loc='left', fontweight='bold', fontsize=8)
 plt.xlabel(u'Meses', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.ylim(22, 34)

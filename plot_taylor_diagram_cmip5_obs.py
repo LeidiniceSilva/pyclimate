@@ -638,7 +638,6 @@ if __name__=='__main__':
 						   marker='$%d$' % (i+1), ms=10, ls='', label=name)
 						   
 			plt.text(-0.95, 7., text1[var], fontweight='bold')
-			plt.text(3.2, 4., 'RSM', fontweight='bold', color='0.6')
 
 		# Add RMS contours, and label them
 		contours = dia.add_contours(colors='0.5')

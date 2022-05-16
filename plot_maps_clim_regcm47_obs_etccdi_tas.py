@@ -36,8 +36,26 @@ def import_obs(var, area, dataset, freq, dt):
 	u'eca_tnn': u'tmin',
 	u'eca_dtr': u'tmax',
 	u'eca_su': u'summer_days_index_per_time_period', 
-	u'eca_tr': u'tropical_nights_index_per_time_period',
-	u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tr': u'tropical_nights_index_per_time_period'}
+
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[dict_var[var]][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	obs  = np.nanmean(var[:][:,:,:], axis=0)
+
+	std   = np.std(var[:][:,:,:], axis=0)
+	sample  = np.nanmean(var[:][0:2,:,:], axis=0)
+		
+	return lat, lon, obs, std, sample
+	
+
+def import_obs_p(var, area, dataset, freq, dt):
+	
+	path = '/home/nice/Documents/dataset/obs/eca'
+	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_lonlat.nc'.format(path, var, area, dataset, freq, dt)	
+
+	dict_var = {u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
 	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
 	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
 	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
@@ -46,7 +64,7 @@ def import_obs(var, area, dataset, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	obs  = np.nanmean(var[:][:,:,:], axis=0)
+	obs  = np.nanmean(var[:][10:20,:,:], axis=0)
 
 	std   = np.std(var[:][:,:,:], axis=0)
 	sample  = np.nanmean(var[:][0:2,:,:], axis=0)
@@ -65,8 +83,26 @@ def import_rcm(var, area, model, exp, freq, dt):
 	u'eca_tnn': u'tasmin',
 	u'eca_dtr': u'tasmax',
 	u'eca_su': u'summer_days_index_per_time_period', 
-	u'eca_tr': u'tropical_nights_index_per_time_period',
-	u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tr': u'tropical_nights_index_per_time_period'}
+	
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[dict_var[var]][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	rcm  = np.nanmean(var[:][:,:,:], axis=0)
+
+	std   = np.std(var[:][:,:,:], axis=0)
+	sample  = np.nanmean(var[:][0:2,:,:], axis=0)
+	
+	return lat, lon, rcm, std, sample
+
+
+def import_rcm_p(var, area, model, exp, freq, dt):
+	
+	path = '/home/nice/Documents/dataset/rcm/eca'	
+	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
+
+	dict_var = {u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
 	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
 	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
 	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
@@ -75,7 +111,7 @@ def import_rcm(var, area, model, exp, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	rcm  = np.nanmean(var[:][:,:,:], axis=0)
+	rcm  = np.nanmean(var[:][10:20,:,:], axis=0)
 
 	std   = np.std(var[:][:,:,:], axis=0)
 	sample  = np.nanmean(var[:][0:2,:,:], axis=0)
@@ -94,11 +130,7 @@ def import_gcm(var, area, model, exp, freq, dt):
 	u'eca_tnn': u'tasmin',
 	u'eca_dtr': u'tasmax',
 	u'eca_su': u'summer_days_index_per_time_period', 
-	u'eca_tr': u'tropical_nights_index_per_time_period',
-	u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
-	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
-	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
-	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
+	u'eca_tr': u'tropical_nights_index_per_time_period'}
 
 	data = netCDF4.Dataset(arq)
 	var  = data.variables[dict_var[var]][:]
@@ -112,6 +144,28 @@ def import_gcm(var, area, model, exp, freq, dt):
 	return lat, lon, gcm, std, sample
 
 
+def import_gcm_p(var, area, model, exp, freq, dt):
+	
+	path = '/home/nice/Documents/dataset/gcm/eca'
+	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
+
+	dict_var = {u'eca_tx10p': u'very_cold_days_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tx90p': u'very_warm_days_percent_wrt_90th_percentile_of_reference_period', 
+	u'eca_tn10p': u'cold_nights_percent_wrt_10th_percentile_of_reference_period',
+	u'eca_tn90p': u'warm_nights_percent_wrt_90th_percentile_of_reference_period'}
+
+	data = netCDF4.Dataset(arq)
+	var  = data.variables[dict_var[var]][:]
+	lat  = data.variables['lat'][:]
+	lon  = data.variables['lon'][:]
+	gcm  = np.nanmean(var[:][10:20,:,:], axis=0)
+
+	std   = np.std(var[:][:,:,:], axis=0)
+	sample  = np.nanmean(var[:][0:2,:,:], axis=0)
+	
+	return lat, lon, gcm, std, sample
+	
+	
 def basemap(lat, lon):
 	
 	aux_lon1 = []
@@ -182,21 +236,21 @@ lat, lon, obs_tr, obs_tr_std, obs_tr_sample = import_obs('eca_tr', 'amz_neb', 'c
 lat, lon, rcm_tr, rcm_tr_std, rcm_tr_sample = import_rcm('eca_tr', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 lat, lon, gcm_tr, gcm_tr_std, gcm_tr_sample = import_gcm('eca_tr', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_tx10p, obs_tx10p_std, obs_tx10p_sample = import_obs('eca_tx10p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
-lat, lon, rcm_tx10p, rcm_tx10p_std, rcm_tx10p_sample = import_rcm('eca_tx10p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_tx10p, gcm_tx10p_std, gcm_tx10p_sample = import_gcm('eca_tx10p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tx10p, obs_tx10p_std, obs_tx10p_sample = import_obs_p('eca_tx10p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tx10p, rcm_tx10p_std, rcm_tx10p_sample = import_rcm_p('eca_tx10p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tx10p, gcm_tx10p_std, gcm_tx10p_sample = import_gcm_p('eca_tx10p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_tx90p, obs_tx90p_std, obs_tx90p_sample = import_obs('eca_tx90p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
-lat, lon, rcm_tx90p, rcm_tx90p_std, rcm_tx90p_sample = import_rcm('eca_tx90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_tx90p, gcm_tx90p_std, gcm_tx90p_sample = import_gcm('eca_tx90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tx90p, obs_tx90p_std, obs_tx90p_sample = import_obs_p('eca_tx90p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tx90p, rcm_tx90p_std, rcm_tx90p_sample = import_rcm_p('eca_tx90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tx90p, gcm_tx90p_std, gcm_tx90p_sample = import_gcm_p('eca_tx90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_tn10p, obs_tn10p_std, obs_tn10p_sample = import_obs('eca_tn10p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
-lat, lon, rcm_tn10p, rcm_tn10p_std, rcm_tn10p_sample = import_rcm('eca_tn10p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_tn10p, gcm_tn10p_std, gcm_tn10p_sample = import_gcm('eca_tn10p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tn10p, obs_tn10p_std, obs_tn10p_sample = import_obs_p('eca_tn10p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tn10p, rcm_tn10p_std, rcm_tn10p_sample = import_rcm_p('eca_tn10p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tn10p, gcm_tn10p_std, gcm_tn10p_sample = import_gcm_p('eca_tn10p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_tn90p, obs_tn90p_std, obs_tn90p_sample = import_obs('eca_tn90p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
-lat, lon, rcm_tn90p, rcm_tn90p_std, rcm_tn90p_sample = import_rcm('eca_tn90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_tn90p, gcm_tn90p_std, gcm_tn90p_sample = import_gcm('eca_tn90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_tn90p, obs_tn90p_std, obs_tn90p_sample = import_obs_p('eca_tn90p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
+lat, lon, rcm_tn90p, rcm_tn90p_std, rcm_tn90p_sample = import_rcm_p('eca_tn90p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_tn90p, gcm_tn90p_std, gcm_tn90p_sample = import_gcm_p('eca_tn90p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
 # Compute ttest from models and obs database 
 p_value_txx_obs = ttest(obs_txx, obs_txx_std, obs_txx_sample)
@@ -428,7 +482,7 @@ map.contourf(xx, yy, gcm_su, levels=levs6, latlon=True, cmap=cm.YlOrRd, extend='
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs6, drawedges=True, ax=ax)
-cbar.set_label('SU (dias)', size=6, labelpad=10, fontweight='bold', rotation=90)
+cbar.set_label('SU (days)', size=6, labelpad=10, fontweight='bold', rotation=90)
 cbar.ax.tick_params(labelsize=6) 
 p_value_su_gcm = ma.masked_where(p_value_su_gcm >= 0.05, p_value_su_gcm) 
 map.contourf(xx, yy, p_value_su_gcm, colors='none', hatches=['....'])
@@ -459,7 +513,7 @@ map.contourf(xx, yy, gcm_tr, levels=levs7, latlon=True, cmap=cm.YlOrRd, extend='
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs7, drawedges=True, ax=ax)
-cbar.set_label('TR (dias)', size=6, labelpad=10, fontweight='bold', rotation=90)
+cbar.set_label('TR (days)', size=6, labelpad=10, fontweight='bold', rotation=90)
 cbar.ax.tick_params(labelsize=6) 
 p_value_tr_gcm = ma.masked_where(p_value_tr_gcm >= 0.05, p_value_tr_gcm) 
 map.contourf(xx, yy, p_value_tr_gcm, colors='none', hatches=['....'])

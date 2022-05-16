@@ -33,7 +33,7 @@ def import_obs(var, area, dataset, dt):
 	
 	obs = []
 	conf_int = []		
-	for mon in range(1, 12 + 1):
+	for mon in range(0, 11 + 1):
 		obs.append(np.nanmean(value[mon::12], axis=0))
 
 	return obs
@@ -51,7 +51,7 @@ def import_rcm(var, area, exp, dt):
 	value = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
 
 	rcm = []
-	for mon in range(1, 12 + 1):
+	for mon in range(0, 11 + 1):
 		rcm.append(np.nanmean(value[mon::12], axis=0))
 	
 	return rcm
@@ -69,7 +69,7 @@ def import_gcm(var, area, exp, dt):
 	value = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
 
 	gcm = []
-	for mon in range(1, 12 + 1):
+	for mon in range(0, 11 + 1):
 		gcm.append(np.nanmean(value[mon::12], axis=0))
 	
 	return gcm
@@ -131,14 +131,21 @@ r2_tas_had_era5_amz = compute_linear_regression(mon_tas_era5_amz, mon_tas_had_am
 r2_tas_had_cru_neb  = compute_linear_regression(mon_tas_cru_neb,  mon_tas_had_neb)
 r2_tas_had_era5_neb = compute_linear_regression(mon_tas_era5_neb, mon_tas_had_neb)
 
-print(r2_tas_reg_cru_amz)
-print(r2_tas_reg_era5_amz)
-print(r2_tas_had_cru_amz)
-print(r2_tas_had_era5_amz)
-print(r2_tas_reg_cru_neb)
-print(r2_tas_reg_era5_neb)
-print(r2_tas_had_cru_neb)
-print(r2_tas_had_era5_neb)
+print(r2_pre_reg_cru_amz)
+print(r2_pre_reg_gpcp_amz)
+print(r2_pre_reg_era5_amz)
+
+print(r2_pre_had_cru_amz)
+print(r2_pre_had_era5_amz)
+print(r2_pre_had_era5_amz)
+
+print(r2_pre_reg_cru_neb)
+print(r2_pre_reg_gpcp_neb)
+print(r2_pre_reg_era5_neb)
+
+print(r2_pre_had_cru_neb)
+print(r2_pre_had_gpcp_neb)
+print(r2_pre_had_era5_neb)
 
 # Plot models and obs database 
 fig = plt.figure()
@@ -159,11 +166,11 @@ ax.spines['top'].set_visible(False)
 plt.setp(ax.get_xticklabels(), visible=False)
 plt.text(0.5, 2.5, 'R²=0.84 (CRU)', fontsize=6, color='green', fontweight='bold')
 plt.text(0.5, 1.5, 'R²=0.82 (GPCP)', fontsize=6, color='green', fontweight='bold')
-plt.text(0.5, 0.5, 'R²=0.82 (ERA5)', fontsize=6, color='green', fontweight='bold')
-plt.text(7.5, 2.5, 'R²=0.98 (CRU)', fontsize=6, color='red', fontweight='bold')
-plt.text(7.5, 1.5, 'R²=0.97 (GPCP)', fontsize=6, color='red', fontweight='bold')
-plt.text(7.5, 0.5, 'R²=0.96 (ERA5)', fontsize=6, color='red', fontweight='bold')
-plt.legend(fontsize=6, loc=9, ncol=1)
+plt.text(0.5, 0.5, 'R²=0.81 (ERA5)', fontsize=6, color='green', fontweight='bold')
+plt.text(8, 2.5, 'R²=0.98 (CRU)', fontsize=6, color='red', fontweight='bold')
+plt.text(8, 1.5, 'R²=0.97 (GPCP)', fontsize=6, color='red', fontweight='bold')
+plt.text(8, 0.5, 'R²=0.96 (ERA5)', fontsize=6, color='red', fontweight='bold')
+plt.legend(fontsize=6, loc=1, ncol=2)
 
 ax = fig.add_subplot(2, 2, 2)
 annual_cycle = ax.plot(time, mon_tas_cru_amz,  linewidth=1.5, linestyle='--', markersize=5, marker='.', markerfacecolor='white', color='black', label='CRU')
@@ -182,9 +189,9 @@ ax.spines['top'].set_visible(False)
 plt.setp(ax.get_xticklabels(), visible=False)
 plt.text(0.5, 22, 'R²=0.85 (CRU)', fontsize=6, color='green', fontweight='bold')
 plt.text(0.5, 21, 'R²=0.76 (ERA5)', fontsize=6, color='green', fontweight='bold')
-plt.text(7.5, 22, 'R²=0.89 (CRU)', fontsize=6, color='red', fontweight='bold')
-plt.text(7.5, 21, 'R²=0.68 (ERA5)', fontsize=6, color='red', fontweight='bold')
-plt.legend(fontsize=6, loc=9, ncol=1)
+plt.text(8, 22, 'R²=0.89 (CRU)', fontsize=6, color='red', fontweight='bold')
+plt.text(8, 21, 'R²=0.68 (ERA5)', fontsize=6, color='red', fontweight='bold')
+plt.legend(fontsize=6, loc=1, ncol=2)
 
 ax = fig.add_subplot(2, 2, 3)
 annual_cycle = ax.plot(time, mon_pre_cru_neb,  linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='black')
@@ -202,9 +209,9 @@ ax.spines['top'].set_visible(False)
 plt.text(0.5, 10, 'R²=0.96 (CRU)', fontsize=6, color='green', fontweight='bold')
 plt.text(0.5, 9, 'R²=0.96 (GPCP)', fontsize=6, color='green', fontweight='bold')
 plt.text(0.5, 8, 'R²=0.96 (ERA5)', fontsize=6, color='green', fontweight='bold')
-plt.text(7.5, 10, 'R²=0.94 (CRU)', fontsize=6, color='red', fontweight='bold')
-plt.text(7.5, 9, 'R²=0.95 (GPCP)', fontsize=6, color='red', fontweight='bold')
-plt.text(7.5, 8, 'R²=0.95 (ERA5)', fontsize=6, color='red', fontweight='bold')
+plt.text(8, 10, 'R²=0.94 (CRU)', fontsize=6, color='red', fontweight='bold')
+plt.text(8, 9, 'R²=0.95 (GPCP)', fontsize=6, color='red', fontweight='bold')
+plt.text(8, 8, 'R²=0.95 (ERA5)', fontsize=6, color='red', fontweight='bold')
 
 ax = fig.add_subplot(2, 2, 4)
 annual_cycle = ax.plot(time, mon_tas_cru_neb,  linewidth=1.5, markersize=5, marker='.', markerfacecolor='white', linestyle='--', color='black')
@@ -223,8 +230,8 @@ ax.spines['left'].set_visible(False)
 ax.spines['top'].set_visible(False)
 plt.text(0.5, 30, 'R²=0.81 (CRU)', fontsize=6, color='green', fontweight='bold')
 plt.text(0.5, 29, 'R²=0.86 (ERA5)', fontsize=6, color='green', fontweight='bold')
-plt.text(7.5, 30, 'R²=0.96 (CRU)', fontsize=6, color='red', fontweight='bold')
-plt.text(7.5, 29, 'R²=0.97 (ERA5)', fontsize=6, color='red', fontweight='bold')
+plt.text(8, 30, 'R²=0.96 (CRU)', fontsize=6, color='red', fontweight='bold')
+plt.text(8, 29, 'R²=0.97 (ERA5)', fontsize=6, color='red', fontweight='bold')
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'

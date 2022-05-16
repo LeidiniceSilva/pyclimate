@@ -51,7 +51,7 @@ def import_obs(var, area, dataset, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	annual_obs = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
+	annual_obs = np.nanmean(np.nanmean(var[:][0:20,:,:], axis=1), axis=1)
 	
 	return annual_obs
 	
@@ -123,7 +123,7 @@ def import_gcm(var, area, model, exp, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	annual_gcm = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
+	annual_gcm = np.nanmean(np.nanmean(var[:][0:20,:,:], axis=1), axis=1)
 
 	return annual_gcm
 
