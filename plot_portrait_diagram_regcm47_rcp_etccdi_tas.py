@@ -452,7 +452,7 @@ mask = np.zeros_like(gcm_rcp26_samz_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)]= True
 heatmap = sns.heatmap(gcm_rcp26_samz_corr, cmap='bwr', vmin=-1, vmax=1, center=0, mask=mask, annot=True, fmt='.1f', annot_kws={"size":6.5},linewidths=.6, ax=ax7)
 heatmap.set_title('G)', fontdict={'fontsize':9}, loc='left', fontweight='bold')
-heatmap.set_ylabel('HadGEM2.6 RCP2.6', fontdict={'fontsize':9}, fontweight='bold')
+heatmap.set_ylabel('HadGEM2-ES RCP2.6', fontdict={'fontsize':9}, fontweight='bold')
 plt.setp(ax7.get_xticklabels(), visible=False)
 
 ax8 = fig.add_subplot(4, 3, 8)
