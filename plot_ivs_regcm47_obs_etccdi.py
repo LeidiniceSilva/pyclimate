@@ -51,7 +51,7 @@ def import_obs(var, area, dataset, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	annual_obs = np.nanmean(np.nanmean(var[:][0:20,:,:], axis=1), axis=1)
+	annual_obs = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
 	
 	return annual_obs
 	
@@ -123,7 +123,7 @@ def import_gcm(var, area, model, exp, freq, dt):
 	var  = data.variables[dict_var[var]][:]
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
-	annual_gcm = np.nanmean(np.nanmean(var[:][0:20,:,:], axis=1), axis=1)
+	annual_gcm = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
 
 	return annual_gcm
 
@@ -524,9 +524,9 @@ time2 = np.arange(1, 12)
 bar_width = .25
 
 ax1 = fig.add_subplot(3, 2, 1)
-plt_clim1 = plt.bar(time1, ivs_rcm_samz_pre, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time1 + .25, ivs_gcm_samz_pre,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'A) SAMZ', loc='left', fontweight='bold', fontsize=8)
+plt_clim1 = plt.bar(time1, ivs_rcm_samz_pre, color='gray', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time1 + .25, ivs_gcm_samz_pre,  color='white', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
+plt.title(u'A)', loc='left', fontweight='bold', fontsize=8)
 plt.ylim(0, 8)
 plt.xticks(time1 + .12, ('PRCPTOT', 'R95p', 'R99p', 'Rx1day', 'Rx5day', 'SDII', 'CDD', 'CWD', 'R10mm', 'R20mm'), fontsize=8)
 plt.yticks(np.arange(0, 10, 2), fontsize=8)
@@ -535,20 +535,20 @@ plt.legend(fontsize=8, ncol=1, handlelength=0.75, handleheight=0.75, frameon=Fal
 plt.tick_params(bottom = False)
 
 ax2 = fig.add_subplot(3, 2, 2)
-plt_clim1 = plt.bar(time2, ivs_rcm_samz_tas, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time2 + .25, ivs_gcm_samz_tas,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'D) SAMZ', loc='left', fontweight='bold', fontsize=8)
+plt_clim1 = plt.bar(time2, ivs_rcm_samz_tas, color='gray', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time2 + .25, ivs_gcm_samz_tas,  color='white', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
+plt.title(u'D)', loc='left', fontweight='bold', fontsize=8)
 plt.ylim(0, 8)
-plt.xticks(time2 + .12, ('TXX', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'Tx10p', 'Tx90p', 'Tn10p', 'Tn90p'), fontsize=8)
+plt.xticks(time2 + .12, ('TXx', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'TX10p', 'TX90p', 'TN10p', 'TN90p'), fontsize=8)
 plt.yticks(np.arange(0, 10, 2), fontsize=8)
 plt.setp(ax2.get_xticklabels(), visible=False)
 plt.tick_params(bottom = False)
 
 ax3 = fig.add_subplot(3, 2, 3)
-plt_clim1 = plt.bar(time1, ivs_rcm_eneb_pre, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time1 + .25, ivs_gcm_eneb_pre,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'B) ENEB', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'IVS - Índices de precipitação', fontsize=8)
+plt_clim1 = plt.bar(time1, ivs_rcm_eneb_pre, color='gray', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time1 + .25, ivs_gcm_eneb_pre,  color='white', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
+plt.title(u'B)', loc='left', fontweight='bold', fontsize=8)
+plt.ylabel(u'IVS of the precipitation indices', fontsize=8)
 plt.ylim(0, 8)
 plt.xticks(time1 + .12, ('PRCPTOT', 'R95p', 'R99p', 'Rx1day', 'Rx5day', 'SDII', 'CDD', 'CWD', 'R10mm', 'R20mm'), fontsize=8)
 plt.yticks(np.arange(0, 10, 2), fontsize=8)
@@ -556,20 +556,20 @@ plt.setp(ax3.get_xticklabels(), visible=False)
 plt.tick_params(bottom = False)
 
 ax4 = fig.add_subplot(3, 2, 4)
-plt_clim1 = plt.bar(time2, ivs_rcm_eneb_tas, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time2 + .25, ivs_gcm_eneb_tas,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'E) ENEB', loc='left', fontweight='bold', fontsize=8)
-plt.ylabel(u'IVS - Índices de temperatura', fontsize=8)
+plt_clim1 = plt.bar(time2, ivs_rcm_eneb_tas, color='gray', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time2 + .25, ivs_gcm_eneb_tas,  color='white', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
+plt.title(u'E)', loc='left', fontweight='bold', fontsize=8)
+plt.ylabel(u'IVS of the temperature indices', fontsize=8)
 plt.ylim(0, 8)
-plt.xticks(time2 + .12, ('TXX', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'Tx10p', 'Tx90p', 'Tn10p', 'Tn90p'), fontsize=8)
+plt.xticks(time2 + .12, ('TXx', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'TX10p', 'TX90p', 'TN10p', 'TN90p'), fontsize=8)
 plt.yticks(np.arange(0, 10, 2), fontsize=8)
 plt.setp(ax4.get_xticklabels(), visible=False)
 plt.tick_params(bottom = False)
 
 ax5 = fig.add_subplot(3, 2, 5)
-plt_clim1 = plt.bar(time1, ivs_rcm_matopiba_pre, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time1 + .25, ivs_gcm_matopiba_pre,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'C) MATOPIBA', loc='left', fontweight='bold', fontsize=8)
+plt_clim1 = plt.bar(time1, ivs_rcm_matopiba_pre, color='gray', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time1 + .25, ivs_gcm_matopiba_pre,  color='white', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
+plt.title(u'C)', loc='left', fontweight='bold', fontsize=8)
 plt.ylim(0, 8)
 plt.xticks(time1 + .12, ('PRCPTOT', 'R95p', 'R99p', 'Rx1day', 'Rx5day', 'SDII', 'CDD', 'CWD', 'R10mm', 'R20mm'), fontsize=8)
 plt.yticks(np.arange(0, 10, 2), fontsize=8)
@@ -577,11 +577,11 @@ labels = ax5.get_xticklabels()
 plt.setp(labels, rotation=90)
 
 ax6 = fig.add_subplot(3, 2, 6)
-plt_clim1 = plt.bar(time2, ivs_rcm_matopiba_tas, color='white', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
-plt_clim2 = plt.bar(time2 + .25, ivs_gcm_matopiba_tas,  color='gray', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
-plt.title(u'F) MATOPIBA', loc='left', fontweight='bold', fontsize=8)
+plt_clim1 = plt.bar(time2, ivs_rcm_matopiba_tas, color='gray', label='RegCM4.7', width = 0.25, edgecolor='black', linewidth=1)
+plt_clim2 = plt.bar(time2 + .25, ivs_gcm_matopiba_tas,  color='white', label='HadGEM2-ES', width = 0.25, edgecolor='black', linewidth=1)
+plt.title(u'F)', loc='left', fontweight='bold', fontsize=8)
 plt.ylim(0, 8)
-plt.xticks(time2 + .12, ('TXX', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'TX10p', 'TX90p', 'TN10p', 'TN90p'), fontsize=8)
+plt.xticks(time2 + .12, ('TXx', 'TXn', 'TNx', 'TNn', 'DTR', 'SU', 'TR', 'TX10p', 'TX90p', 'TN10p', 'TN90p'), fontsize=8)
 plt.yticks(np.arange(0, 10, 2), fontsize=8)
 labels = ax6.get_xticklabels()
 plt.setp(labels, rotation=90)

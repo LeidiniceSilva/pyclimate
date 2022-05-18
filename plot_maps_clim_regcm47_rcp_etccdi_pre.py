@@ -301,7 +301,7 @@ levs31 = [-10, -6, -2, 2, 6, 10]
 levs41 = [-15, -10, -5, 5, 10, 15]
 levs51 = [-35, -25, -15, 15, 25, 35]
 levs61 = [-5, -3, -1, 1, 3, 5]
-levs71 = [-250, -150, -50, 50, 150, 250]
+levs71 = [-250, -200, -100, 50, 150, 250]
 levs81 = [-100, -60, -20, 20, 60, 100]
 levs91 = [-40, -20, -10, 10, 20, 40]
 levs101 = [-10, -6, -2, 2, 6, 10]
@@ -595,7 +595,7 @@ map.contourf(xx, yy, diff_gcm_cdd_rcp85_hist, levels=levs71, latlon=True, cmap=c
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs71, drawedges=True, ax=ax)
-cbar.set_label('CDD (dias)', size=6, labelpad=10, fontweight='bold', rotation=90)
+cbar.set_label('CDD (days)', size=6, labelpad=10, fontweight='bold', rotation=90)
 cbar.ax.tick_params(labelsize=6)
 p_value_gcm_cdd_rcp85 = ma.masked_where(p_value_gcm_cdd_rcp85 >= 0.05, p_value_gcm_cdd_rcp85) 
 map.contourf(xx, yy, p_value_gcm_cdd_rcp85, colors='none', hatches=['....'])
@@ -637,7 +637,7 @@ map.contourf(xx, yy, diff_gcm_cwd_rcp85_hist, levels=levs81, latlon=True, cmap=c
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs81, drawedges=True, ax=ax)
-cbar.set_label('CWD (dias)', size=6, labelpad=10, fontweight='bold', rotation=90)
+cbar.set_label('CWD (days)', size=6, labelpad=10, fontweight='bold', rotation=90)
 cbar.ax.tick_params(labelsize=6)
 p_value_gcm_cwd_rcp85 = ma.masked_where(p_value_gcm_cwd_rcp85 >= 0.05, p_value_gcm_cwd_rcp85) 
 map.contourf(xx, yy, p_value_gcm_cwd_rcp85, colors='none', hatches=['....'])
@@ -679,7 +679,7 @@ map.contourf(xx, yy, diff_gcm_r10mm_rcp85_hist, levels=levs91, latlon=True, cmap
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs91, drawedges=True, ax=ax)
-cbar.set_label('R10mm (dias)', size=6, labelpad=15, fontweight='bold', rotation=90)
+cbar.set_label('R10mm (days)', size=6, labelpad=15, fontweight='bold', rotation=90)
 cbar.ax.tick_params(labelsize=6)
 p_value_gcm_r10mm_rcp85 = ma.masked_where(p_value_gcm_r10mm_rcp85 >= 0.05, p_value_gcm_r10mm_rcp85) 
 map.contourf(xx, yy, p_value_gcm_r10mm_rcp85, colors='none', hatches=['....'])
@@ -725,7 +725,7 @@ map.contourf(xx, yy, diff_gcm_r20mm_rcp85_hist, levels=levs101, latlon=True, cma
 map.drawmeridians(np.arange(-85.,-5.,20.), size=6, labels=[0,0,0,1], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=6, labels=[0,0,0,0], linewidth=0.4, color='black')
 cbar = map.colorbar(ticks=levs101, drawedges=True, ax=ax)
-cbar.set_label('R20mm (dias)', size=6, labelpad=15, fontweight='bold', rotation=90)
+cbar.set_label('R20mm (days)', size=6, labelpad=15, fontweight='bold', rotation=90)
 cbar.ax.tick_params(labelsize=6)
 p_value_gcm_r20mm_rcp85 = ma.masked_where(p_value_gcm_r20mm_rcp85 >= 0.05, p_value_gcm_r20mm_rcp85) 
 map.contourf(xx, yy, p_value_gcm_r20mm_rcp85, colors='none', hatches=['....'])
