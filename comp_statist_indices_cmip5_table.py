@@ -9,8 +9,8 @@ import os
 import netCDF4
 import numpy as np
 import texttable as tt
-from sklearn import metrics
 
+from sklearn import metrics
 from comp_statist_indices import compute_corr, compute_mae, compute_rmse 
 from comp_statist_indices import compute_bias, compute_pbias, compute_apb, compute_effic_coeffic
 

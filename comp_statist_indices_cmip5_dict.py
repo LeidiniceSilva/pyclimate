@@ -9,8 +9,6 @@ import os
 import netCDF4
 import numpy as np
 
-# mpl.use('agg')
-
 from pylab import *
 from netCDF4 import Dataset
 from comp_statist_indices import compute_corr, compute_mae, compute_rmse 

@@ -339,13 +339,9 @@ if __name__=='__main__':
 						   label=name, marker=mark, mfc=cor, color='black', ms=8, ls='')			   
 			plt.text(-3.3, 3.7, text1[var], fontweight='bold')
 			
-
 		# Add RMS contours, and label them
 		contours = dia.add_contours(levels=5, colors='0.5')
 		plt.clabel(contours, inline=1, fontsize=8, fmt='%.1f')
-
-	plt.text(-9.0, -1.8, u'Precipitação (mm d⁻¹)')
-	plt.text(-1.5, -1.8, u'Temperatura (°C)')
 
 	# Add a figure legend
 	fig.legend(dia.samplePoints, 

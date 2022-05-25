@@ -8,7 +8,7 @@ __description__ = "This script compute rank topsis from cmip5 models and obs dat
 import pandas as pd
 import numpy as np
 
-# Import data Prec and Temp(AMZ - NEB - MATOPIBA)
+# Import data Prec and Temp(SAMZ - ENEB - MATOPIBA)
 data = pd.read_csv('/home/nice/temp_matopiba_cmip5.csv')
 data = data.values[:,1:]
 
