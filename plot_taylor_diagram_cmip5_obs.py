@@ -8,12 +8,13 @@ __description__ = "This script plot taylor diagram from cmip5 models and obs dat
 import os
 import netCDF4
 import numpy as np
+import numpy.ma as ma
+import scipy.stats as st
 import matplotlib.pyplot as plt
 import mpl_toolkits.axisartist.floating_axes as FA
 import mpl_toolkits.axisartist.grid_finder as GF
 
 from matplotlib.projections import PolarAxes
-
 
 class TaylorDiagram(object):
     """
@@ -80,8 +81,8 @@ class TaylorDiagram(object):
 
         ax.axis["left"].set_axis_direction("bottom")  # "X axis"
         ax.axis["left"].label.set_text(u'SD')
-        ax.axis["bottom"].set_tick_params(labelsize=4)
-        
+        #~ ax.axis["bottom"].set_tick_params(labelsize=4)
+       
         ax.axis["right"].set_axis_direction("top")    # "Y-axis"
         ax.axis["right"].toggle(ticklabels=True)
         ax.axis["right"].major_ticklabels.set_axis_direction(
@@ -135,9 +136,25 @@ class TaylorDiagram(object):
         return contours
 
 
+def import_obs_clim(param, area, database):
+
+	path  = '/home/nice/Documents/dataset/obs/cmip5'
+	arq   = '{0}/{1}_{2}_{3}_obs_mon_197512-200511.nc'.format(path, param, area, database)	
+	
+	data  = netCDF4.Dataset(arq)
+	var   = data.variables[param][:] 
+	lat   = data.variables['lat'][:]
+	lon   = data.variables['lon'][:]
+	value = var[:][:,:,:]
+	
+	obs_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
+	
+	return obs_data	
+	
+	
 def import_cmip5_clim(param, area, model):
 
-	path  = '/home/nice/Documents/ufrn/phd_project/datas/cmip5/hist'
+	path  = '/home/nice/Documents/dataset/gcm/cmip5'
 	arq   = '{0}/{1}_{2}_Amon_{3}_historical_r1i1p1_197512-200511.nc'.format(path, param, area,	model)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -151,26 +168,16 @@ def import_cmip5_clim(param, area, model):
 	return mdl_data
 
 
-def import_obs_clim(param, area, database):
-
-	path  = '/home/nice/Documents/ufrn/phd_project/datas/obs_data'
-	arq   = '{0}/{1}_{2}_{3}_obs_mon_197512-200511.nc'.format(path, param, area, database)	
-	
-	data  = netCDF4.Dataset(arq)
-	var   = data.variables[param][:] 
-	lat   = data.variables['lat'][:]
-	lon   = data.variables['lon'][:]
-	value = var[:][:,:,:]
-	
-	obs_data = np.nanmean(np.nanmean(value, axis=1), axis=1)
-	
-
-	return obs_data	
-
-
 if __name__=='__main__':
 	
-	# Import cmip5 model and obs database
+	# Import obs database and cmip5 model
+	pre_amz_obs  = import_obs_clim(u'pre', u'amz', u'cru_ts4.02')
+	tmp_amz_obs  = import_obs_clim(u'tmp', u'amz', u'cru_ts4.02')
+	pre_neb_obs  = import_obs_clim(u'pre', u'neb', u'cru_ts4.02')
+	tmp_neb_obs  = import_obs_clim(u'tmp', u'neb', u'cru_ts4.02')
+	pre_mato_obs  = import_obs_clim(u'pre', u'matopiba', u'cru_ts4.02')
+	tmp_mato_obs  = import_obs_clim(u'tmp', u'matopiba', u'cru_ts4.02')
+	
 	pre_amz_gcm1 = import_cmip5_clim(u'pr', u'amz', u'BCC-CSM1.1')
 	tmp_amz_gcm1 = import_cmip5_clim(u'tas', u'amz', u'BCC-CSM1.1')
 	pre_neb_gcm1 = import_cmip5_clim(u'pr', u'neb', u'BCC-CSM1.1')
@@ -387,13 +394,6 @@ if __name__=='__main__':
 	tmp_neb_gcm31 = import_cmip5_clim(u'tas', u'neb', u'ensmean_cmip5')
 	pre_mato_gcm31 = import_cmip5_clim(u'pr', u'matopiba', u'ensmean_cmip5')
 	tmp_mato_gcm31 = import_cmip5_clim(u'tas', u'matopiba', u'ensmean_cmip5')
-
-	pre_amz_obs  = import_obs_clim(u'pre', u'amz', u'cru_ts4.02')
-	tmp_amz_obs  = import_obs_clim(u'tmp', u'amz', u'cru_ts4.02')
-	pre_neb_obs  = import_obs_clim(u'pre', u'neb', u'cru_ts4.02')
-	tmp_neb_obs  = import_obs_clim(u'tmp', u'neb', u'cru_ts4.02')
-	pre_mato_obs  = import_obs_clim(u'pre', u'matopiba', u'cru_ts4.02')
-	tmp_mato_obs  = import_obs_clim(u'tmp', u'matopiba', u'cru_ts4.02')
 	
 	# Reference database standard desviation
 	stdrefs = dict(PRE1=1,
@@ -441,7 +441,7 @@ if __name__=='__main__':
                        [pre_amz_gcm28.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm28)[0,1], 'NCAR-CESM1-CAM5'],
                        [pre_amz_gcm29.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm29)[0,1], 'NorESM1-M'],
                        [pre_amz_gcm30.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm30)[0,1], 'NorESM1-ME'],
-                       [pre_amz_gcm31.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm31)[0,1], 'ensmean_cmip5']],     
+                       [pre_amz_gcm31.std(ddof=1), np.corrcoef(pre_amz_obs, pre_amz_gcm31)[0,1], 'MME']],     
                  TMP1=[[tmp_amz_gcm1.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm1)[0,1], 'BCC-CSM1.1'],
                        [tmp_amz_gcm2.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm2)[0,1], 'BCC-CSM1.1M'],
                        [tmp_amz_gcm3.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm3)[0,1], 'BNU-ESM'],
@@ -472,7 +472,7 @@ if __name__=='__main__':
                        [tmp_amz_gcm28.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm28)[0,1], 'NCAR-CESM1-CAM5'],
                        [tmp_amz_gcm29.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm29)[0,1], 'NorESM1-M'],
                        [tmp_amz_gcm30.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm30)[0,1], 'NorESM1-ME'],
-                       [tmp_amz_gcm31.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm31)[0,1], 'ensmean_cmip5']],
+                       [tmp_amz_gcm31.std(ddof=1), np.corrcoef(pre_amz_obs, tmp_amz_gcm31)[0,1], 'MME']],
                  PRE2=[[pre_neb_gcm1.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm1)[0,1], 'BCC-CSM1.1'],
                        [pre_neb_gcm2.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm2)[0,1], 'BCC-CSM1.1M'],
                        [pre_neb_gcm3.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm3)[0,1], 'BNU-ESM'],
@@ -503,7 +503,7 @@ if __name__=='__main__':
                        [pre_neb_gcm28.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm28)[0,1], 'NCAR-CESM1-CAM5'],
                        [pre_neb_gcm29.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm29)[0,1], 'NorESM1-M'],
                        [pre_neb_gcm30.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm30)[0,1], 'NorESM1-ME'],
-                       [pre_neb_gcm31.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm31)[0,1], 'ensmean_cmip5']],
+                       [pre_neb_gcm31.std(ddof=1), np.corrcoef(pre_neb_obs, pre_neb_gcm31)[0,1], 'MME']],
                  TMP2=[[tmp_neb_gcm1.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm1)[0,1], 'BCC-CSM1.1'],
                        [tmp_neb_gcm2.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm2)[0,1], 'BCC-CSM1.1M'],
                        [tmp_neb_gcm3.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm3)[0,1], 'BNU-ESM'],
@@ -534,7 +534,7 @@ if __name__=='__main__':
                        [tmp_neb_gcm28.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm28)[0,1], 'NCAR-CESM1-CAM5'],
                        [tmp_neb_gcm29.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm29)[0,1], 'NorESM1-M'],
                        [tmp_neb_gcm30.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm30)[0,1], 'NorESM1-ME'],
-                       [tmp_neb_gcm31.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm31)[0,1], 'ensmean_cmip5']],
+                       [tmp_neb_gcm31.std(ddof=1), np.corrcoef(tmp_neb_obs, tmp_neb_gcm31)[0,1], 'MME']],
                  PRE3=[[pre_mato_gcm1.std(ddof=1), np.corrcoef(pre_mato_obs, pre_neb_gcm1)[0,1], 'BCC-CSM1.1'],
                        [pre_mato_gcm2.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm2)[0,1], 'BCC-CSM1.1M'],
                        [pre_mato_gcm3.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm3)[0,1], 'BNU-ESM'],
@@ -565,7 +565,7 @@ if __name__=='__main__':
                        [pre_mato_gcm28.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm28)[0,1], 'NCAR-CESM1-CAM5'],
                        [pre_mato_gcm29.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm29)[0,1], 'NorESM1-M'],
                        [pre_mato_gcm30.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm30)[0,1], 'NorESM1-ME'],
-                       [pre_mato_gcm31.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm31)[0,1], 'ensmean_cmip5']],
+                       [pre_mato_gcm31.std(ddof=1), np.corrcoef(pre_mato_obs, pre_mato_gcm31)[0,1], 'MME']],
                  TMP3=[[tmp_mato_gcm1.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm1)[0,1], 'BCC-CSM1.1'],
                        [tmp_mato_gcm2.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm2)[0,1], 'BCC-CSM1.1M'],
                        [tmp_mato_gcm3.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm3)[0,1], 'BNU-ESM'],
@@ -596,7 +596,7 @@ if __name__=='__main__':
                        [tmp_mato_gcm28.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm28)[0,1], 'NCAR-CESM1-CAM5'],
                        [tmp_mato_gcm29.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm29)[0,1], 'NorESM1-M'],
                        [tmp_mato_gcm30.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm30)[0,1], 'NorESM1-ME'],
-                       [tmp_mato_gcm31.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm31)[0,1], 'ensmean_cmip5']])		          
+                       [tmp_mato_gcm31.std(ddof=1), np.corrcoef(tmp_mato_obs, tmp_mato_gcm31)[0,1], 'MME']])		          
 
 	# Here set placement of the points marking 95th and 99th significance
 	# levels. For more than 102 samples (degrees freedom > 100), critical
@@ -626,18 +626,19 @@ if __name__=='__main__':
 	
 	for var in ['PRE1', 'TMP1', 'PRE2', 'TMP2', 'PRE3', 'TMP3']:
 
-		dia = TaylorDiagram(stdrefs[var], fig=fig, rect=rects[var], label='Reference', srange=(0., 6.5), extend=False)
-		dia.samplePoints[0].set_color('r')
+		dia = TaylorDiagram(stdrefs[var], fig=fig, rect=rects[var], label=u'Reference', srange=(0., 6.5), extend=False)
+		dia.samplePoints[0].set_color('black')
 		dia.ax.plot(x95,y95,color='black')
 		dia.ax.plot(x99,y99,color='black')
-		
-		#~ colors = plt.matplotlib.cm.tab20(np.linspace(0, 1, len(samples['PRE1'])))
+
+		colors = plt.matplotlib.cm.binary(np.linspace(0.299, 1,len(samples['PRE1'])))
+
 		# Add samples to Taylor diagram
 		for i, (stddev,corrcoef,name) in enumerate(samples[var]):
 			dia.add_sample(stddev, corrcoef,
-						   marker='$%d$' % (i+1), ms=10, ls='', label=name)
+						   marker='$%d$' % (i+1), ms=10, ls='', c=colors[i], label=name)
 						   
-			plt.text(-0.95, 7., text1[var], fontweight='bold')
+			plt.text(-0.95, 7.2, text1[var], fontweight='bold')
 
 		# Add RMS contours, and label them
 		contours = dia.add_contours(colors='0.5')
@@ -649,19 +650,20 @@ if __name__=='__main__':
 
 	# Add a figure legend and title. For loc option, place x,y tuple inside [ ].
 	# Can also use special options here: http://matplotlib.sourceforge.net/users/legend_guide.html
-	
+
 	# Add a figure legend
 	fig.legend(dia.samplePoints, 
 			   [ p.get_label() for p in dia.samplePoints ], 
 			   prop=dict(size=10), numpoints=1, loc=(0.73, 0.10))
 
-	plt.subplots_adjust(left=0.10, bottom=0.10, right=0.70, top=0.90, wspace=0.25, hspace=0.20)
+	plt.subplots_adjust(left=0.10, bottom=0.10, right=0.70, top=0.90, wspace=0.55, hspace=0.20)
     
 	# Path out to save figure
-	path_out = '/home/nice'
+	path_out = '/home/nice/Downloads'
 	name_out = 'pyplt_taylor_diagram_cmip5_cru_1975-2005.png'
 	if not os.path.exists(path_out):
 		create_path(path_out)
 	plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 	plt.show()
 	exit()
+	
