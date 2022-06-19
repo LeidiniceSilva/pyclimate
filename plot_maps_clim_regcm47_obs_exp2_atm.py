@@ -71,7 +71,7 @@ def import_gcm(var, area, exp, dt):
 	lon  = data.variables['lon'][:]
 	
 	gcm_850hPa = np.nanmean(var[:][:,2,:,:], axis=0)
-	gcm_200hPa = np.nanmean(var[:][:,8,:,:], axis=0)
+	gcm_200hPa = np.nanmean(var[:][:,9,:,:], axis=0)
 
 	return lat, lon, gcm_850hPa, gcm_200hPa
 	
@@ -117,7 +117,7 @@ wind_djf_rea = ua_djf_rea_850hPa - ua_djf_rea_200hPa
 wind_djf_rcm = ua_djf_rcm_850hPa - ua_djf_rcm_200hPa
 wind_djf_gcm = ua_djf_gcm_850hPa - ua_djf_gcm_200hPa
 
-#~ # Plot models and obs database 
+# Plot models and obs database 
 #~ fig = plt.figure()
 #~ levs1 = [2, 4, 6, 8, 10, 12, 14, 16]
 
@@ -160,7 +160,7 @@ wind_djf_gcm = ua_djf_gcm_850hPa - ua_djf_gcm_200hPa
 #~ ax3 = fig.add_subplot(3, 1, 3)
 #~ map, xx, yy = basemap(lat, lon)
 #~ map.contourf(xx, yy, hus_djf_gcm_850hPa*1000, levels=levs1, latlon=True, cmap=cm.RdYlGn, extend='max')
-#~ map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_gcm_850hPa[::10,::10], va_djf_gcm_850hPa[::10,::10]) 
+#~ q=map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_gcm_850hPa[::10,::10], va_djf_gcm_850hPa[::10,::10]) 
 #~ map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
 #~ map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 #~ plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
@@ -168,6 +168,8 @@ wind_djf_gcm = ua_djf_gcm_850hPa - ua_djf_gcm_200hPa
 #~ plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
 #~ cbar = map.colorbar()
 #~ cbar.ax.tick_params(labelsize=6)
+
+#~ qk = plt.quiverkey(q, 0.9, -0.3, 10, r'$10 m s⁻¹}$', fontproperties={'size':8}, labelpos='E')
 
 #~ y1,j1 = map(-35,-4)
 #~ y2,j2 = map(-35,7)
@@ -214,7 +216,7 @@ cbar.ax.tick_params(labelsize=6)
 ax3 = fig.add_subplot(3, 1, 3)
 map, xx, yy = basemap(lat, lon)
 map.contourf(xx, yy, wind_djf_gcm, levels=levs1, latlon=True, cmap=cm.PuOr, extend='both')
-map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_gcm_200hPa[::10,::10], va_djf_gcm_200hPa[::10,::10]) 
+q=map.quiver(xx[::10,::10], yy[::10,::10], ua_djf_gcm_200hPa[::10,::10], va_djf_gcm_200hPa[::10,::10]) 
 map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.4, color='black')
 map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.4, color='black')
 plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
@@ -222,6 +224,7 @@ plt.ylabel(u'Latitude', fontsize=8, labelpad=25, fontweight='bold')
 plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
 cbar = map.colorbar()
 cbar.ax.tick_params(labelsize=6)
+qk = plt.quiverkey(q, 0.9, -0.3, 10, r'$8 m s⁻¹}$', fontproperties={'size':8}, labelpos='E')
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'

@@ -39,7 +39,7 @@ def import_obs(var, area, dt):
 	value = data.variables[var][:,:,:] 
 	
 	obs = []
-	for mon in range(1, 12 + 1):
+	for mon in range(0, 11 + 1):
 		obs.append(np.nanmean(value[mon::12], axis=0))
 
 	obs = np.nanmean(obs, axis=2)
@@ -58,7 +58,7 @@ def import_rcm(var, area, exp, dt):
 	value = data.variables[var][:,:,:] 
 
 	rcm = []
-	for mon in range(1, 12 + 1):
+	for mon in range(0, 11 + 1):
 		rcm.append(np.nanmean(value[mon::12], axis=0))
 
 	rcm = np.nanmean(rcm, axis=2)
@@ -77,7 +77,7 @@ def import_gcm(var, area, exp, dt):
 	value = data.variables[var][:,:,:] 
 
 	gcm = []
-	for mon in range(1, 12 + 1):
+	for mon in range(0, 11 + 1):
 		gcm.append(np.nanmean(value[mon::12], axis=0))
 
 	gcm = np.nanmean(gcm, axis=2)
@@ -102,40 +102,40 @@ ytime = np.arange(0, 11+1)
 xtime = np.arange(-20, 15, 5)
 
 ax = fig.add_subplot(2, 2, 1)
-plt1 = ax.contourf(lat, ytime, pr_var_obs, np.arange(0, 16, 2), cmap=plt.cm.Blues, extend='max')
+plt1 = ax.contourf(lat, ytime, pr_var_obs, np.arange(0, 14, 2), cmap=plt.cm.Blues, extend='max')
 plt.title(u'A)', loc='left', fontsize=8, fontweight='bold')
 plt.ylabel('Months', fontsize=8, fontweight='bold')
-plt.xticks(xtime, ('20°S', '15°S', '10°S', '5°S', 'EQ', '5°S', '10°N', '15°N', '20°N'), fontsize=7)
+plt.xticks(xtime, ('20°S', '15°S', '10°S', '5°S', '0°', '5°S', '10°N', '15°N', '20°N'), fontsize=7)
 plt.yticks(ytime, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.setp(ax.get_xticklabels(), visible=False)
 plt.grid(True, which='major', linewidth=0.5, linestyle='--', color='white')
 plt.colorbar(plt1, pad=0.040)
 
 ax = fig.add_subplot(2, 2, 2)
-plt1 = ax.contourf(lat, ytime, pr_var_rea, np.arange(0, 16, 2), cmap=plt.cm.Blues, extend='max')
+plt1 = ax.contourf(lat, ytime, pr_var_rea, np.arange(0, 14, 2), cmap=plt.cm.Blues, extend='max')
 plt.title(u'B)', loc='left', fontsize=8, fontweight='bold')
 plt.setp(ax.get_xticklabels(), visible=False)
 plt.setp(ax.get_yticklabels(), visible=False)
-plt.xticks(xtime, ('20°S', '15°S', '10°S', '5°S', 'EQ', '5°S', '10°N', '15°N', '20°N'), fontsize=7)
+plt.xticks(xtime, ('20°S', '15°S', '10°S', '5°S', '0°', '5°S', '10°N', '15°N', '20°N'), fontsize=7)
 plt.yticks(ytime, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.grid(True, which='major', linewidth=0.5, linestyle='--', color='white')
 plt.colorbar(plt1, pad=0.040)
 
 ax = fig.add_subplot(2, 2, 3)
-plt1 = ax.contourf(lat, ytime, pr_var_rcm, np.arange(0, 16, 2), cmap=plt.cm.Blues, extend='max')
+plt1 = ax.contourf(lat, ytime, pr_var_rcm, np.arange(0, 14, 2), cmap=plt.cm.Blues, extend='max')
 plt.title(u'C)', loc='left', fontsize=8, fontweight='bold')
 plt.xlabel('Latitude', fontsize=8, fontweight='bold')
 plt.ylabel('Months', fontsize=8, fontweight='bold')
-plt.xticks(xtime, ('20°S', '15°S', '10°S', '5°S', 'EQ', '5°S', '10°N', '15°N', '20°N'), fontsize=8)
+plt.xticks(xtime, ('20°S', '15°S', '10°S', '5°S', '0°', '5°S', '10°N', '15°N', '20°N'), fontsize=8)
 plt.yticks(ytime, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.grid(True, which='major', linewidth=0.5, linestyle='--', color='white')
 plt.colorbar(plt1, pad=0.040)
 
 ax = fig.add_subplot(2, 2, 4)
-plt1 = ax.contourf(lat, ytime, pr_var_gcm, np.arange(0, 16, 2), cmap=plt.cm.Blues, extend='max')
+plt1 = ax.contourf(lat, ytime, pr_var_gcm, np.arange(0, 14, 2), cmap=plt.cm.Blues, extend='max')
 plt.title(u'D)', loc='left', fontsize=8, fontweight='bold')
 plt.xlabel('Latitude', fontsize=8, fontweight='bold')
-plt.xticks(xtime, ('20°S', '15°S', '10°S', '5°S', 'EQ', '5°S', '10°N', '15°N', '20°N'), fontsize=7)
+plt.xticks(xtime, ('20°S', '15°S', '10°S', '5°S', '0°', '5°S', '10°N', '15°N', '20°N'), fontsize=7)
 plt.yticks(ytime, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.grid(True, which='major', linewidth=0.5, linestyle='--', color='white')
 plt.setp(ax.get_yticklabels(), visible=False)
