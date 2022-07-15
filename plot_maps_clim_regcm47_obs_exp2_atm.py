@@ -113,9 +113,9 @@ lat, lon, va_djf_rea_850hPa, va_djf_rea_200hPa = import_obs('v', 'amz_neb', 'era
 lat, lon, va_djf_rcm_850hPa, va_djf_rcm_200hPa = import_rcm('va', 'amz_neb', 'historical', '1986-2005')
 lat, lon, va_djf_gcm_850hPa, va_djf_gcm_200hPa = import_gcm('va', 'amz_neb', 'historical', '1986-2005')
 
-wind_djf_rea = ua_djf_rea_850hPa - ua_djf_rea_200hPa
-wind_djf_rcm = ua_djf_rcm_850hPa - ua_djf_rcm_200hPa
-wind_djf_gcm = ua_djf_gcm_850hPa - ua_djf_gcm_200hPa
+wind_djf_rea = ua_djf_rea_200hPa - ua_djf_rea_850hPa 
+wind_djf_rcm = ua_djf_rcm_200hPa - ua_djf_rcm_850hPa 
+wind_djf_gcm = ua_djf_gcm_200hPa - ua_djf_gcm_850hPa 
 
 # Plot models and obs database 
 #~ fig = plt.figure()
