@@ -7,7 +7,6 @@ __description__ = "This script plot annual climatology from regcm46 and obs data
 
 import os
 import netCDF4
-import statistics
 import numpy as np
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
@@ -17,8 +16,6 @@ import matplotlib as mpl
 
 from pylab import *
 from netCDF4 import Dataset
-from sklearn import metrics
-from scipy.stats import norm
 from matplotlib.font_manager import FontProperties
 
 
@@ -103,14 +100,14 @@ bar_width = .30
 # Subplot one
 ax = fig.add_subplot(3, 1, 1)
 plt_clim1 = plt.bar(time, nam_obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
-plt_clim2 = plt.bar(time + .30, nam_exp1_clim, alpha=0.8, color='blue', label='Reg_Exp1', width = 0.25, edgecolor='black')
-plt_clim3 = plt.bar(time + .60, nam_exp2_clim, alpha=0.8, color='red', label='Reg_Exp2', width = 0.25, edgecolor='black')
+plt_clim2 = plt.bar(time + .30, nam_exp1_clim, alpha=0.8, color='blue', label='Reg_H', width = 0.25, edgecolor='black')
+plt_clim3 = plt.bar(time + .60, nam_exp2_clim, alpha=0.8, color='red', label='Reg_UW', width = 0.25, edgecolor='black')
 plt.axhline(nam_exp1_median, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
 plt.axhline(nam_exp2_median, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
 plt.axhline(nam_obs_median, linewidth=1, linestyle='dashed', color='black', alpha=0.8)
-plt.title(u'A)', loc='left', fontweight='bold', fontsize=8)
-plt.xticks(time + .30, ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
-plt.yticks(np.arange(0, 14, 2))
+plt.title(u'A) NAMZ', loc='left', fontweight='bold', fontsize=8)
+plt.xticks(time + .30, ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'), fontsize=8)
+plt.yticks(np.arange(0, 14, 2), fontsize=8)
 plt.setp(ax.get_xticklabels(), visible=False)
 plt.text(7.5, 7, 'ME = 6.83', fontsize=8, color='black')
 plt.text(9.5, 7, 'ME = 4.46', fontsize=8, color='blue')
@@ -120,15 +117,15 @@ plt.legend(loc=1, handlelength=0.75, handleheight=0.75, shadow=True, ncol=3, pro
 # Subplot two
 ax = fig.add_subplot(3, 1, 2)
 plt_clim1 = plt.bar(time, sam_obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
-plt_clim2 = plt.bar(time + .30, sam_exp1_clim, alpha=0.8, color='blue', label='Reg_Exp1', width = 0.25, edgecolor='black')
-plt_clim3 = plt.bar(time + .60, sam_exp2_clim, alpha=0.8, color='red', label='Reg_Exp2', width = 0.25, edgecolor='black')
+plt_clim2 = plt.bar(time + .30, sam_exp1_clim, alpha=0.8, color='blue', label='Reg_H', width = 0.25, edgecolor='black')
+plt_clim3 = plt.bar(time + .60, sam_exp2_clim, alpha=0.8, color='red', label='Reg_UW', width = 0.25, edgecolor='black')
 plt.axhline(sam_exp1_median, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
 plt.axhline(sam_exp2_median, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
 plt.axhline(sam_obs_median, linewidth=1, linestyle='dashed', color='black', alpha=0.8)
 plt.ylabel('Precipitation (mm d⁻¹)', fontsize=8, fontweight='bold')
-plt.title(u'B)', loc='left', fontweight='bold', fontsize=8)
-plt.xticks(time + .30, ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
-plt.yticks(np.arange(0, 14, 2))
+plt.title(u'B) SAMZ', loc='left', fontweight='bold', fontsize=8)
+plt.xticks(time + .30, ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'), fontsize=8)
+plt.yticks(np.arange(0, 14, 2), fontsize=8)
 plt.setp(ax.get_xticklabels(), visible=False)
 plt.text(5, 6.5, 'ME = 6.20', fontsize=8, color='black')
 plt.text(7, 6.5, 'ME = 2.83', fontsize=8, color='blue')
@@ -137,15 +134,15 @@ plt.text(9, 6.5, 'ME = 3.15', fontsize=8, color='red')
 # Subplot three
 ax = fig.add_subplot(3, 1, 3)
 plt_clim1 = plt.bar(time, neb_obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
-plt_clim2 = plt.bar(time + .30, neb_exp1_clim, alpha=0.8, color='blue', label='Reg_Exp1', width = 0.25, edgecolor='black')
-plt_clim3 = plt.bar(time + .60, neb_exp2_clim, alpha=0.8, color='red', label='Reg_Exp2', width = 0.25, edgecolor='black')
+plt_clim2 = plt.bar(time + .30, neb_exp1_clim, alpha=0.8, color='blue', label='Reg_H', width = 0.25, edgecolor='black')
+plt_clim3 = plt.bar(time + .60, neb_exp2_clim, alpha=0.8, color='red', label='Reg_UW', width = 0.25, edgecolor='black')
 plt.axhline(neb_exp1_median, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
 plt.axhline(neb_exp2_median, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
 plt.axhline(neb_obs_median, linewidth=1, linestyle='dashed', color='black', alpha=0.8)
 plt.xlabel('Months', fontsize=8, fontweight='bold')
-plt.title(u'C)', loc='left', fontweight='bold', fontsize=8)
-plt.xticks(time + .30, ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
-plt.yticks(np.arange(0, 14, 2))
+plt.title(u'C) NEB', loc='left', fontweight='bold', fontsize=8)
+plt.xticks(time + .30, ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'), fontsize=8)
+plt.yticks(np.arange(0, 14, 2), fontsize=8)
 plt.text(5, 4, 'ME = 2.99', fontsize=8, color='black')
 plt.text(7, 4, 'ME = 2.66', fontsize=8, color='blue')
 plt.text(9, 4, 'ME = 2.60', fontsize=8, color='red')
