@@ -30,17 +30,12 @@ def import_obs(var, area, dataset, dt):
 	lat  = data.variables['lat'][:]
 	lon  = data.variables['lon'][:]
 	value = np.nanmean(np.nanmean(var[:][:,:,:], axis=1), axis=1)
-	print(value)
 	
 	obs = []
 	conf_int = []		
 	for mon in range(0, 11 + 1):
-		print(value[mon])
-	exit()
-	
-	obs.append(np.nanmean(value[mon::12], axis=0))
-
-	conf_int.append(np.percentile(value[mon::12], [2.5, 97.5]))
+		obs.append(np.nanmean(value[mon::12], axis=0))
+		conf_int.append(np.percentile(value[mon::12], [2.5, 97.5]))
 	print(conf_int)
 
 	return value, obs
@@ -124,10 +119,10 @@ time = np.arange(0.5, 12 + 0.5)
 
 ax10 = fig.add_subplot(3, 2, 1)
 annual_cycle1 = ax10.plot(time, pre_cru_samz, time, pre_reg_samz, time, pre_had_samz, time, pre_samz_ci1, time, pre_samz_ci2)
-plt.title(u'A)', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'A) SAMZ', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.ylim(0, 15)
-plt.yticks(np.arange(0, 18, 3), fontsize=8)
+plt.ylim(0, 12)
+plt.yticks(np.arange(0, 14, 2), fontsize=8)
 plt.setp(ax10.get_xticklabels(), visible=False)
 l1, l2, l3, l4, l5 = annual_cycle1
 plt.setp(l1, linewidth=1.5, color='black', linestyle='-')
@@ -146,7 +141,7 @@ plt.legend(annual_cycle1[:-1], ['CRU', 'RegCM4.7', 'HadGEM2-ES'], fontsize=6, lo
 
 ax20 = fig.add_subplot(3, 2, 2)
 annual_cycle2 = ax20.plot(time, tas_cru_samz, time, np.nanmean(tas_reg_samz, axis=1), time, tas_had_samz, time, tas_samz_ci1, time, tas_samz_ci2)
-plt.title(u'D)', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'D) SAMZ', loc='left', fontweight='bold', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.ylim(22, 34)
 plt.yticks(np.arange(22, 36, 2), fontsize=8)
@@ -167,11 +162,11 @@ plt.axvline(8.5, linewidth=1., linestyle='-', color='black')
 
 ax30 = fig.add_subplot(3, 2, 3)
 annual_cycle3 = ax30.plot(time, pre_cru_eneb, time, pre_reg_eneb, time, pre_had_eneb, time, pre_eneb_ci1, time, pre_eneb_ci2)
-plt.title(u'B)', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'B) ENEB', loc='left', fontweight='bold', fontsize=8)
 plt.ylabel(u'Precipitation (mm d⁻¹)', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.ylim(0, 15)
-plt.yticks(np.arange(0, 18, 3), fontsize=8)
+plt.ylim(0, 12)
+plt.yticks(np.arange(0, 14, 2), fontsize=8)
 plt.setp(ax30.get_xticklabels(), visible=False)
 l1, l2, l3, l4, l5 = annual_cycle3
 plt.setp(l1, linewidth=1.5, color='black', linestyle='-')
@@ -189,7 +184,7 @@ plt.axvline(8.5, linewidth=1., linestyle='-', color='black')
 	 
 ax40 = fig.add_subplot(3, 2, 4)
 annual_cycle4 = ax40.plot(time, tas_cru_eneb, time, np.nanmean(tas_reg_eneb, axis=1), time, tas_had_eneb, time, tas_eneb_ci1, time, tas_eneb_ci2)
-plt.title(u'E)', loc='left', fontweight='bold', fontsize=8)
+plt.title(u'E) ENEB', loc='left', fontweight='bold', fontsize=8)
 plt.ylabel(u'Temperature (°C)', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.ylim(22, 34)
@@ -211,11 +206,11 @@ plt.axvline(8.5, linewidth=1., linestyle='-', color='black')
 	 
 ax50 = fig.add_subplot(3, 2, 5)
 annual_cycle5 = ax50.plot(time, pre_cru_matopiba, time, pre_reg_matopiba, time, pre_had_matopiba, time, pre_matopiba_ci1, time, pre_matopiba_ci2)
-plt.title(u'C)', loc='left', fontweight='bold', fontsize=8)
-plt.xlabel(u'Meses', fontsize=8)
+plt.title(u'C) MATOPIBA', loc='left', fontweight='bold', fontsize=8)
+plt.xlabel(u'Months', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
-plt.ylim(0, 15)
-plt.yticks(np.arange(0, 18, 3), fontsize=8)
+plt.ylim(0, 12)
+plt.yticks(np.arange(0, 14, 2), fontsize=8)
 l1, l2, l3, l4, l5 = annual_cycle5
 plt.setp(l1, linewidth=1.5, color='black', linestyle='-')
 plt.setp(l2, linewidth=1.5, color='gray', linestyle='-')
@@ -231,8 +226,8 @@ plt.axvline(8.5, linewidth=1., linestyle='-', color='black')
 
 ax60 = fig.add_subplot(3, 2, 6)
 annual_cycle6 = ax60.plot(time, tas_cru_matopiba, time, np.nanmean(tas_reg_matopiba, axis=1), time, tas_had_matopiba, time, tas_matopiba_ci1, time, tas_matopiba_ci2)
-plt.title(u'F)', loc='left', fontweight='bold', fontsize=8)
-plt.xlabel(u'Meses', fontsize=8)
+plt.title(u'F) MATOPIBA', loc='left', fontweight='bold', fontsize=8)
+plt.xlabel(u'Months', fontsize=8)
 plt.xticks(time, ('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'), fontsize=8)
 plt.ylim(22, 34)
 plt.yticks(np.arange(22, 36, 2), fontsize=8)
