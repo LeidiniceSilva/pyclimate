@@ -2,18 +2,16 @@
 
 __author__      = "Leidinice Silva"
 __email__       = "leidinicesilvae@gmail.com"
-__date__        = "05/26/2018"
+__date__        = "01/29/2022"
 __description__ = "Statistical indices to assesment skill of the models"
-
-
-from netCDF4 import Dataset
 
 import numpy as np
 import scipy.stats as st
+
 from scipy.stats import norm
 
 
-def compute_corr(obs, model):
+def compute_corr(model, obs):
 
     """
     The input arrays must have the same dimentions
@@ -251,7 +249,7 @@ def compute_relative_change(rcp, hist):
     return rc
     
     	
-def compute_anomaly(model, obs):
+def compute_anomaly(model, fcst):
 
     """
     The input arrays must have the same dimensions
@@ -260,10 +258,10 @@ def compute_anomaly(model, obs):
     :Return: Anomaly and Standard Anomaly
     """
 
-    clim_mean = np.nanmean(obs, axis=0)
-    clim_std = np.nanstd(obs, axis=0)
-    anomaly = obs - clim_mean
-    standard_anomaly = (obs - clim_mean)/clim_std
+    clim_mean = np.nanmean(model, axis=0)
+    clim_std = np.nanstd(model, axis=0)
+    anomaly = fcst - clim_mean
+    standard_anomaly = (fcst - clim_mean)/clim_std
     
     return anomaly, standard_anomaly
     
@@ -288,4 +286,4 @@ def compute_fcst_correct(model, obs, fcst):
         fcst_correc.append(ss.gamma.ppf(prob, alpha_obs, scale=beta_obs))
         
     return fcst_correct
-	
+    
