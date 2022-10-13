@@ -36,7 +36,7 @@ def compute_r2(model, obs):
 	:Return: R-squared
 	"""
 
-	corr = np.corrcoef(model, obs)[0][1]
+	corr = np.corrcoef(obs, model)[0][1]
 	r2 = corr ** 2
 
 	return r2
@@ -262,8 +262,8 @@ def compute_anomaly(model, obs):
 
     clim_mean = np.nanmean(obs, axis=0)
     clim_std = np.nanstd(obs, axis=0)
-    anomaly = model - clim_mean
-    standard_anomaly = (model - clim_mean)/clim_std
+    anomaly = obs - clim_mean
+    standard_anomaly = (obs - clim_mean)/clim_std
     
     return anomaly, standard_anomaly
     

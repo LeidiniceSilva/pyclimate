@@ -9,10 +9,6 @@ import xarray as xr
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-
-import numpy as np
-import xarray as xr
-import pandas as pd
 import time
 
 # Set latitude and longitude
