@@ -24,7 +24,7 @@ def import_obs(area, obs):
 	param = 'precip' # precip, pre or tmp
 	date  = '2001-2010'
 
-	path  = '/home/nice/Documents/dataset/obs/reg_pbl'
+	path  = '/home/nice/Documentos/dataset/obs/reg_pbl'
 	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, obs, date)	
 		
 	data  = netCDF4.Dataset(arq)
@@ -48,7 +48,7 @@ def import_sim(area, exp):
 	param = 'pr' # pr or tas
 	date  = '2001-2010'
 
-	path  = '/home/nice/Documents/dataset/rcm/reg_pbl'
+	path  = '/home/nice/Documentos/dataset/rcm/reg_pbl'
 	arq   = '{0}/{1}_{2}_{3}_mon_{4}.nc'.format(path, param, area, exp, date)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -100,8 +100,8 @@ bar_width = .30
 # Subplot one
 ax = fig.add_subplot(3, 1, 1)
 plt_clim1 = plt.bar(time, nam_obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
-plt_clim2 = plt.bar(time + .30, nam_exp1_clim, alpha=0.8, color='blue', label='Reg_H', width = 0.25, edgecolor='black')
-plt_clim3 = plt.bar(time + .60, nam_exp2_clim, alpha=0.8, color='red', label='Reg_UW', width = 0.25, edgecolor='black')
+plt_clim2 = plt.bar(time + .30, nam_exp1_clim, alpha=0.8, color='blue', label='Reg_Holtslag', width = 0.25, edgecolor='black')
+plt_clim3 = plt.bar(time + .60, nam_exp2_clim, alpha=0.8, color='red', label='Reg_UW-PBL', width = 0.25, edgecolor='black')
 plt.axhline(nam_exp1_median, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
 plt.axhline(nam_exp2_median, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
 plt.axhline(nam_obs_median, linewidth=1, linestyle='dashed', color='black', alpha=0.8)
@@ -117,8 +117,8 @@ plt.legend(loc=1, handlelength=0.75, handleheight=0.75, shadow=True, ncol=3, pro
 # Subplot two
 ax = fig.add_subplot(3, 1, 2)
 plt_clim1 = plt.bar(time, sam_obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
-plt_clim2 = plt.bar(time + .30, sam_exp1_clim, alpha=0.8, color='blue', label='Reg_H', width = 0.25, edgecolor='black')
-plt_clim3 = plt.bar(time + .60, sam_exp2_clim, alpha=0.8, color='red', label='Reg_UW', width = 0.25, edgecolor='black')
+plt_clim2 = plt.bar(time + .30, sam_exp1_clim, alpha=0.8, color='blue', label='Reg_Holtslag', width = 0.25, edgecolor='black')
+plt_clim3 = plt.bar(time + .60, sam_exp2_clim, alpha=0.8, color='red', label='Reg_UW-PBL', width = 0.25, edgecolor='black')
 plt.axhline(sam_exp1_median, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
 plt.axhline(sam_exp2_median, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
 plt.axhline(sam_obs_median, linewidth=1, linestyle='dashed', color='black', alpha=0.8)
@@ -134,8 +134,8 @@ plt.text(9, 6.5, 'ME = 3.15', fontsize=8, color='red')
 # Subplot three
 ax = fig.add_subplot(3, 1, 3)
 plt_clim1 = plt.bar(time, neb_obs_clim, alpha=0.8, color='black', label='GPCP', width = 0.25, edgecolor='black')
-plt_clim2 = plt.bar(time + .30, neb_exp1_clim, alpha=0.8, color='blue', label='Reg_H', width = 0.25, edgecolor='black')
-plt_clim3 = plt.bar(time + .60, neb_exp2_clim, alpha=0.8, color='red', label='Reg_UW', width = 0.25, edgecolor='black')
+plt_clim2 = plt.bar(time + .30, neb_exp1_clim, alpha=0.8, color='blue', label='Reg_Holtslag', width = 0.25, edgecolor='black')
+plt_clim3 = plt.bar(time + .60, neb_exp2_clim, alpha=0.8, color='red', label='Reg_UW-PBL', width = 0.25, edgecolor='black')
 plt.axhline(neb_exp1_median, linewidth=1, linestyle='dashed', color='blue', alpha=0.8)
 plt.axhline(neb_exp2_median, linewidth=1, linestyle='dashed', color='red', alpha=0.8)
 plt.axhline(neb_obs_median, linewidth=1, linestyle='dashed', color='black', alpha=0.8)

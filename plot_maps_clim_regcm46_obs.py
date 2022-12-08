@@ -17,11 +17,6 @@ import matplotlib.pyplot as plt
 
 # mpl.use('Agg')
 
-conda_file_dir = conda.__file__
-conda_dir = conda_file_dir.split('lib')[0]
-proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
-os.environ["PROJ_LIB"] = proj_lib
-
 from matplotlib import colors as c
 from matplotlib.colors import BoundaryNorm
 from mpl_toolkits.basemap import Basemap
@@ -33,7 +28,7 @@ def import_obs(area, obs, time):
 	param = 'precip' 
 	date  = '2001-2010'
 
-	path  = '/home/nice/Documents/dataset/obs/reg_pbl'
+	path  = '/home/nice/Documentos/dataset/obs/reg_pbl'
 	arq   = '{0}/{1}_{2}_{3}_{4}_{5}.nc'.format(path, param, area, obs, time, date)	
 		
 	data  = netCDF4.Dataset(arq)
@@ -51,7 +46,7 @@ def import_sim(area, exp, time):
 	param = 'pr' 
 	date  = '2001-2010'
 
-	path  = '/home/nice/Documents/dataset/rcm/reg_pbl'
+	path  = '/home/nice/Documentos/dataset/rcm/reg_pbl'
 	arq   = '{0}/{1}_{2}_{3}_{4}_{5}.nc'.format(path, param, area, exp, time, date)	
 	
 	data  = netCDF4.Dataset(arq)
@@ -86,7 +81,7 @@ def basemap(lat, lon):
 	lats = np.arange(-20.,15.,-0.25) 
 	lons, lats = np.meshgrid(new_lon, new_lat)
 
-	path = '/home/nice/Documents/github_projects/shp'
+	path = '/home/nice/Documentos/github_projects/shp'
 	map.readshapefile('{0}/shp_america_sul/america_sul'.format(path), 'world', drawbounds=True, color='black', linewidth=.8)
 
 	xx, yy = map(lons,lats)
@@ -108,14 +103,14 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
 
 	ax = fig.add_subplot(332)
-	plt.title(u'B) Reg_H DJF', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'B) Reg_Holtslag DJF', loc='left', fontsize=8, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_clim = map.contourf(xx, yy, djf_exp1, levels=levs, latlon=True, cmap=cm.Blues)
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 
 	ax = fig.add_subplot(333)
-	plt.title(u'C) Reg_UW DJF', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'C) Reg_UW-PBL DJF', loc='left', fontsize=8, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_clim = map.contourf(xx, yy, djf_exp2, levels=levs, latlon=True, cmap=cm.Blues)
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
@@ -130,14 +125,14 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
 		
 	ax = fig.add_subplot(335)
-	plt.title(u'E) Reg_H JJA', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'E) Reg_Holtslag JJA', loc='left', fontsize=8, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_map = map.contourf(xx, yy, jja_exp1, levels=levs, latlon=True, cmap=cm.Blues)
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 
 	ax = fig.add_subplot(336)
-	plt.title(u'F) Reg_UW JJA', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'F) Reg_UW-PBL JJA', loc='left', fontsize=8, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_map = map.contourf(xx, yy, jja_exp2, levels=levs, latlon=True, cmap=cm.Blues)
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
@@ -153,7 +148,7 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
 
 	ax = fig.add_subplot(338)
-	plt.title(u'H) Reg_H ANN', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'H) Reg_Holtslag ANN', loc='left', fontsize=8, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_clim = map.contourf(xx, yy, ann_exp1, levels=levs, latlon=True, cmap=cm.Blues)
@@ -161,7 +156,7 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 			
 	ax = fig.add_subplot(339)
-	plt.title(u'I) Reg_UW ANN', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'I) Reg_UW-PBL ANN', loc='left', fontsize=8, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_clim = map.contourf(xx, yy, ann_exp2, levels=levs, latlon=True, cmap=cm.Blues, extend='max')
