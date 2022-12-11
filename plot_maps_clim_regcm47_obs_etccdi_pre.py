@@ -15,11 +15,6 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 import warnings ; warnings.filterwarnings("ignore")
 
-conda_file_dir = conda.__file__
-conda_dir = conda_file_dir.split('lib')[0]
-proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
-os.environ["PROJ_LIB"] = proj_lib
-
 from matplotlib.path import Path
 from mpl_toolkits.basemap import Basemap
 from matplotlib.patches import PathPatch
@@ -27,12 +22,12 @@ from matplotlib.patches import PathPatch
 
 def import_obs(var, area, dataset, freq, dt):
 	
-	path = '/home/nice/Documents/dataset/obs/eca'
+	path = '/home/nice/Documentos/dataset/obs/eca'
 	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_lonlat.nc'.format(path, var, area, dataset, freq, dt)	
 
 	dict_var = {u'eca_prcptot': u'precip', 
-	u'eca_r95p': u'precip',
-	u'eca_r99p': u'precip', 
+	u'eca_r95': u'precip',
+	u'eca_r99': u'precip', 
 	u'eca_rx1day': u'highest_one_day_precipitation_amount_per_time_period',
 	u'eca_rx5day': u'highest_five_day_precipitation_amount_per_time_period',
 	u'eca_sdii': u'simple_daily_intensitiy_index_per_time_period',
@@ -55,12 +50,12 @@ def import_obs(var, area, dataset, freq, dt):
 	
 def import_rcm(var, area, model, exp, freq, dt):
 	
-	path = '/home/nice/Documents/dataset/rcm/eca'	
+	path = '/home/nice/Documentos/dataset/rcm/eca'	
 	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
 
 	dict_var = {u'eca_prcptot': u'pr', 
-	u'eca_r95p': u'pr',
-	u'eca_r99p': u'pr', 
+	u'eca_r95': u'pr',
+	u'eca_r99': u'pr', 
 	u'eca_rx1day': u'highest_one_day_precipitation_amount_per_time_period',
 	u'eca_rx5day': u'highest_five_day_precipitation_amount_per_time_period',
 	u'eca_sdii': u'simple_daily_intensitiy_index_per_time_period',
@@ -83,12 +78,12 @@ def import_rcm(var, area, model, exp, freq, dt):
 
 def import_gcm(var, area, model, exp, freq, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/eca'
+	path = '/home/nice/Documentos/dataset/gcm/eca'
 	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
 
 	dict_var = {u'eca_prcptot': u'pr', 
-	u'eca_r95p': u'pr',
-	u'eca_r99p': u'pr', 
+	u'eca_r95': u'pr',
+	u'eca_r99': u'pr', 
 	u'eca_rx1day': u'highest_one_day_precipitation_amount_per_time_period',
 	u'eca_rx5day': u'highest_five_day_precipitation_amount_per_time_period',
 	u'eca_sdii': u'simple_daily_intensitiy_index_per_time_period',
@@ -131,7 +126,7 @@ def basemap(lat, lon):
 	lons = np.arange(-85.,-5.,0.25) 
 	lats = np.arange(-20.,15.,-0.25) 
 	
-	path = '/home/nice/Documents/github_projects/shp'
+	path = '/home/nice/Documentos/github_projects/shp'
 	map.readshapefile('{0}/shp_america_sul/america_sul'.format(path), 'world', drawbounds=True, color='black', linewidth=0.8)
 	
 	return map, xx, yy
@@ -155,13 +150,13 @@ lat, lon, obs_prcptot, obs_prcptot_std, obs_prcptot_sample = import_obs('eca_prc
 lat, lon, rcm_prcptot, rcm_prcptot_std, rcm_prcptot_sample = import_rcm('eca_prcptot', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 lat, lon, gcm_prcptot, gcm_prcptot_std, gcm_prcptot_sample = import_gcm('eca_prcptot', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_r95p, obs_r95p_std, obs_r95p_sample = import_obs('eca_r95p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
-lat, lon, rcm_r95p, rcm_r95p_std, rcm_r95p_sample = import_rcm('eca_r95p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_r95p, gcm_r95p_std, gcm_r95p_sample = import_gcm('eca_r95p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_r95p, obs_r95p_std, obs_r95p_sample = import_obs('eca_r95', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
+lat, lon, rcm_r95p, rcm_r95p_std, rcm_r95p_sample = import_rcm('eca_r95', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_r95p, gcm_r95p_std, gcm_r95p_sample = import_gcm('eca_r95', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
-lat, lon, obs_r99p, obs_r99p_std, obs_r99p_sample = import_obs('eca_r99p', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
-lat, lon, rcm_r99p, rcm_r99p_std, rcm_r99p_sample = import_rcm('eca_r99p', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-lat, lon, gcm_r99p, gcm_r99p_std, gcm_r99p_sample = import_gcm('eca_r99p', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+lat, lon, obs_r99p, obs_r99p_std, obs_r99p_sample = import_obs('eca_r99', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
+lat, lon, rcm_r99p, rcm_r99p_std, rcm_r99p_sample = import_rcm('eca_r99', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+lat, lon, gcm_r99p, gcm_r99p_std, gcm_r99p_sample = import_gcm('eca_r99', 'amz_neb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 
 lat, lon, obs_rx1day, obs_rx1day_std, obs_rx1day_sample = import_obs('eca_rx1day', 'amz_neb', 'cpc_obs', 'yr', '1986-2005')   
 lat, lon, rcm_rx1day, rcm_rx1day_std, rcm_rx1day_sample = import_rcm('eca_rx1day', 'amz_neb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
@@ -229,8 +224,8 @@ p_value_r20mm_gcm = ttest(gcm_r20mm, gcm_r20mm_std, gcm_r20mm_sample)
 fig = plt.figure(figsize=(6, 10))
 
 levs1 = [100, 500, 1000, 1500, 2000, 3000]
-levs2 = [5, 10, 20, 40, 60, 80]
-levs3 = [1, 5, 10, 20, 30, 40]
+levs2 = [5, 10, 20, 30, 40, 50]
+levs3 = [10, 20, 30, 40, 50, 60]
 levs4 = [1, 10, 20, 30, 40, 50]
 levs5 = [10, 40, 70, 100, 130, 160]
 levs6 = [1, 3, 6, 9, 12, 15]

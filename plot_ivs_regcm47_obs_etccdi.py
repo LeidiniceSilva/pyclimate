@@ -22,12 +22,12 @@ from matplotlib.font_manager import FontProperties
 
 def import_obs(var, area, dataset, freq, dt):
 	
-	path = '/home/nice/Documents/dataset/obs/eca'
+	path = '/home/nice/Documentos/dataset/obs/eca'
 	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_lonlat.nc'.format(path, var, area, dataset, freq, dt)	
 
 	dict_var = {u'eca_prcptot': u'precip', 
-	u'eca_r95p': u'precip',
-	u'eca_r99p': u'precip', 
+	u'eca_r95': u'precip',
+	u'eca_r99': u'precip', 
 	u'eca_rx1day': u'highest_one_day_precipitation_amount_per_time_period',
 	u'eca_rx5day': u'highest_five_day_precipitation_amount_per_time_period',
 	u'eca_sdii': u'simple_daily_intensitiy_index_per_time_period',
@@ -58,12 +58,12 @@ def import_obs(var, area, dataset, freq, dt):
 	
 def import_rcm(var, area, model, exp, freq, dt):
 	
-	path = '/home/nice/Documents/dataset/rcm/eca'	
+	path = '/home/nice/Documentos/dataset/rcm/eca'	
 	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
 
 	dict_var = {u'eca_prcptot': u'pr', 
-	u'eca_r95p': u'pr',
-	u'eca_r99p': u'pr', 
+	u'eca_r95': u'pr',
+	u'eca_r99': u'pr', 
 	u'eca_rx1day': u'highest_one_day_precipitation_amount_per_time_period',
 	u'eca_rx5day': u'highest_five_day_precipitation_amount_per_time_period',
 	u'eca_sdii': u'simple_daily_intensitiy_index_per_time_period',
@@ -94,12 +94,12 @@ def import_rcm(var, area, model, exp, freq, dt):
 
 def import_gcm(var, area, model, exp, freq, dt):
 	
-	path = '/home/nice/Documents/dataset/gcm/eca'
+	path = '/home/nice/Documentos/dataset/gcm/eca'
 	arq  = '{0}/{1}_{2}_{3}_{4}_{5}_{6}_lonlat.nc'.format(path, var, area, model, exp, freq, dt)	
 
 	dict_var = {u'eca_prcptot': u'pr', 
-	u'eca_r95p': u'pr',
-	u'eca_r99p': u'pr', 
+	u'eca_r95': u'pr',
+	u'eca_r99': u'pr', 
 	u'eca_rx1day': u'highest_one_day_precipitation_amount_per_time_period',
 	u'eca_rx5day': u'highest_five_day_precipitation_amount_per_time_period',
 	u'eca_sdii': u'simple_daily_intensitiy_index_per_time_period',
@@ -133,12 +133,12 @@ def import_gcm(var, area, model, exp, freq, dt):
 obs_prcptot_samz = import_obs('eca_prcptot', 'samz', 'cpc_obs', 'yr', '1986-2005')   
 rcm_prcptot_samz = import_rcm('eca_prcptot', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 gcm_prcptot_samz = import_gcm('eca_prcptot', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-obs_r95p_samz = import_obs('eca_r95p', 'samz', 'cpc_obs', 'yr', '1986-2005')   
-rcm_r95p_samz = import_rcm('eca_r95p', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-gcm_r95p_samz = import_gcm('eca_r95p', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-obs_r99p_samz = import_obs('eca_r99p', 'samz', 'cpc_obs', 'yr', '1986-2005')   
-rcm_r99p_samz = import_rcm('eca_r99p', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-gcm_r99p_samz = import_gcm('eca_r99p', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+obs_r95p_samz = import_obs('eca_r95', 'samz', 'cpc_obs', 'yr', '1986-2005')   
+rcm_r95p_samz = import_rcm('eca_r95', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+gcm_r95p_samz = import_gcm('eca_r95', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+obs_r99p_samz = import_obs('eca_r99', 'samz', 'cpc_obs', 'yr', '1986-2005')   
+rcm_r99p_samz = import_rcm('eca_r99', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+gcm_r99p_samz = import_gcm('eca_r99', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 obs_rx1day_samz = import_obs('eca_rx1day', 'samz', 'cpc_obs', 'yr', '1986-2005')   
 rcm_rx1day_samz = import_rcm('eca_rx1day', 'samz', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 gcm_rx1day_samz = import_gcm('eca_rx1day', 'samz', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
@@ -165,12 +165,12 @@ gcm_r20mm_samz = import_gcm('eca_r20mm', 'samz', 'HadGEM2-ES', 'historical', 'yr
 obs_prcptot_eneb = import_obs('eca_prcptot', 'eneb', 'cpc_obs', 'yr', '1986-2005')   
 rcm_prcptot_eneb = import_rcm('eca_prcptot', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 gcm_prcptot_eneb = import_gcm('eca_prcptot', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-obs_r95p_eneb = import_obs('eca_r95p', 'eneb', 'cpc_obs', 'yr', '1986-2005')   
-rcm_r95p_eneb = import_rcm('eca_r95p', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-gcm_r95p_eneb = import_gcm('eca_r95p', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-obs_r99p_eneb = import_obs('eca_r99p', 'eneb', 'cpc_obs', 'yr', '1986-2005')   
-rcm_r99p_eneb = import_rcm('eca_r99p', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-gcm_r99p_eneb = import_gcm('eca_r99p', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+obs_r95p_eneb = import_obs('eca_r95', 'eneb', 'cpc_obs', 'yr', '1986-2005')   
+rcm_r95p_eneb = import_rcm('eca_r95', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+gcm_r95p_eneb = import_gcm('eca_r95', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+obs_r99p_eneb = import_obs('eca_r99', 'eneb', 'cpc_obs', 'yr', '1986-2005')   
+rcm_r99p_eneb = import_rcm('eca_r99', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+gcm_r99p_eneb = import_gcm('eca_r99', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 obs_rx1day_eneb = import_obs('eca_rx1day', 'eneb', 'cpc_obs', 'yr', '1986-2005')   
 rcm_rx1day_eneb = import_rcm('eca_rx1day', 'eneb', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 gcm_rx1day_eneb = import_gcm('eca_rx1day', 'eneb', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
@@ -197,12 +197,12 @@ gcm_r20mm_eneb = import_gcm('eca_r20mm', 'eneb', 'HadGEM2-ES', 'historical', 'yr
 obs_prcptot_matopiba = import_obs('eca_prcptot', 'matopiba', 'cpc_obs', 'yr', '1986-2005')   
 rcm_prcptot_matopiba = import_rcm('eca_prcptot', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 gcm_prcptot_matopiba = import_gcm('eca_prcptot', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-obs_r95p_matopiba = import_obs('eca_r95p', 'matopiba', 'cpc_obs', 'yr', '1986-2005')   
-rcm_r95p_matopiba = import_rcm('eca_r95p', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-gcm_r95p_matopiba = import_gcm('eca_r95p', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
-obs_r99p_matopiba = import_obs('eca_r99p', 'matopiba', 'cpc_obs', 'yr', '1986-2005')   
-rcm_r99p_matopiba = import_rcm('eca_r99p', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
-gcm_r99p_matopiba = import_gcm('eca_r99p', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+obs_r95p_matopiba = import_obs('eca_r95', 'matopiba', 'cpc_obs', 'yr', '1986-2005')   
+rcm_r95p_matopiba = import_rcm('eca_r95', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+gcm_r95p_matopiba = import_gcm('eca_r95', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
+obs_r99p_matopiba = import_obs('eca_r99', 'matopiba', 'cpc_obs', 'yr', '1986-2005')   
+rcm_r99p_matopiba = import_rcm('eca_r99', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
+gcm_r99p_matopiba = import_gcm('eca_r99', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
 obs_rx1day_matopiba = import_obs('eca_rx1day', 'matopiba', 'cpc_obs', 'yr', '1986-2005')   
 rcm_rx1day_matopiba = import_rcm('eca_rx1day', 'matopiba', 'RegCM47_had', 'historical', 'yr', '1986-2005')
 gcm_rx1day_matopiba = import_gcm('eca_rx1day', 'matopiba', 'HadGEM2-ES', 'historical', 'yr', '1986-2005')
