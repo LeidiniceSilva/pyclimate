@@ -25,14 +25,14 @@ from os.path import expanduser
 
 def import_obs(area, obs, time):
 	
-	param = 'pr' 
+	param = 'msshf' # tcc or msshf
 	date  = '2001-2005'
 
 	path  = '/home/nice/Documentos/dataset/obs/reg_pbl'
 	arq   = '{0}/{1}_{2}_{3}_{4}_{5}.nc'.format(path, param, area, obs, time, date)	
 		
 	data  = netCDF4.Dataset(arq)
-	var   = data.variables['cmorph'][:] 
+	var   = data.variables[param][:] 
 	lat   = data.variables['lat'][:]
 	lon   = data.variables['lon'][:]
 	value = var[:][:,:,:]
@@ -43,7 +43,7 @@ def import_obs(area, obs, time):
 	
 def import_sim(area, exp, time):
 	
-	param = 'pr' 
+	param = 'hfss' # clt or hfss
 	date  = '2001-2005'
 
 	path  = '/home/nice/Documentos/dataset/rcm/reg_pbl'
@@ -92,11 +92,20 @@ def basemap(lat, lon):
 def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann_obs, ann_exp1, ann_exp2):
 		
 	fig = plt.figure(figsize=(8,4))
-	levs = [0, 1, 2, 4, 6, 8, 10, 12, 14, 16]
-	color = cm.Blues
+	
+	var = 'msshf' # tcc or msshf 
+	
+	if var == 'tcc':
+		levs = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+		color = cm.Greys
+		text = u'Cloud area fraction (%)'
+	else:
+		levs = [-20, -10, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+		color = cm.jet
+		text = u'Sensible heat flux (W m⁻²)'
 
 	ax = fig.add_subplot(331)
-	plt.title(u'A) CMORPH DJF', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'A) ERA5 DJF', loc='left', fontsize=8, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_map = map.contourf(xx, yy, djf_obs, levels=levs, latlon=True, cmap=color) 
@@ -118,7 +127,7 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 		
 	ax = fig.add_subplot(334)
-	plt.title(u'D) CMORPH JJA', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'D) ERA5 JJA', loc='left', fontsize=8, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	plt_maps_clim = map.contourf(xx, yy, jja_obs, levels=levs, latlon=True, cmap=color) 
@@ -140,7 +149,7 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 		
 	ax = fig.add_subplot(337)
-	plt.title(u'G) CMORPH ANN', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'G) ERA5 ANN', loc='left', fontsize=8, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
@@ -165,33 +174,56 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 
 	cb_ax = fig.add_axes([0.92, 0.2, 0.016, 0.6])
-	bounds=[0, 1, 2, 4, 6, 8, 10, 12, 14, 16]
+	bounds=levs
 	cbar = fig.colorbar(plt_maps_clim, cax=cb_ax, orientation='vertical', boundaries=bounds, shrink=0.5, pad=0.5)
-	cbar.set_label(u'Precipitation (mm d⁻¹)', fontsize=8, fontweight='bold')
+	cbar.set_label('{0}'.format(text), fontsize=8, fontweight='bold')
 	cbar.ax.tick_params(labelsize=8)  
 
 	return plt_maps_clim
 
 
 # Import regcm exps and obs database 
-lat, lon, djf_obs = import_obs(u'amz_neb', u'cmorph_v1_obs', 'djf')
+lat, lon, djf_obs = import_obs(u'amz_neb', u'era5', 'djf')
 lat, lon, djf_exp1 = import_sim(u'amz_neb', u'regcm_exp1', 'djf')
 lat, lon, djf_exp2 = import_sim(u'amz_neb', u'regcm_exp2', 'djf')
 
-lat, lon, jja_obs = import_obs(u'amz_neb', u'cmorph_v1_obs', 'jja')
+lat, lon, jja_obs = import_obs(u'amz_neb', u'era5', 'jja')
 lat, lon, jja_exp1 = import_sim(u'amz_neb', u'regcm_exp1', 'jja')
 lat, lon, jja_exp2 = import_sim(u'amz_neb', u'regcm_exp2', 'jja')
 
-lat, lon, ann_obs = import_obs(u'amz_neb', u'cmorph_v1_obs', 'ann')
+lat, lon, ann_obs = import_obs(u'amz_neb', u'era5', 'ann')
 lat, lon, ann_exp1 = import_sim(u'amz_neb', u'regcm_exp1', 'ann')
 lat, lon, ann_exp2 = import_sim(u'amz_neb', u'regcm_exp2', 'ann')
+
+var = 'msshf' # tcc or msshf 
+
+if var == 'tcc':
+	djf_obs = djf_obs*100
+	djf_exp1 = djf_exp1*100
+	djf_exp2 = djf_exp2*100
+	jja_obs = jja_obs*100
+	jja_exp1 = jja_exp1*100
+	jja_exp2 = jja_exp2*100
+	ann_obs = ann_obs*100
+	ann_exp1 = ann_exp1*100
+	ann_exp2 = ann_exp2*100
+else:
+	djf_obs = djf_obs*(-1)
+	djf_exp1 = djf_exp1
+	djf_exp2 = djf_exp2
+	jja_obs = jja_obs*(-1)
+	jja_exp1 = jja_exp1
+	jja_exp2 = jja_exp2
+	ann_obs = ann_obs*(-1)
+	ann_exp1 = ann_exp1
+	ann_exp2 = ann_exp2
 
 # Plot maps with the function
 plt_map = plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann_obs, ann_exp1, ann_exp2)
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_clim_pr_regcm_pbl_obs_2001-2005.png'
+name_out = 'pyplt_maps_clim_{0}_regcm_pbl_obs_2001-2005.png'.format(var)
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
