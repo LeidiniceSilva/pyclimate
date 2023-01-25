@@ -216,28 +216,31 @@ if __name__=='__main__':
 	ann_exp2_neb = import_sim(u'neb', u'regcm_exp2', 'ann')
 
 	# Reference database standard desviation		   
-	stdrefs = 1
+	stdrefs = dict(DJF=1,
+				 JJA=1,
+				 ANN=1)  
+				 
 	text1 = dict(DJF='A)', JJA='B)', ANN='C)')       
 
 	# Sample std, rho: Be sure to check order and that correct numbers are placed!
-	samples = dict(DJF=[[djf_exp1_namz.std(ddof=1), np.corrcoef(djf_obs_namz, djf_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
-						[djf_exp1_samz.std(ddof=1), np.corrcoef(djf_obs_samz, djf_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
-						[djf_exp1_neb.std(ddof=1),  np.corrcoef(djf_obs_neb,  djf_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
-						[djf_exp2_namz.std(ddof=1), np.corrcoef(djf_obs_namz, djf_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
-						[djf_exp2_samz.std(ddof=1), np.corrcoef(djf_obs_samz, djf_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
-						[djf_exp2_neb.std(ddof=1),  np.corrcoef(djf_obs_neb,  djf_exp2_neb)[0,1],  'NEB',  '^', 'red']],
-				   JJA=[[jja_exp1_namz.std(ddof=1), np.corrcoef(jja_obs_namz, jja_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
-						[jja_exp1_samz.std(ddof=1), np.corrcoef(jja_obs_samz, jja_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
-						[jja_exp1_neb.std(ddof=1),  np.corrcoef(jja_obs_neb,  jja_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
-						[jja_exp2_namz.std(ddof=1), np.corrcoef(jja_obs_namz, jja_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
-						[jja_exp2_samz.std(ddof=1), np.corrcoef(jja_obs_samz, jja_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
-						[jja_exp2_neb.std(ddof=1),  np.corrcoef(jja_obs_neb,  jja_exp2_neb)[0,1],  'NEB',  '^', 'red']],
-				   ANN=[[ann_exp1_namz.std(ddof=1), np.corrcoef(ann_obs_namz, ann_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
-						[ann_exp1_samz.std(ddof=1), np.corrcoef(ann_obs_samz, ann_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
-						[ann_exp1_neb.std(ddof=1),  np.corrcoef(ann_obs_neb,  ann_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
-						[ann_exp2_namz.std(ddof=1), np.corrcoef(ann_obs_namz, ann_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
-						[ann_exp2_samz.std(ddof=1), np.corrcoef(ann_obs_samz, ann_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
-						[ann_exp2_neb.std(ddof=1),  np.corrcoef(ann_obs_neb,  ann_exp2_neb)[0,1],  'NEB',  '^', 'red']])	
+	samples = dict(DJF=[[djf_exp1_namz.std(ddof=0), np.corrcoef(djf_obs_namz, djf_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
+						[djf_exp1_samz.std(ddof=0), np.corrcoef(djf_obs_samz, djf_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
+						[djf_exp1_neb.std(ddof=0),  np.corrcoef(djf_obs_neb,  djf_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
+						[djf_exp2_namz.std(ddof=0), np.corrcoef(djf_obs_namz, djf_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
+						[djf_exp2_samz.std(ddof=0), np.corrcoef(djf_obs_samz, djf_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
+						[djf_exp2_neb.std(ddof=0),  np.corrcoef(djf_obs_neb,  djf_exp2_neb)[0,1],  'NEB',  '^', 'red']],
+				   JJA=[[jja_exp1_namz.std(ddof=0), np.corrcoef(jja_obs_namz, jja_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
+						[jja_exp1_samz.std(ddof=0), np.corrcoef(jja_obs_samz, jja_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
+						[jja_exp1_neb.std(ddof=0),  np.corrcoef(jja_obs_neb,  jja_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
+						[jja_exp2_namz.std(ddof=0), np.corrcoef(jja_obs_namz, jja_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
+						[jja_exp2_samz.std(ddof=0), np.corrcoef(jja_obs_samz, jja_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
+						[jja_exp2_neb.std(ddof=0),  np.corrcoef(jja_obs_neb,  jja_exp2_neb)[0,1],  'NEB',  '^', 'red']],
+				   ANN=[[ann_exp1_namz.std(ddof=0), np.corrcoef(ann_obs_namz, ann_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
+						[ann_exp1_samz.std(ddof=0), np.corrcoef(ann_obs_samz, ann_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
+						[ann_exp1_neb.std(ddof=0),  np.corrcoef(ann_obs_neb,  ann_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
+						[ann_exp2_namz.std(ddof=0), np.corrcoef(ann_obs_namz, ann_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
+						[ann_exp2_samz.std(ddof=0), np.corrcoef(ann_obs_samz, ann_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
+						[ann_exp2_neb.std(ddof=0),  np.corrcoef(ann_obs_neb,  ann_exp2_neb)[0,1],  'NEB',  '^', 'red']])	
 
 	# Colormap (see http://www.scipy.org/Cookbook/Matplotlib/Show_colormaps)
 
@@ -261,7 +264,7 @@ if __name__=='__main__':
 
 	for season in ['DJF','JJA','ANN']:
 
-		dia = TaylorDiagram(stdrefs, fig=fig, rect=rects[season], label=u'Reference', srange=(0., 3.), extend=False)
+		dia = TaylorDiagram(stdrefs[season], fig=fig, rect=rects[season], label=u'Reference', srange=(0., 3.), extend=False)
 		dia.samplePoints[0].set_color('r')
 		dia.ax.plot(x95,y95,color='black')
 		dia.ax.plot(x99,y99,color='black')

@@ -306,7 +306,7 @@ plt.axhline(0.8, linewidth=1., linestyle='dashed', color='black')
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_cdf_pr_regcm_pbl_obs_2001-2010.png'
+name_out = 'pyplt_cdf_pr_regcm_pbl_obs_2001-2005.png'
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
