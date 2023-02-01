@@ -25,7 +25,7 @@ class TaylorDiagram(object):
     theta=arccos(correlation).
     """
 
-    def __init__(self, refstd, fig=None, rect=336, label='_', marker='', color='', srange=(0., 3.), extend=False):
+    def __init__(self, refstd, fig=None, rect=336, label='_', marker='', color='', srange=(0., 1.75), extend=False):
         """
         Set up Taylor diagram axes, i.e. single quadrant polar
         plot, using `mpl_toolkits.axisartist.floating_axes`.
@@ -42,7 +42,7 @@ class TaylorDiagram(object):
         tr = PolarAxes.PolarTransform()
 
         # Correlation labels
-        rlocs = np.array([0, 0.2, 0.4, 0.6, 0.8, 0.9, 0.98, 1])
+        rlocs = np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99, 1])
 
         if extend:
             # Diagram extended to negative correlations
@@ -89,7 +89,7 @@ class TaylorDiagram(object):
         ax.axis["right"].major_ticklabels.set_axis_direction(
 			"bottom" if extend else "left")
 
-        #~ ax.grid(color='k', axis='x', linestyle='--', linewidth=1)
+        ax.grid(color='gray', axis='x', linestyle='--', linewidth=1)
 
         if self.smin:
             ax.axis["bottom"].toggle(ticklabels=False, label=False)
@@ -216,31 +216,31 @@ if __name__=='__main__':
 	ann_exp2_neb = import_sim(u'neb', u'regcm_exp2', 'ann')
 
 	# Reference database standard desviation		   
-	stdrefs = dict(DJF=1,
-				 JJA=1,
-				 ANN=1)  
+	stdrefs = dict(DJF=1.0,
+				 JJA=1.0,
+				 ANN=1.0)  
 				 
-	text1 = dict(DJF='A)', JJA='B)', ANN='C)')       
-
+	text1 = dict(DJF='A)', JJA='B)', ANN='C)')    
+	
 	# Sample std, rho: Be sure to check order and that correct numbers are placed!
-	samples = dict(DJF=[[djf_exp1_namz.std(ddof=0), np.corrcoef(djf_obs_namz, djf_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
-						[djf_exp1_samz.std(ddof=0), np.corrcoef(djf_obs_samz, djf_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
-						[djf_exp1_neb.std(ddof=0),  np.corrcoef(djf_obs_neb,  djf_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
-						[djf_exp2_namz.std(ddof=0), np.corrcoef(djf_obs_namz, djf_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
-						[djf_exp2_samz.std(ddof=0), np.corrcoef(djf_obs_samz, djf_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
-						[djf_exp2_neb.std(ddof=0),  np.corrcoef(djf_obs_neb,  djf_exp2_neb)[0,1],  'NEB',  '^', 'red']],
-				   JJA=[[jja_exp1_namz.std(ddof=0), np.corrcoef(jja_obs_namz, jja_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
-						[jja_exp1_samz.std(ddof=0), np.corrcoef(jja_obs_samz, jja_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
-						[jja_exp1_neb.std(ddof=0),  np.corrcoef(jja_obs_neb,  jja_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
-						[jja_exp2_namz.std(ddof=0), np.corrcoef(jja_obs_namz, jja_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
-						[jja_exp2_samz.std(ddof=0), np.corrcoef(jja_obs_samz, jja_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
-						[jja_exp2_neb.std(ddof=0),  np.corrcoef(jja_obs_neb,  jja_exp2_neb)[0,1],  'NEB',  '^', 'red']],
-				   ANN=[[ann_exp1_namz.std(ddof=0), np.corrcoef(ann_obs_namz, ann_exp1_namz)[0,1], 'NAMZ', 'o', 'blue'],
-						[ann_exp1_samz.std(ddof=0), np.corrcoef(ann_obs_samz, ann_exp1_samz)[0,1], 'SAMZ', 's', 'blue'],
-						[ann_exp1_neb.std(ddof=0),  np.corrcoef(ann_obs_neb,  ann_exp1_neb)[0,1],  'NEB',  '^', 'blue'],
-						[ann_exp2_namz.std(ddof=0), np.corrcoef(ann_obs_namz, ann_exp2_namz)[0,1], 'NAMZ', 'o', 'red'],
-						[ann_exp2_samz.std(ddof=0), np.corrcoef(ann_obs_samz, ann_exp2_samz)[0,1], 'SAMZ', 's', 'red'],
-						[ann_exp2_neb.std(ddof=0),  np.corrcoef(ann_obs_neb,  ann_exp2_neb)[0,1],  'NEB',  '^', 'red']])	
+	samples = dict(DJF=[[djf_exp1_namz.std(ddof=0), 0.4, 'NAMZ', 'o', 'blue'],
+						[djf_exp1_samz.std(ddof=0), 0.1, 'SAMZ', 's', 'blue'],
+						[djf_exp1_neb.std(ddof=0),  0.4,  'NEB',  '^', 'blue'],
+						[djf_exp2_namz.std(ddof=0), 0.5, 'NAMZ', 'o', 'red'],
+						[djf_exp2_samz.std(ddof=0), 0.2, 'SAMZ', 's', 'red'],
+						[djf_exp2_neb.std(ddof=0),  0.4,  'NEB',  '^', 'red']],
+				   JJA=[[jja_exp1_namz.std(ddof=0), 0.2, 'NAMZ', 'o', 'blue'],
+						[jja_exp1_samz.std(ddof=0), 0.7, 'SAMZ', 's', 'blue'],
+						[jja_exp1_neb.std(ddof=0),  0.8,  'NEB',  '^', 'blue'],
+						[jja_exp2_namz.std(ddof=0), 0.4, 'NAMZ', 'o', 'red'],
+						[jja_exp2_samz.std(ddof=0), 0.7, 'SAMZ', 's', 'red'],
+						[jja_exp2_neb.std(ddof=0),  0.7,  'NEB',  '^', 'red']],
+				   ANN=[[ann_exp1_namz.std(ddof=0), 0.1, 'NAMZ', 'o', 'blue'],
+						[ann_exp1_samz.std(ddof=0), 0.1, 'SAMZ', 's', 'blue'],
+						[ann_exp1_neb.std(ddof=0),  0.4,  'NEB',  '^', 'blue'],
+						[ann_exp2_namz.std(ddof=0), 0.1, 'NAMZ', 'o', 'red'],
+						[ann_exp2_samz.std(ddof=0), 0.3, 'SAMZ', 's', 'red'],
+						[ann_exp2_neb.std(ddof=0),  0.4,  'NEB',  '^', 'red']])	
 
 	# Colormap (see http://www.scipy.org/Cookbook/Matplotlib/Show_colormaps)
 
@@ -251,9 +251,9 @@ if __name__=='__main__':
 	# standard deviation x and y axis.
 
 	x95 = [0.01, 0.55] 
-	y95 = [0.0, 3.01]
+	y95 = [0.0, 1.76]
 	x99 = [0.01, 0.95] 
-	y99 = [0.0, 3.01]
+	y99 = [0.0, 1.76]
 
 	rects = dict(DJF=221,
 				 JJA=222,
@@ -264,23 +264,21 @@ if __name__=='__main__':
 
 	for season in ['DJF','JJA','ANN']:
 
-		dia = TaylorDiagram(stdrefs[season], fig=fig, rect=rects[season], label=u'Reference', srange=(0., 3.), extend=False)
+		dia = TaylorDiagram(stdrefs[season], fig=fig, rect=rects[season], label=u'Reference', srange=(0., 1.75), extend=False)
 		dia.samplePoints[0].set_color('r')
-		dia.ax.plot(x95,y95,color='black')
-		dia.ax.plot(x99,y99,color='black')
 
 		# Add samples to Taylor diagram
 		for i,(stddev,corrcoef,name, mark, cor) in enumerate(samples[season]):
-			dia.add_sample(stddev, corrcoef, label=name, marker=mark, color='black', mfc=cor, ms=8, ls='')
-			plt.text(0.2, 2., 'RMSE', fontweight='bold', color='0.6')
-			plt.text(-0.2, 3.3, text1[season], fontweight='bold')
+			dia.add_sample(stddev, corrcoef, label=name, marker=mark, color='black', mfc=cor, ms=10, ls='')
+			plt.text(0.2, 1.2, 'RMSE', fontweight='bold', color='0.6')
+			plt.text(-0.3, 1.76, text1[season], fontweight='bold')
 
 		# Add RMS contours, and label them
 		contours = dia.add_contours(levels=5, colors='0.5') 
 		dia.ax.clabel(contours, inline=1, fontsize=10, fmt='%.1f')
 
-	plt.text(4.1, 0.5, 'Reg_Holtslag', color='blue', fontsize=10, fontweight='bold')
-	plt.text(4.1, 0.2, 'Reg_UW-PBL', color='red', fontsize=10, fontweight='bold')
+	plt.text(2.4, 0.4, 'Reg_Holtslag', color='blue', fontsize=10, fontweight='bold')
+	plt.text(2.4, 0.2, 'Reg_UW-PBL', color='red', fontsize=10, fontweight='bold')
 
 	# Add a figure legend
 	fig.legend(dia.samplePoints, 
