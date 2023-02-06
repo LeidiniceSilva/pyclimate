@@ -87,42 +87,54 @@ def basemap(lat, lon):
 	xx, yy = map(lons,lats)
 	
 	return map, xx, yy
-	
-	
-def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann_obs, ann_exp1, ann_exp2):
+
+
+def plot_maps_clim(djf_obs, bias_djf_exp1, bias_djf_exp2, jja_obs, bias_jja_exp1, bias_jja_exp2, ann_obs, bias_ann_exp1, bias_ann_exp2):
 		
 	fig = plt.figure(figsize=(8,4))
 	
 	var = 'msshf' # tcc or msshf 
 	
 	if var == 'tcc':
-		levs = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-		color = cm.Greys
-		text = u'Cloud area fraction (%)'
+		levs1 = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+		color1 = cm.Greys
+		text1 = u'Cloud area fraction (%)'
+		levs2 = [-50, -40, -30, -20, -10, 10, 20, 30, 40, 50]
+		color2 = cm.RdGy
+		text2 = u'Bias of cloud area fraction (%)'
 	else:
-		levs = [-20, -10, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-		color = cm.jet
-		text = u'Sensible heat flux (W m⁻²)'
-
+		levs1 = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]
+		color1 = cm.turbo
+		text1 = u'Sensible heat flux (W m⁻²)'
+		levs2 = [-50, -40, -30, -20, -10, 10, 20, 30, 40, 50]
+		color2 = cm.Spectral_r
+		text2 = u'Bias of sensible heat flux (W m⁻²)'
+		
 	ax = fig.add_subplot(331)
 	plt.title(u'A) ERA5 DJF', loc='left', fontsize=8, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plt_map = map.contourf(xx, yy, djf_obs, levels=levs, latlon=True, cmap=color) 
+	plot_maps_clim = map.contourf(xx, yy, djf_obs, levels=levs1, latlon=True, cmap=color1, extend='both') 
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
 
+	cb_ax = fig.add_axes([0.92, 0.2, 0.016, 0.6])
+	bounds = levs1
+	cbar = fig.colorbar(plot_maps_clim, cax=cb_ax, orientation='vertical', boundaries=bounds, shrink=0.5, pad=0.5)
+	cbar.set_label('{0}'.format(text1), fontsize=8, fontweight='bold')
+	cbar.ax.tick_params(labelsize=8)  
+	
 	ax = fig.add_subplot(332)
-	plt.title(u'B) Reg_Holtslag DJF', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'B) Reg_Holtslag -ERA5 DJF', loc='left', fontsize=8, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_clim = map.contourf(xx, yy, djf_exp1, levels=levs, latlon=True, cmap=color)
+	map.contourf(xx, yy, bias_djf_exp1, levels=levs2, latlon=True, cmap=color2)
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 
 	ax = fig.add_subplot(333)
-	plt.title(u'C) Reg_UW-PBL DJF', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'C) Reg_UW-PBL - ERA5 DJF', loc='left', fontsize=8, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_clim = map.contourf(xx, yy, djf_exp2, levels=levs, latlon=True, cmap=color)
+	map.contourf(xx, yy, bias_djf_exp2, levels=levs2, latlon=True, cmap=color2)
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 		
@@ -130,21 +142,21 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann
 	plt.title(u'D) ERA5 JJA', loc='left', fontsize=8, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_clim = map.contourf(xx, yy, jja_obs, levels=levs, latlon=True, cmap=color) 
+	plt_maps_clim = map.contourf(xx, yy, jja_obs, levels=levs1, latlon=True, cmap=color1) 
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
 		
 	ax = fig.add_subplot(335)
-	plt.title(u'E) Reg_Holtslag JJA', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'E) Reg_Holtslag - ERA5 JJA', loc='left', fontsize=8, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plt_map = map.contourf(xx, yy, jja_exp1, levels=levs, latlon=True, cmap=color)
+	plot_maps_clim = map.contourf(xx, yy, bias_jja_exp1, levels=levs2, latlon=True, cmap=color2)
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 
 	ax = fig.add_subplot(336)
-	plt.title(u'F) Reg_UW-PBL JJA', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'F) Reg_UW-PBL - ERA5 JJA', loc='left', fontsize=8, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plt_map = map.contourf(xx, yy, jja_exp2, levels=levs, latlon=True, cmap=color)
+	plot_maps_clim = map.contourf(xx, yy, bias_jja_exp2, levels=levs2, latlon=True, cmap=color2)
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 		
@@ -153,31 +165,31 @@ def plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_clim = map.contourf(xx, yy, ann_obs, levels=levs, latlon=True, cmap=color)
+	map.contourf(xx, yy, ann_obs, levels=levs1, latlon=True, cmap=color1)
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
 
 	ax = fig.add_subplot(338)
-	plt.title(u'H) Reg_Holtslag ANN', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'H) Reg_Holtslag - ERA5 ANN', loc='left', fontsize=8, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_clim = map.contourf(xx, yy, ann_exp1, levels=levs, latlon=True, cmap=color)
+	plt_maps_bias = map.contourf(xx, yy, bias_ann_exp1, levels=levs2, latlon=True, cmap=color2, extend='both')
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
-			
+
+	cb_ax = fig.add_axes([1, 0.2, 0.016, 0.6])
+	bounds = levs2
+	cbar = fig.colorbar(plt_maps_bias, cax=cb_ax, orientation='vertical', boundaries=bounds, shrink=0.5, pad=0.5)
+	cbar.set_label('{0}'.format(text2), fontsize=8, fontweight='bold')
+	cbar.ax.tick_params(labelsize=8)  
+	
 	ax = fig.add_subplot(339)
 	plt.title(u'I) Reg_UW-PBL ANN', loc='left', fontsize=8, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plt_maps_clim = map.contourf(xx, yy, ann_exp2, levels=levs, latlon=True, cmap=color, extend='max')
+	map.contourf(xx, yy, bias_ann_exp2, levels=levs2, latlon=True, cmap=color2)
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,1], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
-
-	cb_ax = fig.add_axes([0.92, 0.2, 0.016, 0.6])
-	bounds=levs
-	cbar = fig.colorbar(plt_maps_clim, cax=cb_ax, orientation='vertical', boundaries=bounds, shrink=0.5, pad=0.5)
-	cbar.set_label('{0}'.format(text), fontsize=8, fontweight='bold')
-	cbar.ax.tick_params(labelsize=8)  
 
 	return plt_maps_clim
 
@@ -218,17 +230,23 @@ else:
 	ann_exp1 = ann_exp1
 	ann_exp2 = ann_exp2
 
+bias_djf_exp1 = djf_exp1 - djf_obs
+bias_djf_exp2 = djf_exp2 - djf_obs
+
+bias_jja_exp1 = jja_exp1 - jja_obs
+bias_jja_exp2 = jja_exp2 - jja_obs
+
+bias_ann_exp1 = ann_exp1 - ann_obs
+bias_ann_exp2 = ann_exp2 - ann_obs
+
 # Plot maps with the function
-plt_map = plot_maps_clim(djf_obs, djf_exp1, djf_exp2, jja_obs, jja_exp1, jja_exp2, ann_obs, ann_exp1, ann_exp2)
+plt_map = plot_maps_clim(djf_obs, bias_djf_exp1, bias_djf_exp2, jja_obs, bias_jja_exp1, bias_jja_exp2, ann_obs, bias_ann_exp1, bias_ann_exp2)
 
 # Path out to save figure
 path_out = '/home/nice/Downloads'
-name_out = 'pyplt_maps_clim_{0}_regcm_pbl_obs_2001-2005.png'.format(var)
+name_out = 'pyplt_maps_clim_bias_{0}_regcm_pbl_obs_2001-2005.png'.format(var)
 if not os.path.exists(path_out):
 	create_path(path_out)
 plt.savefig(os.path.join(path_out, name_out), dpi=600, bbox_inches='tight')
 plt.show()
 exit()
-
-
-
