@@ -125,7 +125,7 @@ def plot_maps_clim(djf_obs, bias_djf_exp1, bias_djf_exp2, jja_obs, bias_jja_exp1
 	cbar.ax.tick_params(labelsize=8)  
 	
 	ax = fig.add_subplot(332)
-	plt.title(u'B) Reg_Holtslag -ERA5 DJF', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'B) Reg_Holtslag - ERA5 DJF', loc='left', fontsize=8, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	map.contourf(xx, yy, bias_djf_exp1, levels=levs2, latlon=True, cmap=color2)
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
@@ -184,7 +184,7 @@ def plot_maps_clim(djf_obs, bias_djf_exp1, bias_djf_exp2, jja_obs, bias_jja_exp1
 	cbar.ax.tick_params(labelsize=8)  
 	
 	ax = fig.add_subplot(339)
-	plt.title(u'I) Reg_UW-PBL ANN', loc='left', fontsize=8, fontweight='bold')
+	plt.title(u'I) Reg_UW-PBL - ERA5 ANN', loc='left', fontsize=8, fontweight='bold')
 	plt.xlabel(u'Longitude', fontsize=8, labelpad=15, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
 	map.contourf(xx, yy, bias_ann_exp2, levels=levs2, latlon=True, cmap=color2)
