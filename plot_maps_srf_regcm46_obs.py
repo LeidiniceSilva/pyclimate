@@ -25,7 +25,7 @@ from os.path import expanduser
 
 def import_obs(area, obs, time):
 	
-	param = 'msshf' # tcc or msshf
+	param = 'tcc' # tcc or msshf
 	date  = '2001-2005'
 
 	path  = '/home/nice/Documentos/dataset/obs/reg_pbl'
@@ -43,7 +43,7 @@ def import_obs(area, obs, time):
 	
 def import_sim(area, exp, time):
 	
-	param = 'hfss' # clt or hfss
+	param = 'clt' # clt or hfss
 	date  = '2001-2005'
 
 	path  = '/home/nice/Documentos/dataset/rcm/reg_pbl'
@@ -93,7 +93,7 @@ def plot_maps_clim(djf_obs, bias_djf_exp1, bias_djf_exp2, jja_obs, bias_jja_exp1
 		
 	fig = plt.figure(figsize=(8,4))
 	
-	var = 'msshf' # tcc or msshf 
+	var = 'tcc' # tcc or msshf 
 	
 	if var == 'tcc':
 		levs1 = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
@@ -114,7 +114,7 @@ def plot_maps_clim(djf_obs, bias_djf_exp1, bias_djf_exp2, jja_obs, bias_jja_exp1
 	plt.title(u'A) ERA5 DJF', loc='left', fontsize=8, fontweight='bold')
 	plt.ylabel(u'Latitude', fontsize=8, labelpad=20, fontweight='bold')
 	map, xx, yy = basemap(lat, lon)
-	plot_maps_clim = map.contourf(xx, yy, djf_obs, levels=levs1, latlon=True, cmap=color1, extend='both') 
+	plot_maps_clim = map.contourf(xx, yy, djf_obs, levels=levs1, latlon=True, cmap=color1) 
 	map.drawmeridians(np.arange(-85.,-5.,20.), size=8, labels=[0,0,0,0], linewidth=0.5, color='black')
 	map.drawparallels(np.arange(-20.,15.,10.), size=8, labels=[1,0,0,0], linewidth=0.5, color='black')
 
@@ -207,7 +207,7 @@ lat, lon, ann_obs = import_obs(u'amz_neb', u'era5', 'ann')
 lat, lon, ann_exp1 = import_sim(u'amz_neb', u'regcm_exp1', 'ann')
 lat, lon, ann_exp2 = import_sim(u'amz_neb', u'regcm_exp2', 'ann')
 
-var = 'msshf' # tcc or msshf 
+var = 'tcc' # tcc or msshf 
 
 if var == 'tcc':
 	djf_obs = djf_obs*100

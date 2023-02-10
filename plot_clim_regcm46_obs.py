@@ -92,8 +92,6 @@ nam_obs_median = np.nanmean(nam_obs_clim)
 sam_obs_median = np.nanmean(sam_obs_clim)
 neb_obs_median = np.nanmean(neb_obs_clim)
 
-print(neb_obs_clim)
-
 # Plot regcm exps and obs database 
 fig = plt.figure()
 time = np.arange(1, 13)
