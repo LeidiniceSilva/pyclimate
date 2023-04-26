@@ -286,4 +286,22 @@ def compute_fcst_correct(model, obs, fcst):
         fcst_correc.append(ss.gamma.ppf(prob, alpha_obs, scale=beta_obs))
         
     return fcst_correct
-    
+   
+
+def compute_kge(obs, model):
+
+	"""
+	The input arrays must have the same dimensions
+	Param model: Numpy array with model data
+	Param obs: Numpy array with obs data
+	Return: Kling-Gupta Efficiency
+	"""
+
+	p1 = np.corrcoef(obs, model)[0][1]
+	p2 = np.nanmean(model) / np.nanmean(obs)
+	p3 = np.nanstd(model, ddof=0) / np.nanmean(model) * 100 
+	p4 = np.nanstd(obs, ddof=0) / np.nanmean(obs) * 100 
+	p5 = p3/p4
+	kge = 1 - np.sqrt((1 - p1)**2 + (1 - p2)**2 + (1 - p5)**2)
+
+	return kge
